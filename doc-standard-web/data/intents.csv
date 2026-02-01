@@ -1,0 +1,31 @@
+id,slug,name,kind,priority,description
+customs-clearance,customs-clearance-services,Customs Clearance Services,customs,1,Professional customs clearance and brokerage services
+freight-forwarding,freight-forwarding-services,Freight Forwarding Services,forwarding,2,International freight forwarding and logistics
+import-export,import-export-documentation,Import Export Documentation,customs,3,Complete import and export documentation services
+commercial-invoice,commercial-invoice-processing,Commercial Invoice Processing,invoice,4,Commercial invoice preparation and processing
+bill-of-lading,bill-of-lading-services,Bill of Lading Services,shipping,5,Bill of lading documentation and management
+certificate-origin,certificate-of-origin-services,Certificate of Origin Services,customs,6,Certificate of origin processing and authentication
+packing-list,packing-list-documentation,Packing List Documentation,shipping,7,Professional packing list preparation
+shipping-labels,shipping-label-services,Shipping Label Services,shipping,8,Shipping label creation and management
+airway-bill,airway-bill-processing,Airway Bill Processing,shipping,9,Air waybill documentation services
+sea-freight,sea-freight-documentation,Sea Freight Documentation,shipping,10,Ocean freight documentation and processing
+air-freight,air-freight-documentation,Air Freight Documentation,shipping,11,Air cargo documentation services
+customs-bonds,customs-bond-services,Customs Bond Services,customs,12,Customs bond processing and management
+duty-drawback,duty-drawback-services,Duty Drawback Services,customs,13,Duty drawback claims and processing
+tariff-classification,tariff-classification-services,Tariff Classification Services,customs,14,HS code classification and consulting
+trade-compliance,trade-compliance-services,Trade Compliance Services,compliance,15,International trade compliance consulting
+warehouse-receipt,warehouse-receipt-documentation,Warehouse Receipt Documentation,warehousing,20,Warehouse receipt processing
+dock-receipt,dock-receipt-services,Dock Receipt Services,shipping,21,Dock receipt documentation
+delivery-order,delivery-order-processing,Delivery Order Processing,shipping,22,Delivery order management services
+fumigation-cert,fumigation-certificate-services,Fumigation Certificate Services,compliance,23,Fumigation certificate processing
+insurance-cert,cargo-insurance-documentation,Cargo Insurance Documentation,insurance,24,Cargo insurance certificate services
+inspection-cert,inspection-certificate-services,Inspection Certificate Services,compliance,25,Pre-shipment inspection certificates
+export-license,export-license-services,Export License Services,compliance,26,Export licensing and permits
+import-license,import-license-services,Import License Services,compliance,27,Import permit processing
+hazmat-docs,hazmat-documentation-services,Hazmat Documentation Services,compliance,28,Hazardous materials documentation
+shipper-letter,shipper-letter-instruction,Shipper Letter of Instruction,shipping,29,SLI preparation and processing
+arrival-notice,arrival-notice-services,Arrival Notice Services,notification,30,Import arrival notifications
+delivery-appointment,delivery-appointment-services,Delivery Appointment Services,logistics,31,Delivery scheduling and coordination
+container-tracking,container-tracking-services,Container Tracking Services,logistics,32,Real-time container tracking
+demurrage-management,demurrage-management-services,Demurrage Management Services,logistics,33,Demurrage and detention management
+freight-audit,freight-audit-services,Freight Audit Services,finance,34,Freight bill auditing services

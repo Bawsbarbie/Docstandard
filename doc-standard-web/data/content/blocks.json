@@ -1,0 +1,98 @@
+{
+  "intro": [
+    {
+      "id": "intro-1",
+      "text": "Professional {service} in {city}, {state}. Our expert team delivers fast, accurate, and compliant solutions for all your logistics documentation needs."
+    },
+    {
+      "id": "intro-2",
+      "text": "Looking for reliable {service} in {city}? We provide industry-leading document processing with same-day turnaround and dedicated support."
+    },
+    {
+      "id": "intro-3",
+      "text": "Streamline your logistics operations with our {service} in {city}, {state}. Trusted by importers and exporters across the region."
+    }
+  ],
+  "pain": [
+    {
+      "id": "pain-1",
+      "text": "Dealing with complex customs documentation can be overwhelming. Delays, errors, and compliance issues cost time and money."
+    },
+    {
+      "id": "pain-2",
+      "text": "Manual document processing leads to costly mistakes and shipment delays. You need a reliable partner who understands logistics."
+    },
+    {
+      "id": "pain-3",
+      "text": "Navigating international trade regulations is challenging. One mistake can result in penalties, holds, and lost revenue."
+    }
+  ],
+  "benefit": [
+    {
+      "id": "benefit-1",
+      "text": "Same-day document processing and turnaround"
+    },
+    {
+      "id": "benefit-2",
+      "text": "100% accuracy guarantee on all documentation"
+    },
+    {
+      "id": "benefit-3",
+      "text": "Expert compliance review by licensed professionals"
+    },
+    {
+      "id": "benefit-4",
+      "text": "Flat-fee pricing - $799 per batch, no surprises"
+    },
+    {
+      "id": "benefit-5",
+      "text": "Dedicated support team available 24/7"
+    },
+    {
+      "id": "benefit-6",
+      "text": "Secure cloud-based document management"
+    }
+  ],
+  "cta": [
+    {
+      "id": "cta-1",
+      "text": "Get started today with our flat-fee $799 document processing service. Upload your documents now and receive expert-processed files within 24 hours."
+    },
+    {
+      "id": "cta-2",
+      "text": "Ready to streamline your logistics? Our $799 flat-fee service includes unlimited revisions and dedicated support. Start your order now."
+    }
+  ],
+  "faq": [
+    {
+      "id": "faq-1",
+      "question": "How long does document processing take?",
+      "answer": "Standard processing is completed within 24 hours. Urgent requests can be expedited for same-day delivery."
+    },
+    {
+      "id": "faq-2",
+      "question": "What types of documents do you process?",
+      "answer": "We handle all logistics documentation including customs forms, commercial invoices, bills of lading, certificates of origin, and more."
+    },
+    {
+      "id": "faq-3",
+      "question": "Is the $799 fee all-inclusive?",
+      "answer": "Yes, our flat fee covers processing up to 50 documents per batch with unlimited revisions and expert review."
+    },
+    {
+      "id": "faq-4",
+      "question": "Do you guarantee compliance?",
+      "answer": "Absolutely. All documents are reviewed by licensed customs brokers and trade compliance experts to ensure 100% regulatory compliance."
+    },
+    {
+      "id": "faq-5",
+      "question": "Can you handle international documentation?",
+      "answer": "Yes, we process documentation for all countries and comply with international trade regulations including ITAR, EAR, and Customs requirements."
+    },
+    {
+      "id": "faq-6",
+      "question": "What if I need revisions?",
+      "answer": "Unlimited revisions are included in your flat fee. We'll work with you until the documents meet your exact specifications."
+    }
+  ]
+}

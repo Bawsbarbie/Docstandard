@@ -1,0 +1,43 @@
+country_code,country_name,state_code,state_name,city_name,priority,population,lat,lng
+us,United States,CA,California,Los Angeles,100,3898747,34.0522,-118.2437
+us,United States,CA,California,San Francisco,95,873965,37.7749,-122.4194
+us,United States,CA,California,San Diego,92,1386932,32.7157,-117.1611
+us,United States,CA,California,San Jose,88,1013240,37.3382,-121.8863
+us,United States,CA,California,Oakland,85,433031,37.8044,-122.2712
+us,United States,NY,New York,New York,100,8336817,40.7128,-74.0060
+us,United States,NY,New York,Buffalo,87,278349,42.8864,-78.8784
+us,United States,NY,New York,Rochester,84,211328,43.1566,-77.6088
+us,United States,TX,Texas,Houston,98,2304580,29.7604,-95.3698
+us,United States,TX,Texas,Dallas,96,1343573,32.7767,-96.7970
+us,United States,TX,Texas,Austin,93,978908,30.2672,-97.7431
+us,United States,TX,Texas,San Antonio,91,1547253,29.4241,-98.4936
+us,United States,FL,Florida,Miami,97,467963,25.7617,-80.1918
+us,United States,FL,Florida,Tampa,89,399700,27.9506,-82.4572
+us,United States,FL,Florida,Orlando,87,307573,28.5383,-81.3792
+us,United States,FL,Florida,Jacksonville,86,949611,30.3322,-81.6557
+us,United States,IL,Illinois,Chicago,99,2746388,41.8781,-87.6298
+us,United States,IL,Illinois,Aurora,80,180542,41.7606,-88.3201
+us,United States,WA,Washington,Seattle,95,753675,47.6062,-122.3321
+us,United States,WA,Washington,Tacoma,82,219346,47.2529,-122.4443
+us,United States,GA,Georgia,Atlanta,94,498715,33.7490,-84.3880
+us,United States,GA,Georgia,Savannah,83,147780,32.0809,-81.0912
+us,United States,PA,Pennsylvania,Philadelphia,93,1584064,39.9526,-75.1652
+us,United States,PA,Pennsylvania,Pittsburgh,86,302971,40.4406,-79.9959
+us,United States,AZ,Arizona,Phoenix,92,1680992,33.4484,-112.0740
+us,United States,AZ,Arizona,Tucson,84,548073,32.2226,-110.9747
+us,United States,MA,Massachusetts,Boston,96,692600,42.3601,-71.0589
+us,United States,MA,Massachusetts,Worcester,81,206518,42.2626,-71.8023
+us,United States,CO,Colorado,Denver,91,715522,39.7392,-104.9903
+us,United States,NC,North Carolina,Charlotte,89,885708,35.2271,-80.8431
+us,United States,NC,North Carolina,Raleigh,87,474069,35.7796,-78.6382
+us,United States,OR,Oregon,Portland,90,652503,45.5152,-122.6784
+us,United States,NV,Nevada,Las Vegas,88,641903,36.1699,-115.1398
+us,United States,TN,Tennessee,Nashville,87,689447,36.1627,-86.7816
+us,United States,TN,Tennessee,Memphis,85,633104,35.1495,-90.0490
+us,United States,MD,Maryland,Baltimore,86,585708,39.2904,-76.6122
+us,United States,MI,Michigan,Detroit,85,639111,42.3314,-83.0458
+us,United States,OH,Ohio,Columbus,87,905748,39.9612,-82.9988
+us,United States,OH,Ohio,Cleveland,84,372624,41.4993,-81.6944
+us,United States,MN,Minnesota,Minneapolis,88,429954,44.9778,-93.2650
+us,United States,MO,Missouri,Kansas City,85,508090,39.0997,-94.5786
+us,United States,LA,Louisiana,New Orleans,86,383997,29.9511,-90.0715
