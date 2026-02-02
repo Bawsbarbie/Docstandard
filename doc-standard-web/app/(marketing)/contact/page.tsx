@@ -98,7 +98,7 @@ Notes: ${formData.notes || "None"}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10">
             <span className="text-brand-600 font-semibold tracking-wide uppercase text-sm">
-              Project Intake
+              Contact
             </span>
             <h1 className="mt-3 text-3xl md:text-4xl font-bold text-gray-900">
               Talk to a human about your documents
