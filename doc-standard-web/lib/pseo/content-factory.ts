@@ -73,15 +73,20 @@ export class ContentFactory {
     if (this.blocks) return this.blocks
 
     const blocksPath = path.join(process.cwd(), "data", "content", "blocks.json")
-    const blocksContent = await fs.readFile(blocksPath, "utf-8")
+    const faqsPath = path.join(process.cwd(), "data", "content", "faqs.json")
+    const [blocksContent, faqsContent] = await Promise.all([
+      fs.readFile(blocksPath, "utf-8"),
+      fs.readFile(faqsPath, "utf-8"),
+    ])
     const rawBlocks = JSON.parse(blocksContent)
+    const rawFaqs = JSON.parse(faqsContent)
 
     this.blocks = {
       intro: rawBlocks.intro || [],
       pain: rawBlocks.pain || [],
-      benefit: rawBlocks.benefit || [],
+      benefit: rawBlocks.benefit || rawBlocks.benefits || [],
       cta: rawBlocks.cta || [],
-      faq: rawBlocks.faq || [],
+      faq: rawBlocks.faq || rawFaqs || [],
     }
 
     return this.blocks
@@ -147,7 +152,14 @@ export class ContentFactory {
    * Get block IDs from pool for a specific block type
    */
   private getBlockIdsFromPool(pool: ContentPool, blockType: string): string[] {
-    return pool.blocks[blockType] || []
+    const direct = pool.blocks[blockType]
+    if (direct && direct.length > 0) return direct
+
+    if (blockType === "benefit") {
+      return pool.blocks.benefits || []
+    }
+
+    return []
   }
 
   /**
@@ -268,21 +280,26 @@ export class ContentFactory {
     let faqItems = blocks.faq
 
     if (faqIds.length > 0) {
-      faqItems = blocks.faq.filter((f) => faqIds.includes(f.id))
+      const filtered = blocks.faq.filter((f) => faqIds.includes(f.id))
+      faqItems = filtered.length > 0 ? filtered : blocks.faq
     }
 
     // Use hash to select 4-6 FAQs
     const faqCount = 4 + (this.getHash(seed + "faq-count") % 3) // 4, 5, or 6
     const selectedFaqs: typeof faqItems = []
+    const maxCount = Math.min(faqCount, faqItems.length)
+    let attempts = 0
 
-    for (let i = 0; i < Math.min(faqCount, faqItems.length); i++) {
-      const hash = this.getHash(seed + "faq" + i)
+    while (selectedFaqs.length < maxCount && attempts < faqItems.length * 2) {
+      const hash = this.getHash(seed + "faq" + attempts)
       const index = hash % faqItems.length
       const faq = faqItems[index]
 
       if (!selectedFaqs.find((f) => f.id === faq.id)) {
         selectedFaqs.push(faq)
       }
+
+      attempts += 1
     }
 
     // Replace variables in all text

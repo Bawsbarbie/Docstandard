@@ -207,7 +207,7 @@
       "tags": ["general"]
     }
   ],
-  "benefits": [
+  "benefit": [
     {
       "id": "benefits_1",
       "text": "Flat $799 pricing per Standard Batch with no per-page or per-file fees.",
