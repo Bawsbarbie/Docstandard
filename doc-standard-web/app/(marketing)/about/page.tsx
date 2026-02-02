@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
-import { Advantage } from "@/components/landing/Advantage"
 import { Mail, MapPin } from "lucide-react"
 import Link from "next/link"
 
@@ -9,7 +8,6 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
       <main className="pt-20">
-        <Advantage />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
           {/* Hero Section */}
