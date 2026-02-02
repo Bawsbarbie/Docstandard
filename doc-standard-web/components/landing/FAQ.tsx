@@ -34,6 +34,16 @@ const questions: FAQItem[] = [
     answer:
       "Yes. For unusually large or complex batches, scope is confirmed before processing to ensure accuracy and timely delivery.",
   },
+  {
+    question: "Is this the same as data entry?",
+    answer:
+      "No. We don't perform manual data entry. DocStandard focuses on cleaning, structuring, validating, and standardizing existing documents so the information becomes system-ready and consistent.",
+  },
+  {
+    question: "How do you handle messy or inconsistent documents?",
+    answer:
+      "Real-world documents are rarely clean. We process inconsistent layouts, missing fields, duplicates, and multi-page files by standardizing structure and resolving edge cases instead of guessing or auto-filling blindly.",
+  },
 ]
 
 export const FAQ: React.FC = () => {
@@ -66,7 +76,7 @@ export const FAQ: React.FC = () => {
 
               <div
                 className={`transition-all duration-300 ease-in-out ${
-                  openIndex === index ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
                 <div className="px-6 pb-6 text-gray-600 leading-relaxed">
