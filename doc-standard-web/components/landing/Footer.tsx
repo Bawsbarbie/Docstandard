@@ -51,14 +51,14 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#why-us" className="hover:text-brand-600">
+                <Link href="/security" className="hover:text-brand-600">
                   Security
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#services" className="hover:text-brand-600">
-                  Data Formats
-                </a>
+                <Link href="/contact" className="hover:text-brand-600">
+                  Contact
+                </Link>
               </li>
             </ul>
           </div>
@@ -67,14 +67,14 @@ export const Footer: React.FC = () => {
             <h4 className="font-bold text-gray-900 mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-gray-600">
               <li>
-                <a href="#" className="hover:text-brand-600">
+                <Link href="/about" className="hover:text-brand-600">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-600">
+                <Link href="/contact" className="hover:text-brand-600">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-brand-600">
@@ -106,7 +106,10 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-100 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} DocStandard. All rights reserved.
+          <p>Registered in the EU. Operated by DocStandard.</p>
+          <p className="mt-1">
+            © {new Date().getFullYear()} DocStandard. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

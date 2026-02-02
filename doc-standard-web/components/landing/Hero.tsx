@@ -57,6 +57,14 @@ export const Hero: React.FC = () => {
               </a>
             </div>
 
+            <div className="mt-5 text-sm text-gray-500 flex flex-col sm:flex-row gap-2 justify-center lg:justify-start">
+              <span>Scope confirmed before processing.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>Edge cases flagged, not guessed.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>No silent automation failures.</span>
+            </div>
+
             <div className="mt-8 flex items-center justify-center lg:justify-start space-x-6 text-sm text-gray-500">
               <span className="flex items-center">
                 <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" /> One Service
