@@ -1,0 +1,12 @@
+[phases.setup]
+# Use Node.js 22 to match Coolify environment
+nixPkgs = ["nodejs_22", "npm"]
+
+[phases.install]
+cmds = ["cd doc-standard-web && npm ci"]
+
+[phases.build]
+cmds = ["cd doc-standard-web && npm run build"]
+
+[start]
+cmd = "cd doc-standard-web && npm run start"
