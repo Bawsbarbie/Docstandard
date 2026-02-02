@@ -16,7 +16,7 @@ export default function AboutPage() {
               About Us
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Turning business documents into usable data — so your team can
+              Turning business documents into usable data so your team can
               focus on what matters.
             </p>
           </div>
@@ -26,14 +26,14 @@ export default function AboutPage() {
             <section>
               <p className="text-lg text-gray-700 leading-relaxed">
                 At enterprises and mid-size companies alike, documents are
-                everywhere — invoices, contracts, reports, forms, scans. They
+                everywhere: invoices, contracts, reports, forms, scans. They
                 touch every team, but they rarely speak the same language.
                 Systems break. Analysts spend hours cleaning data instead of
                 using it. Critical decisions get delayed by messy inputs.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mt-4">
                 That&apos;s the problem we kept seeing. And it wasn&apos;t just
-                technical — it was felt by the people stuck in the middle of
+                technical. It was felt by the people stuck in the middle of
                 it.
               </p>
             </section>
@@ -72,7 +72,7 @@ export default function AboutPage() {
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Accuracy comes first</strong> — because imperfect
+                    <strong>Accuracy comes first</strong> because imperfect
                     data still costs time, money, and trust.
                   </p>
                 </li>
@@ -99,8 +99,8 @@ export default function AboutPage() {
                 Who We Serve
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                We partner with professionals who depend on data to get work done
-                — like:
+                We partner with professionals who depend on data to get work done,
+                like:
               </p>
               <ul className="list-disc list-inside space-y-2 text-lg text-gray-700 mb-6 ml-4">
                 <li>Operations teams streamlining processes</li>
@@ -120,7 +120,7 @@ export default function AboutPage() {
                 How We Work
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                We take your documents — however messy and inconsistent — and
+                We take your documents, however messy and inconsistent, and
                 turn them into structured, standardized data you can actually
                 use. We do this through a careful process of cleaning,
                 validation, and verification that respects both precision and
@@ -133,21 +133,21 @@ export default function AboutPage() {
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Human-focused</strong> — because automation alone
+                    <strong>Human-focused</strong> because automation alone
                     misses real-world complexity
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Outcome-oriented</strong> — delivering Excel, CSV, or
+                    <strong>Outcome-oriented</strong> delivering Excel, CSV, or
                     JSON ready for your workflows
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Predictable</strong> — we agree scope and price
+                    <strong>Predictable</strong> we agree scope and price
                     upfront, with no surprises
                   </p>
                 </li>
@@ -170,21 +170,21 @@ export default function AboutPage() {
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Clarity over complexity</strong> — no dashboards, no
+                    <strong>Clarity over complexity</strong> no dashboards, no
                     endless configuration
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Accountability over ambiguity</strong> — we stand by
+                    <strong>Accountability over ambiguity</strong> we stand by
                     our outputs
                   </p>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-brand-600 font-bold mt-1">•</span>
                   <p className="text-gray-700">
-                    <strong>Partnership over products</strong> — we take work
+                    <strong>Partnership over products</strong> we take work
                     off your plate so you can focus on your goals
                   </p>
                 </li>
@@ -199,7 +199,7 @@ export default function AboutPage() {
               <p className="text-lg text-gray-700 leading-relaxed">
                 We&apos;re a small group of operators and data practitioners who
                 have lived the chaos of unstructured documents. Our backgrounds
-                are in operations, analytics, and workflow automation — and we
+                are in operations, analytics, and workflow automation, and we
                 built DocStandard to solve the pain we saw every day.
               </p>
             </section>
@@ -231,7 +231,7 @@ export default function AboutPage() {
               </h2>
               <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
                 Whether you want to ask a question, discuss a specific workflow,
-                or share your document challenges — we&apos;re here.
+                or share your document challenges, we&apos;re here.
               </p>
               <Link
                 href="/contact"
