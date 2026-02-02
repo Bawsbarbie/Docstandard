@@ -9,7 +9,6 @@ import { HowItWorks } from "@/components/landing/HowItWorks"
 import { Deliverables } from "@/components/landing/Deliverables"
 import { WeeklyProcessing } from "@/components/landing/WeeklyProcessing"
 import { Comparison } from "@/components/landing/Comparison"
-import { Advantage } from "@/components/landing/Advantage"
 import { NotFor } from "@/components/landing/NotFor"
 import { Pricing } from "@/components/landing/Pricing"
 import { FAQ } from "@/components/landing/FAQ"
@@ -28,7 +27,6 @@ export default function HomePage() {
         <Deliverables />
         <WeeklyProcessing />
         <Comparison />
-        <Advantage />
         <NotFor />
         <Pricing />
         <FAQ />
