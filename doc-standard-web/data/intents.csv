@@ -29,3 +29,53 @@ delivery-appointment,delivery-appointment-services,Delivery Appointment Services
 container-tracking,container-tracking-services,Container Tracking Services,logistics,32,Real-time container tracking
 demurrage-management,demurrage-management-services,Demurrage Management Services,logistics,33,Demurrage and detention management
 freight-audit,freight-audit-services,Freight Audit Services,finance,34,Freight bill auditing services
+sap-tm-sap-s4hana,sap-tm-to-sap-s4hana-integration,SAP TM to SAP S/4HANA Integration,integration,50,Native SAP TM to S/4HANA logistics data synchronization
+oracle-otm-oracle-erp,oracle-otm-to-oracle-erp-integration,Oracle OTM to Oracle ERP Integration,integration,51,Oracle OTM logistics data sync with Oracle ERP Cloud
+blue-yonder-tms-sap-s4hana,blue-yonder-tms-to-sap-s4hana-integration,Blue Yonder TMS to SAP S/4HANA Integration,integration,52,Sync Blue Yonder transportation data with SAP S/4HANA finance
+manhattan-wms-sap-s4hana,manhattan-wms-to-sap-s4hana-integration,Manhattan WMS to SAP S/4HANA Integration,integration,53,Manhattan WMS inventory sync with SAP S/4HANA
+cargowise-sap-s4hana,cargowise-to-sap-s4hana-integration,CargoWise to SAP S/4HANA Integration,integration,54,CargoWise forwarding data sync with SAP S/4HANA finance
+cargowise-oracle-netsuite,cargowise-to-netsuite-integration,CargoWise to NetSuite Integration,integration,55,Automated CargoWise invoice and shipment sync to NetSuite
+blue-yonder-wms-dynamics-365,blue-yonder-wms-to-dynamics-365-integration,Blue Yonder WMS to Dynamics 365 Integration,integration,56,Warehouse inventory sync between Blue Yonder and Microsoft Dynamics
+koerber-wms-dynamics-365,koerber-wms-to-dynamics-365-integration,Körber WMS to Dynamics 365 Integration,integration,57,Körber WMS integration with Microsoft Dynamics 365 F&O
+descartes-sap-s4hana,descartes-to-sap-s4hana-integration,Descartes to SAP S/4HANA Integration,integration,58,Descartes customs filing data sync with SAP S/4HANA
+mercurygate-netsuite,mercurygate-to-netsuite-integration,MercuryGate to NetSuite Integration,integration,59,MercuryGate TMS billing and load sync with NetSuite
+cargowise-dynamics-365-bc,cargowise-to-dynamics-365-bc-integration,CargoWise to Dynamics 365 BC Integration,integration,60,CargoWise integration with Microsoft Dynamics 365 Business Central
+magaya-quickbooks,magaya-to-quickbooks-integration,Magaya to QuickBooks Integration,integration,61,Seamless Magaya logistics sync with QuickBooks Enterprise
+magaya-sage-intacct,magaya-to-sage-intacct-integration,Magaya to Sage Intacct Integration,integration,62,Magaya forwarding operations sync with Sage Intacct finance
+mercurygate-quickbooks,mercurygate-to-quickbooks-integration,MercuryGate to QuickBooks Integration,integration,63,MercuryGate load financial sync with QuickBooks
+extensiv-quickbooks,extensiv-to-quickbooks-integration,Extensiv to QuickBooks Integration,integration,64,3PL Central (Extensiv) billing sync with QuickBooks
+extensiv-netsuite,extensiv-to-netsuite-integration,Extensiv to NetSuite Integration,integration,65,Extensiv WMS inventory and order sync with NetSuite
+kuebix-netsuite,kuebix-to-netsuite-integration,Kuebix to NetSuite Integration,integration,66,Kuebix TMS shipment data sync with NetSuite ERP
+gofreight-quickbooks,gofreight-to-quickbooks-integration,GoFreight to QuickBooks Integration,integration,67,GoFreight forwarding operations sync with QuickBooks Online
+fishbowl-quickbooks,fishbowl-to-quickbooks-integration,Fishbowl to QuickBooks Integration,integration,68,Fishbowl inventory management sync with QuickBooks Enterprise
+flexport-netsuite,flexport-to-netsuite-integration,Flexport to NetSuite Integration,integration,69,Flexport shipment visibility and landed cost sync to NetSuite
+manhattan-wms-tms,manhattan-wms-to-tms-integration,Manhattan WMS to TMS Integration,integration,70,Unified fulfillment: Manhattan WMS to Manhattan TMS sync
+blue-yonder-wms-tms,blue-yonder-wms-to-tms-integration,Blue Yonder WMS to TMS Integration,integration,71,Blue Yonder warehouse to transportation suite integration
+netsuite-shopify-plus,netsuite-to-shopify-plus-integration,NetSuite to Shopify Plus Integration,integration,72,NetSuite ERP inventory and order sync with Shopify Plus
+extensiv-shopify,extensiv-to-shopify-integration,Extensiv to Shopify Integration,integration,73,Extensiv 3PL WMS order fulfillment sync with Shopify
+cargowise-salesforce,cargowise-to-salesforce-integration,CargoWise to Salesforce Integration,integration,74,CargoWise quoting and shipment visibility sync to Salesforce
+magaya-hubspot,magaya-to-hubspot-integration,Magaya to HubSpot Integration,integration,75,Magaya CRM and shipment tracking sync with HubSpot
+samsara-netsuite,samsara-to-netsuite-integration,Samsara to NetSuite Integration,integration,76,Samsara fleet asset and maintenance data sync with NetSuite
+motive-quickbooks,motive-to-quickbooks-integration,Motive to QuickBooks Integration,integration,77,Motive fleet expense and IFTA sync with QuickBooks
+descartes-netsuite,descartes-to-netsuite-integration,Descartes to NetSuite Integration,integration,78,Descartes logistics and compliance data sync with NetSuite
+e2open-sap-s4hana,e2open-to-sap-s4hana-integration,E2open to SAP S/4HANA Integration,integration,79,E2open supply chain orchestration sync with SAP S/4HANA
+cargowise-xero,cargowise-to-xero-integration,CargoWise to Xero Integration,integration,80,CargoWise financial sync for small forwarders using Xero
+acumatica-spire,acumatica-to-spire-integration,Acumatica to Spire Integration,integration,81,Acumatica cloud ERP sync with Spire systems
+sage-x3-blue-yonder,sage-x3-to-blue-yonder-integration,Sage X3 to Blue Yonder Integration,integration,82,Sage X3 manufacturing ERP sync with Blue Yonder supply chain
+epicor-descartes,epicor-to-descartes-integration,Epicor to Descartes Integration,integration,83,Epicor distribution ERP sync with Descartes logistics
+infor-cloudsuite-roadnet,infor-to-roadnet-integration,Infor CloudSuite to Roadnet Integration,integration,84,Infor ERP sync with Roadnet transportation routing
+workday-coupa,workday-to-coupa-integration,Workday to Coupa Integration,integration,85,Workday HR/Finance sync with Coupa procurement logistics
+shipstation-netsuite,shipstation-to-netsuite-integration,ShipStation to NetSuite Integration,integration,86,ShipStation parcel shipping data sync with NetSuite
+shipstation-sap-business-one,shipstation-to-sap-b1-integration,ShipStation to SAP Business One Integration,integration,87,ShipStation shipping execution sync with SAP Business One
+cin7-quickbooks,cin7-to-quickbooks-integration,Cin7 to QuickBooks Integration,integration,88,Cin7 inventory management sync with QuickBooks
+dear-systems-xero,dear-systems-to-xero-integration,DEAR Systems to Xero Integration,integration,89,DEAR inventory sync with Xero accounting
+legacy-erp-tms,legacy-erp-to-modern-tms-integration,Legacy ERP to Modern TMS Integration,integration,90,Bridge AS/400 and legacy systems to modern TMS platforms
+sage-100-magento,sage-100-to-magento-integration,Sage 100 to Magento Integration,integration,91,Sage 100 distribution ERP sync with Magento commerce
+dynamics-gp-cargowise,dynamics-gp-to-cargowise-integration,Dynamics GP to CargoWise Integration,integration,92,Microsoft Dynamics GP (Great Plains) sync with CargoWise
+sap-business-one-magaya,sap-b1-to-magaya-integration,SAP Business One to Magaya Integration,integration,93,SAP Business One ERP sync with Magaya logistics
+quickbooks-desktop-wms,quickbooks-desktop-to-wms-integration,QuickBooks Desktop to Custom WMS Integration,integration,94,QuickBooks Desktop inventory sync with warehouse systems
+excel-cargowise,excel-to-cargowise-automation,Excel to CargoWise Automation,integration,95,Automated Excel/CSV data upload to CargoWise
+email-parser-tms,email-to-tms-automation,Email to TMS Automation,integration,96,Automated load entry from email to TMS
+edi-netsuite,edi-to-netsuite-integration,EDI to NetSuite Integration,integration,97,EDI 850/810/214 document processing for NetSuite
+edi-quickbooks,edi-to-quickbooks-integration,EDI to QuickBooks Integration,integration,98,EDI transaction sync with QuickBooks Enterprise
+api-legacy-systems,api-to-legacy-system-integration,API to Legacy System Integration,integration,99,Modern API connectivity for flat-file legacy logistics systems
