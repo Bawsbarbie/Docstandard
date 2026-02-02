@@ -3,10 +3,12 @@
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { CheckCircle2, Upload } from "lucide-react"
 
-export default function ContactPage() {
+function ContactForm() {
+  const searchParams = useSearchParams()
   const [formData, setFormData] = useState({
     workEmail: "",
     companyName: "",
@@ -19,6 +21,14 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  // Pre-fill document type from URL query parameter
+  useEffect(() => {
+    const service = searchParams.get("service")
+    if (service) {
+      setFormData((prev) => ({ ...prev, documentTypes: service }))
+    }
+  }, [searchParams])
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -313,5 +323,23 @@ Notes: ${formData.notes || "None"}
       </main>
       <Footer />
     </div>
+  )
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <main className="pt-28 pb-20">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-gray-600">Loading...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    }>
+      <ContactForm />
+    </Suspense>
   )
 }
