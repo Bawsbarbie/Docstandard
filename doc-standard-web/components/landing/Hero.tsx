@@ -57,19 +57,24 @@ export const Hero: React.FC = () => {
               </a>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-4">
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                <CheckCircle className="w-4 h-4 text-green-500" />
-                <span>Scope confirmed before processing</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                <CheckCircle className="w-4 h-4 text-green-500" />
-                <span>Edge cases flagged, not guessed</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                <CheckCircle className="w-4 h-4 text-green-500" />
-                <span>No silent automation failures</span>
-              </div>
+            <div className="mt-5 text-sm text-gray-500 flex flex-col sm:flex-row gap-2 justify-center lg:justify-start">
+              <span>Scope confirmed before processing.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>Edge cases flagged, not guessed.</span>
+              <span className="hidden sm:inline">•</span>
+              <span>No silent automation failures.</span>
+            </div>
+
+            <div className="mt-8 flex items-center justify-center lg:justify-start space-x-6 text-sm text-gray-500">
+              <span className="flex items-center">
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" /> One Service
+              </span>
+              <span className="flex items-center">
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" /> One Price
+              </span>
+              <span className="flex items-center">
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" /> Real Results
+              </span>
             </div>
           </motion.div>
 
