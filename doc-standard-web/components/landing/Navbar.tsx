@@ -17,12 +17,12 @@ export const Navbar: React.FC = () => {
   }, [])
 
   const navLinks = [
-    { name: "How It Works", href: "#how-it-works" },
-    { name: "Services", href: "#services" },
-    { name: "Why Us", href: "#why-us" },
-    { name: "Pricing", href: "#pricing" },
+    { name: "How It Works", href: "/#how-it-works" },
+    { name: "Services", href: "/services" },
+    { name: "Why Us", href: "/#why-us" },
+    { name: "Pricing", href: "/#pricing" },
     { name: "Security", href: "/security" },
-    { name: "FAQ", href: "#faq" },
+    { name: "FAQ", href: "/#faq" },
   ]
 
   return (

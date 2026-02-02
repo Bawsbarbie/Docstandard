@@ -1,0 +1,103 @@
+import { Metadata } from "next"
+import Link from "next/link"
+import { Navbar } from "@/components/landing/Navbar"
+import { Footer } from "@/components/landing/Footer"
+import { loadIntents } from "@/lib/pseo/intents"
+import { ArrowRight, FileText, Globe, Layers, ShieldCheck } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Logistics Document Services & Integrations | DocStandard",
+  description: "Browse our full catalog of logistics document processing services and B2B software integrations.",
+}
+
+// Map kinds to display names and icons
+const KIND_CONFIG: Record<string, { label: string; icon: any }> = {
+  integration: { label: "Software Integrations", icon: Layers },
+  shipping: { label: "Shipping Documents", icon: Globe },
+  customs: { label: "Customs & Compliance", icon: ShieldCheck },
+  invoice: { label: "Financial Documents", icon: FileText },
+  logistics: { label: "Logistics Operations", icon: Globe },
+  finance: { label: "Freight Finance", icon: FileText },
+  compliance: { label: "Trade Compliance", icon: ShieldCheck },
+  forwarding: { label: "Freight Forwarding", icon: Globe },
+  notification: { label: "Notifications", icon: FileText },
+  warehousing: { label: "Warehousing", icon: Layers },
+  insurance: { label: "Insurance", icon: ShieldCheck },
+}
+
+export default async function ServicesPage() {
+  const intents = await loadIntents()
+
+  // Group intents by kind
+  const grouped = intents.reduce((acc, intent) => {
+    const kind = intent.kind || "other"
+    if (!acc[kind]) acc[kind] = []
+    acc[kind].push(intent)
+    return acc
+  }, {} as Record<string, typeof intents>)
+
+  // Sort groups by config order
+  const sortedKinds = Object.keys(grouped).sort((a, b) => {
+    // Integration first
+    if (a === "integration") return -1
+    if (b === "integration") return 1
+    return 0
+  })
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+      
+      <main className="flex-grow pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
+            Service Directory
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Explore our comprehensive catalog of document processing services and software integrations.
+          </p>
+        </div>
+
+        <div className="space-y-16">
+          {sortedKinds.map((kind) => {
+            const config = KIND_CONFIG[kind] || { label: kind, icon: FileText }
+            const Icon = config.icon
+            const items = grouped[kind]
+
+            return (
+              <div key={kind} id={kind} className="scroll-mt-28">
+                <div className="flex items-center space-x-3 mb-6 border-b border-gray-200 pb-4">
+                  <div className="p-2 bg-brand-100 rounded-lg">
+                    <Icon className="w-6 h-6 text-brand-600" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900">{config.label}</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {items.map((intent) => (
+                    <Link
+                      key={intent.id}
+                      // Linking to NY as a canonical example for now
+                      href={`/us/ny/new-york/${intent.slug}`}
+                      className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 border border-gray-100 hover:border-brand-200"
+                    >
+                      <h3 className="font-semibold text-gray-900 group-hover:text-brand-600 mb-2 flex items-center justify-between">
+                        {intent.name}
+                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform" />
+                      </h3>
+                      <p className="text-sm text-gray-500 line-clamp-2">
+                        {intent.description || `Professional ${intent.name} processing and standardization.`}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
