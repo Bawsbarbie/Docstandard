@@ -183,7 +183,9 @@ export async function getCityBySlug(
   citySlug: string
 ): Promise<City | null> {
   await initializeMaps()
-  const key = `${countryCode}-${stateCode}-${citySlug}`
+  // Ensure stateCode is uppercase for lookup, as CSV data uses "FL", "NY", etc.
+  const normalizedState = stateCode.toUpperCase()
+  const key = `${countryCode}-${normalizedState}-${citySlug}`
   return citySlugMap?.get(key) || null
 }
 
