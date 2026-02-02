@@ -127,7 +127,7 @@ Notes: ${formData.notes || "None"}
                   required
                   value={formData.workEmail}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                   placeholder="you@company.com"
                 />
               </div>
@@ -146,7 +146,7 @@ Notes: ${formData.notes || "None"}
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                   placeholder="Your company"
                 />
               </div>
@@ -166,7 +166,7 @@ Notes: ${formData.notes || "None"}
                   required
                   value={formData.documentTypes}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                   placeholder="e.g., Invoices, Contracts, Forms"
                 />
               </div>
@@ -187,7 +187,7 @@ Notes: ${formData.notes || "None"}
                   required
                   value={formData.fileCount}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                   placeholder="e.g., 50 files, ~200 pages"
                 />
               </div>
@@ -246,7 +246,7 @@ Notes: ${formData.notes || "None"}
                   name="deadline"
                   value={formData.deadline}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
                   placeholder="e.g., End of month, ASAP, Flexible"
                 />
               </div>
@@ -265,7 +265,7 @@ Notes: ${formData.notes || "None"}
                   rows={4}
                   value={formData.notes}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
                   placeholder="Any specific requirements or context..."
                 />
               </div>
