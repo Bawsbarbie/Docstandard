@@ -77,9 +77,9 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-600">
+                <Link href="/privacy" className="hover:text-brand-600">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-brand-600">
