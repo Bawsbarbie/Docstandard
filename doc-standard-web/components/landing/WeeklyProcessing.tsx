@@ -52,13 +52,6 @@ export const WeeklyProcessing: React.FC = () => {
             </div>
           ))}
         </div>
-
-        <div className="mt-10 flex justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-brand-700 text-sm font-medium">
-            <Sparkles className="w-4 h-4" />
-            Scope confirmed before processing. Edge cases flagged, not guessed.
-          </div>
-        </div>
       </div>
     </section>
   )
