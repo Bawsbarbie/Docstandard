@@ -77,7 +77,8 @@ export default async function ServicesPage() {
                   {items.map((intent) => (
                     <Link
                       key={intent.id}
-                      href={`/contact?service=${encodeURIComponent(intent.name)}`}
+                      // Linking to NY as a canonical example for now
+                      href={`/us/ny/new-york/${intent.slug}`}
                       className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 border border-gray-100 hover:border-brand-200"
                     >
                       <h3 className="font-semibold text-gray-900 group-hover:text-brand-600 mb-2 flex items-center justify-between">
