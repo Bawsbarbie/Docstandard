@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
             Get standardized, clean data delivered to you today.
           </p>
           <Link
-            href="/upload"
+            href="/login"
             className="inline-block bg-brand-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:bg-brand-700 transition-colors"
           >
             Upload Documents · Get Started

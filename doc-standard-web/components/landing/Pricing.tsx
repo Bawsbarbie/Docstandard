@@ -53,7 +53,7 @@ export const Pricing: React.FC = () => {
             <p className="text-sm text-gray-500 mb-8">Standard processing batch</p>
 
             <Link
-              href="/upload"
+              href="/login"
               className="w-full bg-brand-600 text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:bg-brand-700 hover:shadow-xl transform hover:-translate-y-1 transition-all flex items-center justify-center"
             >
               Start Processing

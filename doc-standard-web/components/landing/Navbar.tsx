@@ -54,7 +54,7 @@ export const Navbar: React.FC = () => {
               </a>
             ))}
             <Link
-              href="/upload"
+              href="/login"
               className="bg-gray-900 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               Get Started
@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
             ))}
             <div className="pt-4">
               <Link
-                href="/upload"
+                href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="block text-center w-full bg-brand-600 text-white px-5 py-3 rounded-lg text-base font-medium hover:bg-brand-700"
               >
