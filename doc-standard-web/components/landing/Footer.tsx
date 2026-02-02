@@ -82,9 +82,9 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-brand-600">
+                <Link href="/terms" className="hover:text-brand-600">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
