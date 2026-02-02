@@ -44,6 +44,36 @@ const questions: FAQItem[] = [
     answer:
       "Real-world documents are rarely clean. We process inconsistent layouts, missing fields, duplicates, and multi-page files by standardizing structure and resolving edge cases instead of guessing or auto-filling blindly.",
   },
+  {
+    question: "Do you validate the data before delivery?",
+    answer:
+      "Yes. Every batch includes validation and quality checks to identify inconsistencies, duplicates, incomplete records, and formatting issues before delivery.",
+  },
+  {
+    question: "Can you remove duplicate records?",
+    answer:
+      "Yes. If duplicates exist within a batch, we identify and clean them so your final dataset reflects accurate, up-to-date information only.",
+  },
+  {
+    question: "What is included in the $799 batch price?",
+    answer:
+      "The flat $799 price covers a standard processing batch, including document intake, cleaning, structuring, validation, and delivery. If a batch is unusually large or complex, scope is confirmed upfront before work begins.",
+  },
+  {
+    question: "How long does processing take?",
+    answer:
+      "Typical turnaround is 3-5 business days for standard batches. Timelines may vary for larger or more complex document sets, which we'll communicate clearly before starting.",
+  },
+  {
+    question: "Can you handle large or ongoing volumes?",
+    answer:
+      "Yes. DocStandard is designed to scale. For recurring or high-volume needs, we can define a repeatable structure and processing approach to maintain consistency over time.",
+  },
+  {
+    question: "What happens if something in my documents is unclear?",
+    answer:
+      "We flag unclear or ambiguous data instead of making assumptions. Accuracy and consistency matter more than speed, and we prioritize clarity over guesswork.",
+  },
 ]
 
 export const FAQ: React.FC = () => {
