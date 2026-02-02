@@ -41,6 +41,7 @@ export interface PageModel {
     description: string
     shouldIndex: boolean
     canonical: string
+    imageUrl: string
   }
 }
 
@@ -236,6 +237,25 @@ export class ContentFactory {
   }
 
   /**
+   * Map intent kind to Unsplash photo ID
+   */
+  private getImageUrlForIntent(intent: Intent): string {
+    const imageMap: Record<string, string> = {
+      customs: "1450175726323-c3ad5986ff21",
+      compliance: "1450175726323-c3ad5986ff21",
+      insurance: "1450175726323-c3ad5986ff21",
+      shipping: "1494412574643-f4e7b2c1766c",
+      logistics: "1519003309479-3c57e1f7403f",
+      finance: "1554224155-8d041820510a",
+      invoice: "1554224155-8d041820510a",
+      integration: "1558494947-3591d68ae851",
+    }
+
+    const photoId = imageMap[intent.kind] || "1586528116311-c4ad521ef844"
+    return `https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&q=80&w=1200`
+  }
+
+  /**
    * Replace template variables in text
    */
   private replaceVariables(
@@ -349,6 +369,8 @@ export class ContentFactory {
       intent.slug
     }`
 
+    const imageUrl = this.getImageUrlForIntent(intent)
+
     return {
       city,
       intent,
@@ -364,6 +386,7 @@ export class ContentFactory {
         description,
         shouldIndex,
         canonical,
+        imageUrl,
       },
     }
   }
