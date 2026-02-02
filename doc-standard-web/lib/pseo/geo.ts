@@ -16,6 +16,7 @@ let citiesCache: City[] | null = null
 // Fast lookup maps
 let cityToStateMap: Map<string, string> | null = null
 let stateSlugMap: Map<string, State> | null = null
+let stateCodeMap: Map<string, State> | null = null
 let citySlugMap: Map<string, City> | null = null
 
 /**
@@ -151,8 +152,10 @@ async function initializeMaps() {
 
   // Build state slug -> state map
   stateSlugMap = new Map()
+  stateCodeMap = new Map()
   for (const state of states) {
     stateSlugMap.set(`${state.countryCode}-${state.slug}`, state)
+    stateCodeMap.set(`${state.countryCode}-${state.code.toLowerCase()}`, state)
   }
 }
 
@@ -197,8 +200,12 @@ export async function getStateBySlug(
   stateSlug: string
 ): Promise<State | null> {
   await initializeMaps()
-  const key = `${countryCode}-${stateSlug}`
-  return stateSlugMap?.get(key) || null
+  const normalized = stateSlug.toLowerCase()
+  const slugKey = `${countryCode}-${normalized}`
+  const bySlug = stateSlugMap?.get(slugKey)
+  if (bySlug) return bySlug
+  const codeKey = `${countryCode}-${normalized}`
+  return stateCodeMap?.get(codeKey) || null
 }
 
 /**
