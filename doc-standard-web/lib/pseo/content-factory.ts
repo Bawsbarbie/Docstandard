@@ -237,6 +237,8 @@ export class ContentFactory {
       .replace(/\{state\}/g, state?.name || "")
       .replace(/\{service\}/g, intent.name)
       .replace(/\{intent\}/g, intent.name)
+      .replace(/\{intentName\}/g, intent.name)
+      .replace(/\{vertical\}/g, "logistics") // Default vertical
   }
 
   /**
