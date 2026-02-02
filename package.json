@@ -1,0 +1,9 @@
+{
+  "name": "docstandard-root",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm --prefix doc-standard-web install",
+    "build": "npm --prefix doc-standard-web run build",
+    "start": "npm --prefix doc-standard-web run start"
+  }
+}
