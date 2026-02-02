@@ -50,7 +50,7 @@ export interface BlockItem {
 export interface ContentPool {
   id: string // e.g., "default", "customs", "freight-forwarding"
   extends?: string // Pool inheritance (e.g., "default")
-  blocks: Record<string, BlockItem[]> // blockType -> array of variants
+  blocks: Record<string, string[]> // blockType -> array of block IDs
 }
 
 // Page Generation Types

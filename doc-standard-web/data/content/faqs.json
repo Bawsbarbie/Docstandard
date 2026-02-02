@@ -1,0 +1,86 @@
+[
+  {
+    "id": "faq_scope_1",
+    "question": "What exactly is included in a Standard Batch of {intentName}?",
+    "answer": "Our $799 Standard Batch covers the ingestion, cleaning, structuring, and validation of your {intentName} documents. We normalize headers, standardize fields, and deliver system-ready files that are consistent and usable.",
+    "tags": ["scope"]
+  },
+  {
+    "id": "faq_scope_2",
+    "question": "Is there a limit to how many {intentName} files I can include in a Standard Batch?",
+    "answer": "A Standard Batch is defined by processing scope, not file count. You can include a batch of related {intentName} documents, even if formats vary, as long as they align with a single processing goal.",
+    "tags": ["scope"]
+  },
+  {
+    "id": "faq_format_1",
+    "question": "Can you handle scanned PDFs and digital {intentName} files together?",
+    "answer": "Yes. DocStandard is built for mixed inputs. We handle scanned PDFs, image-based files, and digital documents in the same Standard Batch and return a unified, structured output.",
+    "tags": ["format"]
+  },
+  {
+    "id": "faq_format_2",
+    "question": "What if my {intentName} documents come from multiple sources?",
+    "answer": "That’s common. We clean and standardize documents from different sources so they follow one consistent structure, regardless of how they were originally created.",
+    "tags": ["format"]
+  },
+  {
+    "id": "faq_output_1",
+    "question": "What format will my {intentName} data be delivered in?",
+    "answer": "We deliver system-ready outputs such as CSV, XML, or JSON, depending on your use case. All outputs are structured for easy import into business systems.",
+    "tags": ["output"]
+  },
+  {
+    "id": "faq_output_2",
+    "question": "Can the structured {intentName} data be used in my existing software?",
+    "answer": "Yes. Our outputs are designed for compatibility with common business software and internal tools, reducing the need for additional cleanup before import.",
+    "tags": ["output"]
+  },
+  {
+    "id": "faq_pricing_1",
+    "question": "Is the $799 fee charged per {intentName} file or per page?",
+    "answer": "No. The $799 price is for the entire Standard Batch. We do not charge per file or per page, which keeps pricing predictable.",
+    "tags": ["pricing"]
+  },
+  {
+    "id": "faq_pricing_2",
+    "question": "Why is the Standard Batch priced as a flat fee?",
+    "answer": "Flat pricing reflects the operational value of document readiness. You pay for clean, structured, usable data, not for individual pages or manual tasks.",
+    "tags": ["pricing"]
+  },
+  {
+    "id": "faq_service_1",
+    "question": "Is DocStandard a data entry or virtual assistant service?",
+    "answer": "No. DocStandard is a document readiness service. We focus on cleaning, structuring, and standardizing documents so they are usable by systems, not on manual data entry.",
+    "tags": ["service"]
+  },
+  {
+    "id": "faq_service_2",
+    "question": "What problem does DocStandard solve that outsourcing data entry does not?",
+    "answer": "Data entry focuses on typing. DocStandard focuses on data readiness—ensuring documents are structured, consistent, and reliable for automation and systems.",
+    "tags": ["service"]
+  },
+  {
+    "id": "faq_security_1",
+    "question": "Is my {intentName} data secure during processing?",
+    "answer": "Yes. We use enterprise-grade security practices to protect your documents throughout ingestion, processing, and delivery.",
+    "tags": ["security"]
+  },
+  {
+    "id": "faq_security_2",
+    "question": "Who has access to my documents during processing?",
+    "answer": "Access is restricted to secure processing environments and authorized workflows only. Your documents are handled with strict confidentiality controls.",
+    "tags": ["security"]
+  },
+  {
+    "id": "faq_turnaround_1",
+    "question": "What is the typical turnaround time for {city} companies?",
+    "answer": "Most Standard Batches are completed within a few business days. Exact turnaround depends on document complexity, not location.",
+    "tags": ["turnaround"]
+  },
+  {
+    "id": "faq_turnaround_2",
+    "question": "Does being located in {city} affect processing speed?",
+    "answer": "No. DocStandard operates digitally, so companies in {city} receive the same turnaround times as clients anywhere else.",
+    "tags": ["turnaround"]
+  }
+]

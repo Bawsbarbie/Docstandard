@@ -4,29 +4,82 @@
       "id": "default",
       "description": "Default content pool for all pages",
       "blocks": {
-        "intro": ["intro-1", "intro-2", "intro-3"],
-        "pain": ["pain-1", "pain-2", "pain-3"],
-        "benefit": ["benefit-1", "benefit-2", "benefit-3", "benefit-4", "benefit-5", "benefit-6"],
-        "cta": ["cta-1", "cta-2"],
-        "faq": ["faq-1", "faq-2", "faq-3", "faq-4", "faq-5", "faq-6"]
-      }
-    },
-    {
-      "id": "customs",
-      "extends": "default",
-      "description": "Customs-specific content",
-      "blocks": {
-        "intro": ["intro-1", "intro-3"],
-        "faq": ["faq-1", "faq-2", "faq-4", "faq-5"]
-      }
-    },
-    {
-      "id": "shipping",
-      "extends": "default",
-      "description": "Shipping document content",
-      "blocks": {
-        "intro": ["intro-2", "intro-3"],
-        "faq": ["faq-1", "faq-2", "faq-3", "faq-6"]
+        "intro": [
+          "intro_doctype_1",
+          "intro_doctype_2",
+          "intro_doctype_3",
+          "intro_doctype_4",
+          "intro_industry_1",
+          "intro_industry_2",
+          "intro_industry_3",
+          "intro_software_1",
+          "intro_software_2",
+          "intro_general_1"
+        ],
+        "pain": [
+          "pain_1",
+          "pain_2",
+          "pain_3",
+          "pain_4",
+          "pain_5",
+          "pain_6",
+          "pain_7",
+          "pain_8",
+          "pain_9",
+          "pain_10"
+        ],
+        "what_we_structure": [
+          "structure_1",
+          "structure_2",
+          "structure_3",
+          "structure_4",
+          "structure_5",
+          "structure_6",
+          "structure_7",
+          "structure_8",
+          "structure_9",
+          "structure_10"
+        ],
+        "process_steps": [
+          "process_1",
+          "process_2",
+          "process_3",
+          "process_4",
+          "process_5",
+          "process_6",
+          "process_7",
+          "process_8",
+          "process_9",
+          "process_10"
+        ],
+        "benefits": [
+          "benefits_1",
+          "benefits_2",
+          "benefits_3",
+          "benefits_4",
+          "benefits_5",
+          "benefits_6",
+          "benefits_7",
+          "benefits_8",
+          "benefits_9",
+          "benefits_10"
+        ],
+        "faq": [
+          "faq_scope_1",
+          "faq_scope_2",
+          "faq_format_1",
+          "faq_format_2",
+          "faq_output_1",
+          "faq_output_2",
+          "faq_pricing_1",
+          "faq_pricing_2",
+          "faq_service_1",
+          "faq_service_2",
+          "faq_security_1",
+          "faq_security_2",
+          "faq_turnaround_1",
+          "faq_turnaround_2"
+        ]
       }
     }
   ]

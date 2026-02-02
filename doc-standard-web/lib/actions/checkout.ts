@@ -6,7 +6,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server"
-import { stripe, STRIPE_CONFIG } from "@/lib/stripe"
+import { getStripe, STRIPE_CONFIG } from "@/lib/stripe"
 import type { Order } from "@/lib/types/database"
 
 /**
@@ -63,7 +63,7 @@ export async function createCheckoutSession(
     const fileCount = files?.length || 0
 
     // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       mode: "payment",
       customer_email: user.email,
       client_reference_id: orderId,

@@ -95,7 +95,7 @@ export class ContentFactory {
 
     const poolsPath = path.join(process.cwd(), "data", "content", "pools.json")
     const poolsContent = await fs.readFile(poolsPath, "utf-8")
-    this.pools = JSON.parse(poolsContent)
+    this.pools = JSON.parse(poolsContent) as PoolConfig
 
     return this.pools
   }

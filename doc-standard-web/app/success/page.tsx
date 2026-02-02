@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Link from "next/link"
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [countdown, setCountdown] = useState(5)
@@ -96,7 +96,7 @@ export default function SuccessPage() {
                 <li className="flex items-start gap-2">
                   <span className="font-semibold text-foreground">1.</span>
                   <span>
-                    You'll receive a confirmation email with your order details
+                    You&apos;ll receive a confirmation email with your order details
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -108,7 +108,7 @@ export default function SuccessPage() {
                 <li className="flex items-start gap-2">
                   <span className="font-semibold text-foreground">3.</span>
                   <span>
-                    We'll notify you when processing is complete
+                    We&apos;ll notify you when processing is complete
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -144,5 +144,17 @@ export default function SuccessPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   )
 }

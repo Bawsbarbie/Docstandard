@@ -1,98 +1,261 @@
 {
   "intro": [
     {
-      "id": "intro-1",
-      "text": "Professional {service} in {city}, {state}. Our expert team delivers fast, accurate, and compliant solutions for all your logistics documentation needs."
+      "id": "intro_doctype_1",
+      "text": "DocStandard helps businesses in {city}, {state} turn messy {intentName} files into clean, structured, system-ready documents. For a flat $799, our Standard Batch service delivers usable data instead of raw files.",
+      "tags": ["doctype"]
     },
     {
-      "id": "intro-2",
-      "text": "Looking for reliable {service} in {city}? We provide industry-leading document processing with same-day turnaround and dedicated support."
+      "id": "intro_doctype_2",
+      "text": "If your {intentName} documents are digital but still hard to use, DocStandard fixes the problem. We process a full Standard Batch for $799 and return clean, structured files.",
+      "tags": ["doctype"]
     },
     {
-      "id": "intro-3",
-      "text": "Streamline your logistics operations with our {service} in {city}, {state}. Trusted by importers and exporters across the region."
+      "id": "intro_doctype_3",
+      "text": "Messy {intentName} files slow down operations. DocStandard standardizes and structures document batches so teams can actually work with the data.",
+      "tags": ["doctype"]
+    },
+    {
+      "id": "intro_doctype_4",
+      "text": "DocStandard transforms inconsistent {intentName} documents into reliable, system-ready files using a flat-fee Standard Batch model.",
+      "tags": ["doctype"]
+    },
+    {
+      "id": "intro_industry_1",
+      "text": "For {vertical} teams in {city}, document quality impacts every workflow. DocStandard cleans and structures {intentName} files for operational use.",
+      "tags": ["industry"]
+    },
+    {
+      "id": "intro_industry_2",
+      "text": "{vertical} companies rely on accurate documents to keep systems running smoothly. DocStandard delivers clean, validated data from messy files.",
+      "tags": ["industry"]
+    },
+    {
+      "id": "intro_industry_3",
+      "text": "When {vertical} documents aren’t structured properly, errors follow. DocStandard prepares your {intentName} files for real business systems.",
+      "tags": ["industry"]
+    },
+    {
+      "id": "intro_software_1",
+      "text": "Unstructured {intentName} files cause problems inside software platforms. DocStandard ensures documents are structured before import.",
+      "tags": ["software"]
+    },
+    {
+      "id": "intro_software_2",
+      "text": "Feeding raw documents into {intentName} workflows leads to errors. DocStandard cleans and standardizes files so systems can read them correctly.",
+      "tags": ["software"]
+    },
+    {
+      "id": "intro_general_1",
+      "text": "DocStandard focuses on document readiness. We take messy files and return clean, structured data businesses can trust.",
+      "tags": ["general"]
     }
   ],
   "pain": [
     {
-      "id": "pain-1",
-      "text": "Dealing with complex customs documentation can be overwhelming. Delays, errors, and compliance issues cost time and money."
+      "id": "pain_1",
+      "text": "Many {intentName} files look digital but function like paper. Scans, inconsistent layouts, and missing structure make them hard to use.",
+      "tags": ["general"]
     },
     {
-      "id": "pain-2",
-      "text": "Manual document processing leads to costly mistakes and shipment delays. You need a reliable partner who understands logistics."
+      "id": "pain_2",
+      "text": "Inconsistent document formats cause failed imports, broken reports, and manual cleanup work.",
+      "tags": ["general"]
     },
     {
-      "id": "pain-3",
-      "text": "Navigating international trade regulations is challenging. One mistake can result in penalties, holds, and lost revenue."
+      "id": "pain_3",
+      "text": "Even small formatting differences across files can break automation and slow down teams.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_4",
+      "text": "Image-based PDFs prevent systems from reliably reading the data inside them.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_5",
+      "text": "Raw documents often contain duplicate fields, unclear headers, and mismatched data types.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_6",
+      "text": "Teams spend hours fixing documents after the fact instead of using the data immediately.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_7",
+      "text": "Dirty data creates downstream errors that surface later in reporting, audits, and reconciliation.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_8",
+      "text": "Documents coming from multiple sources rarely follow the same structure or naming conventions.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_9",
+      "text": "Unstructured files limit visibility and make it difficult to scale operations.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_10",
+      "text": "Without standardization, digital documents still require manual intervention to be usable.",
+      "tags": ["general"]
     }
   ],
-  "benefit": [
+  "what_we_structure": [
     {
-      "id": "benefit-1",
-      "text": "Same-day document processing and turnaround"
+      "id": "structure_1",
+      "text": "Normalized headers and consistent column naming across the entire document batch.",
+      "tags": ["general"]
     },
     {
-      "id": "benefit-2",
-      "text": "100% accuracy guarantee on all documentation"
+      "id": "structure_2",
+      "text": "Standardized date formats to ensure consistency across files and systems.",
+      "tags": ["general"]
     },
     {
-      "id": "benefit-3",
-      "text": "Expert compliance review by licensed professionals"
+      "id": "structure_3",
+      "text": "Cleaned and validated reference numbers, totals, and identifiers found in {intentName} documents.",
+      "tags": ["doctype"]
     },
     {
-      "id": "benefit-4",
-      "text": "Flat-fee pricing - $799 per batch, no surprises"
+      "id": "structure_4",
+      "text": "Vendor, customer, and company names cleaned for consistency and accuracy.",
+      "tags": ["general"]
     },
     {
-      "id": "benefit-5",
-      "text": "Dedicated support team available 24/7"
+      "id": "structure_5",
+      "text": "Aligned field placement so similar data always appears in the same location.",
+      "tags": ["general"]
     },
     {
-      "id": "benefit-6",
-      "text": "Secure cloud-based document management"
+      "id": "structure_6",
+      "text": "Validated numeric fields to reduce calculation and reporting errors.",
+      "tags": ["general"]
+    },
+    {
+      "id": "structure_7",
+      "text": "Standardized units, codes, and operational fields commonly used in {vertical} workflows.",
+      "tags": ["industry"]
+    },
+    {
+      "id": "structure_8",
+      "text": "Removed duplicate or conflicting fields across documents.",
+      "tags": ["general"]
+    },
+    {
+      "id": "structure_9",
+      "text": "Structured outputs designed to be system-compatible and predictable.",
+      "tags": ["software"]
+    },
+    {
+      "id": "structure_10",
+      "text": "Consistency checks across the batch to ensure all files follow the same schema.",
+      "tags": ["general"]
     }
   ],
-  "cta": [
+  "process_steps": [
     {
-      "id": "cta-1",
-      "text": "Get started today with our flat-fee $799 document processing service. Upload your documents now and receive expert-processed files within 24 hours."
+      "id": "process_1",
+      "text": "Upload your batch of documents, even if formats and layouts vary.",
+      "tags": ["general"]
     },
     {
-      "id": "cta-2",
-      "text": "Ready to streamline your logistics? Our $799 flat-fee service includes unlimited revisions and dedicated support. Start your order now."
+      "id": "process_2",
+      "text": "Files are ingested and reviewed for structure, consistency, and usability.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_3",
+      "text": "Documents are cleaned, structured, and standardized across the batch.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_4",
+      "text": "Key fields are validated to reduce downstream errors.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_5",
+      "text": "Data is aligned to consistent schemas suitable for systems and reporting.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_6",
+      "text": "Edge cases and inconsistencies are handled within the Standard Batch scope.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_7",
+      "text": "Structured files are reviewed for accuracy and completeness.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_8",
+      "text": "Final outputs are prepared in clean, usable formats.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_9",
+      "text": "Files are delivered ready for systems, workflows, or internal use.",
+      "tags": ["general"]
+    },
+    {
+      "id": "process_10",
+      "text": "You receive structured data without needing manual cleanup.",
+      "tags": ["general"]
     }
   ],
-  "faq": [
+  "benefits": [
     {
-      "id": "faq-1",
-      "question": "How long does document processing take?",
-      "answer": "Standard processing is completed within 24 hours. Urgent requests can be expedited for same-day delivery."
+      "id": "benefits_1",
+      "text": "Flat $799 pricing per Standard Batch with no per-page or per-file fees.",
+      "tags": ["pricing"]
     },
     {
-      "id": "faq-2",
-      "question": "What types of documents do you process?",
-      "answer": "We handle all logistics documentation including customs forms, commercial invoices, bills of lading, certificates of origin, and more."
+      "id": "benefits_2",
+      "text": "Flexible scope allows mixed formats and document types within a single batch.",
+      "tags": ["general"]
     },
     {
-      "id": "faq-3",
-      "question": "Is the $799 fee all-inclusive?",
-      "answer": "Yes, our flat fee covers processing up to 50 documents per batch with unlimited revisions and expert review."
+      "id": "benefits_3",
+      "text": "Clean, structured data improves accuracy across systems and reports.",
+      "tags": ["general"]
     },
     {
-      "id": "faq-4",
-      "question": "Do you guarantee compliance?",
-      "answer": "Absolutely. All documents are reviewed by licensed customs brokers and trade compliance experts to ensure 100% regulatory compliance."
+      "id": "benefits_4",
+      "text": "Standardized outputs reduce manual rework and operational friction.",
+      "tags": ["general"] },
+    {
+      "id": "benefits_5",
+      "text": "Designed for compatibility with business software and internal tools.",
+      "tags": ["software"]
     },
     {
-      "id": "faq-5",
-      "question": "Can you handle international documentation?",
-      "answer": "Yes, we process documentation for all countries and comply with international trade regulations including ITAR, EAR, and Customs requirements."
+      "id": "benefits_6",
+      "text": "Faster access to usable data without internal cleanup effort.",
+      "tags": ["general"]
     },
     {
-      "id": "faq-6",
-      "question": "What if I need revisions?",
-      "answer": "Unlimited revisions are included in your flat fee. We'll work with you until the documents meet your exact specifications."
+      "id": "benefits_7",
+      "text": "Improved consistency across documents from multiple sources.",
+      "tags": ["general"]
+    },
+    {
+      "id": "benefits_8",
+      "text": "Reduced risk from dirty or unreliable document data.",
+      "tags": ["general"]
+    },
+    {
+      "id": "benefits_9",
+      "text": "Clear separation from data entry or virtual assistant services.",
+      "tags": ["general"]
+    },
+    {
+      "id": "benefits_10",
+      "text": "Documents delivered ready for operational use, not manual fixing.",
+      "tags": ["general"]
     }
   ]
 }

@@ -5,14 +5,31 @@
 
 import Stripe from "stripe"
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY is not set in environment variables")
+// Initialize Stripe lazily to avoid build-time errors
+let stripeInstance: Stripe | null = null
+
+export function getStripe(): Stripe {
+  if (!stripeInstance) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY is not set in environment variables")
+    }
+    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2026-01-28.clover",
+      typescript: true,
+    })
+  }
+  return stripeInstance
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-12-18.acacia",
-  typescript: true,
-})
+// For backward compatibility
+export const stripe = {
+  get checkout() {
+    return getStripe().checkout
+  },
+  get webhooks() {
+    return getStripe().webhooks
+  },
+}
 
 // Stripe configuration constants
 export const STRIPE_CONFIG = {

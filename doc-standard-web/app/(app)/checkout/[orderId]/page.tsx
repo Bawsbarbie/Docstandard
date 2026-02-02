@@ -20,24 +20,24 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
   const [processingPayment, setProcessingPayment] = useState(false)
 
   useEffect(() => {
-    loadOrder()
-  }, [params.orderId])
+    const loadOrderData = async () => {
+      setLoading(true)
+      setError(null)
 
-  const loadOrder = async () => {
-    setLoading(true)
-    setError(null)
+      const { data, error: fetchError } = await getOrderForCheckout(params.orderId)
 
-    const { data, error: fetchError } = await getOrderForCheckout(params.orderId)
+      if (fetchError || !data) {
+        setError(fetchError || "Failed to load order")
+        setLoading(false)
+        return
+      }
 
-    if (fetchError || !data) {
-      setError(fetchError || "Failed to load order")
+      setOrder(data)
       setLoading(false)
-      return
     }
 
-    setOrder(data)
-    setLoading(false)
-  }
+    loadOrderData()
+  }, [params.orderId])
 
   const handleCheckout = async () => {
     if (!order) return
@@ -142,7 +142,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
 
         {/* What's Included */}
         <div className="rounded-lg border bg-card p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">What's Included</h2>
+          <h2 className="text-lg font-semibold mb-4">What&apos;s Included</h2>
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
               <svg
@@ -195,7 +195,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
                 />
               </svg>
               <span className="text-sm">
-                Unlimited revisions until you're satisfied
+                Unlimited revisions until you&apos;re satisfied
               </span>
             </li>
             <li className="flex items-start gap-3">
