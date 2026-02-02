@@ -147,9 +147,18 @@ export default function LoginSignupPage() {
                 />
               </div>
 
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-4 bg-brand-600 text-white rounded-lg font-semibold text-lg hover:bg-brand-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Please wait..." : isLogin ? "Sign In" : "Register"}
+              </button>
+
               {/* Terms and Privacy */}
               {!isLogin && (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 text-center mt-4">
                   By registering an account, you agree to our{" "}
                   <Link href="/terms" className="text-brand-600 hover:underline">
                     Terms of Service
@@ -161,15 +170,6 @@ export default function LoginSignupPage() {
                   .
                 </p>
               )}
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-6 py-4 bg-brand-600 text-white rounded-lg font-semibold text-lg hover:bg-brand-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "Please wait..." : isLogin ? "Sign In" : "Register"}
-              </button>
             </form>
 
             {/* Consultation Link */}
