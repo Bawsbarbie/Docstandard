@@ -79,42 +79,68 @@ const questions: FAQItem[] = [
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
+  // Split questions into two halves for 2-column layout
+  const midPoint = Math.ceil(questions.length / 2)
+  const leftColumn = questions.slice(0, midPoint)
+  const rightColumn = questions.slice(midPoint)
+
+  const renderFAQItem = (item: FAQItem, index: number, columnOffset: number) => {
+    const globalIndex = index + columnOffset
+    return (
+      <div
+        key={globalIndex}
+        className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+      >
+        <button
+          className="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
+          onClick={() =>
+            setOpenIndex(openIndex === globalIndex ? null : globalIndex)
+          }
+        >
+          <span className="font-semibold text-gray-900">{item.question}</span>
+          {openIndex === globalIndex ? (
+            <Minus className="w-5 h-5 text-brand-600 flex-shrink-0" />
+          ) : (
+            <Plus className="w-5 h-5 text-gray-400 flex-shrink-0" />
+          )}
+        </button>
+
+        <div
+          className={`transition-all duration-300 ease-in-out ${
+            openIndex === globalIndex
+              ? "max-h-96 opacity-100"
+              : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="px-6 pb-6 text-gray-600 leading-relaxed">
+            {item.answer}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <section id="faq" className="py-24 bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
           Frequently Asked Questions
         </h2>
 
-        <div className="space-y-4">
-          {questions.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-            >
-              <button
-                className="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-              >
-                <span className="font-semibold text-gray-900">{item.question}</span>
-                {openIndex === index ? (
-                  <Minus className="w-5 h-5 text-brand-600 flex-shrink-0" />
-                ) : (
-                  <Plus className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                )}
-              </button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+          {/* Left Column */}
+          <div className="space-y-4">
+            {leftColumn.map((item, index) =>
+              renderFAQItem(item, index, 0)
+            )}
+          </div>
 
-              <div
-                className={`transition-all duration-300 ease-in-out ${
-                  openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                }`}
-              >
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed">
-                  {item.answer}
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Right Column */}
+          <div className="space-y-4">
+            {rightColumn.map((item, index) =>
+              renderFAQItem(item, index, midPoint)
+            )}
+          </div>
         </div>
       </div>
     </section>
