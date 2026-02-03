@@ -1,7 +1,7 @@
 "use client"
 
 import type { BlockItem } from "@/lib/pseo/types"
-import { FileCheck, Zap, ArrowRight } from "lucide-react"
+import { FileCheck, Zap, ArrowRight, CheckCircle2 } from "lucide-react"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import Link from "next/link"

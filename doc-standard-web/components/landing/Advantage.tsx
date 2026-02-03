@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Image from "next/image"
 import { CircleCheck } from "lucide-react"
 
 export const Advantage: React.FC = () => {
@@ -19,11 +20,13 @@ export const Advantage: React.FC = () => {
           {/* Left Side: Image with Offset Border */}
           <div className="w-full lg:w-1/2 relative">
             <div className="absolute top-4 left-4 w-full h-full border border-brand-200 rounded-2xl z-0"></div>
-            <div className="relative z-10 overflow-hidden rounded-2xl shadow-lg border border-gray-100">
-              <img
+            <div className="relative z-10 overflow-hidden rounded-2xl shadow-lg border border-gray-100 aspect-[4/3]">
+              <Image
                 src="https://images.unsplash.com/photo-1586762523080-6e9a66e47d6c?q=80&w=2000&auto=format&fit=crop"
                 alt="Document analysis and data extraction workflow"
-                className="w-full h-auto object-cover aspect-[4/3]"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </div>
