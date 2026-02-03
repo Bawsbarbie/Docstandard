@@ -25,6 +25,21 @@ interface BenefitsGridProps {
   isIntegration?: boolean
 }
 
+const DEFAULT_BENEFITS: BlockItem[] = [
+  {
+    id: "benefit-default-1",
+    text: "High-Integrity Extraction: We move beyond simple OCR to validate field logic across your entire batch.",
+  },
+  {
+    id: "benefit-default-2",
+    text: "System-Ready Deliverables: Final files are structured for direct import into ERPs like SAP, NetSuite, or QuickBooks.",
+  },
+  {
+    id: "benefit-default-3",
+    text: "Operational Scalability: Remove the data-cleansing bottleneck so your team can focus on operations, not fixing PDFs.",
+  },
+]
+
 // Map benefit text to appropriate icons
 const getIconForBenefit = (text: string) => {
   const lowerText = text.toLowerCase()
@@ -150,7 +165,7 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
   }
 
   // Fallback to generic benefits grid
-  const safeBenefits = benefits && benefits.length > 0 ? benefits : []
+  const safeBenefits = benefits && benefits.length > 0 ? benefits : DEFAULT_BENEFITS
   return (
     <section className="py-24 bg-slate-50 overflow-hidden">
       <div className="container px-4">

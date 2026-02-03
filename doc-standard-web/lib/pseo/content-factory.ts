@@ -14,6 +14,7 @@ import type {
   City,
   Intent,
   BlockItem,
+  TestimonialItem,
   ContentPool,
   IntegrationDetails,
   ServiceDetails,
@@ -39,13 +40,40 @@ import type {
   InvoiceGuide,
 } from "./types"
 
+const GUIDE_MAP: Record<string, string> = {
+  "motive-eld-ifta-data-normalization": "motive_ifta_guide",
+  "clean-cargowise-data-for-accounting": "tms_erp_bridging_guide",
+  "customs-document-data-extraction": "customs_clearance_guide",
+  "commercial-invoice-data-digitization": "invoice_digitization_guide",
+  "bill-of-lading-data-processing": "shipping_documentation_guide",
+  "prepare-magaya-data-for-quickbooks": "finance_operations_guide",
+  "packing-list-data-extraction-services": "inventory_management_guide",
+  "airway-bill-document-digitization": "shipping_documentation_guide",
+  "customs-bond-documentation-processing": "customs_clearance_guide",
+  "hs-code-validation-from-docs": "hscode_extraction_guide",
+  "freight-bill-audit-data-preparation": "finance_operations_guide",
+  "clean-logistics-data-for-sap-s4hana": "tms_erp_bridging_guide",
+  "shipment-data-prep-for-netsuite-landed-cost": "tms_erp_bridging_guide",
+  "edi-document-normalization-services": "tms_erp_bridging_guide",
+  "import-export-license-data-extraction": "compliance_extraction_guide",
+}
+
+const INTEGRATION_MAP: Record<string, string> = {
+  "clean-cargowise-data-for-accounting": "cargowise-netsuite",
+  "motive-eld-ifta-data-normalization": "motive-quickbooks",
+  "prepare-magaya-data-for-quickbooks": "magaya-quickbooks",
+  "clean-logistics-data-for-sap-s4hana": "cargowise-sap-s4hana",
+  "shipment-data-prep-for-netsuite-landed-cost": "cargowise-netsuite",
+}
+
 // Block storage types
 interface BlockCollection {
   intro: BlockItem[]
   pain: BlockItem[]
   benefit: BlockItem[]
   cta: BlockItem[]
-  faq: Array<{ id: string; question: string; answer: string }>
+  faq: Array<{ id: string; question: string; answer: string; tags?: string[] }>
+  testimonials: TestimonialItem[]
 }
 
 interface PoolConfig {
@@ -62,6 +90,7 @@ export interface PageModel {
     benefits: BlockItem[]
     cta: BlockItem
     faq: Array<{ question: string; answer: string }>
+    testimonials: TestimonialItem[]
   }
   meta: {
     title: string
@@ -141,6 +170,7 @@ export class ContentFactory {
       benefit: rawBlocks.benefit || rawBlocks.benefits || [],
       cta: rawBlocks.cta || [],
       faq: rawBlocks.faq || rawFaqs || [],
+      testimonials: rawBlocks.testimonials || [],
     }
 
     return this.blocks
@@ -365,112 +395,83 @@ export class ContentFactory {
     invoiceGuide?: InvoiceGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
-    const intentSlug = intent.slug.toLowerCase()
-    
-    // Check if intent slug contains TMS/ERP keywords
-    const tmsErpKeywords = ['cargowise', 'sap', 'netsuite', 'mercurygate', 'blue-yonder']
-    const hasTmsErpKeyword = tmsErpKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Customs/Invoice/Packing keywords
-    const customsKeywords = ['customs', 'invoice', 'packing']
-    const hasCustomsKeyword = customsKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Finance/Audit/QuickBooks/Magaya keywords
-    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya']
-    const hasFinanceKeyword = financeKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Shipping/BOL/Airway/Container keywords
-    const shippingKeywords = ['bill-of-lading', 'airway-bill', 'shipping', 'container']
-    const hasShippingKeyword = shippingKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Inventory/Packing List/Warehouse/SKU keywords
-    const inventoryKeywords = ['packing-list', 'warehouse', 'inventory', 'sku']
-    const hasInventoryKeyword = inventoryKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Compliance/License/Permit keywords
-    const complianceKeywords = ['license', 'permit', 'export-control', 'compliance']
-    const hasComplianceKeyword = complianceKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Motive/IFTA/ELD keywords
-    const motiveKeywords = ['motive', 'ifta', 'eld']
-    const hasMotiveKeyword = motiveKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains HS Code/Classification keywords
-    const hsCodeKeywords = ['tariff', 'hs-code', 'classification', 'duty-drawback']
-    const hasHSCodeKeyword = hsCodeKeywords.some(keyword => intentSlug.includes(keyword))
-
-    // Check if intent slug contains Invoice keywords
-    const invoiceKeywords = ['commercial-invoice', 'invoice-processing']
-    const hasInvoiceKeyword = invoiceKeywords.some(keyword => intentSlug.includes(keyword))
+    const guideKey = GUIDE_MAP[intent.slug]
 
     // Load TMS-ERP guide if keywords match
     let tmsErpGuideData: TmsErpGuide | undefined
-    if (hasTmsErpKeyword) {
-      const guideFile = await this.loadTmsErpGuide()
-      tmsErpGuideData = guideFile.tms_erp_bridging_guide
-    }
 
     // Load Customs guide if keywords match
     let customsGuideData: CustomsGuide | undefined
-    if (hasCustomsKeyword) {
-      const guideFile = await this.loadCustomsGuide()
-      customsGuideData = guideFile.customs_clearance_guide
-    }
 
     // Load Finance guide if keywords match
     let financeGuideData: FinanceGuide | undefined
-    if (hasFinanceKeyword) {
-      const guideFile = await this.loadFinanceGuide()
-      financeGuideData = guideFile.finance_operations_guide
-    }
 
     // Load Shipping guide if keywords match
     let shippingGuideData: ShippingGuide | undefined
-    if (hasShippingKeyword) {
-      const guideFile = await this.loadShippingGuide()
-      shippingGuideData = guideFile.shipping_documentation_guide
-    }
 
     // Load Inventory guide if keywords match
     let inventoryGuideData: InventoryGuide | undefined
-    if (hasInventoryKeyword) {
-      const guideFile = await this.loadInventoryGuide()
-      inventoryGuideData = guideFile.inventory_management_guide
-    }
-
-    // Load Compliance guide if keywords match
     let complianceGuideData: ComplianceGuide | undefined
-    if (hasComplianceKeyword) {
-      const guideFile = await this.loadComplianceGuide()
-      complianceGuideData = guideFile.compliance_extraction_guide
-    }
-
-    // Load Motive guide if keywords match
     let motiveGuideData: MotiveGuide | undefined
-    if (hasMotiveKeyword) {
-      const guideFile = await this.loadMotiveGuide()
-      motiveGuideData = guideFile.motive_ifta_guide
-    }
-
-    // Load HS Code guide if keywords match
     let hsCodeGuideData: HSCodeGuide | undefined
-    if (hasHSCodeKeyword) {
-      const guideFile = await this.loadHSCodeGuide()
-      hsCodeGuideData = guideFile.hscode_extraction_guide
-    }
-
-    // Load Invoice guide if keywords match (override customs for these pages)
     let invoiceGuideData: InvoiceGuide | undefined
-    if (hasInvoiceKeyword) {
-      const guideFile = await this.loadInvoiceGuide()
-      invoiceGuideData = guideFile.invoice_digitization_guide
-      customsGuideData = undefined
+
+    switch (guideKey) {
+      case "tms_erp_bridging_guide": {
+        const guideFile = await this.loadTmsErpGuide()
+        tmsErpGuideData = guideFile.tms_erp_bridging_guide
+        break
+      }
+      case "customs_clearance_guide": {
+        const guideFile = await this.loadCustomsGuide()
+        customsGuideData = guideFile.customs_clearance_guide
+        break
+      }
+      case "finance_operations_guide": {
+        const guideFile = await this.loadFinanceGuide()
+        financeGuideData = guideFile.finance_operations_guide
+        break
+      }
+      case "shipping_documentation_guide": {
+        const guideFile = await this.loadShippingGuide()
+        shippingGuideData = guideFile.shipping_documentation_guide
+        break
+      }
+      case "inventory_management_guide": {
+        const guideFile = await this.loadInventoryGuide()
+        inventoryGuideData = guideFile.inventory_management_guide
+        break
+      }
+      case "compliance_extraction_guide": {
+        const guideFile = await this.loadComplianceGuide()
+        complianceGuideData = guideFile.compliance_extraction_guide
+        break
+      }
+      case "motive_ifta_guide": {
+        const guideFile = await this.loadMotiveGuide()
+        motiveGuideData = guideFile.motive_ifta_guide
+        break
+      }
+      case "hscode_extraction_guide": {
+        const guideFile = await this.loadHSCodeGuide()
+        hsCodeGuideData = guideFile.hscode_extraction_guide
+        break
+      }
+      case "invoice_digitization_guide": {
+        const guideFile = await this.loadInvoiceGuide()
+        invoiceGuideData = guideFile.invoice_digitization_guide
+        break
+      }
+      default:
+        break
     }
 
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
       // Try matching by intent.id first, then by slug
+      const mappedIntegrationKey = INTEGRATION_MAP[intent.slug]
       let integrationData =
+        (mappedIntegrationKey ? details.integrations[mappedIntegrationKey] : undefined) ||
         details.integrations[intent.id] ||
         details.integrations[intent.slug] ||
         // Also try removing common suffixes like "-services" or "-integration"
@@ -781,79 +782,48 @@ export class ContentFactory {
     const ctaBlock = await this.selectBlock("cta", pool, seed)
     const benefitBlocks = await this.selectBlocks("benefit", pool, seed, 6)
 
-    // Select FAQs
     const blocks = await this.loadBlocks()
-    const faqIds = this.getBlockIdsFromPool(pool, "faq")
-    let faqItems = blocks.faq
 
-    if (faqIds.length > 0) {
-      const filtered = blocks.faq.filter((f) => faqIds.includes(f.id))
-      faqItems = filtered.length > 0 ? filtered : blocks.faq
-    }
-
-    // Use hash to select 4-6 FAQs
-    const faqCount = 4 + (this.getHash(seed + "faq-count") % 3) // 4, 5, or 6
-    const selectedFaqs: typeof faqItems = []
-    const maxCount = Math.min(faqCount, faqItems.length)
-    let attempts = 0
-
-    while (selectedFaqs.length < maxCount && attempts < faqItems.length * 2) {
-      const hash = this.getHash(seed + "faq" + attempts)
-      const index = hash % faqItems.length
-      const faq = faqItems[index]
-
-      if (!selectedFaqs.find((f) => f.id === faq.id)) {
-        selectedFaqs.push(faq)
+    const pickDeterministic = <T extends { id: string }>(
+      items: T[],
+      count: number,
+      seedSuffix: string
+    ): T[] => {
+      if (!items || items.length === 0 || count <= 0) return []
+      const selected: T[] = []
+      let attempts = 0
+      const maxAttempts = items.length * 3
+      while (selected.length < count && attempts < maxAttempts) {
+        const hash = this.getHash(seed + seedSuffix + attempts)
+        const index = hash % items.length
+        const item = items[index]
+        if (!selected.find((s) => s.id === item.id)) {
+          selected.push(item)
+        }
+        attempts += 1
       }
-
-      attempts += 1
+      return selected
     }
 
-    // Pull technical details early so we can mine extra FAQs from expert sections
-    const technicalData = await this.getTechnicalDetails(intent)
+    const tagged = (tag: string) =>
+      blocks.faq.filter((f) => f.tags?.includes(tag))
 
-    // Ensure we always have at least 5 FAQs by appending 3-4 more from pool or technical guides
-    const minimumFaqs = 5
-    const extras: typeof faqItems = []
+    const safetyFaqs = tagged("safety")
+    const kindFaqs = tagged(intent.kind)
 
-    // First, add unused FAQs from the pool
-    const remainingPoolFaqs = faqItems.filter(
-      (f) => !selectedFaqs.find((s) => s.id === f.id)
+    const selectedSafety = pickDeterministic(safetyFaqs, 2, "faq-safety")
+    const selectedKind = pickDeterministic(kindFaqs, 3, "faq-kind")
+    const combinedFaqs = [...selectedSafety, ...selectedKind]
+
+    const fallbackFaqs = blocks.faq.filter(
+      (f) => !combinedFaqs.find((s) => s.id === f.id)
     )
-    const extraPoolNeeded = Math.max(0, minimumFaqs - selectedFaqs.length)
-    extras.push(...remainingPoolFaqs.slice(0, extraPoolNeeded))
+    const needed = Math.max(0, 5 - combinedFaqs.length)
+    const fillFaqs = pickDeterministic(fallbackFaqs, needed, "faq-fill")
 
-    // If still short, derive FAQs from technical guide expert sections
-    const stillNeeded = Math.max(0, minimumFaqs - (selectedFaqs.length + extras.length))
-    if (stillNeeded > 0 && technicalData) {
-      const technicalFaqCandidates: Array<{ id: string; question: string; answer: string }> = []
+    const selectedFaqs = [...combinedFaqs, ...fillFaqs]
 
-      const pushSections = (sections?: { title: string; content: string }[]) => {
-        sections?.forEach((section, idx) => {
-          // Slightly vary question phrasing to avoid duplicates
-          technicalFaqCandidates.push({
-            id: `tech-${section.title}-${idx}`,
-            question: `How do you handle ${section.title}?`,
-            answer: section.content,
-          })
-          // Cap total size later
-        })
-      }
-
-      pushSections(technicalData.tmsErpGuide?.expert_sections)
-      pushSections(technicalData.customsGuide?.expert_sections)
-      pushSections(technicalData.financeGuide?.expert_sections)
-      pushSections(technicalData.shippingGuide?.expert_sections)
-      pushSections(technicalData.inventoryGuide?.expert_sections)
-
-      const uniqueTechnicalFaqs = technicalFaqCandidates.filter(
-        (cand) =>
-          !selectedFaqs.find((f) => f.question === cand.question) &&
-          !extras.find((f) => f.question === cand.question)
-      )
-
-      extras.push(...uniqueTechnicalFaqs.slice(0, stillNeeded))
-    }
+    const technicalData = await this.getTechnicalDetails(intent)
 
     // Replace variables in all text
     const processedIntro = introBlock
@@ -882,10 +852,36 @@ export class ContentFactory {
       text: this.replaceVariables(b.text, city, intent, state),
     }))
 
-    const processedFaqs = [...selectedFaqs, ...extras].map((f) => ({
+    const processedFaqs = selectedFaqs.map((f) => ({
       question: this.replaceVariables(f.question, city, intent, state),
       answer: this.replaceVariables(f.answer, city, intent, state),
     }))
+
+    const testimonialKind = (intent.kind || "").toLowerCase()
+    const testimonialTag =
+      testimonialKind === "finance" || testimonialKind === "invoice"
+        ? "finance"
+        : testimonialKind === "customs" || testimonialKind === "compliance"
+        ? "customs"
+        : "logistics"
+
+    const taggedTestimonials = blocks.testimonials.filter((t) =>
+      t.tags?.includes(testimonialTag)
+    )
+    const testimonialFallback = blocks.testimonials.filter(
+      (t) => !taggedTestimonials.find((s) => s.id === t.id)
+    )
+    const selectedTestimonials = pickDeterministic(
+      taggedTestimonials,
+      3,
+      "testimonials"
+    )
+    const fillTestimonials = pickDeterministic(
+      testimonialFallback,
+      Math.max(0, 3 - selectedTestimonials.length),
+      "testimonials-fill"
+    )
+    const processedTestimonials = [...selectedTestimonials, ...fillTestimonials]
 
     // Generate metadata
     const shouldIndex = city.priority >= 90 && intent.priority <= 15
@@ -918,6 +914,7 @@ export class ContentFactory {
         benefits: processedBenefits,
         cta: processedCta,
         faq: processedFaqs,
+        testimonials: processedTestimonials,
       },
       meta: {
         title,

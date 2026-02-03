@@ -107,12 +107,15 @@ const ITEMS_PER_PAGE = 3
 
 interface TestimonialsSectionProps {
   kind?: string
+  testimonials?: Testimonial[]
 }
 
-export function TestimonialsSection({ kind }: TestimonialsSectionProps) {
+export function TestimonialsSection({ kind, testimonials }: TestimonialsSectionProps) {
   const normalizedKind = (kind || "general").toLowerCase() as TestimonialKind
   const reviews =
-    testimonialSets[normalizedKind as TestimonialKind] || testimonialSets.general
+    testimonials && testimonials.length > 0
+      ? testimonials
+      : testimonialSets[normalizedKind as TestimonialKind] || testimonialSets.general
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const totalPages = Math.ceil(reviews.length / ITEMS_PER_PAGE)

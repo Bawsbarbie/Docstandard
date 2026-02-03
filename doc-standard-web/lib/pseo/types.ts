@@ -47,6 +47,15 @@ export interface BlockItem {
   tags?: string[] // For filtering/targeting specific scenarios
 }
 
+export interface TestimonialItem {
+  id: string
+  quote: string
+  author: string
+  role: string
+  company: string
+  tags?: string[]
+}
+
 export interface ContentPool {
   id: string // e.g., "default", "customs", "freight-forwarding"
   extends?: string // Pool inheritance (e.g., "default")

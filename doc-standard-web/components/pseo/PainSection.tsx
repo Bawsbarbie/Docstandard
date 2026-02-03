@@ -13,6 +13,13 @@ interface PainSectionProps {
 }
 
 export function PainSection({ content, painPoints, valueLogic }: PainSectionProps) {
+  const fallbackPoints: string[] = [
+    "Inconsistent document formats force manual cleanup and slow processing.",
+    "Missing or mismatched reference fields create reconciliation delays.",
+    "Unvalidated data increases audit risk and downstream exceptions.",
+  ]
+  const pointsToRender = painPoints && painPoints.length > 0 ? painPoints : fallbackPoints
+
   return (
     <section className="py-24 bg-slate-900 text-white overflow-hidden relative">
       {/* Background patterns */}
@@ -58,8 +65,7 @@ export function PainSection({ content, painPoints, valueLogic }: PainSectionProp
 
             {/* Right Pain Points Grid */}
             <div className="space-y-4">
-              {painPoints && painPoints.length > 0 ? (
-                painPoints.map((point, index) => (
+              {pointsToRender.map((point, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 20 }}
@@ -74,7 +80,7 @@ export function PainSection({ content, painPoints, valueLogic }: PainSectionProp
                     <p className="text-gray-300 leading-relaxed font-medium">{point}</p>
                   </motion.div>
                 ))
-              ) : null}
+              }
             </div>
           </div>
 

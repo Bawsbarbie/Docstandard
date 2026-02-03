@@ -6,7 +6,6 @@ import { BenefitsGrid } from "./BenefitsGrid"
 import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
 import { TestimonialsSection } from "./TestimonialsSection"
-import { CTASection } from "./CTASection"
 import { MiddleCTA } from "./MiddleCTA"
 
 interface PseoPageTemplateProps {
@@ -40,15 +39,15 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const derivedPainPoints = (() => {
     if (painPoints && painPoints.length > 0) return painPoints
 
-    const extractNumberedPoints = (text?: string): string[] => {
+    const extractListPoints = (text?: string): string[] => {
       if (!text) return []
       return text
         .split("\n")
         .map((line) => line.trim())
-        .filter((line) => /^\d+\.\s+/.test(line))
+        .filter((line) => /^(\d+\.\s+|[-*•–]\s+)/.test(line))
         .map((line) =>
           line
-            .replace(/^\d+\.\s+/, "")
+            .replace(/^(\d+\.\s+|[-*•–]\s+)/, "")
             .replace(/\*\*/g, "")
             .trim()
         )
@@ -66,6 +65,10 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       financeGuide?.expert_sections,
       shippingGuide?.expert_sections,
       inventoryGuide?.expert_sections,
+      complianceGuide?.expert_sections,
+      motiveGuide?.expert_sections,
+      hsCodeGuide?.expert_sections,
+      invoiceGuide?.expert_sections,
     ]
 
     const collected: string[] = []
@@ -73,7 +76,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       if (collected.length >= 4) break
       sections?.forEach((section) => {
         if (collected.length >= 4) return
-        const points = extractNumberedPoints(section.content)
+        const points = extractListPoints(section.content)
         collected.push(...points)
       })
     }
@@ -129,7 +132,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <FAQSection faqs={content.faq} />
 
       {/* Pass intent kind to render domain-relevant testimonials */}
-      <TestimonialsSection kind={intent.kind} />
+      <TestimonialsSection kind={intent.kind} testimonials={content.testimonials} />
     </main>
   )
 }

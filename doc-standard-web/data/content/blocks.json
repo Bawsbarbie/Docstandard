@@ -61,12 +61,216 @@
     {
       "id": "faq_1",
       "question": "Is this a data entry service?",
-      "answer": "No. DocStandard is a document normalization engine. We use technology to structure and validate your existing digital or scanned {intentName} files, not to manually type data."
+      "answer": "No. DocStandard is a document normalization engine. We use technology to structure and validate your existing digital or scanned {intentName} files, not to manually type data.",
+      "tags": ["general"]
     },
     {
       "id": "faq_2",
       "question": "What formats can you extract from?",
-      "answer": "We handle PDF, XML, CSV, and image-based scans of {intentName} documents. We return the data in a clean, unified format of your choice (JSON, CSV, or XML)."
+      "answer": "We handle PDF, XML, CSV, and image-based scans of {intentName} documents. We return the data in a clean, unified format of your choice (JSON, CSV, or XML).",
+      "tags": ["general"]
+    },
+    {
+      "id": "faq_safety_1",
+      "question": "How do you protect sensitive documents?",
+      "answer": "Files are processed in private storage with role-based access controls. We never expose customer documents publicly and restrict internal access to active batches only.",
+      "tags": ["safety"]
+    },
+    {
+      "id": "faq_safety_2",
+      "question": "Do you delete files after processing?",
+      "answer": "Yes. We can purge source documents on request or after a retention window so you control how long documents remain stored.",
+      "tags": ["safety"]
+    },
+    {
+      "id": "faq_finance_1",
+      "question": "Do you normalize charge-level freight bill details?",
+      "answer": "Yes. We separate accessorials, fuel, and base charges so your GL mapping and audit rules can be applied at the line level.",
+      "tags": ["finance"]
+    },
+    {
+      "id": "faq_finance_2",
+      "question": "Can you handle multi-currency invoice validation?",
+      "answer": "We reconcile invoice totals against line items and validate currency conversions using your ERP spot rates.",
+      "tags": ["finance"]
+    },
+    {
+      "id": "faq_finance_3",
+      "question": "Do you support QuickBooks and NetSuite imports?",
+      "answer": "Yes. We deliver clean CSV/JSON formats aligned to QuickBooks and NetSuite import templates.",
+      "tags": ["finance"]
+    },
+    {
+      "id": "faq_shipping_1",
+      "question": "Can you standardize BOL and AWB fields?",
+      "answer": "Yes. We normalize shipper, consignee, notify party, and routing fields into a consistent schema.",
+      "tags": ["shipping"]
+    },
+    {
+      "id": "faq_shipping_2",
+      "question": "Do you handle carrier-specific BOL variations?",
+      "answer": "Yes. We map carrier-specific field names to standard fields so your TMS can ingest them reliably.",
+      "tags": ["shipping"]
+    },
+    {
+      "id": "faq_shipping_3",
+      "question": "Can you extract container and equipment details?",
+      "answer": "Yes. We capture container IDs, seal numbers, and equipment types for downstream tracking and compliance.",
+      "tags": ["shipping"]
+    },
+    {
+      "id": "faq_customs_1",
+      "question": "Do you extract CBP entry fields like CF 7501 line items?",
+      "answer": "Yes. We structure importer, HTS, duty, and value fields for broker review and filing.",
+      "tags": ["customs"]
+    },
+    {
+      "id": "faq_customs_2",
+      "question": "Can you validate origin and valuation data?",
+      "answer": "We normalize COO and valuation fields to reduce audit risk and filing delays.",
+      "tags": ["customs"]
+    },
+    {
+      "id": "faq_customs_3",
+      "question": "Do you support bond documentation processing?",
+      "answer": "Yes. We digitize bond forms and approvals to maintain complete compliance records.",
+      "tags": ["customs"]
+    },
+    {
+      "id": "faq_integration_1",
+      "question": "Can you normalize CargoWise or Magaya exports?",
+      "answer": "Yes. We map operational exports into ERP-ready formats to avoid manual cleanup.",
+      "tags": ["integration"]
+    },
+    {
+      "id": "faq_integration_2",
+      "question": "Do you handle data validation before ERP import?",
+      "answer": "We validate schema alignment, currency, and required fields before delivery.",
+      "tags": ["integration"]
+    },
+    {
+      "id": "faq_integration_3",
+      "question": "Can you align TMS fields to SAP or NetSuite?",
+      "answer": "Yes. We map and normalize fields to match SAP and NetSuite import specifications.",
+      "tags": ["integration"]
+    },
+    {
+      "id": "faq_invoice_1",
+      "question": "Can you handle 3-way match for commercial invoices?",
+      "answer": "Yes. We extract PO references, match receipts, and reconcile invoice totals for AP.",
+      "tags": ["invoice"]
+    },
+    {
+      "id": "faq_invoice_2",
+      "question": "Do you normalize currency and tax fields?",
+      "answer": "We standardize currency, tax, and subtotal fields for consistent AP posting.",
+      "tags": ["invoice"]
+    },
+    {
+      "id": "faq_invoice_3",
+      "question": "Can you flag bank detail changes for fraud risk?",
+      "answer": "Yes. We detect bank detail changes and surface them for AP review.",
+      "tags": ["invoice"]
+    },
+    {
+      "id": "faq_compliance_1",
+      "question": "Do you track license limits and expiry dates?",
+      "answer": "Yes. We validate decrementing limits and expiry windows to reduce violation risk.",
+      "tags": ["compliance"]
+    },
+    {
+      "id": "faq_compliance_2",
+      "question": "Can you validate end-user and consignee details?",
+      "answer": "We normalize consignee details and check for mismatches that invalidate licenses.",
+      "tags": ["compliance"]
+    },
+    {
+      "id": "faq_compliance_3",
+      "question": "Do you capture permit and license fields for audit trails?",
+      "answer": "Yes. We extract license numbers, ECCN, and permit details for compliance records.",
+      "tags": ["compliance"]
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "test_fin_1",
+      "quote": "We cut carrier overpayments in the first month because DocStandard normalized every accessorial and fuel line for audit.",
+      "author": "Jenna Ortiz",
+      "role": "Controller",
+      "company": "Falcon Freight Co.",
+      "tags": ["finance"]
+    },
+    {
+      "id": "test_fin_2",
+      "quote": "Their files drop straight into NetSuite without cleanup. Our close is faster and the GL is cleaner.",
+      "author": "Marcus Lee",
+      "role": "Finance Director",
+      "company": "IronGate Logistics",
+      "tags": ["finance"]
+    },
+    {
+      "id": "test_fin_3",
+      "quote": "Freight bill audits used to take days. Now we get validated charge-level data in hours.",
+      "author": "Priya Shah",
+      "role": "AP Manager",
+      "company": "Northline Supply",
+      "tags": ["finance"]
+    },
+    {
+      "id": "test_log_1",
+      "quote": "BOL and AWB fields are finally consistent across carriers. Our TMS ingest is reliable.",
+      "author": "Evan Morales",
+      "role": "Operations Manager",
+      "company": "HarborLink",
+      "tags": ["logistics"]
+    },
+    {
+      "id": "test_log_2",
+      "quote": "We stopped rekeying packing lists. DocStandard standardized everything for our WMS.",
+      "author": "Lena Brooks",
+      "role": "Warehouse Lead",
+      "company": "BluePeak Distribution",
+      "tags": ["logistics"]
+    },
+    {
+      "id": "test_log_3",
+      "quote": "CargoWise exports used to be a mess. Now accounting gets clean ERP-ready files.",
+      "author": "Rafael Kim",
+      "role": "Logistics Systems",
+      "company": "SwiftBridge",
+      "tags": ["logistics"]
+    },
+    {
+      "id": "test_log_4",
+      "quote": "Airway bill digitization went from a bottleneck to a same-day workflow.",
+      "author": "Grace Patel",
+      "role": "Import Ops",
+      "company": "Vantage Air",
+      "tags": ["logistics"]
+    },
+    {
+      "id": "test_cus_1",
+      "quote": "Entry filings are smoother because the data is structured exactly how our broker needs it.",
+      "author": "Luis Romero",
+      "role": "Customs Compliance",
+      "company": "Portline Trade",
+      "tags": ["customs"]
+    },
+    {
+      "id": "test_cus_2",
+      "quote": "We reduced holds by standardizing COO, HTS, and valuation fields before filing.",
+      "author": "Alyssa Grant",
+      "role": "Trade Manager",
+      "company": "Summit Imports",
+      "tags": ["customs"]
+    },
+    {
+      "id": "test_cus_3",
+      "quote": "Bond documentation is now organized and audit-ready with zero rework.",
+      "author": "Dmitri Novak",
+      "role": "Broker Relations",
+      "company": "ClearPath Brokers",
+      "tags": ["customs"]
     }
   ]
 }
