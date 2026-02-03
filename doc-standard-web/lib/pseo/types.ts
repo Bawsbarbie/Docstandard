@@ -102,3 +102,27 @@ export interface IntegrationDetailsFile {
 export interface ServiceDetailsFile {
   services: Record<string, ServiceDetails>
 }
+
+// TMS-ERP Guide Types
+export interface ExpertSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    tms_system: string
+    erp_system: string
+    tms_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface TmsErpGuide {
+  title: string
+  word_count_target: number
+  expert_sections: ExpertSection[]
+}
+
+export interface TmsErpGuideFile {
+  tms_erp_bridging_guide: TmsErpGuide
+}

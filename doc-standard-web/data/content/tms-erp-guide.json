@@ -1,0 +1,51 @@
+{
+  "tms_erp_bridging_guide": {
+    "title": "TMS to ERP Data Bridging: The Technical Guide for Logistics Providers",
+    "word_count_target": 2500,
+    "expert_sections": [
+      {
+        "id": "technical_bottlenecks",
+        "title": "Why Direct TMS-to-ERP Syncs Fail: The Operational Reality",
+        "content": "Most logistics providers assume that enabling an API or XML export between their TMS (CargoWise, MercuryGate) and their ERP (SAP, NetSuite) is a 'plug-and-play' operation. In reality, direct syncs fail 40% of the time due to 'Data Friction'—unstructured, inconsistent, or invalid data that the ERP rejects. Key bottlenecks include: \n\n1. **XML Encoding & Schema Mismatches:** CargoWise eAdapter exports often contain character sets or nested XML structures that rigid ERP schemas (like SAP S/4HANA) cannot parse without custom middleware. \n2. **UOM (Unit of Measure) Desync:** A TMS might record a shipment in 'PLT' (Pallets), while the ERP requires 'EA' (Each) or a specific ISO code. Without normalization, these invoices trigger manual reconciliation alerts.\n3. **Multi-Currency Rounding Errors:** When processing international freight across 50+ documents, rounding differences at the line-item level between TMS accruals and ERP actuals lead to 'Penny-Gap' audit failures."
+      },
+      {
+        "id": "field_mapping_table",
+        "title": "The Master Mapping Blueprint",
+        "content": "To achieve high-integrity data bridging, DocStandard normalizes the following critical field pairs across these major systems:",
+        "mapping_data": [
+          {
+            "tms_system": "CargoWise One",
+            "erp_system": "SAP S/4HANA",
+            "tms_field": "FSD_ChargeAmount (XML)",
+            "erp_field": "BAPI_ACC_DOCUMENT_POST (LineItem)",
+            "normalization_logic": "Convert currency to ISO 4217; Validate against Credit Note total."
+          },
+          {
+            "tms_system": "MercuryGate TMS",
+            "erp_system": "Oracle NetSuite",
+            "tms_field": "Voucher_Financial_Total",
+            "erp_field": "VendorBill (JSON Payload)",
+            "normalization_logic": "Extract GL segments from TMS tags; Map to NetSuite Dept/Class."
+          },
+          {
+            "tms_system": "Blue Yonder",
+            "erp_system": "Dynamics 365",
+            "tms_field": "Trans_Invoice_Detail",
+            "erp_field": "VendInvoiceJournal (OData)",
+            "normalization_logic": "Standardize date formats (YYYY-MM-DD); Resolve sub-ledger IDs."
+          }
+        ]
+      },
+      {
+        "id": "doc_standard_solution",
+        "title": "The DocStandard Approach: Normalization Before Ingestion",
+        "content": "DocStandard acts as the 'Intelligent Filter' between your operational chaos and your financial ledger. Instead of pushing raw, dirty data into your ERP, we perform a 3-step normalization process: \n\n1. **Extraction & Validation:** Our engine extracts every line item from your TMS PDF or XML exports, identifying missing reference numbers or invalid HS codes immediately.\n2. **Cross-System Alignment:** We apply your specific business logic (e.g., 'If Carrier = X, then GL Code = Y') to every record in the batch.\n3. **System-Ready Output:** We deliver a clean, validated CSV or JSON payload that is guaranteed to clear your ERP's validation rules on the first try."
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: The Cost of Manual Cleanup",
+        "content": "For a mid-sized 3PL processing 100 multi-page invoices per day: \n\n- **Manual Effort:** 8 minutes per invoice (Review -> Cleanup -> Entry) = 13.3 hours/day.\n- **DocStandard Automation:** 30 seconds per batch for upload = <5 minutes/day.\n- **Labor Savings:** ~$120,000 annually in reclaimed operational capacity. \n- **Audit Value:** 100% reduction in 'Dirty Data' reconciliation errors."
+      }
+    ]
+  }
+}

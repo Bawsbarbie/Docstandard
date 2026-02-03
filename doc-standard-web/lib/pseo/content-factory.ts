@@ -19,6 +19,8 @@ import type {
   ServiceDetails,
   IntegrationDetailsFile,
   ServiceDetailsFile,
+  TmsErpGuideFile,
+  TmsErpGuide,
 } from "./types"
 
 // Block storage types
@@ -57,6 +59,7 @@ export interface PageModel {
     isIntegration: boolean
     integrationDetails?: IntegrationDetails
     serviceDetails?: ServiceDetails
+    tmsErpGuide?: TmsErpGuide
   }
 }
 
@@ -69,6 +72,7 @@ export class ContentFactory {
   private pools: PoolConfig | null = null
   private integrationDetails: IntegrationDetailsFile | null = null
   private serviceDetails: ServiceDetailsFile | null = null
+  private tmsErpGuide: TmsErpGuideFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -158,6 +162,23 @@ export class ContentFactory {
   }
 
   /**
+   * Load TMS-ERP guide data
+   */
+  private async loadTmsErpGuide(): Promise<TmsErpGuideFile> {
+    if (this.tmsErpGuide) return this.tmsErpGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "tms-erp-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.tmsErpGuide = JSON.parse(content) as TmsErpGuideFile
+    } catch {
+      this.tmsErpGuide = { tms_erp_bridging_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.tmsErpGuide
+  }
+
+  /**
    * Get technical details for an intent (if available)
    * Checks both intent.id AND intent.slug against JSON keys
    */
@@ -165,8 +186,21 @@ export class ContentFactory {
     isIntegration: boolean
     integrationDetails?: IntegrationDetails
     serviceDetails?: ServiceDetails
+    tmsErpGuide?: TmsErpGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
+    const intentSlug = intent.slug.toLowerCase()
+    
+    // Check if intent slug contains TMS/ERP keywords
+    const tmsErpKeywords = ['cargowise', 'sap', 'netsuite', 'mercurygate', 'blue-yonder']
+    const hasTmsErpKeyword = tmsErpKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Load TMS-ERP guide if keywords match
+    let tmsErpGuideData: TmsErpGuide | undefined
+    if (hasTmsErpKeyword) {
+      const guideFile = await this.loadTmsErpGuide()
+      tmsErpGuideData = guideFile.tms_erp_bridging_guide
+    }
 
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
@@ -177,8 +211,12 @@ export class ContentFactory {
         // Also try removing common suffixes like "-services" or "-integration"
         details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
         details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
-      if (integrationData) {
-        return { isIntegration: true, integrationDetails: integrationData }
+      if (integrationData || tmsErpGuideData) {
+        return { 
+          isIntegration: true, 
+          integrationDetails: integrationData,
+          tmsErpGuide: tmsErpGuideData
+        }
       }
     } else {
       const details = await this.loadServiceDetails()
@@ -188,8 +226,20 @@ export class ContentFactory {
         details.services[intent.slug] ||
         // Also try removing common suffixes
         details.services[intent.id.replace(/-services?$/, "")]
-      if (serviceData) {
-        return { isIntegration: false, serviceDetails: serviceData }
+      if (serviceData || tmsErpGuideData) {
+        return { 
+          isIntegration: false, 
+          serviceDetails: serviceData,
+          tmsErpGuide: tmsErpGuideData
+        }
+      }
+    }
+
+    // Return TMS-ERP guide even if no other technical details found
+    if (tmsErpGuideData) {
+      return {
+        isIntegration: false,
+        tmsErpGuide: tmsErpGuideData
       }
     }
 

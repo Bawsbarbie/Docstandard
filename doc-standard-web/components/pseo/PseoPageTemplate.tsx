@@ -1,6 +1,7 @@
 import type { PageModel } from "@/lib/pseo/content-factory"
 import { IntroBlock } from "./IntroBlock"
 import { PainSection } from "./PainSection"
+import { TechnicalGuide } from "./TechnicalGuide"
 import { BenefitsGrid } from "./BenefitsGrid"
 import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
@@ -19,6 +20,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const isIntegration = technical?.isIntegration ?? false
   const integrationDetails = technical?.integrationDetails
   const serviceDetails = technical?.serviceDetails
+  const tmsErpGuide = technical?.tmsErpGuide
 
   return (
     <main className="min-h-screen">
@@ -41,6 +43,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         painPoints={serviceDetails?.pain_points}
         valueLogic={serviceDetails?.value_logic}
       />
+
+      <TechnicalGuide guide={tmsErpGuide} />
 
       <MiddleCTA />
 
