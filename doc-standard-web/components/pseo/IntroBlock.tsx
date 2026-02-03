@@ -1,5 +1,6 @@
 import type { BlockItem } from "@/lib/pseo/types"
 import { FileCheck, Zap } from "lucide-react"
+import Image from "next/image"
 
 interface IntroBlockProps {
   content: BlockItem
@@ -75,10 +76,13 @@ export function IntroBlock({
           {/* Right Column: Hero Image */}
           <div className="relative w-full h-[400px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
             {imageUrl ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={`${serviceName} in ${cityName}`}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center">
