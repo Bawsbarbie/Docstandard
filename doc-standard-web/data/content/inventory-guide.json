@@ -1,0 +1,75 @@
+{
+  "inventory_management_guide": {
+    "title": "Inventory Document Processing: The Technical Guide for Warehouse Operations",
+    "word_count_target": 2500,
+    "expert_sections": [
+      {
+        "id": "packing_list_mapping",
+        "title": "Packing List Field Mapping: Source Document to WMS/ERP",
+        "content": "Packing lists contain critical inventory data that must be accurately extracted and mapped to your warehouse management and ERP systems. DocStandard standardizes the following key fields:",
+        "mapping_data": [
+          {
+            "packing_list_field": "SKU / Item Number",
+            "system_field": "Product Master Record",
+            "normalization_logic": "Extract SKU codes; Validate format against item master; Map to internal product IDs; Flag unknown SKUs for review."
+          },
+          {
+            "packing_list_field": "Quantity (Qty)",
+            "system_field": "Unit Quantity + UOM",
+            "normalization_logic": "Extract numeric quantity; Standardize unit of measure (EA, CS, PLT, etc.); Convert to base unit if needed; Validate against order quantities."
+          },
+          {
+            "packing_list_field": "Description / Product Name",
+            "system_field": "Product Description Field",
+            "normalization_logic": "Extract product descriptions; Clean and standardize text; Match against product master for consistency; Flag discrepancies."
+          },
+          {
+            "packing_list_field": "Lot Number / Serial Number",
+            "system_field": "Lot/Serial Tracking Fields",
+            "normalization_logic": "Extract lot/serial identifiers; Validate format; Link to inventory records; Flag duplicate or invalid lot numbers."
+          },
+          {
+            "packing_list_field": "Carton / Package Number",
+            "system_field": "Package Tracking ID",
+            "normalization_logic": "Extract package identifiers; Validate uniqueness; Link packages to shipment; Track package-level quantities."
+          },
+          {
+            "packing_list_field": "Weight & Dimensions",
+            "system_field": "Item Attributes (Weight, Cube)",
+            "normalization_logic": "Extract weight (standardize to lbs or kg); Parse dimensions (LxWxH); Calculate cube; Validate against product master data."
+          },
+          {
+            "packing_list_field": "Location / Bin",
+            "system_field": "Warehouse Location Code",
+            "normalization_logic": "Extract location codes; Validate against warehouse layout; Map to WMS location hierarchy (Zone-Aisle-Rack-Shelf)."
+          },
+          {
+            "packing_list_field": "Expiration Date / Best Before",
+            "system_field": "Shelf Life / Expiration Tracking",
+            "normalization_logic": "Extract date fields; Standardize format (MM/DD/YYYY); Calculate days until expiration; Flag expired or near-expiry items."
+          }
+        ]
+      },
+      {
+        "id": "warehouse_receiving",
+        "title": "Warehouse Receiving Documentation",
+        "content": "Receiving operations require accurate documentation to maintain inventory accuracy and prevent discrepancies:\n\n- **ASN (Advanced Shipping Notice) Matching:** Match packing lists against ASNs to validate expected vs. received quantities, flagging shortages or overages.\n- **Damage Reporting:** Extract damage notes and condition codes from receiving documents, routing damaged items to quality control workflows.\n- **Put-Away Instructions:** Parse location assignments from receiving documents, ensuring items are placed in correct warehouse zones.\n- **Vendor Compliance:** Validate packing list formats against vendor compliance requirements, flagging non-compliant shipments for review.\n- **Cross-Dock Processing:** Identify cross-dock shipments from packing list data, routing items directly to outbound staging without put-away.\n\nDocStandard ensures receiving documentation is complete, accurate, and ready for immediate WMS import, reducing receiving cycle time by up to 40%."
+      },
+      {
+        "id": "inventory_reconciliation",
+        "title": "Inventory Reconciliation and Cycle Counting",
+        "content": "Accurate inventory counts depend on reliable documentation processing:\n\n1. **Cycle Count Preparation:** Extract item lists and expected quantities from cycle count worksheets, generating count sheets with current system quantities.\n2. **Variance Analysis:** Compare physical count data against system quantities, flagging discrepancies above tolerance thresholds.\n3. **Adjustment Documentation:** Process inventory adjustment forms, ensuring proper GL coding and approval workflows are maintained.\n4. **ABC Analysis:** Classify items by value and velocity from inventory reports, prioritizing high-value items for more frequent counts.\n5. **Location Accuracy:** Validate bin locations from cycle count sheets against WMS location data, identifying mis-located inventory.\n\nDocStandard processes cycle count and reconciliation documents, ensuring inventory adjustments are properly documented and traceable for audit purposes."
+      },
+      {
+        "id": "sku_master_data",
+        "title": "SKU Master Data Management",
+        "content": "Maintaining accurate SKU master data is critical for inventory operations:\n\n- **New Item Setup:** Extract product attributes (dimensions, weight, UOM, category) from vendor catalogs or product sheets, creating standardized SKU records.\n- **Attribute Updates:** Process product change notifications, updating SKU attributes (pricing, dimensions, descriptions) while maintaining change history.\n- **Duplicate Detection:** Identify duplicate SKUs across multiple systems or catalogs, consolidating records to prevent inventory fragmentation.\n- **Taxonomy Classification:** Map product descriptions to standardized product categories and hierarchies, ensuring consistent classification across systems.\n- **Cross-Reference Maintenance:** Link internal SKUs to vendor part numbers, customer SKUs, and barcode identifiers, maintaining complete cross-reference tables.\n\nDocStandard processes SKU master data documents, ensuring your product database remains accurate and synchronized across WMS, ERP, and e-commerce platforms."
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: Manual vs. Automated Packing List Processing",
+        "content": "For a warehouse processing 2,000 packing lists per week:\n\n- **Manual Entry:** 4 minutes per packing list = 133 hours/week of data entry\n- **Error Rate:** 6-10% requiring correction = 120-200 packing lists with downstream issues (inventory discrepancies, shipping errors)\n- **DocStandard Processing:** Batch upload + automated extraction = 3 hours/week\n- **Accuracy:** 99%+ with exception flagging for review\n\n**Annual Savings:**\n- Labor: $150,000+ in reclaimed warehouse operations time\n- Error Cost Avoidance: $50,000+ in inventory write-offs and shipping corrections\n- Inventory Accuracy: 99.5%+ vs. 94% with manual entry, reducing stockouts and overstock situations"
+      }
+    ]
+  }
+}

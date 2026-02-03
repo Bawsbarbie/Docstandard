@@ -193,3 +193,25 @@ export interface ShippingGuide {
 export interface ShippingGuideFile {
   shipping_documentation_guide: ShippingGuide
 }
+
+// Inventory Guide Types
+export interface InventoryGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    packing_list_field: string
+    system_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface InventoryGuide {
+  title: string
+  word_count_target: number
+  expert_sections: InventoryGuideSection[]
+}
+
+export interface InventoryGuideFile {
+  inventory_management_guide: InventoryGuide
+}

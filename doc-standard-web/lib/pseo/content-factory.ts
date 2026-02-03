@@ -27,6 +27,8 @@ import type {
   FinanceGuide,
   ShippingGuideFile,
   ShippingGuide,
+  InventoryGuideFile,
+  InventoryGuide,
 } from "./types"
 
 // Block storage types
@@ -69,6 +71,7 @@ export interface PageModel {
     customsGuide?: CustomsGuide
     financeGuide?: FinanceGuide
     shippingGuide?: ShippingGuide
+    inventoryGuide?: InventoryGuide
   }
 }
 
@@ -85,6 +88,7 @@ export class ContentFactory {
   private customsGuide: CustomsGuideFile | null = null
   private financeGuide: FinanceGuideFile | null = null
   private shippingGuide: ShippingGuideFile | null = null
+  private inventoryGuide: InventoryGuideFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -242,6 +246,23 @@ export class ContentFactory {
   }
 
   /**
+   * Load Inventory guide data
+   */
+  private async loadInventoryGuide(): Promise<InventoryGuideFile> {
+    if (this.inventoryGuide) return this.inventoryGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "inventory-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.inventoryGuide = JSON.parse(content) as InventoryGuideFile
+    } catch {
+      this.inventoryGuide = { inventory_management_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.inventoryGuide
+  }
+
+  /**
    * Get technical details for an intent (if available)
    * Checks both intent.id AND intent.slug against JSON keys
    */
@@ -253,6 +274,7 @@ export class ContentFactory {
     customsGuide?: CustomsGuide
     financeGuide?: FinanceGuide
     shippingGuide?: ShippingGuide
+    inventoryGuide?: InventoryGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
     const intentSlug = intent.slug.toLowerCase()
@@ -272,6 +294,10 @@ export class ContentFactory {
     // Check if intent slug contains Shipping/BOL/Airway/Container keywords
     const shippingKeywords = ['bill-of-lading', 'airway-bill', 'shipping', 'container']
     const hasShippingKeyword = shippingKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains Inventory/Packing List/Warehouse/SKU keywords
+    const inventoryKeywords = ['packing-list', 'warehouse', 'inventory', 'sku']
+    const hasInventoryKeyword = inventoryKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Load TMS-ERP guide if keywords match
     let tmsErpGuideData: TmsErpGuide | undefined
@@ -301,6 +327,13 @@ export class ContentFactory {
       shippingGuideData = guideFile.shipping_documentation_guide
     }
 
+    // Load Inventory guide if keywords match
+    let inventoryGuideData: InventoryGuide | undefined
+    if (hasInventoryKeyword) {
+      const guideFile = await this.loadInventoryGuide()
+      inventoryGuideData = guideFile.inventory_management_guide
+    }
+
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
       // Try matching by intent.id first, then by slug
@@ -310,14 +343,15 @@ export class ContentFactory {
         // Also try removing common suffixes like "-services" or "-integration"
         details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
         details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
-      if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData) {
+      if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
         return { 
           isIntegration: true, 
           integrationDetails: integrationData,
           tmsErpGuide: tmsErpGuideData,
           customsGuide: customsGuideData,
           financeGuide: financeGuideData,
-          shippingGuide: shippingGuideData
+          shippingGuide: shippingGuideData,
+          inventoryGuide: inventoryGuideData
         }
       }
     } else {
@@ -328,26 +362,28 @@ export class ContentFactory {
         details.services[intent.slug] ||
         // Also try removing common suffixes
         details.services[intent.id.replace(/-services?$/, "")]
-      if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData) {
+      if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
         return { 
           isIntegration: false, 
           serviceDetails: serviceData,
           tmsErpGuide: tmsErpGuideData,
           customsGuide: customsGuideData,
           financeGuide: financeGuideData,
-          shippingGuide: shippingGuideData
+          shippingGuide: shippingGuideData,
+          inventoryGuide: inventoryGuideData
         }
       }
     }
 
     // Return guides even if no other technical details found
-    if (tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData) {
+    if (tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
       return {
         isIntegration: false,
         tmsErpGuide: tmsErpGuideData,
         customsGuide: customsGuideData,
         financeGuide: financeGuideData,
-        shippingGuide: shippingGuideData
+        shippingGuide: shippingGuideData,
+        inventoryGuide: inventoryGuideData
       }
     }
 
