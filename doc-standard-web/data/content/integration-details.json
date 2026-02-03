@@ -1,0 +1,64 @@
+{
+  "integrations": {
+    "motive-quickbooks": {
+      "pair": "Motive ↔️ QuickBooks",
+      "data_flow": [
+        "Automatic import of vehicle details and GPS trip miles from Motive ELDs.",
+        "Fuel-up data synchronization from Motive fuel cards to QuickBooks expense categories.",
+        "Automated IFTA reporting data generation (distance by state/province).",
+        "Driver HOS (Hours of Service) logs for payroll reconciliation."
+      ],
+      "use_case": "A trucking fleet using Motive can automatically sync fuel card transactions into QuickBooks, saving ~10 hours per week on manual expense categorization and ensuring IFTA audit readiness.",
+      "technical_specs": "REST API based synchronization with Webhook support for real-time trip completion events.",
+      "prerequisites": "Motive Enterprise or Pro plan; QuickBooks Online Plus or Advanced / QuickBooks Desktop Enterprise."
+    },
+    "cargowise-sap-s4hana": {
+      "pair": "CargoWise ↔️ SAP S/4HANA",
+      "data_flow": [
+        "Forwarding Settlement Documents (FSD) mapped to SAP Billing Documents.",
+        "Supplier invoice accruals transferred from Freight Orders to SAP General Ledger.",
+        "Real-time shipment milestone updates (ETA, ATD) synced to SAP Sales & Distribution (SD).",
+        "Master data sync (Business Partners, UNLOCO codes) between both systems."
+      ],
+      "use_case": "International forwarders can automate the transfer of accruals and actual costs into SAP S/4HANA, eliminating the 'financial lag' between operations and corporate finance.",
+      "technical_specs": "eAdapter (XML) or REST API integration using SAP Cloud Integration (CPI) as middleware.",
+      "prerequisites": "CargoWise One (latest version); SAP S/4HANA 2020 or newer; eAdapter module enabled."
+    },
+    "magaya-quickbooks": {
+      "pair": "Magaya ↔️ QuickBooks Enterprise",
+      "data_flow": [
+        "Syncing Magaya Invoices and Credit Memos directly to QuickBooks AR.",
+        "Magaya Bills and Bill Credits pushed to QuickBooks AP.",
+        "Automated sync of Business Entities (Customer/Vendor address books).",
+        "Inventory adjustment sync for warehousing operations."
+      ],
+      "use_case": "Small to mid-sized forwarders can run operations in Magaya while maintaining a clean ledger in QuickBooks without manual double-entry of commercial invoices.",
+      "technical_specs": "Magaya QuickBooks Extension using Desktop Sync Tool (XML-based) or QBO API.",
+      "prerequisites": "Magaya Supply Chain; QuickBooks Desktop Enterprise v21.0+ or QBO."
+    },
+    "cargowise-netsuite": {
+      "pair": "CargoWise ↔️ Oracle NetSuite",
+      "data_flow": [
+        "Direct mapping of CargoWise AR Invoices to NetSuite Sales Invoices.",
+        "Shipment Landed Cost data pushed to NetSuite for accurate inventory valuation.",
+        "Payment status feedback (NetSuite → CargoWise) to update operational credit holds.",
+        "Automated currency conversion and multi-subsidiary mapping."
+      ],
+      "use_case": "Logistics companies can automate 'Multi-Entity' billing, ensuring that freight costs in CargoWise match the corporate financial reporting in NetSuite in real-time.",
+      "technical_specs": "Middleware integration (Celigo, Boomi) using CargoWise eAdapter and NetSuite SuiteTalk API.",
+      "prerequisites": "CargoWise One; NetSuite OneWorld (for multi-subsidiary); API Enablement."
+    },
+    "mercurygate-netsuite": {
+      "pair": "MercuryGate ↔️ NetSuite",
+      "data_flow": [
+        "Voucher and load financial data sync from MercuryGate to NetSuite AP/AR.",
+        "Carrier payment status updates for visibility inside the TMS.",
+        "GL account mapping for specific freight modes (LTL, FTL, Ocean).",
+        "Customer credit limit sync from NetSuite to MercuryGate."
+      ],
+      "use_case": "3PLs can ensure that carrier payments are only released in NetSuite after the load is marked as 'Financial Approved' in MercuryGate, preventing overpayments.",
+      "technical_specs": "REST API based integration using MercuryGate Integration Manager.",
+      "prerequisites": "MercuryGate TMS; NetSuite ERP; REST Web Services enabled in NetSuite."
+    }
+  }
+}

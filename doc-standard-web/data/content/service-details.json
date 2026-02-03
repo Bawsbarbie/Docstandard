@@ -1,0 +1,74 @@
+{
+  "services": {
+    "customs-clearance": {
+      "name": "Customs Clearance Services",
+      "pain_points": [
+        "Backdated financial exposure: Incorrect duty and tax calculations can lead to significant penalties during retroactive customs audits.",
+        "Improper classification risks: Misidentifying goods (e.g., flotation devices vs. life jackets) can lead to legal litigation and seized shipments.",
+        "FCA Violations: Penalties for negligence can range from double the duty loss to triple the value of underpaid duties plus individual violation fines."
+      ],
+      "operational_requirements": [
+        "Commercial Invoice and Packing List for value and quantity verification.",
+        "Country of Origin certificates to determine preferential tariff eligibility.",
+        "Denied Party Screening results to ensure compliance with international trade sanctions."
+      ],
+      "value_logic": "Automated tools often fail to flag prohibited items or nuanced restricted goods. Professional clearance ensures that every entry is audit-ready and minimizes the risk of backdated duty assessments that SaaS tools cannot defend."
+    },
+    "hs-code-classification": {
+      "name": "HS Code Tariff Classification",
+      "pain_points": [
+        "Composition Complexity: Section VI (Chemicals) and Section XVI (Machinery) contain thousands of subheadings where small material differences change the tariff rate.",
+        "GRI Compliance Failures: Failure to apply the General Rules for Interpretation (GRI) in the correct strict order leads to systemic classification errors.",
+        "Seizure of Goods: Customs authorities can lose trust in importers who consistently misclassify, leading to 100% inspection rates and warehouse demurrage."
+      ],
+      "operational_requirements": [
+        "Technical Data Sheets (TDS) or Material Safety Data Sheets (MSDS) for chemical compositions.",
+        "Engineered drawings or functional descriptions for machinery and mechanical parts.",
+        "Historical classification rulings (CBP Cross Rulings) for consistent legal precedent."
+      ],
+      "value_logic": "AI classification tools struggle with 'form vs. function' nuances in complex machinery. Expert classification applies legal precedent and deep material science to ensure the lowest legal duty rate while maintaining 100% compliance."
+    },
+    "trade-compliance": {
+      "name": "Trade Compliance Consulting",
+      "pain_points": [
+        "Regulatory Volatility: Trade laws and sanctions change weekly; static internal policies lead to accidental illegal exports.",
+        "Loss of Import Privileges: Severe or repeat non-compliance can result in the permanent revocation of a company's ability to import or export.",
+        "Supply Chain Demurrage: Compliance-related delays at the border can cost thousands per day in storage and missed delivery penalties."
+      ],
+      "operational_requirements": [
+        "End-Use and End-User statements for sensitive high-tech or dual-use goods.",
+        "Comprehensive export/import license history and internal control programs (ICP).",
+        "Record-keeping logs for the 5-year statutory retention period required by most jurisdictions."
+      ],
+      "value_logic": "Generic compliance software provides templates but doesn't handle the 'Informed Compliance' requirements of modern customs authorities. Our experts build custom defensible workflows that protect corporate officers from individual liability."
+    },
+    "shipping-logistics": {
+      "name": "Shipping & Logistics Support",
+      "pain_points": [
+        "Demurrage & Detention Spirals: Lack of real-time visibility into rolling cargo and port exceptions leads to thousands in avoidable daily fees.",
+        "Retailer Chargebacks: Inaccurate documentation and late arrival notifications trigger heavy financial penalties from major retailers.",
+        "Exception Management Failure: Without standardized tracking data, identifying and resolving carrier business rule failures happens too late to save the shipment."
+      ],
+      "operational_requirements": [
+        "Real-time tracking data and time-stamped documentation to dispute unfair demurrage charges.",
+        "Automated exception alerts integrated with warehouse labor scheduling.",
+        "Historical carrier performance audits to evaluate risk and shipment history."
+      ],
+      "value_logic": "Standard tracking APIs provide raw data, but professional logistics support provides the smart exception identification needed to dispute fees and optimize warehouse labor before bottlenecks occur."
+    },
+    "freight-audit-finance": {
+      "name": "Freight Audit & Financial Processing",
+      "pain_points": [
+        "GL Coding Inaccuracies: Manual processing leads to misallocated transportation spend across mode-level charges (LTL, FTL, Ocean).",
+        "Duplicate Billing: WithoutCharge-level automated audits, companies often pay the same carrier invoice multiple times across different departments.",
+        "Fuel Surcharge Overcharges: Static auditing fails to catch version-controlled fuel surcharge schedule errors in versioned contracts."
+      ],
+      "operational_requirements": [
+        "Version-controlled contract terms, tariffs, and SLAs for automated validation.",
+        "CHARGE-LEVELMode-level mode-level modes mode-level charge modes Mode-level Charge level Mode-level mode-level Charge level Charge-level charge audit history.",
+        "Integrated ERP/TMS data flows to ensure clean, audit-ready financial statements."
+      ],
+      "value_logic": "Generic accounting software lacks freight-specific logic like detention clauses and dynamic fuel surcharges. Our expert financial processing corrects billing errors at the root cause before they hit the general ledger."
+    }
+  }
+}
