@@ -1,3 +1,9 @@
+"use client"
+
+import { useState } from "react"
+import type { ReactNode } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ChevronDown } from "lucide-react"
 import type { TmsErpGuide, CustomsGuide, CustomsGuideSection, ExpertSection, FinanceGuide, FinanceGuideSection, ShippingGuide, ShippingGuideSection, InventoryGuide, InventoryGuideSection } from "@/lib/pseo/types"
 
 interface TechnicalGuideProps {
@@ -9,74 +15,142 @@ interface TechnicalGuideProps {
 }
 
 export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuide, inventoryGuide }: TechnicalGuideProps) {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
+
+  const toggleSection = (key: string) => {
+    setOpenSections((prev) => ({ ...prev, [key]: !(prev[key] ?? true) }))
+  }
+
+  const getOpenState = (key: string) => openSections[key] ?? true
+
+  const sectionShellClass =
+    "relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-[0_12px_30px_rgba(15,23,42,0.08)]"
+  const sectionHeaderClass =
+    "text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-6"
+  const sectionBodyClass = "text-slate-700 leading-relaxed whitespace-pre-line"
+
+  const tableShellClass =
+    "mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm"
+  const tableClass = "min-w-full text-sm"
+  const tableHeadClass = "bg-slate-100/80 text-slate-600"
+  const tableRowClass =
+    "border-b border-slate-200/70 even:bg-slate-50/60 hover:bg-slate-100/60 transition-colors"
+  const thClass =
+    "px-5 py-3 text-left text-[0.7rem] font-bold uppercase tracking-[0.18em]"
+  const tdClass = "px-5 py-4 text-slate-700"
+
+  const renderSectionChrome = (
+    sectionKey: string,
+    title: string,
+    content: ReactNode,
+    extra?: ReactNode
+  ) => {
+    const isOpen = getOpenState(sectionKey)
+    return (
+      <motion.div
+        key={sectionKey}
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -4 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.5 }}
+        className="relative"
+      >
+        <div className={`${sectionShellClass} p-8 md:p-10`}>
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <h2 className={sectionHeaderClass}>{title}</h2>
+              <div className="h-1 w-16 rounded-full bg-brand-600/80 mb-6" />
+            </div>
+            <button
+              type="button"
+              onClick={() => toggleSection(sectionKey)}
+              className="flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-colors"
+              aria-expanded={isOpen}
+            >
+              {isOpen ? "Collapse" : "Expand"}
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+          </div>
+          <AnimatePresence initial={false}>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.35 }}
+                className="overflow-hidden"
+              >
+                <div className="pt-2">
+                  <div className={sectionBodyClass}>{content}</div>
+                  {extra}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-brand-500/10 blur-3xl" />
+        </div>
+      </motion.div>
+    )
+  }
+
   // Render inventory guide sections if available (takes highest priority)
   if (inventoryGuide && inventoryGuide.expert_sections && inventoryGuide.expert_sections.length > 0) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-purple-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
             {inventoryGuide.expert_sections.map((section: InventoryGuideSection) => {
+              const sectionKey = `inventory-${section.id}`
+
               // Special handling for Packing List Mapping table
               if (section.id === "packing_list_mapping" && section.mapping_data) {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                    <div className="overflow-x-auto mt-6">
-                      <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Packing List Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              System Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Normalization Logic
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {section.mapping_data.map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                {row.packing_list_field}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-r border-gray-300">
-                                {row.system_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700">
-                                {row.normalization_logic}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Mapping Table</h3>
                     </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Packing List Field</th>
+                          <th className={thClass}>System Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.packing_list_field}</td>
+                            <td className={tdClass}>{row.system_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
               }
 
               // Special handling for operational_roi (inventory version)
               if (section.id === "operational_roi") {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <div className="bg-gradient-to-r from-purple-50 to-violet-50 border-l-4 border-purple-500 p-6 rounded-r-lg shadow-sm">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                      <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                    </div>
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-purple-200/80 bg-gradient-to-r from-purple-50 via-white to-violet-50 p-6 text-slate-700">
+                    {section.content}
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
               }
 
               // Default rendering for other inventory sections
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                </div>
-              )
+              return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
         </div>
@@ -87,71 +161,58 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
   // Render shipping guide sections if available
   if (shippingGuide && shippingGuide.expert_sections && shippingGuide.expert_sections.length > 0) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
             {shippingGuide.expert_sections.map((section: ShippingGuideSection) => {
+              const sectionKey = `shipping-${section.id}`
+
               // Special handling for BOL Field Mapping table
               if (section.id === "bol_field_mapping" && section.mapping_data) {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                    <div className="overflow-x-auto mt-6">
-                      <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              BOL Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              System Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Normalization Logic
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {section.mapping_data.map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                {row.bol_field}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-r border-gray-300">
-                                {row.system_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700">
-                                {row.normalization_logic}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Mapping Table</h3>
                     </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>BOL Field</th>
+                          <th className={thClass}>System Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.bol_field}</td>
+                            <td className={tdClass}>{row.system_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
               }
 
               // Special handling for operational_roi (shipping version)
               if (section.id === "operational_roi") {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border-l-4 border-blue-500 p-6 rounded-r-lg shadow-sm">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                      <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                    </div>
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-blue-200/80 bg-gradient-to-r from-blue-50 via-white to-cyan-50 p-6 text-slate-700">
+                    {section.content}
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
               }
 
               // Default rendering for other shipping sections
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                </div>
-              )
+              return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
         </div>
@@ -162,77 +223,60 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
   // Render finance guide sections if available
   if (financeGuide && financeGuide.expert_sections && financeGuide.expert_sections.length > 0) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
             {financeGuide.expert_sections.map((section: FinanceGuideSection) => {
+              const sectionKey = `finance-${section.id}`
+
               // Special handling for GL Code Mapping table
               if (section.id === "gl_coding_mapping" && section.mapping_data) {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                    <div className="overflow-x-auto mt-6">
-                      <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Document Type
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Source Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              ERP Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Normalization Logic
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {section.mapping_data.map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                {row.document_type}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-r border-gray-300">
-                                {row.source_field}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-r border-gray-300">
-                                {row.erp_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700">
-                                {row.normalization_logic}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Mapping Table</h3>
                     </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Document Type</th>
+                          <th className={thClass}>Source Field</th>
+                          <th className={thClass}>ERP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.document_type}</td>
+                            <td className={tdClass}>{row.source_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
               }
 
               // Special handling for operational_roi (finance version)
               if (section.id === "operational_roi") {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-6 rounded-r-lg shadow-sm">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                      <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                    </div>
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-emerald-200/80 bg-gradient-to-r from-emerald-50 via-white to-green-50 p-6 text-slate-700">
+                    {section.content}
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
               }
 
               // Default rendering for other finance sections
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                </div>
-              )
+              return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
         </div>
@@ -243,59 +287,48 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
   // Render customs guide sections if available
   if (customsGuide && customsGuide.expert_sections && customsGuide.expert_sections.length > 0) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
             {customsGuide.expert_sections.map((section: CustomsGuideSection) => {
+              const sectionKey = `customs-${section.id}`
+
               // Special handling for CBP Entry Field Mapping
               if (section.id === "cbp_entry_field_mapping" && section.mapping_data) {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                    <div className="overflow-x-auto mt-6">
-                      <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Source Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              CBP Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Normalization Logic
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {section.mapping_data.map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r border-gray-300">
-                                {row.source_field}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-r border-gray-300">
-                                {row.cbp_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700">
-                                {row.normalization_logic}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Mapping Table</h3>
                     </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Source Field</th>
+                          <th className={thClass}>CBP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.source_field}</td>
+                            <td className={tdClass}>{row.cbp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
               }
 
               // Default rendering for other customs sections
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                </div>
-              )
+              return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
         </div>
@@ -306,83 +339,62 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
   // Render TMS-ERP guide sections if available
   if (guide && guide.expert_sections && guide.expert_sections.length > 0) {
     return (
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-indigo-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
             {guide.expert_sections.map((section: ExpertSection) => {
+              const sectionKey = `tms-erp-${section.id}`
+
               // Special handling for field_mapping_table
               if (section.id === "field_mapping_table" && section.mapping_data) {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                    <div className="overflow-x-auto mt-6">
-                      <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              TMS System
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              ERP System
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              TMS Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              ERP Field
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b border-gray-300">
-                              Normalization Logic
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {section.mapping_data.map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
-                                {row.tms_system}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-r border-gray-300">
-                                {row.erp_system}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700 border-r border-gray-300">
-                                {row.tms_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700 border-r border-gray-300">
-                                {row.erp_field}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-700">
-                                {row.normalization_logic}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Master Mapping Blueprint</h3>
                     </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>TMS System</th>
+                          <th className={thClass}>ERP System</th>
+                          <th className={thClass}>TMS Field</th>
+                          <th className={thClass}>ERP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.tms_system}</td>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.erp_system}</td>
+                            <td className={tdClass}>{row.tms_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
               }
 
               // Special handling for operational_roi
               if (section.id === "operational_roi") {
-                return (
-                  <div key={section.id} className="mb-12">
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-r-lg shadow-sm">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                      <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                    </div>
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-indigo-200/80 bg-gradient-to-r from-indigo-50 via-white to-blue-50 p-6 text-slate-700">
+                    {section.content}
                   </div>
                 )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
               }
 
               // Default rendering for other TMS-ERP sections
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                </div>
-              )
+              return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
         </div>

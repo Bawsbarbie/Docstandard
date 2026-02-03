@@ -33,6 +33,58 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
     serviceDetails?.value_logic ||
     integrationDetails?.value_logic ||
     undefined
+  const derivedPainPoints = (() => {
+    if (painPoints && painPoints.length > 0) return painPoints
+
+    const extractNumberedPoints = (text?: string): string[] => {
+      if (!text) return []
+      return text
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => /^\d+\.\s+/.test(line))
+        .map((line) =>
+          line
+            .replace(/^\d+\.\s+/, "")
+            .replace(/\*\*/g, "")
+            .trim()
+        )
+        .filter(Boolean)
+    }
+
+    const extractSectionTitles = (sections?: Array<{ title: string }>) => {
+      if (!sections) return []
+      return sections.map((s) => s.title).filter(Boolean)
+    }
+
+    const sources = [
+      tmsErpGuide?.expert_sections,
+      customsGuide?.expert_sections,
+      financeGuide?.expert_sections,
+      shippingGuide?.expert_sections,
+      inventoryGuide?.expert_sections,
+    ]
+
+    const collected: string[] = []
+    for (const sections of sources) {
+      if (collected.length >= 4) break
+      sections?.forEach((section) => {
+        if (collected.length >= 4) return
+        const points = extractNumberedPoints(section.content)
+        collected.push(...points)
+      })
+    }
+
+    if (collected.length < 3) {
+      for (const sections of sources) {
+        if (collected.length >= 4) break
+        const titles = extractSectionTitles(sections)
+        collected.push(...titles)
+      }
+    }
+
+    const unique = Array.from(new Set(collected)).slice(0, 4)
+    return unique.length > 0 ? unique : undefined
+  })()
 
   return (
     <main className="min-h-screen">
@@ -52,7 +104,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <PainSection
         content={content.pain}
         // Service-specific pain points (high-stakes problems)
-        painPoints={painPoints}
+        painPoints={derivedPainPoints}
         valueLogic={valueLogic}
       />
 
@@ -72,7 +124,6 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
 
       <FAQSection faqs={content.faq} />
 
-      <TestimonialsSection />
       {/* Pass intent kind to render domain-relevant testimonials */}
       <TestimonialsSection kind={intent.kind} />
     </main>

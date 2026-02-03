@@ -288,7 +288,7 @@ export class ContentFactory {
     const hasCustomsKeyword = customsKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Check if intent slug contains Finance/Audit/QuickBooks/Magaya keywords
-    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya']
+    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya', 'ifta']
     const hasFinanceKeyword = financeKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Check if intent slug contains Shipping/BOL/Airway/Container keywords
@@ -372,11 +372,29 @@ export class ContentFactory {
     } else {
       const details = await this.loadServiceDetails()
       // Try matching by intent.id first, then by slug
-      const serviceData =
+      let serviceData =
         details.services[intent.id] ||
         details.services[intent.slug] ||
         // Also try removing common suffixes
         details.services[intent.id.replace(/-services?$/, "")]
+
+      // Fallback mapping by intent kind / common keywords
+      if (!serviceData) {
+        const intentSlugLower = intent.slug.toLowerCase()
+        const kindLower = intent.kind?.toLowerCase()
+
+        if (intentSlugLower.includes("hs-code") || intentSlugLower.includes("tariff")) {
+          serviceData = details.services["hs-code-classification"]
+        } else if (kindLower === "customs") {
+          serviceData = details.services["customs-clearance"]
+        } else if (kindLower === "finance") {
+          serviceData = details.services["freight-audit-finance"]
+        } else if (kindLower === "shipping") {
+          serviceData = details.services["shipping-logistics"]
+        } else if (kindLower === "compliance") {
+          serviceData = details.services["trade-compliance"]
+        }
+      }
       if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
         return { 
           isIntegration: false, 
@@ -487,7 +505,12 @@ export class ContentFactory {
     const allBlocks = blocks[blockType as keyof BlockCollection] as BlockItem[]
     const filteredBlocks = allBlocks.filter((b) => blockIds.includes(b.id))
 
-    if (filteredBlocks.length === 0) return null
+    if (filteredBlocks.length === 0) {
+      if (!allBlocks || allBlocks.length === 0) return null
+      const hash = this.getHash(seed + blockType)
+      const index = hash % allBlocks.length
+      return allBlocks[index]
+    }
 
     const hash = this.getHash(seed + blockType)
     const index = hash % filteredBlocks.length
@@ -512,7 +535,8 @@ export class ContentFactory {
       allBlocks = (blocks[blockType as keyof BlockCollection] as BlockItem[]) || []
     } else {
       const availableBlocks = (blocks[blockType as keyof BlockCollection] as BlockItem[]) || []
-      allBlocks = availableBlocks.filter((b) => blockIds.includes(b.id))
+      const filtered = availableBlocks.filter((b) => blockIds.includes(b.id))
+      allBlocks = filtered.length > 0 ? filtered : availableBlocks
     }
 
     if (allBlocks.length === 0) return []
