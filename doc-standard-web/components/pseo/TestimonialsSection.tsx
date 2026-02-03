@@ -1,7 +1,8 @@
 "use client"
 
-import { Quote, Star } from "lucide-react"
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface Testimonial {
   quote: string
@@ -55,7 +56,25 @@ const testimonials: Testimonial[] = [
   },
 ]
 
+const ITEMS_PER_PAGE = 3
+
 export function TestimonialsSection() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const totalPages = Math.ceil(testimonials.length / ITEMS_PER_PAGE)
+
+  const currentTestimonials = testimonials.slice(
+    currentIndex * ITEMS_PER_PAGE,
+    currentIndex * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+  )
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? totalPages - 1 : prev - 1))
+  }
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === totalPages - 1 ? 0 : prev + 1))
+  }
+
   return (
     <section className="py-24 bg-slate-50 relative overflow-hidden">
       {/* Decorative dots */}
@@ -101,47 +120,89 @@ export function TestimonialsSection() {
             </p>
           </motion.div>
 
-          {/* Testimonials Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
+          {/* Carousel Container */}
+          <div className="relative">
+            {/* Left Arrow */}
+            <button
+              onClick={goToPrevious}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center hover:bg-brand-50 hover:border-brand-300 transition-all group"
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-brand-600 transition-colors" />
+            </button>
+
+            {/* Testimonials Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 md:px-0">
+              <AnimatePresence mode="wait">
+                {currentTestimonials.map((testimonial, index) => {
+                  const globalIndex = currentIndex * ITEMS_PER_PAGE + index
+                  return (
+                    <motion.div
+                      key={globalIndex}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ y: -5 }}
+                      className="bg-white rounded-[2rem] border border-gray-100 p-8 shadow-sm hover:shadow-2xl transition-all flex flex-col group relative"
+                    >
+                      {/* Quote Icon */}
+                      <div className="absolute top-8 right-8 text-brand-50 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <Quote className="w-16 h-16" />
+                      </div>
+
+                      <div className="mb-6 flex gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        ))}
+                      </div>
+
+                      {/* Quote Text */}
+                      <p className="text-gray-700 leading-relaxed mb-8 flex-1 italic relative z-10 text-lg">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </p>
+
+                      {/* Author Info */}
+                      <div className="border-t border-gray-100 pt-6 mt-auto">
+                        <p className="font-black text-gray-900 text-lg">
+                          {testimonial.author}
+                        </p>
+                        <p className="text-sm font-bold text-brand-600 uppercase tracking-widest mt-1">
+                          {testimonial.role}
+                        </p>
+                        <p className="text-sm text-gray-500 font-medium mt-0.5">
+                          {testimonial.company}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
+            </div>
+
+            {/* Right Arrow */}
+            <button
+              onClick={goToNext}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-12 h-12 rounded-full bg-white shadow-lg border border-gray-200 flex items-center justify-center hover:bg-brand-50 hover:border-brand-300 transition-all group"
+              aria-label="Next testimonials"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-brand-600 transition-colors" />
+            </button>
+          </div>
+
+          {/* Pagination Dots */}
+          <div className="flex justify-center gap-2 mt-12">
+            {[...Array(totalPages)].map((_, index) => (
+              <button
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-[2rem] border border-gray-100 p-8 shadow-sm hover:shadow-2xl transition-all flex flex-col group relative"
-              >
-                {/* Quote Icon */}
-                <div className="absolute top-8 right-8 text-brand-50 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Quote className="w-16 h-16" />
-                </div>
-
-                <div className="mb-6 flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-
-                {/* Quote Text */}
-                <p className="text-gray-700 leading-relaxed mb-8 flex-1 italic relative z-10 text-lg">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-
-                {/* Author Info */}
-                <div className="border-t border-gray-100 pt-6 mt-auto">
-                  <p className="font-black text-gray-900 text-lg">
-                    {testimonial.author}
-                  </p>
-                  <p className="text-sm font-bold text-brand-600 uppercase tracking-widest mt-1">
-                    {testimonial.role}
-                  </p>
-                  <p className="text-sm text-gray-500 font-medium mt-0.5">
-                    {testimonial.company}
-                  </p>
-                </div>
-              </motion.div>
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-all ${
+                  index === currentIndex
+                    ? "bg-brand-600 w-8"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to page ${index + 1}`}
+              />
             ))}
           </div>
         </div>
