@@ -1,7 +1,20 @@
 "use client"
 
 import type { BlockItem } from "@/lib/pseo/types"
-import { CheckCircle2, ArrowRight, Database, Check } from "lucide-react"
+import { 
+  CheckCircle2, 
+  ArrowRight, 
+  Database, 
+  Check,
+  DollarSign,
+  FileText,
+  Layers,
+  Zap,
+  Shield,
+  Package,
+  FileCheck,
+  Sparkles
+} from "lucide-react"
 import { motion } from "framer-motion"
 
 interface BenefitsGridProps {
@@ -10,6 +23,45 @@ interface BenefitsGridProps {
   dataFlow?: string[]
   prerequisites?: string
   isIntegration?: boolean
+}
+
+// Map benefit text to appropriate icons
+const getIconForBenefit = (text: string) => {
+  const lowerText = text.toLowerCase()
+  
+  if (lowerText.includes("$799") || lowerText.includes("pricing") || lowerText.includes("flat")) {
+    return DollarSign
+  }
+  if (lowerText.includes("flexible") || lowerText.includes("mixed formats") || lowerText.includes("document types")) {
+    return Layers
+  }
+  if (lowerText.includes("clean") || lowerText.includes("structured data") || lowerText.includes("accuracy")) {
+    return FileCheck
+  }
+  if (lowerText.includes("standardized") || lowerText.includes("reduce manual") || lowerText.includes("operational friction")) {
+    return Sparkles
+  }
+  if (lowerText.includes("compatibility") || lowerText.includes("business software") || lowerText.includes("internal tools")) {
+    return Zap
+  }
+  if (lowerText.includes("faster") || lowerText.includes("without internal cleanup") || lowerText.includes("usable data")) {
+    return ArrowRight
+  }
+  if (lowerText.includes("consistency") || lowerText.includes("multiple sources")) {
+    return Package
+  }
+  if (lowerText.includes("risk") || lowerText.includes("dirty") || lowerText.includes("unreliable")) {
+    return Shield
+  }
+  if (lowerText.includes("separation") || lowerText.includes("data entry") || lowerText.includes("virtual assistant")) {
+    return FileText
+  }
+  if (lowerText.includes("ready for operational use") || lowerText.includes("not manual fixing") || lowerText.includes("delivered")) {
+    return CheckCircle2
+  }
+  
+  // Default icon
+  return Check
 }
 
 const containerVariants = {
@@ -118,20 +170,23 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
             viewport={{ once: true }}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {benefits.map((benefit) => (
-              <motion.div
-                key={benefit.id}
-                variants={itemVariants}
-                whileHover={{ y: -8 }}
-                className="flex flex-col p-8 rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-brand-100 transition-all group relative overflow-hidden h-full"
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity" />
-                <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 transition-colors">
-                  <Check className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors" />
-                </div>
-                <p className="text-xl font-semibold leading-snug text-gray-900 relative z-10">{benefit.text}</p>
-              </motion.div>
-            ))}
+            {benefits.map((benefit) => {
+              const IconComponent = getIconForBenefit(benefit.text)
+              return (
+                <motion.div
+                  key={benefit.id}
+                  variants={itemVariants}
+                  whileHover={{ y: -8 }}
+                  className="flex flex-col p-8 rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-brand-100 transition-all group relative overflow-hidden h-full"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity" />
+                  <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 transition-colors">
+                    <IconComponent className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors" />
+                  </div>
+                  <p className="text-xl font-semibold leading-snug text-gray-900 relative z-10">{benefit.text}</p>
+                </motion.div>
+              )
+            })}
           </motion.div>
         </div>
       </div>
