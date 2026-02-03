@@ -21,6 +21,8 @@ import type {
   ServiceDetailsFile,
   TmsErpGuideFile,
   TmsErpGuide,
+  CustomsGuideFile,
+  CustomsGuide,
 } from "./types"
 
 // Block storage types
@@ -60,6 +62,7 @@ export interface PageModel {
     integrationDetails?: IntegrationDetails
     serviceDetails?: ServiceDetails
     tmsErpGuide?: TmsErpGuide
+    customsGuide?: CustomsGuide
   }
 }
 
@@ -73,6 +76,7 @@ export class ContentFactory {
   private integrationDetails: IntegrationDetailsFile | null = null
   private serviceDetails: ServiceDetailsFile | null = null
   private tmsErpGuide: TmsErpGuideFile | null = null
+  private customsGuide: CustomsGuideFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -179,6 +183,23 @@ export class ContentFactory {
   }
 
   /**
+   * Load Customs guide data
+   */
+  private async loadCustomsGuide(): Promise<CustomsGuideFile> {
+    if (this.customsGuide) return this.customsGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "customs-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.customsGuide = JSON.parse(content) as CustomsGuideFile
+    } catch {
+      this.customsGuide = { customs_clearance_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.customsGuide
+  }
+
+  /**
    * Get technical details for an intent (if available)
    * Checks both intent.id AND intent.slug against JSON keys
    */
@@ -187,6 +208,7 @@ export class ContentFactory {
     integrationDetails?: IntegrationDetails
     serviceDetails?: ServiceDetails
     tmsErpGuide?: TmsErpGuide
+    customsGuide?: CustomsGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
     const intentSlug = intent.slug.toLowerCase()
@@ -195,11 +217,22 @@ export class ContentFactory {
     const tmsErpKeywords = ['cargowise', 'sap', 'netsuite', 'mercurygate', 'blue-yonder']
     const hasTmsErpKeyword = tmsErpKeywords.some(keyword => intentSlug.includes(keyword))
 
+    // Check if intent slug contains Customs/Invoice/Packing keywords
+    const customsKeywords = ['customs', 'invoice', 'packing']
+    const hasCustomsKeyword = customsKeywords.some(keyword => intentSlug.includes(keyword))
+
     // Load TMS-ERP guide if keywords match
     let tmsErpGuideData: TmsErpGuide | undefined
     if (hasTmsErpKeyword) {
       const guideFile = await this.loadTmsErpGuide()
       tmsErpGuideData = guideFile.tms_erp_bridging_guide
+    }
+
+    // Load Customs guide if keywords match
+    let customsGuideData: CustomsGuide | undefined
+    if (hasCustomsKeyword) {
+      const guideFile = await this.loadCustomsGuide()
+      customsGuideData = guideFile.customs_clearance_guide
     }
 
     if (isIntegration) {
@@ -211,11 +244,12 @@ export class ContentFactory {
         // Also try removing common suffixes like "-services" or "-integration"
         details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
         details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
-      if (integrationData || tmsErpGuideData) {
+      if (integrationData || tmsErpGuideData || customsGuideData) {
         return { 
           isIntegration: true, 
           integrationDetails: integrationData,
-          tmsErpGuide: tmsErpGuideData
+          tmsErpGuide: tmsErpGuideData,
+          customsGuide: customsGuideData
         }
       }
     } else {
@@ -226,20 +260,22 @@ export class ContentFactory {
         details.services[intent.slug] ||
         // Also try removing common suffixes
         details.services[intent.id.replace(/-services?$/, "")]
-      if (serviceData || tmsErpGuideData) {
+      if (serviceData || tmsErpGuideData || customsGuideData) {
         return { 
           isIntegration: false, 
           serviceDetails: serviceData,
-          tmsErpGuide: tmsErpGuideData
+          tmsErpGuide: tmsErpGuideData,
+          customsGuide: customsGuideData
         }
       }
     }
 
-    // Return TMS-ERP guide even if no other technical details found
-    if (tmsErpGuideData) {
+    // Return guides even if no other technical details found
+    if (tmsErpGuideData || customsGuideData) {
       return {
         isIntegration: false,
-        tmsErpGuide: tmsErpGuideData
+        tmsErpGuide: tmsErpGuideData,
+        customsGuide: customsGuideData
       }
     }
 

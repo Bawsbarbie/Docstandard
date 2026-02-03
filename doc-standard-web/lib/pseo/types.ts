@@ -126,3 +126,25 @@ export interface TmsErpGuide {
 export interface TmsErpGuideFile {
   tms_erp_bridging_guide: TmsErpGuide
 }
+
+// Customs Guide Types
+export interface CustomsGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    source_field: string
+    cbp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface CustomsGuide {
+  title: string
+  word_count_target: number
+  expert_sections: CustomsGuideSection[]
+}
+
+export interface CustomsGuideFile {
+  customs_clearance_guide: CustomsGuide
+}

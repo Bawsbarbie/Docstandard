@@ -1,0 +1,65 @@
+{
+  "customs_clearance_guide": {
+    "title": "Customs Clearance Documentation: The Technical Guide for Import/Export Operations",
+    "word_count_target": 2500,
+    "expert_sections": [
+      {
+        "id": "cbp_entry_field_mapping",
+        "title": "CBP Entry Field Mapping: System-to-System Data Requirements",
+        "content": "To ensure accurate customs clearance processing, DocStandard maps critical data fields from your source documents to CBP (Customs and Border Protection) entry requirements. The following table outlines the standard field mappings and normalization logic required for successful customs entry filing:",
+        "mapping_data": [
+          {
+            "source_field": "Invoice Number",
+            "cbp_field": "Entry Number (7501)",
+            "normalization_logic": "Extract alphanumeric identifier; Validate format (typically 8-11 characters); Cross-reference with commercial invoice."
+          },
+          {
+            "source_field": "HS Code",
+            "cbp_field": "HTSUS Classification (9801.00.10)",
+            "normalization_logic": "Standardize to 10-digit HTSUS format; Validate against CBP database; Flag discrepancies for manual review."
+          },
+          {
+            "source_field": "Country of Origin",
+            "cbp_field": "Country Code (ISO 3166-1 alpha-2)",
+            "normalization_logic": "Map country names to ISO codes (e.g., 'China' → 'CN'); Validate against CBP approved country list."
+          },
+          {
+            "source_field": "Unit Price",
+            "cbp_field": "Unit Value (Currency)",
+            "normalization_logic": "Convert to USD if foreign currency; Round to 2 decimal places; Validate against invoice totals."
+          },
+          {
+            "source_field": "Quantity",
+            "cbp_field": "Quantity (UOM)",
+            "normalization_logic": "Standardize unit of measure (EA, KG, M2, etc.); Convert to CBP-accepted UOM codes; Validate quantity totals."
+          },
+          {
+            "source_field": "Manufacturer Name",
+            "cbp_field": "Manufacturer/Shipper Name",
+            "normalization_logic": "Clean and standardize company names; Remove special characters; Match against CBP manufacturer database when available."
+          },
+          {
+            "source_field": "Port of Entry",
+            "cbp_field": "Port Code (3-digit CBP code)",
+            "normalization_logic": "Map port names to CBP port codes (e.g., 'Los Angeles' → '2704'); Validate against active port list."
+          },
+          {
+            "source_field": "Entry Date",
+            "cbp_field": "Entry Date (MM/DD/YYYY)",
+            "normalization_logic": "Standardize date format to MM/DD/YYYY; Validate date is within CBP filing window; Flag future dates."
+          }
+        ]
+      },
+      {
+        "id": "document_requirements",
+        "title": "Required Documentation for Customs Clearance",
+        "content": "Customs clearance requires a complete set of documentation to ensure compliance and avoid delays. DocStandard processes and validates the following documents:\n\n1. **Commercial Invoice:** Must include itemized line items, unit prices, quantities, and country of origin for each product.\n2. **Packing List:** Detailed breakdown of packages, weights, dimensions, and package-level HS codes.\n3. **Bill of Lading (BOL):** Carrier-issued document with vessel/flight information, port of loading, and port of discharge.\n4. **Certificate of Origin:** When required for preferential trade agreements (e.g., USMCA, CAFTA).\n5. **Importer Security Filing (ISF-10):** Required for ocean shipments, must be filed 24 hours before vessel departure.\n\nDocStandard extracts, validates, and standardizes data from these documents to create CBP-ready entry files."
+      },
+      {
+        "id": "compliance_validation",
+        "title": "Compliance Validation and Error Prevention",
+        "content": "DocStandard performs automated validation checks to prevent common customs clearance errors:\n\n- **HS Code Validation:** Cross-references extracted HS codes against CBP's Harmonized Tariff Schedule to flag invalid or outdated classifications.\n- **Value Reconciliation:** Validates that invoice totals match the sum of line items, accounting for freight, insurance, and other charges.\n- **Country of Origin Verification:** Ensures country codes match CBP requirements and flags potential origin misclassifications.\n- **Missing Field Detection:** Identifies required fields that are missing or incomplete, preventing entry rejections.\n\nThis validation process reduces the risk of CBP holds, liquidated damages, or entry rejections that can delay shipments and incur penalties."
+      }
+    ]
+  }
+}

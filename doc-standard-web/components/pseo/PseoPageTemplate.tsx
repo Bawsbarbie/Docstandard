@@ -21,6 +21,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const integrationDetails = technical?.integrationDetails
   const serviceDetails = technical?.serviceDetails
   const tmsErpGuide = technical?.tmsErpGuide
+  const customsGuide = technical?.customsGuide
 
   return (
     <main className="min-h-screen">
@@ -44,7 +45,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         valueLogic={serviceDetails?.value_logic}
       />
 
-      <TechnicalGuide guide={tmsErpGuide} />
+      <TechnicalGuide guide={tmsErpGuide} customsGuide={customsGuide} />
 
       <MiddleCTA />
 
