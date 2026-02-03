@@ -337,12 +337,27 @@ export class ContentFactory {
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
       // Try matching by intent.id first, then by slug
-      const integrationData =
+      let integrationData =
         details.integrations[intent.id] ||
         details.integrations[intent.slug] ||
         // Also try removing common suffixes like "-services" or "-integration"
         details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
         details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
+
+      // Fuzzy match: pick an integration whose key tokens all appear in the slug (helps magaya-quickbooks, cargowise-netsuite, etc.)
+      if (!integrationData) {
+        const intentSlugLower = intent.slug.toLowerCase()
+        const fuzzy = Object.entries(details.integrations).find(([key]) => {
+          const tokens = key
+            .toLowerCase()
+            .split(/[-_]/)
+            .filter((t) => t.length > 2) // ignore tiny words
+          return tokens.every((t) => intentSlugLower.includes(t))
+        })
+        if (fuzzy) {
+          integrationData = fuzzy[1]
+        }
+      }
       if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
         return { 
           isIntegration: true, 
@@ -625,6 +640,52 @@ export class ContentFactory {
       attempts += 1
     }
 
+    // Pull technical details early so we can mine extra FAQs from expert sections
+    const technicalData = await this.getTechnicalDetails(intent)
+
+    // Ensure we always have at least 5 FAQs by appending 3-4 more from pool or technical guides
+    const minimumFaqs = 5
+    const extras: typeof faqItems = []
+
+    // First, add unused FAQs from the pool
+    const remainingPoolFaqs = faqItems.filter(
+      (f) => !selectedFaqs.find((s) => s.id === f.id)
+    )
+    const extraPoolNeeded = Math.max(0, minimumFaqs - selectedFaqs.length)
+    extras.push(...remainingPoolFaqs.slice(0, extraPoolNeeded))
+
+    // If still short, derive FAQs from technical guide expert sections
+    const stillNeeded = Math.max(0, minimumFaqs - (selectedFaqs.length + extras.length))
+    if (stillNeeded > 0 && technicalData) {
+      const technicalFaqCandidates: Array<{ id: string; question: string; answer: string }> = []
+
+      const pushSections = (sections?: { title: string; content: string }[]) => {
+        sections?.forEach((section, idx) => {
+          // Slightly vary question phrasing to avoid duplicates
+          technicalFaqCandidates.push({
+            id: `tech-${section.title}-${idx}`,
+            question: `How do you handle ${section.title}?`,
+            answer: section.content,
+          })
+          // Cap total size later
+        })
+      }
+
+      pushSections(technicalData.tmsErpGuide?.expert_sections)
+      pushSections(technicalData.customsGuide?.expert_sections)
+      pushSections(technicalData.financeGuide?.expert_sections)
+      pushSections(technicalData.shippingGuide?.expert_sections)
+      pushSections(technicalData.inventoryGuide?.expert_sections)
+
+      const uniqueTechnicalFaqs = technicalFaqCandidates.filter(
+        (cand) =>
+          !selectedFaqs.find((f) => f.question === cand.question) &&
+          !extras.find((f) => f.question === cand.question)
+      )
+
+      extras.push(...uniqueTechnicalFaqs.slice(0, stillNeeded))
+    }
+
     // Replace variables in all text
     const processedIntro = introBlock
       ? {
@@ -652,7 +713,7 @@ export class ContentFactory {
       text: this.replaceVariables(b.text, city, intent, state),
     }))
 
-    const processedFaqs = selectedFaqs.map((f) => ({
+    const processedFaqs = [...selectedFaqs, ...extras].map((f) => ({
       question: this.replaceVariables(f.question, city, intent, state),
       answer: this.replaceVariables(f.answer, city, intent, state),
     }))
@@ -673,9 +734,6 @@ export class ContentFactory {
     }`
 
     const imageUrl = this.getImageUrlForIntent(intent)
-
-    // Get technical details if available (Leah's research data)
-    const technicalData = await this.getTechnicalDetails(intent)
 
     // Debug logging to help diagnose matching issues
     console.log(

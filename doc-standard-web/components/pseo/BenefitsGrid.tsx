@@ -80,8 +80,11 @@ const itemVariants = {
 }
 
 export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration }: BenefitsGridProps) {
+  const hasDataFlow = Boolean(isIntegration && dataFlow && dataFlow.length > 0)
+
   // For integrations with specific data flow, show technical view
-  if (isIntegration && dataFlow && dataFlow.length > 0) {
+  if (hasDataFlow) {
+    const flows = dataFlow || []
     return (
       <section className="py-24 bg-slate-50">
         <div className="container px-4">
@@ -108,7 +111,7 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
               viewport={{ once: true }}
               className="grid gap-4 mb-12"
             >
-              {dataFlow.map((flow, index) => (
+              {flows.map((flow, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
@@ -147,6 +150,7 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
   }
 
   // Fallback to generic benefits grid
+  const safeBenefits = benefits && benefits.length > 0 ? benefits : []
   return (
     <section className="py-24 bg-slate-50 overflow-hidden">
       <div className="container px-4">
@@ -170,7 +174,7 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
             viewport={{ once: true }}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {benefits.map((benefit) => {
+            {safeBenefits.map((benefit) => {
               const IconComponent = getIconForBenefit(benefit.text)
               return (
                 <motion.div

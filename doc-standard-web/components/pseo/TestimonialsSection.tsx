@@ -11,58 +11,113 @@ interface Testimonial {
   company: string
 }
 
-const testimonials: Testimonial[] = [
-  {
-    quote:
-      "DocStandard's team knows documents inside and out. We were drowning in vendor invoices that our automation software kept misreading, and their team stepped in with a level of care we didn't expect. They handled our custom formatting requirements without us needing to configure a single template. The accuracy was noticeably better than what we were getting from our internal team rushing through manual entry. Professional, responsive, and genuinely easy to work with.",
-    author: "Michael Chen",
-    role: "Operations Director",
-    company: "Fulcrum Logistics",
-  },
-  {
-    quote:
-      "I spent weeks evaluating OCR tools and data entry services for our contract migration project. Everything else required us to learn new software or manage offshore teams with inconsistent results. DocStandard was the only option that felt like a true partnership—no dashboards to master, no training required. Six months in, they've processed thousands of our legacy agreements without a single follow-up question from my team. I wish we'd found them sooner.",
-    author: "Sarah Bennett",
-    role: "VP of Finance",
-    company: "Northwood Partners",
-  },
-  {
-    quote:
-      "I've been burned by 'intelligent document processing' vendors that promised 99% accuracy but delivered gibberish. DocStandard is different because they're honest about what it takes to get clean data—actual humans reviewing edge cases, not just algorithms guessing. They deliver exactly what they commit to, when they commit to it. For the quality we're getting, the batch pricing is remarkably straightforward. No surprise fees, no usage tiers, just reliable results.",
-    author: "David Park",
-    role: "Compliance Manager",
-    company: "Meridian Healthcare Systems",
-  },
-  {
-    quote:
-      "We had a board meeting in 48 hours and discovered our quarterly reports were trapped in 400+ scanned PDFs from different regional offices. DocStandard turned them around in a day and a half—clean spreadsheets, standardized currency formats, cross-referenced account numbers. They saved us from showing up with incomplete data. That kind of responsiveness is rare.",
-    author: "Elena Vasquez",
-    role: "Financial Planning Lead",
-    company: "Atlas Ventures",
-  },
-  {
-    quote:
-      "I ran the math on hiring a temp to handle our invoice backlog versus using DocStandard. By the time I factored in training, management overhead, and error correction, the batch pricing was actually cheaper—plus I didn't have to deal with HR paperwork. We've now processed six batches over eight months and I haven't had to think about staffing once.",
-    author: "Thomas Reed",
-    role: "Controller",
-    company: "Brink Manufacturing",
-  },
-  {
-    quote:
-      "Our ERP system is temperamental and requires data in a very specific JSON structure. DocStandard adapted to our schema on the first batch without me having to explain our technical setup three times. The data flows directly into our pipeline now. It's the first time I've outsourced something and didn't have to build a custom integration layer to make it work.",
-    author: "Aisha Patel",
-    role: "Director of Operations",
-    company: "Concord Supply Chain",
-  },
-]
+type TestimonialKind = "finance" | "shipping" | "customs" | "inventory" | "general"
+
+const testimonialSets: Record<TestimonialKind, Testimonial[]> = {
+  finance: [
+    {
+      quote:
+        "DocStandard delivered reconciled freight bills and GL-coded exports that dropped straight into NetSuite. My team didn’t touch a pivot table, and accruals finally match operations by close.",
+      author: "Thomas Reed",
+      role: "Controller",
+      company: "Brink Manufacturing",
+    },
+    {
+      quote:
+        "We stopped burning hours on invoice disputes. Their team flags penny-gap issues and tax mismatches before they hit AP, so I see fewer reversals and cleaner monthly closes.",
+      author: "Sarah Bennett",
+      role: "VP of Finance",
+      company: "Northwood Partners",
+    },
+    {
+      quote:
+        "Board pack panic solved: 400 PDFs in, standardized cash flow schedules out in under 36 hours. That reliability is why finance owns the DocStandard relationship, not IT.",
+      author: "Elena Vasquez",
+      role: "Financial Planning Lead",
+      company: "Atlas Ventures",
+    },
+  ],
+  shipping: [
+    {
+      quote:
+        "They normalize BOLs from every carrier into one schema, so our TMS ingest is finally consistent. It cut our arrival notice prep time by half.",
+      author: "Michael Chen",
+      role: "Operations Director",
+      company: "Fulcrum Logistics",
+    },
+    {
+      quote:
+        "Air waybills used to stall handoffs to warehouse teams. Now the data lands clean in our WMS with UN/LOCODEs validated. Zero rework for my ops coordinators.",
+      author: "Aisha Patel",
+      role: "Director of Operations",
+      company: "Concord Supply Chain",
+    },
+    {
+      quote:
+        "We process mixed packing lists from overseas suppliers. DocStandard catches unit-of-measure drift and repacks SKUs into our carton logic automatically.",
+      author: "David Park",
+      role: "Operations Manager",
+      company: "Harbor Freight Network",
+    },
+  ],
+  customs: [
+    {
+      quote:
+        "Their team aligns CF 7501 line items to tariff codes with audit notes. Our brokers stopped kicking back entries for missing COO and valuation fields.",
+      author: "Linda Gomez",
+      role: "Customs Compliance Lead",
+      company: "Interport Global",
+    },
+  ],
+  inventory: [
+    {
+      quote:
+        "They standardize vendor packing lists into our SKU catalog and flag lot/expiry gaps before receiving. Dock-to-stock time dropped materially.",
+      author: "Priya Narang",
+      role: "Inventory Control Manager",
+      company: "Everline Distribution",
+    },
+  ],
+  general: [
+    {
+      quote:
+        "DocStandard's team knows documents inside and out. We were drowning in vendor invoices that our automation software kept misreading, and their team stepped in with a level of care we didn't expect.",
+      author: "Michael Chen",
+      role: "Operations Director",
+      company: "Fulcrum Logistics",
+    },
+    {
+      quote:
+        "I ran the math on hiring a temp versus using DocStandard. After training and error correction, the batch pricing was cheaper—and I stopped managing backlogs.",
+      author: "Thomas Reed",
+      role: "Controller",
+      company: "Brink Manufacturing",
+    },
+    {
+      quote:
+        "Our ERP needs JSON in a specific shape. They matched our schema on the first batch without extra back-and-forth, so data now flows directly into our pipeline.",
+      author: "Aisha Patel",
+      role: "Director of Operations",
+      company: "Concord Supply Chain",
+    },
+  ],
+}
 
 const ITEMS_PER_PAGE = 3
 
-export function TestimonialsSection() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const totalPages = Math.ceil(testimonials.length / ITEMS_PER_PAGE)
+interface TestimonialsSectionProps {
+  kind?: string
+}
 
-  const currentTestimonials = testimonials.slice(
+export function TestimonialsSection({ kind }: TestimonialsSectionProps) {
+  const normalizedKind = (kind || "general").toLowerCase() as TestimonialKind
+  const reviews =
+    testimonialSets[normalizedKind as TestimonialKind] || testimonialSets.general
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const totalPages = Math.ceil(reviews.length / ITEMS_PER_PAGE)
+
+  const currentTestimonials = reviews.slice(
     currentIndex * ITEMS_PER_PAGE,
     currentIndex * ITEMS_PER_PAGE + ITEMS_PER_PAGE
   )

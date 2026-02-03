@@ -86,6 +86,8 @@ export interface IntegrationDetails {
   use_case: string // Specific use case scenario
   technical_specs: string // API/integration details
   prerequisites: string // Required software versions
+  pain_points?: string[] // Optional: high-stakes failures specific to the integration
+  value_logic?: string // Optional: why service-led integration beats DIY/SaaS
 }
 
 export interface ServiceDetails {

@@ -25,6 +25,14 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const financeGuide = technical?.financeGuide
   const shippingGuide = technical?.shippingGuide
   const inventoryGuide = technical?.inventoryGuide
+  const painPoints =
+    serviceDetails?.pain_points ||
+    integrationDetails?.pain_points ||
+    undefined
+  const valueLogic =
+    serviceDetails?.value_logic ||
+    integrationDetails?.value_logic ||
+    undefined
 
   return (
     <main className="min-h-screen">
@@ -44,8 +52,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <PainSection
         content={content.pain}
         // Service-specific pain points (high-stakes problems)
-        painPoints={serviceDetails?.pain_points}
-        valueLogic={serviceDetails?.value_logic}
+        painPoints={painPoints}
+        valueLogic={valueLogic}
       />
 
       <TechnicalGuide guide={tmsErpGuide} customsGuide={customsGuide} financeGuide={financeGuide} shippingGuide={shippingGuide} inventoryGuide={inventoryGuide} />
@@ -65,8 +73,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <FAQSection faqs={content.faq} />
 
       <TestimonialsSection />
-
-      <CTASection content={content.cta} />
+      {/* Pass intent kind to render domain-relevant testimonials */}
+      <TestimonialsSection kind={intent.kind} />
     </main>
   )
 }
