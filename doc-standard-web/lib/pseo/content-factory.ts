@@ -10,7 +10,16 @@
 
 import { promises as fs } from "fs"
 import path from "path"
-import type { City, Intent, BlockItem, ContentPool } from "./types"
+import type {
+  City,
+  Intent,
+  BlockItem,
+  ContentPool,
+  IntegrationDetails,
+  ServiceDetails,
+  IntegrationDetailsFile,
+  ServiceDetailsFile,
+} from "./types"
 
 // Block storage types
 interface BlockCollection {
@@ -43,6 +52,12 @@ export interface PageModel {
     canonical: string
     imageUrl: string
   }
+  // Technical details (when available from Leah's research)
+  technical?: {
+    isIntegration: boolean
+    integrationDetails?: IntegrationDetails
+    serviceDetails?: ServiceDetails
+  }
 }
 
 /**
@@ -52,6 +67,8 @@ export interface PageModel {
 export class ContentFactory {
   private blocks: BlockCollection | null = null
   private pools: PoolConfig | null = null
+  private integrationDetails: IntegrationDetailsFile | null = null
+  private serviceDetails: ServiceDetailsFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -104,6 +121,67 @@ export class ContentFactory {
     this.pools = JSON.parse(poolsContent) as PoolConfig
 
     return this.pools
+  }
+
+  /**
+   * Load integration details from Leah's research
+   */
+  private async loadIntegrationDetails(): Promise<IntegrationDetailsFile> {
+    if (this.integrationDetails) return this.integrationDetails
+
+    const detailsPath = path.join(process.cwd(), "data", "content", "integration-details.json")
+    try {
+      const content = await fs.readFile(detailsPath, "utf-8")
+      this.integrationDetails = JSON.parse(content) as IntegrationDetailsFile
+    } catch {
+      this.integrationDetails = { integrations: {} }
+    }
+
+    return this.integrationDetails
+  }
+
+  /**
+   * Load service details from Leah's research
+   */
+  private async loadServiceDetails(): Promise<ServiceDetailsFile> {
+    if (this.serviceDetails) return this.serviceDetails
+
+    const detailsPath = path.join(process.cwd(), "data", "content", "service-details.json")
+    try {
+      const content = await fs.readFile(detailsPath, "utf-8")
+      this.serviceDetails = JSON.parse(content) as ServiceDetailsFile
+    } catch {
+      this.serviceDetails = { services: {} }
+    }
+
+    return this.serviceDetails
+  }
+
+  /**
+   * Get technical details for an intent (if available)
+   */
+  private async getTechnicalDetails(intent: Intent): Promise<{
+    isIntegration: boolean
+    integrationDetails?: IntegrationDetails
+    serviceDetails?: ServiceDetails
+  } | null> {
+    const isIntegration = intent.kind === "integration"
+
+    if (isIntegration) {
+      const details = await this.loadIntegrationDetails()
+      const integrationData = details.integrations[intent.id]
+      if (integrationData) {
+        return { isIntegration: true, integrationDetails: integrationData }
+      }
+    } else {
+      const details = await this.loadServiceDetails()
+      const serviceData = details.services[intent.id]
+      if (serviceData) {
+        return { isIntegration: false, serviceDetails: serviceData }
+      }
+    }
+
+    return null
   }
 
   /**
@@ -371,6 +449,9 @@ export class ContentFactory {
 
     const imageUrl = this.getImageUrlForIntent(intent)
 
+    // Get technical details if available (Leah's research data)
+    const technicalData = await this.getTechnicalDetails(intent)
+
     return {
       city,
       intent,
@@ -388,6 +469,8 @@ export class ContentFactory {
         canonical,
         imageUrl,
       },
+      // Include technical details when available
+      technical: technicalData || undefined,
     }
   }
 }

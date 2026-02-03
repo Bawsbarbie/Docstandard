@@ -78,3 +78,27 @@ export interface AssembledContent {
   faq: Array<{ question: string; answer: string }>
   cta: BlockItem
 }
+
+// Technical Detail Types (from Leah's research)
+export interface IntegrationDetails {
+  pair: string // e.g., "Motive ↔️ QuickBooks"
+  data_flow: string[] // Technical data points
+  use_case: string // Specific use case scenario
+  technical_specs: string // API/integration details
+  prerequisites: string // Required software versions
+}
+
+export interface ServiceDetails {
+  name: string // Full service name
+  pain_points: string[] // Industry-specific pain points
+  operational_requirements: string[] // Required documents/data
+  value_logic: string // Why professional service > SaaS
+}
+
+export interface IntegrationDetailsFile {
+  integrations: Record<string, IntegrationDetails>
+}
+
+export interface ServiceDetailsFile {
+  services: Record<string, ServiceDetails>
+}
