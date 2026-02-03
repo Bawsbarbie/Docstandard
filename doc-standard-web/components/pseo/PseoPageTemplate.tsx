@@ -127,7 +127,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         isIntegration={isIntegration}
       />
 
-      <ProcessingBatchSection />
+      <ProcessingBatchSection kind={intent.kind} />
 
       <FAQSection faqs={content.faq} />
 

@@ -79,7 +79,7 @@
     {
       "id": "faq_safety_2",
       "question": "Do you delete files after processing?",
-      "answer": "Yes. We can purge source documents on request or after a retention window so you control how long documents remain stored.",
+      "answer": "Yes. We delete source documents after 30 days.",
       "tags": ["safety"]
     },
     {
