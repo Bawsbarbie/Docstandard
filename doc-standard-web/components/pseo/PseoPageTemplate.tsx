@@ -4,6 +4,7 @@ import { PainSection } from "./PainSection"
 import { BenefitsGrid } from "./BenefitsGrid"
 import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
+import { TestimonialsSection } from "./TestimonialsSection"
 import { CTASection } from "./CTASection"
 
 interface PseoPageTemplateProps {
@@ -51,6 +52,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <ProcessingBatchSection />
 
       <FAQSection faqs={content.faq} />
+
+      <TestimonialsSection />
 
       <CTASection content={content.cta} />
 
