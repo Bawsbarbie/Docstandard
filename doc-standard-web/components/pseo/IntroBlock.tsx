@@ -9,9 +9,9 @@ interface IntroBlockProps {
 
 export function IntroBlock({ content, cityName, serviceName, imageUrl }: IntroBlockProps) {
   return (
-    <section className="py-12 md:py-16 bg-white">
+    <section className="py-12 md:py-20 bg-slate-50 border-b border-gray-100">
       <div className="container">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Left Column: Headline and Intro Text */}
           <div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-gray-900">

@@ -6,7 +6,7 @@ interface PainSectionProps {
 
 export function PainSection({ content }: PainSectionProps) {
   return (
-    <section className="py-12 bg-slate-50">
+    <section className="py-16 bg-white">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">The Challenge</h2>

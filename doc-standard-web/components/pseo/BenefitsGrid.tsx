@@ -7,7 +7,7 @@ interface BenefitsGridProps {
 
 export function BenefitsGrid({ benefits }: BenefitsGridProps) {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-20 bg-slate-50">
       <div className="container">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">
