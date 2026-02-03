@@ -1,0 +1,65 @@
+{
+  "finance_operations_guide": {
+    "title": "Financial Document Processing: The Technical Guide for AP/AR Operations",
+    "word_count_target": 2500,
+    "expert_sections": [
+      {
+        "id": "gl_coding_mapping",
+        "title": "GL Code Mapping: Source Document to ERP Ledger",
+        "content": "Accurate GL coding is the foundation of reliable financial reporting. DocStandard maps line items from source documents to your chart of accounts using the following standardized approach:",
+        "mapping_data": [
+          {
+            "document_type": "Vendor Invoice",
+            "source_field": "Line Item Description",
+            "erp_field": "GL Account Code",
+            "normalization_logic": "Parse description keywords; Match against GL account rules; Apply department/class segmentation."
+          },
+          {
+            "document_type": "Freight Bill",
+            "source_field": "Carrier Charge Type",
+            "erp_field": "Expense Category",
+            "normalization_logic": "Map charge codes (LTL, FTL, Accessorial) to expense accounts; Split fuel surcharges separately."
+          },
+          {
+            "document_type": "Purchase Order",
+            "source_field": "Item SKU",
+            "erp_field": "Inventory Asset Account",
+            "normalization_logic": "Cross-reference SKU to item master; Apply COGS vs. expense classification rules."
+          },
+          {
+            "document_type": "Credit Memo",
+            "source_field": "Return Reason Code",
+            "erp_field": "Contra Revenue Account",
+            "normalization_logic": "Map reason codes to appropriate write-off or adjustment accounts; Validate against original invoice."
+          },
+          {
+            "document_type": "Bank Statement",
+            "source_field": "Transaction Description",
+            "erp_field": "Cash Account + Offset",
+            "normalization_logic": "Pattern match transaction types (ACH, Wire, Check); Auto-categorize recurring vendors."
+          }
+        ]
+      },
+      {
+        "id": "three_way_match",
+        "title": "Three-Way Match Automation",
+        "content": "The three-way match (PO → Receipt → Invoice) is critical for AP accuracy but notoriously error-prone when done manually. DocStandard automates this process by:\n\n1. **PO Extraction:** Capturing line items, quantities, unit prices, and payment terms from purchase orders.\n2. **Receipt Validation:** Matching goods received notes against PO quantities, flagging discrepancies.\n3. **Invoice Reconciliation:** Validating invoice amounts against PO pricing and received quantities.\n4. **Exception Flagging:** Automatically surfacing mismatches for human review rather than silent failures.\n\nThis process eliminates the 15-20% of invoices that typically require manual intervention due to data entry errors."
+      },
+      {
+        "id": "audit_trail",
+        "title": "Audit-Ready Documentation",
+        "content": "Financial audits require complete documentation trails. DocStandard maintains:\n\n- **Source Document Archive:** Original PDFs linked to every processed record.\n- **Transformation Log:** Complete history of how raw data was normalized and mapped.\n- **Approval Workflow:** Timestamped records of exception reviews and approvals.\n- **Version Control:** Full history of any corrections or adjustments made post-processing.\n\nThis documentation satisfies SOX compliance requirements and reduces audit preparation time by up to 60%."
+      },
+      {
+        "id": "erp_integration",
+        "title": "ERP Integration Readiness",
+        "content": "DocStandard outputs are designed for seamless ERP import. We support:\n\n**QuickBooks Online/Desktop:**\n- IIF import files for batch journal entries\n- CSV format for vendor bills and customer invoices\n- API-ready JSON for QuickBooks Online integrations\n\n**NetSuite:**\n- CSV templates matching SuiteImport specifications\n- JSON payloads for SuiteTalk web services\n- GL segment mapping for multi-subsidiary environments\n\n**SAP Business One / S/4HANA:**\n- DI API compatible XML structures\n- Business Partner and Document posting formats\n- Cost center and profit center allocation\n\n**Magaya:**\n- Accounting module import formats\n- Shipment-to-invoice linking\n- Multi-currency handling for international freight"
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: Manual vs. Automated Processing",
+        "content": "For a finance team processing 500 vendor invoices per month:\n\n- **Manual Entry:** 5 minutes per invoice = 42 hours/month of data entry\n- **Error Rate:** 2-4% requiring correction = 10-20 invoices with downstream issues\n- **DocStandard Processing:** Batch upload + review = 2 hours/month\n- **Accuracy:** 99.5%+ with exception flagging\n\n**Annual Savings:**\n- Labor: $25,000+ in reclaimed AP staff time\n- Error Cost Avoidance: $15,000+ in late payment penalties and vendor disputes\n- Audit Prep: $10,000+ in reduced external audit fees"
+      }
+    ]
+  }
+}

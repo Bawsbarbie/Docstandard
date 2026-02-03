@@ -148,3 +148,26 @@ export interface CustomsGuide {
 export interface CustomsGuideFile {
   customs_clearance_guide: CustomsGuide
 }
+
+// Finance Guide Types
+export interface FinanceGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    document_type: string
+    source_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface FinanceGuide {
+  title: string
+  word_count_target: number
+  expert_sections: FinanceGuideSection[]
+}
+
+export interface FinanceGuideFile {
+  finance_operations_guide: FinanceGuide
+}

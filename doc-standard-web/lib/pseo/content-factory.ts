@@ -23,6 +23,8 @@ import type {
   TmsErpGuide,
   CustomsGuideFile,
   CustomsGuide,
+  FinanceGuideFile,
+  FinanceGuide,
 } from "./types"
 
 // Block storage types
@@ -63,6 +65,7 @@ export interface PageModel {
     serviceDetails?: ServiceDetails
     tmsErpGuide?: TmsErpGuide
     customsGuide?: CustomsGuide
+    financeGuide?: FinanceGuide
   }
 }
 
@@ -77,6 +80,7 @@ export class ContentFactory {
   private serviceDetails: ServiceDetailsFile | null = null
   private tmsErpGuide: TmsErpGuideFile | null = null
   private customsGuide: CustomsGuideFile | null = null
+  private financeGuide: FinanceGuideFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -200,6 +204,23 @@ export class ContentFactory {
   }
 
   /**
+   * Load Finance guide data
+   */
+  private async loadFinanceGuide(): Promise<FinanceGuideFile> {
+    if (this.financeGuide) return this.financeGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "finance-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.financeGuide = JSON.parse(content) as FinanceGuideFile
+    } catch {
+      this.financeGuide = { finance_operations_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.financeGuide
+  }
+
+  /**
    * Get technical details for an intent (if available)
    * Checks both intent.id AND intent.slug against JSON keys
    */
@@ -209,6 +230,7 @@ export class ContentFactory {
     serviceDetails?: ServiceDetails
     tmsErpGuide?: TmsErpGuide
     customsGuide?: CustomsGuide
+    financeGuide?: FinanceGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
     const intentSlug = intent.slug.toLowerCase()
@@ -220,6 +242,10 @@ export class ContentFactory {
     // Check if intent slug contains Customs/Invoice/Packing keywords
     const customsKeywords = ['customs', 'invoice', 'packing']
     const hasCustomsKeyword = customsKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains Finance/Audit/QuickBooks/Magaya keywords
+    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya']
+    const hasFinanceKeyword = financeKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Load TMS-ERP guide if keywords match
     let tmsErpGuideData: TmsErpGuide | undefined
@@ -235,6 +261,13 @@ export class ContentFactory {
       customsGuideData = guideFile.customs_clearance_guide
     }
 
+    // Load Finance guide if keywords match
+    let financeGuideData: FinanceGuide | undefined
+    if (hasFinanceKeyword) {
+      const guideFile = await this.loadFinanceGuide()
+      financeGuideData = guideFile.finance_operations_guide
+    }
+
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
       // Try matching by intent.id first, then by slug
@@ -244,12 +277,13 @@ export class ContentFactory {
         // Also try removing common suffixes like "-services" or "-integration"
         details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
         details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
-      if (integrationData || tmsErpGuideData || customsGuideData) {
+      if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData) {
         return { 
           isIntegration: true, 
           integrationDetails: integrationData,
           tmsErpGuide: tmsErpGuideData,
-          customsGuide: customsGuideData
+          customsGuide: customsGuideData,
+          financeGuide: financeGuideData
         }
       }
     } else {
@@ -260,22 +294,24 @@ export class ContentFactory {
         details.services[intent.slug] ||
         // Also try removing common suffixes
         details.services[intent.id.replace(/-services?$/, "")]
-      if (serviceData || tmsErpGuideData || customsGuideData) {
+      if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData) {
         return { 
           isIntegration: false, 
           serviceDetails: serviceData,
           tmsErpGuide: tmsErpGuideData,
-          customsGuide: customsGuideData
+          customsGuide: customsGuideData,
+          financeGuide: financeGuideData
         }
       }
     }
 
     // Return guides even if no other technical details found
-    if (tmsErpGuideData || customsGuideData) {
+    if (tmsErpGuideData || customsGuideData || financeGuideData) {
       return {
         isIntegration: false,
         tmsErpGuide: tmsErpGuideData,
-        customsGuide: customsGuideData
+        customsGuide: customsGuideData,
+        financeGuide: financeGuideData
       }
     }
 
