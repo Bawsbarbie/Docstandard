@@ -1,0 +1,46 @@
+{
+  "invoice_digitization_guide": {
+    "title": "Commercial Invoice Digitization: Accounts Payable Automation",
+    "word_count_target": 2000,
+    "expert_sections": [
+      {
+        "id": "ap_bottlenecks",
+        "title": "The '3-Way Match' Failure: Why AP Automation Breaks",
+        "content": "Accounts Payable teams care about one thing: The 3-Way Match (PO vs. Receipt vs. Invoice). Commercial Invoices from overseas vendors break this logic because:\n\n1. **No PO Reference:** Vendors often omit your Purchase Order number on the PDF. Without it, the invoice sits in a 'Mystery Queue' forever. We fuzzy-match line item descriptions to open POs to auto-assign the number.\n2. **Currency Chaos:** The PO was cut in USD ($), but the invoice arrives in EUR (€). Most AP bots fail here. We pull the daily spot rate from your ERP to validate the variance automatically.\n3. **'Miscellaneous' Charges:** Freight, insurance, and packaging fees often appear as extra lines not on the PO. We extract these as 'Non-PO Charges' and code them to specific GL expense accounts automatically."
+      },
+      {
+        "id": "field_mapping_table",
+        "title": "AP Data Extraction Blueprint",
+        "content": "We normalize unstructured vendor invoices into clean AP vouchers for NetSuite, SAP, and QuickBooks:",
+        "mapping_data": [
+          {
+            "tms_system": "Vendor Invoice (PDF)",
+            "erp_system": "ERP AP Voucher",
+            "tms_field": "Total_Amount_Due",
+            "erp_field": "Payment_Amount",
+            "normalization_logic": "Validate header total matches sum of line items (Line-Level Reconciliation)."
+          },
+          {
+            "tms_system": "Line Item Description",
+            "erp_system": "Inventory Item Receipt",
+            "tms_field": "Part_Number / SKU",
+            "erp_field": "Item_ID",
+            "normalization_logic": "Strip vendor prefixes (e.g., 'VEN-123') to match internal Item Master."
+          },
+          {
+            "tms_system": "Bank Details",
+            "erp_system": "Vendor Master Record",
+            "tms_field": "IBAN / SWIFT",
+            "erp_field": "Payment_Instructions",
+            "normalization_logic": "Detect changes in bank details to flag potential wire fraud (Business Email Compromise)."
+          }
+        ]
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: Early Payment Discounts",
+        "content": "- **The Opportunity:** Many vendors offer '2/10 Net 30' terms (2% discount if paid in 10 days).\n- **The Problem:** Manual data entry takes 15 days, missing the window.\n- **The Fix:** DocStandard digitizes invoices in <4 hours, allowing you to capture that 2% discount on millions in spend."
+      }
+    ]
+  }
+}

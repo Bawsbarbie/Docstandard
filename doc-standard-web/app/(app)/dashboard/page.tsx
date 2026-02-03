@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { getUserOrders } from "@/lib/actions/upload"
 
+export const dynamic = "force-dynamic"
+
 export default async function DashboardPage() {
   const { data: orders, error } = await getUserOrders()
 

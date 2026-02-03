@@ -1,0 +1,46 @@
+{
+  "motive_ifta_guide": {
+    "title": "Motive ELD & IFTA Data Normalization: The Fuel Tax Standard",
+    "word_count_target": 2200,
+    "expert_sections": [
+      {
+        "id": "ifta_bottlenecks",
+        "title": "Why Raw ELD Data Fails IFTA Audits",
+        "content": "Most fleets assume Motive's raw GPS export is 'IFTA-Ready'. It's not. Raw ELD data contains gaps that trigger audit penalties:\n\n1. **GPS Drift & 'Jumping':** When a truck enters a tunnel or dense urban canyon, GPS points 'jump'. A 5-mile trip suddenly looks like 50 miles. Without smoothing algorithms, your mileage totals are inflated, and you overpay tax.\n2. **Private Yard Moves:** Miles driven inside a private yard (unladen) are often exempt from IFTA. Raw logs count every wheel turn. We filter 'On-Property' vs 'Highway' miles automatically.\n3. **Fuel Card Mismatches:** A driver buys fuel in Ohio but the ELD says the truck was in Kentucky (border crossing issue). Auditors flag this instantly. We cross-reference Fuel Card timestamps with GPS pings to validate every gallon."
+      },
+      {
+        "id": "field_mapping_table",
+        "title": "Motive to IFTA Report Blueprint",
+        "content": "We normalize raw telematics data into state-compliant IFTA filing formats:",
+        "mapping_data": [
+          {
+            "tms_system": "Motive ELD (CSV/API)",
+            "erp_system": "IFTA Quarterly Return",
+            "tms_field": "Vehicle_Gateway_Odometer",
+            "erp_field": "Total Taxable Miles (by Jurisdiction)",
+            "normalization_logic": "Calculate state-line crossings using geospatial polygon geofencing."
+          },
+          {
+            "tms_system": "Fuel Card (Wex/Comdata)",
+            "erp_system": "IFTA Fuel Schedule",
+            "tms_field": "Transaction_Gallons",
+            "erp_field": "Tax-Paid Gallons Purchased",
+            "normalization_logic": "Deduce 'Reefer Fuel' (Non-Taxable) from total purchase based on pump code."
+          },
+          {
+            "tms_system": "Driver Log (HOS)",
+            "erp_system": "Payroll / Audit",
+            "tms_field": "Duty_Status_Change",
+            "erp_field": "Non-Driving Paid Time",
+            "normalization_logic": "Flag 'Personal Conveyance' misuse patterns for safety compliance."
+          }
+        ]
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: Recovering Overpaid Fuel Tax",
+        "content": "- **The 'Leak':** Fleets often overpay IFTA by 3-7% because they don't exclude exempt miles (off-road, private roads, toll road exemptions).\n- **The Fix:** Our geospatial filtering removes non-taxable miles from the report automatically.\n- **Value:** For a 50-truck fleet, this recovers ~$15,000/year in unnecessary tax payments."
+      }
+    ]
+  }
+}

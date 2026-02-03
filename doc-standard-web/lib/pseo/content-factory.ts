@@ -29,6 +29,14 @@ import type {
   ShippingGuide,
   InventoryGuideFile,
   InventoryGuide,
+  ComplianceGuideFile,
+  ComplianceGuide,
+  MotiveGuideFile,
+  MotiveGuide,
+  HSCodeGuideFile,
+  HSCodeGuide,
+  InvoiceGuideFile,
+  InvoiceGuide,
 } from "./types"
 
 // Block storage types
@@ -72,6 +80,10 @@ export interface PageModel {
     financeGuide?: FinanceGuide
     shippingGuide?: ShippingGuide
     inventoryGuide?: InventoryGuide
+    complianceGuide?: ComplianceGuide
+    motiveGuide?: MotiveGuide
+    hsCodeGuide?: HSCodeGuide
+    invoiceGuide?: InvoiceGuide
   }
 }
 
@@ -89,6 +101,10 @@ export class ContentFactory {
   private financeGuide: FinanceGuideFile | null = null
   private shippingGuide: ShippingGuideFile | null = null
   private inventoryGuide: InventoryGuideFile | null = null
+  private complianceGuide: ComplianceGuideFile | null = null
+  private motiveGuide: MotiveGuideFile | null = null
+  private hsCodeGuide: HSCodeGuideFile | null = null
+  private invoiceGuide: InvoiceGuideFile | null = null
 
   /**
    * Simple hash function for deterministic random selection
@@ -263,6 +279,74 @@ export class ContentFactory {
   }
 
   /**
+   * Load Compliance guide data
+   */
+  private async loadComplianceGuide(): Promise<ComplianceGuideFile> {
+    if (this.complianceGuide) return this.complianceGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "compliance-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.complianceGuide = JSON.parse(content) as ComplianceGuideFile
+    } catch {
+      this.complianceGuide = { compliance_extraction_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.complianceGuide
+  }
+
+  /**
+   * Load Motive IFTA guide data
+   */
+  private async loadMotiveGuide(): Promise<MotiveGuideFile> {
+    if (this.motiveGuide) return this.motiveGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "motive-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.motiveGuide = JSON.parse(content) as MotiveGuideFile
+    } catch {
+      this.motiveGuide = { motive_ifta_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.motiveGuide
+  }
+
+  /**
+   * Load HS Code guide data
+   */
+  private async loadHSCodeGuide(): Promise<HSCodeGuideFile> {
+    if (this.hsCodeGuide) return this.hsCodeGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "hscode-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.hsCodeGuide = JSON.parse(content) as HSCodeGuideFile
+    } catch {
+      this.hsCodeGuide = { hscode_extraction_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.hsCodeGuide
+  }
+
+  /**
+   * Load Invoice guide data
+   */
+  private async loadInvoiceGuide(): Promise<InvoiceGuideFile> {
+    if (this.invoiceGuide) return this.invoiceGuide
+
+    const guidePath = path.join(process.cwd(), "data", "content", "invoice-guide.json")
+    try {
+      const content = await fs.readFile(guidePath, "utf-8")
+      this.invoiceGuide = JSON.parse(content) as InvoiceGuideFile
+    } catch {
+      this.invoiceGuide = { invoice_digitization_guide: { title: "", word_count_target: 0, expert_sections: [] } }
+    }
+
+    return this.invoiceGuide
+  }
+
+  /**
    * Get technical details for an intent (if available)
    * Checks both intent.id AND intent.slug against JSON keys
    */
@@ -275,6 +359,10 @@ export class ContentFactory {
     financeGuide?: FinanceGuide
     shippingGuide?: ShippingGuide
     inventoryGuide?: InventoryGuide
+    complianceGuide?: ComplianceGuide
+    motiveGuide?: MotiveGuide
+    hsCodeGuide?: HSCodeGuide
+    invoiceGuide?: InvoiceGuide
   } | null> {
     const isIntegration = intent.kind?.toLowerCase() === "integration"
     const intentSlug = intent.slug.toLowerCase()
@@ -288,7 +376,7 @@ export class ContentFactory {
     const hasCustomsKeyword = customsKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Check if intent slug contains Finance/Audit/QuickBooks/Magaya keywords
-    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya', 'ifta']
+    const financeKeywords = ['finance', 'audit', 'quickbooks', 'magaya']
     const hasFinanceKeyword = financeKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Check if intent slug contains Shipping/BOL/Airway/Container keywords
@@ -298,6 +386,22 @@ export class ContentFactory {
     // Check if intent slug contains Inventory/Packing List/Warehouse/SKU keywords
     const inventoryKeywords = ['packing-list', 'warehouse', 'inventory', 'sku']
     const hasInventoryKeyword = inventoryKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains Compliance/License/Permit keywords
+    const complianceKeywords = ['license', 'permit', 'export-control', 'compliance']
+    const hasComplianceKeyword = complianceKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains Motive/IFTA/ELD keywords
+    const motiveKeywords = ['motive', 'ifta', 'eld']
+    const hasMotiveKeyword = motiveKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains HS Code/Classification keywords
+    const hsCodeKeywords = ['tariff', 'hs-code', 'classification', 'duty-drawback']
+    const hasHSCodeKeyword = hsCodeKeywords.some(keyword => intentSlug.includes(keyword))
+
+    // Check if intent slug contains Invoice keywords
+    const invoiceKeywords = ['commercial-invoice', 'invoice-processing']
+    const hasInvoiceKeyword = invoiceKeywords.some(keyword => intentSlug.includes(keyword))
 
     // Load TMS-ERP guide if keywords match
     let tmsErpGuideData: TmsErpGuide | undefined
@@ -334,6 +438,35 @@ export class ContentFactory {
       inventoryGuideData = guideFile.inventory_management_guide
     }
 
+    // Load Compliance guide if keywords match
+    let complianceGuideData: ComplianceGuide | undefined
+    if (hasComplianceKeyword) {
+      const guideFile = await this.loadComplianceGuide()
+      complianceGuideData = guideFile.compliance_extraction_guide
+    }
+
+    // Load Motive guide if keywords match
+    let motiveGuideData: MotiveGuide | undefined
+    if (hasMotiveKeyword) {
+      const guideFile = await this.loadMotiveGuide()
+      motiveGuideData = guideFile.motive_ifta_guide
+    }
+
+    // Load HS Code guide if keywords match
+    let hsCodeGuideData: HSCodeGuide | undefined
+    if (hasHSCodeKeyword) {
+      const guideFile = await this.loadHSCodeGuide()
+      hsCodeGuideData = guideFile.hscode_extraction_guide
+    }
+
+    // Load Invoice guide if keywords match (override customs for these pages)
+    let invoiceGuideData: InvoiceGuide | undefined
+    if (hasInvoiceKeyword) {
+      const guideFile = await this.loadInvoiceGuide()
+      invoiceGuideData = guideFile.invoice_digitization_guide
+      customsGuideData = undefined
+    }
+
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
       // Try matching by intent.id first, then by slug
@@ -358,7 +491,7 @@ export class ContentFactory {
           integrationData = fuzzy[1]
         }
       }
-      if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
+      if (integrationData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData || complianceGuideData || motiveGuideData || hsCodeGuideData || invoiceGuideData) {
         return { 
           isIntegration: true, 
           integrationDetails: integrationData,
@@ -366,7 +499,11 @@ export class ContentFactory {
           customsGuide: customsGuideData,
           financeGuide: financeGuideData,
           shippingGuide: shippingGuideData,
-          inventoryGuide: inventoryGuideData
+          inventoryGuide: inventoryGuideData,
+          complianceGuide: complianceGuideData,
+          motiveGuide: motiveGuideData,
+          hsCodeGuide: hsCodeGuideData,
+          invoiceGuide: invoiceGuideData
         }
       }
     } else {
@@ -395,7 +532,7 @@ export class ContentFactory {
           serviceData = details.services["trade-compliance"]
         }
       }
-      if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
+      if (serviceData || tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData || complianceGuideData || motiveGuideData || hsCodeGuideData || invoiceGuideData) {
         return { 
           isIntegration: false, 
           serviceDetails: serviceData,
@@ -403,20 +540,28 @@ export class ContentFactory {
           customsGuide: customsGuideData,
           financeGuide: financeGuideData,
           shippingGuide: shippingGuideData,
-          inventoryGuide: inventoryGuideData
+          inventoryGuide: inventoryGuideData,
+          complianceGuide: complianceGuideData,
+          motiveGuide: motiveGuideData,
+          hsCodeGuide: hsCodeGuideData,
+          invoiceGuide: invoiceGuideData
         }
       }
     }
 
     // Return guides even if no other technical details found
-    if (tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData) {
+    if (tmsErpGuideData || customsGuideData || financeGuideData || shippingGuideData || inventoryGuideData || complianceGuideData || motiveGuideData || hsCodeGuideData || invoiceGuideData) {
       return {
         isIntegration: false,
         tmsErpGuide: tmsErpGuideData,
         customsGuide: customsGuideData,
         financeGuide: financeGuideData,
         shippingGuide: shippingGuideData,
-        inventoryGuide: inventoryGuideData
+        inventoryGuide: inventoryGuideData,
+        complianceGuide: complianceGuideData,
+        motiveGuide: motiveGuideData,
+        hsCodeGuide: hsCodeGuideData,
+        invoiceGuide: invoiceGuideData
       }
     }
 

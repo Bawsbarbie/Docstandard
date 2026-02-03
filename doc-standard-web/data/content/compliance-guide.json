@@ -1,0 +1,46 @@
+{
+  "compliance_extraction_guide": {
+    "title": "Import/Export License Management: The 'Decrementing' Engine",
+    "word_count_target": 2000,
+    "expert_sections": [
+      {
+        "id": "license_bottlenecks",
+        "title": "Why License Management Fails in Spreadsheets",
+        "content": "Managing export licenses (BIS, ITAR) or import permits (USDA, FDA) in Excel is a compliance violation waiting to happen. The core friction points are:\n\n1. **License Decrementing Errors:** A license allows 1,000 units. You ship 500, then 600. Without real-time decrementing against the license cap, the second shipment is an illegal export. Excel formulas rarely catch this 'Over-Shipment' risk.\n2. **Expiry Date Anxiety:** Licenses expire. If your system doesn't flag a license that expires *during* the transit time of a shipment, your cargo gets seized at the destination port.\n3. **'End-User' Mismatches:** A license is often specific to a single address. If the Consignee moves their warehouse down the street, the license is invalid. Dumb OCR misses address variations that a compliance officer would catch."
+      },
+      {
+        "id": "field_mapping_table",
+        "title": "Compliance Data Extraction Blueprint",
+        "content": "We extract and validate critical regulatory fields to ensure every transaction matches the authorized permit:",
+        "mapping_data": [
+          {
+            "tms_system": "Export License (PDF)",
+            "erp_system": "ERP Compliance Module",
+            "tms_field": "License_Number / ECCN",
+            "erp_field": "Auth_Code (AES Filing)",
+            "normalization_logic": "Validate ECCN format against latest Commerce Control List (CCL)."
+          },
+          {
+            "tms_system": "Commercial Invoice",
+            "erp_system": "License Balance Log",
+            "tms_field": "Line_Item_Value / Qty",
+            "erp_field": "Decrement_Amount",
+            "normalization_logic": "Subtract shipment qty from License Total; Alert if < 0."
+          },
+          {
+            "tms_system": "End-User Statement",
+            "erp_system": "Denied Party Screening",
+            "tms_field": "Consignee_Name",
+            "erp_field": "Screening_Entity",
+            "normalization_logic": "Fuzzy match against Consolidated Screening List (CSL) to catch 'hidden' denied parties."
+          }
+        ]
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: The Cost of a Violation",
+        "content": "- **Penalty Risk:** Fines for export violations can reach $300,000 per transaction or denial of export privileges.\n- **Operational Cost:** Manual license checking takes 20-30 minutes per order.\n- **DocStandard Value:** Automated validation against license limits reduces risk to near-zero and cuts processing time to seconds."
+      }
+    ]
+  }
+}

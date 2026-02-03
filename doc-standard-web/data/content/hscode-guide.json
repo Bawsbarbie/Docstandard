@@ -1,0 +1,46 @@
+{
+  "hscode_extraction_guide": {
+    "title": "HS Code Classification: The Decision Tree for Duty Optimization",
+    "word_count_target": 2100,
+    "expert_sections": [
+      {
+        "id": "classification_bottlenecks",
+        "title": "Why Keyword Search Fails Classification",
+        "content": "Most importers try to classify goods by searching a keyword (e.g., 'Drone') in the HTSUS book. This fails because legal classification is based on **'Essential Character' (GRI 3b)**, not marketing names.\n\n**Example:** A 'Drone with Camera'.\n- Is it an Aircraft (Chapter 88)?\n- Is it a Camera (Chapter 85)?\n- **The Rule:** If the camera is the primary function, it's 8525. If it's for flying, it's 8806. A wrong choice changes the duty rate from 0% to 25%. Our engine traces the GRI logic step-by-step."
+      },
+      {
+        "id": "field_mapping_table",
+        "title": "The 'Section Note' Logic Table",
+        "content": "We cross-reference every part against the legal Section Notes that override the headings:",
+        "mapping_data": [
+          {
+            "tms_system": "Product: Screw (Steel)",
+            "erp_system": "HTS Chapter 73 (Iron/Steel)",
+            "tms_field": "Material: Stainless Steel",
+            "erp_field": "Heading: 7318",
+            "normalization_logic": "Note 2(b) to Section XV: Parts of general use (screws) are always classified by material, not by the machine they go into."
+          },
+          {
+            "tms_system": "Product: Plastic Toy Car",
+            "erp_system": "HTS Chapter 95 (Toys)",
+            "tms_field": "Material: Plastic",
+            "erp_field": "Heading: 9503",
+            "normalization_logic": "Chapter 39 (Plastics) Note 2(y): Excludes articles of Chapter 95 (Toys). You cannot classify a toy as 'plastic' even if it is 100% plastic."
+          },
+          {
+            "tms_system": "Product: Smartphone",
+            "erp_system": "HTS Chapter 85",
+            "tms_field": "Function: LTE/5G",
+            "erp_field": "Heading: 8517.13",
+            "normalization_logic": "Differentiate 'Telephones for cellular networks' from generic 'Transmitting apparatus'."
+          }
+        ]
+      },
+      {
+        "id": "compliance_risk",
+        "title": "Section 301 Exclusion Detection",
+        "content": "The biggest financial risk in classification isn't the base duty—it's the **25% China Tariff (Section 301)**. Many items have specific 'Exclusions' that expire or renew monthly. DocStandard checks every HTS code against the live USTR Exclusion List to identify potential duty refunds that manual brokers miss."
+      }
+    ]
+  }
+}

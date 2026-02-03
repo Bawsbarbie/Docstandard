@@ -25,6 +25,10 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const financeGuide = technical?.financeGuide
   const shippingGuide = technical?.shippingGuide
   const inventoryGuide = technical?.inventoryGuide
+  const complianceGuide = technical?.complianceGuide
+  const motiveGuide = technical?.motiveGuide
+  const hsCodeGuide = technical?.hsCodeGuide
+  const invoiceGuide = technical?.invoiceGuide
   const painPoints =
     serviceDetails?.pain_points ||
     integrationDetails?.pain_points ||
@@ -108,7 +112,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         valueLogic={valueLogic}
       />
 
-      <TechnicalGuide guide={tmsErpGuide} customsGuide={customsGuide} financeGuide={financeGuide} shippingGuide={shippingGuide} inventoryGuide={inventoryGuide} />
+      <TechnicalGuide guide={tmsErpGuide} customsGuide={customsGuide} financeGuide={financeGuide} shippingGuide={shippingGuide} inventoryGuide={inventoryGuide} complianceGuide={complianceGuide} motiveGuide={motiveGuide} hsCodeGuide={hsCodeGuide} invoiceGuide={invoiceGuide} />
 
       <MiddleCTA />
 

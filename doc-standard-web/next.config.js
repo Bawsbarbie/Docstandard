@@ -1,15 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   experimental: {
     typedRoutes: true,
-  },
-  // Ensure data files are included in production builds
-  outputFileTracingIncludes: {
-    '/**': [
-      './data/**/*',
-      './data/content/*.json',
-      './data/*.csv',
-    ],
+    outputFileTracingIncludes: {
+      "/**/*": ["./data/**/*"],
+    },
   },
   images: {
     remotePatterns: [

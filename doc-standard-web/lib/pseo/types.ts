@@ -217,3 +217,99 @@ export interface InventoryGuide {
 export interface InventoryGuideFile {
   inventory_management_guide: InventoryGuide
 }
+
+// Compliance Guide Types
+export interface ComplianceGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    tms_system: string
+    erp_system: string
+    tms_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface ComplianceGuide {
+  title: string
+  word_count_target: number
+  expert_sections: ComplianceGuideSection[]
+}
+
+export interface ComplianceGuideFile {
+  compliance_extraction_guide: ComplianceGuide
+}
+
+// Motive Guide Types
+export interface MotiveGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    tms_system: string
+    erp_system: string
+    tms_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface MotiveGuide {
+  title: string
+  word_count_target: number
+  expert_sections: MotiveGuideSection[]
+}
+
+export interface MotiveGuideFile {
+  motive_ifta_guide: MotiveGuide
+}
+
+// HS Code Guide Types
+export interface HSCodeGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    tms_system: string
+    erp_system: string
+    tms_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface HSCodeGuide {
+  title: string
+  word_count_target: number
+  expert_sections: HSCodeGuideSection[]
+}
+
+export interface HSCodeGuideFile {
+  hscode_extraction_guide: HSCodeGuide
+}
+
+// Invoice Guide Types
+export interface InvoiceGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    tms_system: string
+    erp_system: string
+    tms_field: string
+    erp_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface InvoiceGuide {
+  title: string
+  word_count_target: number
+  expert_sections: InvoiceGuideSection[]
+}
+
+export interface InvoiceGuideFile {
+  invoice_digitization_guide: InvoiceGuide
+}

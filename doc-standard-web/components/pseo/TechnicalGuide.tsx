@@ -4,7 +4,7 @@ import { useState } from "react"
 import type { ReactNode } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
-import type { TmsErpGuide, CustomsGuide, CustomsGuideSection, ExpertSection, FinanceGuide, FinanceGuideSection, ShippingGuide, ShippingGuideSection, InventoryGuide, InventoryGuideSection } from "@/lib/pseo/types"
+import type { TmsErpGuide, CustomsGuide, CustomsGuideSection, ExpertSection, FinanceGuide, FinanceGuideSection, ShippingGuide, ShippingGuideSection, InventoryGuide, InventoryGuideSection, ComplianceGuide, ComplianceGuideSection, MotiveGuide, MotiveGuideSection, HSCodeGuide, HSCodeGuideSection, InvoiceGuide, InvoiceGuideSection } from "@/lib/pseo/types"
 
 interface TechnicalGuideProps {
   guide?: TmsErpGuide
@@ -12,9 +12,13 @@ interface TechnicalGuideProps {
   financeGuide?: FinanceGuide
   shippingGuide?: ShippingGuide
   inventoryGuide?: InventoryGuide
+  complianceGuide?: ComplianceGuide
+  motiveGuide?: MotiveGuide
+  hsCodeGuide?: HSCodeGuide
+  invoiceGuide?: InvoiceGuide
 }
 
-export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuide, inventoryGuide }: TechnicalGuideProps) {
+export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuide, inventoryGuide, complianceGuide, motiveGuide, hsCodeGuide, invoiceGuide }: TechnicalGuideProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
 
   const toggleSection = (key: string) => {
@@ -212,6 +216,246 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
               }
 
               // Default rendering for other shipping sections
+              return renderSectionChrome(sectionKey, section.title, section.content)
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Render compliance guide sections if available
+  if (complianceGuide && complianceGuide.expert_sections && complianceGuide.expert_sections.length > 0) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
+            {complianceGuide.expert_sections.map((section: ComplianceGuideSection) => {
+              const sectionKey = `compliance-${section.id}`
+
+              if (section.id === "field_mapping_table" && section.mapping_data) {
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Compliance Blueprint</h3>
+                    </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Source</th>
+                          <th className={thClass}>System Target</th>
+                          <th className={thClass}>Field</th>
+                          <th className={thClass}>ERP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.tms_system}</td>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.erp_system}</td>
+                            <td className={tdClass}>{row.tms_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
+              }
+
+              if (section.id === "operational_roi") {
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-amber-200/80 bg-gradient-to-r from-amber-50 via-white to-orange-50 p-6 text-slate-700">
+                    {section.content}
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
+              }
+
+              return renderSectionChrome(sectionKey, section.title, section.content)
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (motiveGuide && motiveGuide.expert_sections && motiveGuide.expert_sections.length > 0) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
+            {motiveGuide.expert_sections.map((section: MotiveGuideSection) => {
+              const sectionKey = `motive-${section.id}`
+
+              if (section.id === "field_mapping_table" && section.mapping_data) {
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Motive IFTA Blueprint</h3>
+                    </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Source</th>
+                          <th className={thClass}>System Target</th>
+                          <th className={thClass}>Field</th>
+                          <th className={thClass}>ERP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.tms_system}</td>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.erp_system}</td>
+                            <td className={tdClass}>{row.tms_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
+              }
+
+              if (section.id === "operational_roi") {
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-emerald-200/80 bg-gradient-to-r from-emerald-50 via-white to-green-50 p-6 text-slate-700">
+                    {section.content}
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
+              }
+
+              return renderSectionChrome(sectionKey, section.title, section.content)
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (hsCodeGuide && hsCodeGuide.expert_sections && hsCodeGuide.expert_sections.length > 0) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-indigo-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
+            {hsCodeGuide.expert_sections.map((section: HSCodeGuideSection) => {
+              const sectionKey = `hscode-${section.id}`
+
+              if (section.id === "field_mapping_table" && section.mapping_data) {
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">Section Note Logic Table</h3>
+                    </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Product</th>
+                          <th className={thClass}>HTS Chapter</th>
+                          <th className={thClass}>Field</th>
+                          <th className={thClass}>Heading</th>
+                          <th className={thClass}>Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.tms_system}</td>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.erp_system}</td>
+                            <td className={tdClass}>{row.tms_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
+              }
+
+              return renderSectionChrome(sectionKey, section.title, section.content)
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (invoiceGuide && invoiceGuide.expert_sections && invoiceGuide.expert_sections.length > 0) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
+            {invoiceGuide.expert_sections.map((section: InvoiceGuideSection) => {
+              const sectionKey = `invoice-${section.id}`
+
+              if (section.id === "field_mapping_table" && section.mapping_data) {
+                const table = (
+                  <div className={tableShellClass}>
+                    <div className="px-5 pt-5">
+                      <h3 className="text-lg md:text-xl font-bold text-slate-900">AP Extraction Blueprint</h3>
+                    </div>
+                    <table className={tableClass}>
+                      <thead className={tableHeadClass}>
+                        <tr>
+                          <th className={thClass}>Source</th>
+                          <th className={thClass}>System Target</th>
+                          <th className={thClass}>Field</th>
+                          <th className={thClass}>ERP Field</th>
+                          <th className={thClass}>Normalization Logic</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {section.mapping_data.map((row, index) => (
+                          <tr key={index} className={tableRowClass}>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.tms_system}</td>
+                            <td className={`${tdClass} font-semibold text-slate-900`}>{row.erp_system}</td>
+                            <td className={tdClass}>{row.tms_field}</td>
+                            <td className={tdClass}>{row.erp_field}</td>
+                            <td className={tdClass}>{row.normalization_logic}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, section.content, table)
+              }
+
+              if (section.id === "operational_roi") {
+                const callout = (
+                  <div className="mt-6 rounded-2xl border border-blue-200/80 bg-gradient-to-r from-blue-50 via-white to-slate-50 p-6 text-slate-700">
+                    {section.content}
+                  </div>
+                )
+                return renderSectionChrome(sectionKey, section.title, "", callout)
+              }
+
               return renderSectionChrome(sectionKey, section.title, section.content)
             })}
           </div>
