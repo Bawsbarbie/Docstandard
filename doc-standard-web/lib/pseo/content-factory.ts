@@ -468,11 +468,11 @@ export class ContentFactory {
 
     const title = intent.metaTitle
       ? this.replaceVariables(intent.metaTitle, city, intent, state)
-      : `${intent.name} in ${city.name}, ${state?.name || ""} | DocStandard`
+      : `${intent.name} | DocStandard`
 
     const description =
       intent.metaDescription ||
-      `Professional ${intent.name.toLowerCase()} in ${city.name}. Flat-fee $799 document processing with same-day turnaround. Expert logistics solutions.`
+      `Professional ${intent.name.toLowerCase()}. Flat-fee $799 document processing with same-day turnaround. Expert logistics solutions.`
 
     const canonical = `/${city.countryCode}/${city.stateCode.toLowerCase()}/${city.slug}/${
       intent.slug

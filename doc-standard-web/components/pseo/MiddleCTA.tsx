@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { ArrowRight, Zap } from "lucide-react"
 import Link from "next/link"
 
-export function MiddleCTA({ cityName }: { cityName: string }) {
+export function MiddleCTA() {
   return (
     <section className="py-12 bg-white">
       <div className="container px-4">
@@ -19,10 +19,10 @@ export function MiddleCTA({ cityName }: { cityName: string }) {
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <Zap className="text-white w-5 h-5" />
               </div>
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-white/80">Local Market Efficiency</span>
+              <span className="text-xs font-black uppercase tracking-[0.2em] text-white/80">Operational Efficiency</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-black mb-4 leading-tight">
-              Optimizing Document Workflows for <span className="text-brand-200">{cityName}</span>
+              Optimize Your Document Workflows
             </h2>
             <p className="text-lg text-white/90 max-w-xl">
               Join dozens of logistics and finance teams who have eliminated manual data entry backlogs.

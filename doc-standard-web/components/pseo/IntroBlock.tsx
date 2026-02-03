@@ -56,7 +56,7 @@ export function IntroBlock({
             )}
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-8 text-gray-900 leading-[1.1]">
-              Professional {serviceName} <span className="text-brand-600 font-black italic">in {cityName}</span>
+              Professional {serviceName}
             </h1>
 
             {/* Use case (for integrations) or generic intro */}
@@ -132,7 +132,7 @@ export function IntroBlock({
               {imageUrl ? (
                 <Image
                   src={imageUrl}
-                  alt={`${serviceName} in ${cityName}`}
+                  alt={`${serviceName}`}
                   fill
                   className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -151,7 +151,7 @@ export function IntroBlock({
                   </div>
                   <div>
                     <p className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-0.5">Automated Ingestion</p>
-                    <p className="text-sm font-semibold text-gray-900 leading-tight">Zero-latency data extraction enabled for {cityName} hubs.</p>
+                    <p className="text-sm font-semibold text-gray-900 leading-tight">Zero-latency data extraction enabled.</p>
                   </div>
                 </div>
               </div>

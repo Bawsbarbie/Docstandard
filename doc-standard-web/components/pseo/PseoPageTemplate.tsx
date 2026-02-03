@@ -42,7 +42,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         valueLogic={serviceDetails?.value_logic}
       />
 
-      <MiddleCTA cityName={city.name} />
+      <MiddleCTA />
 
       <BenefitsGrid
         benefits={content.benefits}
@@ -59,15 +59,6 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <TestimonialsSection />
 
       <CTASection content={content.cta} />
-
-      {/* Footer credit */}
-      <div className="bg-slate-50 py-12 border-t border-gray-100">
-        <div className="container px-4 text-center">
-          <p className="text-gray-500 text-sm font-medium">
-            Professional {intent.name.toLowerCase()} serving <span className="text-brand-600">{city.name}</span> hubs and surrounding regions.
-          </p>
-        </div>
-      </div>
     </main>
   )
 }

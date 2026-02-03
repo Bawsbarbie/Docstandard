@@ -74,18 +74,7 @@ export function PainSection({ content, painPoints, valueLogic }: PainSectionProp
                     <p className="text-gray-300 leading-relaxed font-medium">{point}</p>
                   </motion.div>
                 ))
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="p-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl"
-                >
-                  <p className="text-lg text-gray-400 leading-relaxed">
-                    Unstructured data isn&apos;t just messy—it&apos;s a liability. Without standardized processing, your team remains reactive to errors instead of focused on operations.
-                  </p>
-                </motion.div>
-              )}
+              ) : null}
             </div>
           </div>
 
