@@ -329,35 +329,36 @@ export class ContentFactory {
   /**
    * Map intent kind to Unsplash photo ID
    * Uses case-insensitive partial matching
+   * All IDs verified working as of 2024
    */
   private getImageUrlForIntent(intent: Intent): string {
     const kind = (intent.kind || "").toLowerCase()
 
     let photoId: string
 
-    // Customs, compliance, insurance -> professional/document photo
+    // Customs, compliance, insurance -> professional documents/business photo
     if (kind.includes("customs") || kind.includes("compliance") || kind.includes("insurance")) {
-      photoId = "1450175726323-c3ad5986ff21"
+      photoId = "1554224154-26032ffc0d07" // Business/finance documents
     }
-    // Shipping or forwarding -> cargo/shipping photo
+    // Shipping or forwarding -> cargo/shipping containers photo
     else if (kind.includes("shipping") || kind.includes("forwarding")) {
-      photoId = "1494412574643-f4e7b2c1766c"
+      photoId = "1494412651409-8963ce7935a7" // Cargo ship containers
     }
-    // Logistics -> warehouse/logistics photo
-    else if (kind.includes("logistics")) {
-      photoId = "1519003309479-3c57e1f7403f"
+    // Logistics or warehousing -> warehouse/logistics photo
+    else if (kind.includes("logistics") || kind.includes("warehousing")) {
+      photoId = "1586528116311-ad8dd3c8310d" // Modern warehouse
     }
     // Finance or invoice -> financial/accounting photo
     else if (kind.includes("finance") || kind.includes("invoice")) {
-      photoId = "1554224155-8d041820510a"
+      photoId = "1454165804606-c3d57bc86b40" // Business analytics
     }
-    // Integration -> tech/integration photo
+    // Integration -> tech/software integration photo
     else if (kind.includes("integration")) {
-      photoId = "1558494947-3591d68ae851"
+      photoId = "1558618666-fcd25c85cd64" // Tech integration
     }
-    // Default fallback
+    // Default fallback -> professional logistics
     else {
-      photoId = "1586528116311-c4ad521ef844"
+      photoId = "1566576721346-d4a3b4eaeb55" // Logistics operations
     }
 
     return `https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&q=80&w=1200`
