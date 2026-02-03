@@ -171,3 +171,25 @@ export interface FinanceGuide {
 export interface FinanceGuideFile {
   finance_operations_guide: FinanceGuide
 }
+
+// Shipping Guide Types
+export interface ShippingGuideSection {
+  id: string
+  title: string
+  content: string
+  mapping_data?: Array<{
+    bol_field: string
+    system_field: string
+    normalization_logic: string
+  }>
+}
+
+export interface ShippingGuide {
+  title: string
+  word_count_target: number
+  expert_sections: ShippingGuideSection[]
+}
+
+export interface ShippingGuideFile {
+  shipping_documentation_guide: ShippingGuide
+}

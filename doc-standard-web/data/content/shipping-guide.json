@@ -1,0 +1,75 @@
+{
+  "shipping_documentation_guide": {
+    "title": "Shipping Document Processing: The Technical Guide for Freight Operations",
+    "word_count_target": 2500,
+    "expert_sections": [
+      {
+        "id": "bol_field_mapping",
+        "title": "Bill of Lading Field Mapping: Source Document to TMS/ERP",
+        "content": "Bill of Lading (BOL) documents contain critical shipment data that must be accurately extracted and mapped to your transportation management and ERP systems. DocStandard standardizes the following key fields:",
+        "mapping_data": [
+          {
+            "bol_field": "Shipper Name & Address",
+            "system_field": "Vendor/Carrier Master Record",
+            "normalization_logic": "Parse company name from address block; Standardize address format (street, city, state, ZIP); Match against existing vendor database."
+          },
+          {
+            "bol_field": "Consignee Name & Address",
+            "system_field": "Customer Master Record",
+            "normalization_logic": "Extract consignee details; Validate address against USPS database; Link to customer account by name or address match."
+          },
+          {
+            "bol_field": "Pro Number / BOL Number",
+            "system_field": "Shipment Reference Number",
+            "normalization_logic": "Extract alphanumeric identifier; Validate format (typically 8-12 characters); Flag duplicates for review."
+          },
+          {
+            "bol_field": "Freight Charges",
+            "system_field": "Line Item Charges (Base + Accessorials)",
+            "normalization_logic": "Parse line items (LTL, FTL, Fuel Surcharge, etc.); Map charge types to GL codes; Calculate total vs. line item sum."
+          },
+          {
+            "bol_field": "Weight & Dimensions",
+            "system_field": "Shipment Attributes (Weight, Cube, Pallets)",
+            "normalization_logic": "Extract weight (convert to consistent unit: lbs or kg); Parse dimensions (LxWxH); Calculate cube; Extract pallet count."
+          },
+          {
+            "bol_field": "Pickup Date / Delivery Date",
+            "system_field": "Shipment Dates (Pickup, In-Transit, Delivery)",
+            "normalization_logic": "Standardize date format (MM/DD/YYYY); Validate date ranges (pickup before delivery); Flag future dates or past-due shipments."
+          },
+          {
+            "bol_field": "Commodity Description",
+            "system_field": "Product/SKU Classification",
+            "normalization_logic": "Extract product descriptions; Map to internal SKU codes when available; Classify by commodity type (hazmat, temperature-controlled, etc.)."
+          },
+          {
+            "bol_field": "Special Instructions",
+            "system_field": "Service Requirements & Notes",
+            "normalization_logic": "Extract special handling codes (Liftgate, Inside Delivery, Appointment Required); Flag hazmat or temperature requirements."
+          }
+        ]
+      },
+      {
+        "id": "airway_bill_processing",
+        "title": "Airway Bill (AWB) Processing for Air Freight",
+        "content": "Airway Bills require specialized handling due to international shipping regulations and IATA standards. DocStandard processes:\n\n- **Master vs. House AWB:** Distinguishes between carrier-issued master AWBs and forwarder-issued house AWBs, maintaining proper linkage.\n- **IATA Airport Codes:** Validates and standardizes 3-letter airport codes (e.g., LAX, JFK, LHR) for origin and destination.\n- **Weight & Volume:** Extracts chargeable weight (the greater of actual weight or volumetric weight) for accurate freight calculations.\n- **Customs Declarations:** Captures declared value, commodity codes, and country of origin for customs clearance preparation.\n- **Service Level Codes:** Maps service types (Express, Standard, Economy) to internal service classifications.\n\nThis ensures air freight documentation integrates seamlessly with your logistics systems and customs workflows."
+      },
+      {
+        "id": "container_tracking",
+        "title": "Container Tracking and Documentation",
+        "content": "Container shipments require tracking multiple data points across the shipment lifecycle:\n\n1. **Container Numbers:** Extract and validate ISO container numbers (11 characters: 4-letter prefix + 6 digits + 1 check digit).\n2. **Seal Numbers:** Capture seal numbers for security and customs verification.\n3. **Vessel/Voyage Information:** Extract vessel name, voyage number, and port rotation for ocean freight tracking.\n4. **Port Codes:** Standardize port names to UN/LOCODE format (5 characters: 2-letter country + 3-letter location).\n5. **Equipment Type:** Classify containers (20ft, 40ft, 40ft HC, refrigerated, etc.) for capacity planning.\n6. **Gate In/Out Dates:** Track container movement through terminal gates for detention/demurrage calculations.\n\nDocStandard maintains complete container documentation chains, linking BOLs, packing lists, and customs documents to enable end-to-end visibility."
+      },
+      {
+        "id": "multi_modal_coordination",
+        "title": "Multi-Modal Shipment Coordination",
+        "content": "Complex shipments often involve multiple transportation modes (truck → rail → ocean → truck). DocStandard handles:\n\n- **Intermodal Linkage:** Connects truck BOLs to rail waybills to ocean bills of lading, maintaining shipment continuity.\n- **Transit Time Calculation:** Tracks time-in-transit across modes to identify bottlenecks and optimize routing.\n- **Cost Allocation:** Splits freight charges across modes for accurate cost accounting and customer billing.\n- **Exception Management:** Flags missing documents, date mismatches, or routing inconsistencies that could cause delays.\n\nThis coordination ensures your TMS has complete visibility into multi-leg shipments, preventing lost shipments and billing errors."
+      },
+      {
+        "id": "operational_roi",
+        "title": "ROI Analysis: Manual vs. Automated BOL Processing",
+        "content": "For a logistics operation processing 1,000 BOLs per week:\n\n- **Manual Entry:** 3 minutes per BOL = 50 hours/week of data entry\n- **Error Rate:** 5-8% requiring correction = 50-80 BOLs with downstream issues (billing errors, tracking gaps)\n- **DocStandard Processing:** Batch upload + automated extraction = 2 hours/week\n- **Accuracy:** 99%+ with exception flagging for review\n\n**Annual Savings:**\n- Labor: $60,000+ in reclaimed operations staff time\n- Error Cost Avoidance: $25,000+ in billing corrections and customer disputes\n- Visibility: 100% shipment tracking coverage vs. 85% with manual entry"
+      }
+    ]
+  }
+}
