@@ -159,23 +159,35 @@ export class ContentFactory {
 
   /**
    * Get technical details for an intent (if available)
+   * Checks both intent.id AND intent.slug against JSON keys
    */
   private async getTechnicalDetails(intent: Intent): Promise<{
     isIntegration: boolean
     integrationDetails?: IntegrationDetails
     serviceDetails?: ServiceDetails
   } | null> {
-    const isIntegration = intent.kind === "integration"
+    const isIntegration = intent.kind?.toLowerCase() === "integration"
 
     if (isIntegration) {
       const details = await this.loadIntegrationDetails()
-      const integrationData = details.integrations[intent.id]
+      // Try matching by intent.id first, then by slug
+      const integrationData =
+        details.integrations[intent.id] ||
+        details.integrations[intent.slug] ||
+        // Also try removing common suffixes like "-services" or "-integration"
+        details.integrations[intent.id.replace(/-services?$|-integration$/, "")] ||
+        details.integrations[intent.slug.replace(/-to-|-integration$/, "-")]
       if (integrationData) {
         return { isIntegration: true, integrationDetails: integrationData }
       }
     } else {
       const details = await this.loadServiceDetails()
-      const serviceData = details.services[intent.id]
+      // Try matching by intent.id first, then by slug
+      const serviceData =
+        details.services[intent.id] ||
+        details.services[intent.slug] ||
+        // Also try removing common suffixes
+        details.services[intent.id.replace(/-services?$/, "")]
       if (serviceData) {
         return { isIntegration: false, serviceDetails: serviceData }
       }
@@ -316,20 +328,38 @@ export class ContentFactory {
 
   /**
    * Map intent kind to Unsplash photo ID
+   * Uses case-insensitive partial matching
    */
   private getImageUrlForIntent(intent: Intent): string {
-    const imageMap: Record<string, string> = {
-      customs: "1450175726323-c3ad5986ff21",
-      compliance: "1450175726323-c3ad5986ff21",
-      insurance: "1450175726323-c3ad5986ff21",
-      shipping: "1494412574643-f4e7b2c1766c",
-      logistics: "1519003309479-3c57e1f7403f",
-      finance: "1554224155-8d041820510a",
-      invoice: "1554224155-8d041820510a",
-      integration: "1558494947-3591d68ae851",
+    const kind = (intent.kind || "").toLowerCase()
+
+    let photoId: string
+
+    // Customs, compliance, insurance -> professional/document photo
+    if (kind.includes("customs") || kind.includes("compliance") || kind.includes("insurance")) {
+      photoId = "1450175726323-c3ad5986ff21"
+    }
+    // Shipping or forwarding -> cargo/shipping photo
+    else if (kind.includes("shipping") || kind.includes("forwarding")) {
+      photoId = "1494412574643-f4e7b2c1766c"
+    }
+    // Logistics -> warehouse/logistics photo
+    else if (kind.includes("logistics")) {
+      photoId = "1519003309479-3c57e1f7403f"
+    }
+    // Finance or invoice -> financial/accounting photo
+    else if (kind.includes("finance") || kind.includes("invoice")) {
+      photoId = "1554224155-8d041820510a"
+    }
+    // Integration -> tech/integration photo
+    else if (kind.includes("integration")) {
+      photoId = "1558494947-3591d68ae851"
+    }
+    // Default fallback
+    else {
+      photoId = "1586528116311-c4ad521ef844"
     }
 
-    const photoId = imageMap[intent.kind] || "1586528116311-c4ad521ef844"
     return `https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&q=80&w=1200`
   }
 
@@ -451,6 +481,11 @@ export class ContentFactory {
 
     // Get technical details if available (Leah's research data)
     const technicalData = await this.getTechnicalDetails(intent)
+
+    // Debug logging to help diagnose matching issues
+    console.log(
+      `[ContentFactory] Intent ID: ${intent.id}, Kind: ${intent.kind}, Slug: ${intent.slug}, Technical Found: ${!!technicalData}, Image URL: ${imageUrl.substring(0, 60)}...`
+    )
 
     return {
       city,
