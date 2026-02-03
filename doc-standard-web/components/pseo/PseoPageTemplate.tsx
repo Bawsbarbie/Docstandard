@@ -5,7 +5,6 @@ import { BenefitsGrid } from "./BenefitsGrid"
 import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
 import { TestimonialsSection } from "./TestimonialsSection"
-import { CTASection } from "./CTASection"
 import { MiddleCTA } from "./MiddleCTA"
 
 interface PseoPageTemplateProps {
@@ -57,8 +56,6 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
       <FAQSection faqs={content.faq} />
 
       <TestimonialsSection />
-
-      <CTASection content={content.cta} />
 
       {/* Footer credit */}
       <div className="bg-slate-50 py-12 border-t border-gray-100">
