@@ -6,6 +6,7 @@ import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import { CTASection } from "./CTASection"
+import { MiddleCTA } from "./MiddleCTA"
 
 interface PseoPageTemplateProps {
   pageModel: PageModel
@@ -20,7 +21,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
   const serviceDetails = technical?.serviceDetails
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen">
       <IntroBlock
         content={content.intro}
         cityName={city.name}
@@ -41,6 +42,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         valueLogic={serviceDetails?.value_logic}
       />
 
+      <MiddleCTA cityName={city.name} />
+
       <BenefitsGrid
         benefits={content.benefits}
         // Integration-specific data flow
@@ -57,12 +60,13 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
 
       <CTASection content={content.cta} />
 
-      {/* Footer note */}
-      <div className="container py-8 text-center text-sm text-gray-500 border-t border-gray-200">
-        <p>
-          Professional {intent.name.toLowerCase()} serving {city.name} and
-          surrounding areas.
-        </p>
+      {/* Final footer credit */}
+      <div className="bg-slate-50 py-12 border-t border-gray-100">
+        <div className="container px-4 text-center">
+          <p className="text-gray-500 text-sm font-medium">
+            Professional {intent.name.toLowerCase()} serving <span className="text-brand-600">{city.name}</span> hubs and surrounding regions.
+          </p>
+        </div>
       </div>
     </main>
   )

@@ -1,5 +1,8 @@
+"use client"
+
 import type { BlockItem } from "@/lib/pseo/types"
-import { CheckCircle2, ArrowRight, Database } from "lucide-react"
+import { CheckCircle2, ArrowRight, Database, Check } from "lucide-react"
+import { motion } from "framer-motion"
 
 interface BenefitsGridProps {
   benefits: BlockItem[]
@@ -9,48 +12,81 @@ interface BenefitsGridProps {
   isIntegration?: boolean
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+}
+
 export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration }: BenefitsGridProps) {
   // For integrations with specific data flow, show technical view
   if (isIntegration && dataFlow && dataFlow.length > 0) {
     return (
-      <section className="py-20 bg-slate-50">
-        <div className="container">
+      <section className="py-24 bg-slate-50">
+        <div className="container px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
                 What Gets Synchronized
               </h2>
-              <p className="text-gray-600">
-                Real-time data flow between your systems
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Clean, validated data flows autonomously between your mission-critical systems.
               </p>
-            </div>
+            </motion.div>
 
             {/* Data Flow Items */}
-            <div className="space-y-4 mb-8">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid gap-4 mb-12"
+            >
               {dataFlow.map((flow, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="flex items-start gap-4 p-5 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                  variants={itemVariants}
+                  className="flex items-center gap-6 p-6 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-200 transition-all group"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center">
-                    <ArrowRight className="w-5 h-5 text-brand-600" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center group-hover:bg-brand-600 group-hover:rotate-90 transition-all duration-500">
+                    <ArrowRight className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors" />
                   </div>
-                  <p className="text-base leading-relaxed text-gray-700 pt-2">{flow}</p>
-                </div>
+                  <p className="text-lg font-medium text-gray-800">{flow}</p>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Prerequisites */}
             {prerequisites && (
-              <div className="p-5 bg-amber-50 border border-amber-200 rounded-lg">
-                <div className="flex items-start gap-3">
-                  <Database className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-amber-800 mb-1">Prerequisites</h4>
-                    <p className="text-sm text-amber-700">{prerequisites}</p>
-                  </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="p-8 bg-amber-50 border border-amber-100 rounded-[2rem] flex flex-col md:flex-row items-center gap-8 shadow-inner"
+              >
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <Database className="w-8 h-8 text-amber-600" />
                 </div>
-              </div>
+                <div>
+                  <h4 className="text-sm font-black text-amber-800 uppercase tracking-[0.2em] mb-2">Technical Prerequisites</h4>
+                  <p className="text-lg text-amber-900 leading-relaxed font-medium">{prerequisites}</p>
+                </div>
+              </motion.div>
             )}
           </div>
         </div>
@@ -60,25 +96,43 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
 
   // Fallback to generic benefits grid
   return (
-    <section className="py-20 bg-slate-50">
-      <div className="container">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">
-            Why Choose DocStandard?
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
+    <section className="py-24 bg-slate-50 overflow-hidden">
+      <div className="container px-4">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+              Operational Excellence <br /> <span className="text-brand-600 italic">Delivered as a Service</span>
+            </h2>
+            <div className="w-24 h-1.5 bg-brand-600 mx-auto rounded-full" />
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {benefits.map((benefit) => (
-              <div
+              <motion.div
                 key={benefit.id}
-                className="flex items-start gap-4 p-6 rounded-lg border border-gray-200 bg-white hover:shadow-md transition-shadow"
+                variants={itemVariants}
+                whileHover={{ y: -8 }}
+                className="flex flex-col p-8 rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-2xl hover:border-brand-100 transition-all group relative overflow-hidden h-full"
               >
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5 text-brand-600" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 transition-colors">
+                  <Check className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors" />
                 </div>
-                <p className="text-base leading-relaxed text-gray-700">{benefit.text}</p>
-              </div>
+                <p className="text-xl font-semibold leading-snug text-gray-900 relative z-10">{benefit.text}</p>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

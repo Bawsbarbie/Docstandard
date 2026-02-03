@@ -1,4 +1,7 @@
-import { Quote } from "lucide-react"
+"use client"
+
+import { Quote, Star } from "lucide-react"
+import { motion } from "framer-motion"
 
 interface Testimonial {
   quote: string
@@ -54,50 +57,91 @@ const testimonials: Testimonial[] = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 bg-slate-50">
-      <div className="container">
+    <section className="py-24 bg-slate-50 relative overflow-hidden">
+      {/* Decorative dots */}
+      <div className="absolute top-0 right-0 p-12 text-slate-200 pointer-events-none opacity-50">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="10" cy="10" r="2" fill="currentColor" />
+          <circle cx="30" cy="10" r="2" fill="currentColor" />
+          <circle cx="50" cy="10" r="2" fill="currentColor" />
+          <circle cx="70" cy="10" r="2" fill="currentColor" />
+          <circle cx="90" cy="10" r="2" fill="currentColor" />
+          <circle cx="10" cy="30" r="2" fill="currentColor" />
+          <circle cx="30" cy="30" r="2" fill="currentColor" />
+          <circle cx="50" cy="30" r="2" fill="currentColor" />
+          <circle cx="70" cy="30" r="2" fill="currentColor" />
+          <circle cx="90" cy="30" r="2" fill="currentColor" />
+          <circle cx="10" cy="50" r="2" fill="currentColor" />
+          <circle cx="30" cy="50" r="2" fill="currentColor" />
+          <circle cx="50" cy="50" r="2" fill="currentColor" />
+          <circle cx="70" cy="50" r="2" fill="currentColor" />
+          <circle cx="90" cy="50" r="2" fill="currentColor" />
+        </svg>
+      </div>
+
+      <div className="container px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              What Our Clients Say
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
+              Validated by <br /> <span className="text-brand-600 italic">Industry Leaders</span>
             </h2>
-            <p className="text-lg text-gray-600">
-              Real feedback from teams who&apos;ve trusted DocStandard with their
-              document processing
+            <div className="flex justify-center gap-1 mb-8">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+              ))}
+            </div>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Real feedback from operations and finance teams who have delegated their document complexity to us.
             </p>
-          </div>
+          </motion.div>
 
           {/* Testimonials Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[2rem] border border-gray-100 p-8 shadow-sm hover:shadow-2xl transition-all flex flex-col group relative"
               >
                 {/* Quote Icon */}
-                <div className="mb-4">
-                  <Quote className="w-8 h-8 text-brand-600 opacity-50" />
+                <div className="absolute top-8 right-8 text-brand-50 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Quote className="w-16 h-16" />
+                </div>
+
+                <div className="mb-6 flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
 
                 {/* Quote Text */}
-                <p className="text-gray-700 leading-relaxed mb-6 flex-1">
+                <p className="text-gray-700 leading-relaxed mb-8 flex-1 italic relative z-10 text-lg">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
 
                 {/* Author Info */}
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="font-semibold text-gray-900">
+                <div className="border-t border-gray-100 pt-6 mt-auto">
+                  <p className="font-black text-gray-900 text-lg">
                     {testimonial.author}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm font-bold text-brand-600 uppercase tracking-widest mt-1">
                     {testimonial.role}
                   </p>
-                  <p className="text-sm text-gray-500 italic">
+                  <p className="text-sm text-gray-500 font-medium mt-0.5">
                     {testimonial.company}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
