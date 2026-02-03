@@ -2,6 +2,7 @@ import type { PageModel } from "@/lib/pseo/content-factory"
 import { IntroBlock } from "./IntroBlock"
 import { PainSection } from "./PainSection"
 import { BenefitsGrid } from "./BenefitsGrid"
+import { ProcessingBatchSection } from "./ProcessingBatchSection"
 import { FAQSection } from "./FAQSection"
 import { CTASection } from "./CTASection"
 
@@ -46,6 +47,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         prerequisites={integrationDetails?.prerequisites}
         isIntegration={isIntegration}
       />
+
+      <ProcessingBatchSection />
 
       <FAQSection faqs={content.faq} />
 
