@@ -1,261 +1,72 @@
 {
   "intro": [
     {
-      "id": "intro_doctype_1",
-      "text": "DocStandard helps businesses in {city}, {state} turn messy {intentName} files into clean, structured, system-ready documents. For a flat $799, our Standard Batch service delivers usable data instead of raw files.",
-      "tags": ["doctype"]
+      "id": "intro_ops_1",
+      "text": "DocStandard provides technical document normalization for {vertical} operations. We transform messy {intentName} files into high-integrity, structured data suitable for automated systems and audits.",
+      "tags": ["ops"]
     },
     {
-      "id": "intro_doctype_2",
-      "text": "If your {intentName} documents are digital but still hard to use, DocStandard fixes the problem. We process a full Standard Batch for $799 and return clean, structured files.",
-      "tags": ["doctype"]
+      "id": "intro_ops_2",
+      "text": "If your {intentName} documents are slowing down your controller or operations team, we solve the data friction. For a flat $799, we process a standard batch into system-ready files.",
+      "tags": ["ops"]
     },
     {
-      "id": "intro_doctype_3",
-      "text": "Messy {intentName} files slow down operations. DocStandard standardizes and structures document batches so teams can actually work with the data.",
-      "tags": ["doctype"]
-    },
-    {
-      "id": "intro_doctype_4",
-      "text": "DocStandard transforms inconsistent {intentName} documents into reliable, system-ready files using a flat-fee Standard Batch model.",
-      "tags": ["doctype"]
-    },
-    {
-      "id": "intro_industry_1",
-      "text": "For {vertical} teams in {city}, document quality impacts every workflow. DocStandard cleans and structures {intentName} files for operational use.",
-      "tags": ["industry"]
-    },
-    {
-      "id": "intro_industry_2",
-      "text": "{vertical} companies rely on accurate documents to keep systems running smoothly. DocStandard delivers clean, validated data from messy files.",
-      "tags": ["industry"]
-    },
-    {
-      "id": "intro_industry_3",
-      "text": "When {vertical} documents aren’t structured properly, errors follow. DocStandard prepares your {intentName} files for real business systems.",
-      "tags": ["industry"]
-    },
-    {
-      "id": "intro_software_1",
-      "text": "Unstructured {intentName} files cause problems inside software platforms. DocStandard ensures documents are structured before import.",
-      "tags": ["software"]
-    },
-    {
-      "id": "intro_software_2",
-      "text": "Feeding raw documents into {intentName} workflows leads to errors. DocStandard cleans and standardizes files so systems can read them correctly.",
-      "tags": ["software"]
-    },
-    {
-      "id": "intro_general_1",
-      "text": "DocStandard focuses on document readiness. We take messy files and return clean, structured data businesses can trust.",
-      "tags": ["general"]
+      "id": "intro_ops_3",
+      "text": "Operational bottlenecks in {vertical} are often caused by unstructured {intentName} files. DocStandard cleans, validates, and re-structures these batches for immediate system ingestion.",
+      "tags": ["ops"]
     }
   ],
   "pain": [
     {
-      "id": "pain_1",
-      "text": "Many {intentName} files look digital but function like paper. Scans, inconsistent layouts, and missing structure make them hard to use.",
+      "id": "pain_ops_1",
+      "text": "Logistics data friction: Inconsistent {intentName} layouts prevent automated ingestion, forcing high-cost operators to perform manual cleanup.",
       "tags": ["general"]
     },
     {
-      "id": "pain_2",
-      "text": "Inconsistent document formats cause failed imports, broken reports, and manual cleanup work.",
+      "id": "pain_ops_2",
+      "text": "Audit risk from 'Dirty Data': Unstructured reference numbers and mismatched dates in {intentName} batches create downstream reconciliation errors.",
       "tags": ["general"]
     },
     {
-      "id": "pain_3",
-      "text": "Even small formatting differences across files can break automation and slow down teams.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_4",
-      "text": "Image-based PDFs prevent systems from reliably reading the data inside them.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_5",
-      "text": "Raw documents often contain duplicate fields, unclear headers, and mismatched data types.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_6",
-      "text": "Teams spend hours fixing documents after the fact instead of using the data immediately.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_7",
-      "text": "Dirty data creates downstream errors that surface later in reporting, audits, and reconciliation.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_8",
-      "text": "Documents coming from multiple sources rarely follow the same structure or naming conventions.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_9",
-      "text": "Unstructured files limit visibility and make it difficult to scale operations.",
-      "tags": ["general"]
-    },
-    {
-      "id": "pain_10",
-      "text": "Without standardization, digital documents still require manual intervention to be usable.",
-      "tags": ["general"]
-    }
-  ],
-  "what_we_structure": [
-    {
-      "id": "structure_1",
-      "text": "Normalized headers and consistent column naming across the entire document batch.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_2",
-      "text": "Standardized date formats to ensure consistency across files and systems.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_3",
-      "text": "Cleaned and validated reference numbers, totals, and identifiers found in {intentName} documents.",
-      "tags": ["doctype"]
-    },
-    {
-      "id": "structure_4",
-      "text": "Vendor, customer, and company names cleaned for consistency and accuracy.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_5",
-      "text": "Aligned field placement so similar data always appears in the same location.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_6",
-      "text": "Validated numeric fields to reduce calculation and reporting errors.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_7",
-      "text": "Standardized units, codes, and operational fields commonly used in {vertical} workflows.",
-      "tags": ["industry"]
-    },
-    {
-      "id": "structure_8",
-      "text": "Removed duplicate or conflicting fields across documents.",
-      "tags": ["general"]
-    },
-    {
-      "id": "structure_9",
-      "text": "Structured outputs designed to be system-compatible and predictable.",
-      "tags": ["software"]
-    },
-    {
-      "id": "structure_10",
-      "text": "Consistency checks across the batch to ensure all files follow the same schema.",
-      "tags": ["general"]
-    }
-  ],
-  "process_steps": [
-    {
-      "id": "process_1",
-      "text": "Upload your batch of documents, even if formats and layouts vary.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_2",
-      "text": "Files are ingested and reviewed for structure, consistency, and usability.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_3",
-      "text": "Documents are cleaned, structured, and standardized across the batch.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_4",
-      "text": "Key fields are validated to reduce downstream errors.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_5",
-      "text": "Data is aligned to consistent schemas suitable for systems and reporting.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_6",
-      "text": "Edge cases and inconsistencies are handled within the Standard Batch scope.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_7",
-      "text": "Structured files are reviewed for accuracy and completeness.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_8",
-      "text": "Final outputs are prepared in clean, usable formats.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_9",
-      "text": "Files are delivered ready for systems, workflows, or internal use.",
-      "tags": ["general"]
-    },
-    {
-      "id": "process_10",
-      "text": "You receive structured data without needing manual cleanup.",
+      "id": "pain_ops_3",
+      "text": "System Incompatibility: Raw exports from systems like {vertical} platforms are often not formatted correctly for ERP or accounting imports.",
       "tags": ["general"]
     }
   ],
   "benefit": [
     {
-      "id": "benefits_1",
-      "text": "Flat $799 pricing per Standard Batch with no per-page or per-file fees.",
-      "tags": ["pricing"]
-    },
-    {
-      "id": "benefits_2",
-      "text": "Flexible scope allows mixed formats and document types within a single batch.",
+      "id": "benefit_ops_1",
+      "text": "High-Integrity Extraction: We move beyond simple OCR to validate field logic across your entire {intentName} batch.",
       "tags": ["general"]
     },
     {
-      "id": "benefits_3",
-      "text": "Clean, structured data improves accuracy across systems and reports.",
+      "id": "benefit_ops_2",
+      "text": "System-Ready Deliverables: Final files are structured for direct import into ERPs like SAP, NetSuite, or QuickBooks.",
       "tags": ["general"]
     },
     {
-      "id": "benefits_4",
-      "text": "Standardized outputs reduce manual rework and operational friction.",
-      "tags": ["general"] },
+      "id": "benefit_ops_3",
+      "text": "Operational Scalability: Remove the data-cleansing bottleneck so your team can focus on moving cargo, not fixing PDFs.",
+      "tags": ["general"]
+    }
+  ],
+  "cta": [
     {
-      "id": "benefits_5",
-      "text": "Designed for compatibility with business software and internal tools.",
-      "tags": ["software"]
+      "id": "cta_1",
+      "text": "Process your first Standard Batch of {intentName} documents for a flat $799 fee.",
+      "tags": ["general"]
+    }
+  ],
+  "faq": [
+    {
+      "id": "faq_1",
+      "question": "Is this a data entry service?",
+      "answer": "No. DocStandard is a document normalization engine. We use technology to structure and validate your existing digital or scanned {intentName} files, not to manually type data."
     },
     {
-      "id": "benefits_6",
-      "text": "Faster access to usable data without internal cleanup effort.",
-      "tags": ["general"]
-    },
-    {
-      "id": "benefits_7",
-      "text": "Improved consistency across documents from multiple sources.",
-      "tags": ["general"]
-    },
-    {
-      "id": "benefits_8",
-      "text": "Reduced risk from dirty or unreliable document data.",
-      "tags": ["general"]
-    },
-    {
-      "id": "benefits_9",
-      "text": "Clear separation from data entry or virtual assistant services.",
-      "tags": ["general"]
-    },
-    {
-      "id": "benefits_10",
-      "text": "Documents delivered ready for operational use, not manual fixing.",
-      "tags": ["general"]
+      "id": "faq_2",
+      "question": "What formats can you extract from?",
+      "answer": "We handle PDF, XML, CSV, and image-based scans of {intentName} documents. We return the data in a clean, unified format of your choice (JSON, CSV, or XML)."
     }
   ]
 }
