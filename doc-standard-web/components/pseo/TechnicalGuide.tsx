@@ -1,4 +1,4 @@
-import type { TmsErpGuide, CustomsGuide } from "@/lib/pseo/types"
+import type { TmsErpGuide, CustomsGuide, CustomsGuideSection, ExpertSection } from "@/lib/pseo/types"
 
 interface TechnicalGuideProps {
   guide?: TmsErpGuide
@@ -6,25 +6,19 @@ interface TechnicalGuideProps {
 }
 
 export function TechnicalGuide({ guide, customsGuide }: TechnicalGuideProps) {
-  // Use customs guide if available, otherwise fall back to TMS-ERP guide
-  const activeGuide = customsGuide || guide
-  
-  if (!activeGuide || !activeGuide.expert_sections || activeGuide.expert_sections.length === 0) {
-    return null
-  }
-
-  return (
-    <section className="py-16 bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="prose prose-lg max-w-none">
-          {activeGuide.expert_sections.map((section) => {
-            // Special handling for CBP Entry Field Mapping (customs guide)
-            if (section.id === "cbp_entry_field_mapping" && customsGuide) {
-              return (
-                <div key={section.id} className="mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                  {section.mapping_data && section.mapping_data.length > 0 && (
+  // Render customs guide sections if available
+  if (customsGuide && customsGuide.expert_sections && customsGuide.expert_sections.length > 0) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="prose prose-lg max-w-none">
+            {customsGuide.expert_sections.map((section: CustomsGuideSection) => {
+              // Special handling for CBP Entry Field Mapping
+              if (section.id === "cbp_entry_field_mapping" && section.mapping_data) {
+                return (
+                  <div key={section.id} className="mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
+                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
                     <div className="overflow-x-auto mt-6">
                       <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
                         <thead className="bg-gray-50">
@@ -57,18 +51,37 @@ export function TechnicalGuide({ guide, customsGuide }: TechnicalGuideProps) {
                         </tbody>
                       </table>
                     </div>
-                  )}
-                </div>
-              )
-            }
+                  </div>
+                )
+              }
 
-            // Special handling for field_mapping_table (TMS-ERP guide)
-            if (section.id === "field_mapping_table" && guide) {
+              // Default rendering for other customs sections
               return (
                 <div key={section.id} className="mb-12">
                   <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                  <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
-                  {section.mapping_data && section.mapping_data.length > 0 && (
+                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Render TMS-ERP guide sections if available
+  if (guide && guide.expert_sections && guide.expert_sections.length > 0) {
+    return (
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="prose prose-lg max-w-none">
+            {guide.expert_sections.map((section: ExpertSection) => {
+              // Special handling for field_mapping_table
+              if (section.id === "field_mapping_table" && section.mapping_data) {
+                return (
+                  <div key={section.id} className="mb-12">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
+                    <p className="text-gray-700 mb-6 whitespace-pre-line">{section.content}</p>
                     <div className="overflow-x-auto mt-6">
                       <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
                         <thead className="bg-gray-50">
@@ -113,33 +126,35 @@ export function TechnicalGuide({ guide, customsGuide }: TechnicalGuideProps) {
                         </tbody>
                       </table>
                     </div>
-                  )}
-                </div>
-              )
-            }
+                  </div>
+                )
+              }
 
-            // Special handling for operational_roi
-            if (section.id === "operational_roi") {
+              // Special handling for operational_roi
+              if (section.id === "operational_roi") {
+                return (
+                  <div key={section.id} className="mb-12">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-r-lg shadow-sm">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
+                      <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
+                    </div>
+                  </div>
+                )
+              }
+
+              // Default rendering for other TMS-ERP sections
               return (
                 <div key={section.id} className="mb-12">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-r-lg shadow-sm">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                    <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
+                  <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
                 </div>
               )
-            }
-
-            // Default rendering for other sections
-            return (
-              <div key={section.id} className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">{section.title}</h2>
-                <div className="text-gray-700 whitespace-pre-line">{section.content}</div>
-              </div>
-            )
-          })}
+            })}
+          </div>
         </div>
-      </div>
-    </section>
-  )
+      </section>
+    )
+  }
+
+  return null
 }
