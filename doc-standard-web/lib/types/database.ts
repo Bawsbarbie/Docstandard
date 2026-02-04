@@ -44,6 +44,10 @@ export interface OrderFile {
   uploaded_at: string | null
 }
 
+export interface OrderWithFiles extends Order {
+  order_files?: OrderFile[] | null
+}
+
 export interface CreateOrderInput {
   scope?: BatchScope
   notes?: string

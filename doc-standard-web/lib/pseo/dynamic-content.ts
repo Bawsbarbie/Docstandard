@@ -62,9 +62,13 @@ export function resolvePool(
 ): ContentPool {
   const defaultPool = pools.find((pool) => pool.id === "default") || { id: "default", blocks: {} }
   const kindPool = options.kind ? pools.find((pool) => pool.id === options.kind) : undefined
-  const intentPool =
-    (options.intentId && pools.find((pool) => pool.id === options.intentId)) ||
-    (options.intentSlug && pools.find((pool) => pool.id === options.intentSlug))
+  let intentPool: ContentPool | undefined
+  if (options.intentId) {
+    intentPool = pools.find((pool) => pool.id === options.intentId)
+  }
+  if (!intentPool && options.intentSlug) {
+    intentPool = pools.find((pool) => pool.id === options.intentSlug)
+  }
 
   return mergePools(mergePools(defaultPool, kindPool), intentPool)
 }

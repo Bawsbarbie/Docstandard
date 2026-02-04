@@ -20,14 +20,26 @@ interface UploadFile {
 
 interface FileUploaderProps {
   onUploadComplete?: (orderId: string) => void
+  onFilesChange?: (fileCount: number) => void
   maxFiles?: number
   maxSizeMB?: number
+  orderNotes?: string
+  scopeOverride?: "standard" | "large" | "complex"
+  dropzoneLabel?: string
+  dropzoneHint?: string
+  dropzoneDetail?: string
 }
 
 export function FileUploader({
   onUploadComplete,
+  onFilesChange,
   maxFiles = 50,
   maxSizeMB = 50,
+  orderNotes,
+  scopeOverride,
+  dropzoneLabel,
+  dropzoneHint,
+  dropzoneDetail,
 }: FileUploaderProps) {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([])
   const [orderId, setOrderId] = useState<string | null>(null)
@@ -59,16 +71,23 @@ export function FileUploader({
         status: "pending",
       }))
 
-      setUploadFiles((prev) => [...prev, ...newFiles])
+      setUploadFiles((prev) => {
+        const next = [...prev, ...newFiles]
+        if (onFilesChange) onFilesChange(next.length)
+        return next
+      })
       setUploadError(null)
     },
-    [uploadFiles.length, maxFiles, maxSizeMB]
+    [uploadFiles.length, maxFiles, maxSizeMB, onFilesChange]
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       "application/pdf": [".pdf"],
+      "text/csv": [".csv"],
+      "application/xml": [".xml"],
+      "text/xml": [".xml"],
       "image/*": [".png", ".jpg", ".jpeg"],
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
@@ -77,7 +96,11 @@ export function FileUploader({
   })
 
   const removeFile = (fileId: string) => {
-    setUploadFiles((prev) => prev.filter((f) => f.id !== fileId))
+    setUploadFiles((prev) => {
+      const next = prev.filter((f) => f.id !== fileId)
+      if (onFilesChange) onFilesChange(next.length)
+      return next
+    })
   }
 
   const uploadSingleFile = async (
@@ -168,8 +191,10 @@ export function FileUploader({
 
     try {
       // Create order
+      const derivedScope = uploadFiles.length > 1000 ? "complex" : uploadFiles.length > 50 ? "large" : "standard"
       const { data: order, error: orderError } = await createOrder({
-        scope: uploadFiles.length > 50 ? "large" : "standard",
+        scope: scopeOverride || derivedScope,
+        notes: orderNotes || undefined,
       })
 
       if (orderError || !order) {
@@ -241,13 +266,14 @@ export function FileUploader({
           </div>
           <div>
             <p className="text-lg font-medium">
-              {isDragActive ? "Drop files here..." : "Drag & drop files here"}
+              {isDragActive ? "Drop files here..." : dropzoneLabel || "Drag & drop files here"}
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              or click to select files
+              {dropzoneHint || "or click to select files"}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              PDF, Images, DOCX, XLSX • Max {maxSizeMB}MB per file • Up to {maxFiles} files
+              {dropzoneDetail ||
+                `PDF, Images, DOCX, XLSX • Max ${maxSizeMB}MB per file • Up to ${maxFiles} files`}
             </p>
           </div>
         </div>
@@ -269,7 +295,10 @@ export function FileUploader({
             </h3>
             {!isUploading && !allFilesUploaded && (
               <button
-                onClick={() => setUploadFiles([])}
+                onClick={() => {
+                  setUploadFiles([])
+                  if (onFilesChange) onFilesChange(0)
+                }}
                 className="text-sm text-muted-foreground hover:text-foreground"
               >
                 Clear all
@@ -364,9 +393,15 @@ export function FileUploader({
               <p className="text-xs text-green-700 mt-1">
                 Order ID: {orderId}
               </p>
-              <p className="text-xs text-green-700 mt-2">
-                Redirecting to checkout...
-              </p>
+              {onUploadComplete ? (
+                <p className="text-xs text-green-700 mt-2">
+                  Redirecting to checkout...
+                </p>
+              ) : (
+                <p className="text-xs text-green-700 mt-2">
+                  Your batch is queued for review.
+                </p>
+              )}
             </div>
           )}
         </div>

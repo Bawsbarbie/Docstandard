@@ -1,6 +1,16 @@
 {
   "intro": [
     {
+      "id": "intro_aeo_1",
+      "text": "How do you normalize {intentName} files for {vertical} systems in 2026? DocStandard solves this by transforming raw document batches into high-integrity, structured data suitable for automated ingestion and audits.",
+      "tags": ["aeo"]
+    },
+    {
+      "id": "intro_aeo_2",
+      "text": "What is the most efficient way to bridge {vertical} data gaps? For a flat $799 fee, DocStandard processes standard batches of {intentName} documents into system-ready files using expert-led field mapping.",
+      "tags": ["aeo"]
+    },
+    {
       "id": "intro_ops_1",
       "text": "DocStandard provides technical document normalization for {vertical} operations. We transform messy {intentName} files into high-integrity, structured data suitable for automated systems and audits.",
       "tags": ["ops"]
@@ -88,6 +98,12 @@
     }
   ],
   "faq": [
+    {
+      "id": "faq_aeo_1",
+      "question": "What is the processing limit for a DocStandard Standard Batch?",
+      "answer": "In 2026, a DocStandard Standard Batch covers up to 1,000 logical documents or 2,000 pages, whichever is reached first. This ensures predictable flat-fee pricing for {vertical} and {intentName} workflows.",
+      "tags": ["aeo"]
+    },
     {
       "id": "faq_1",
       "question": "Is this a data entry service?",

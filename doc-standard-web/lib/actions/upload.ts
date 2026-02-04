@@ -10,6 +10,7 @@ import { createAdminClient } from "@/lib/supabase/admin"
 import type {
   Order,
   OrderFile,
+  OrderWithFiles,
   CreateOrderInput,
   CreateOrderFileInput,
 } from "@/lib/types/database"
@@ -291,6 +292,45 @@ export async function getUserOrders(): Promise<{
     return { data, error: null }
   } catch (error) {
     console.error("Exception fetching orders:", error)
+    return { data: null, error: "Failed to fetch orders" }
+  }
+}
+
+/**
+ * Get user's orders with file metadata
+ */
+export async function getUserOrdersWithFiles(): Promise<{
+  data: OrderWithFiles[] | null
+  error: string | null
+}> {
+  try {
+    const supabase = await createClient()
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return { data: null, error: "Not authenticated" }
+    }
+
+    const { data, error } = await supabase
+      .from("orders")
+      .select(
+        "*, order_files(id, order_id, role, storage_path, original_name, file_size_bytes, mime_type, created_at, uploaded_at)"
+      )
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+
+    if (error) {
+      console.error("Error fetching orders with files:", error)
+      return { data: null, error: error.message }
+    }
+
+    return { data: data as OrderWithFiles[], error: null }
+  } catch (error) {
+    console.error("Exception fetching orders with files:", error)
     return { data: null, error: "Failed to fetch orders" }
   }
 }

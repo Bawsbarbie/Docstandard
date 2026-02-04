@@ -65,7 +65,7 @@
       ],
       "operational_requirements": [
         "Version-controlled contract terms, tariffs, and SLAs for automated validation.",
-        "CHARGE-LEVELMode-level mode-level modes mode-level charge modes Mode-level Charge level Mode-level mode-level Charge level Charge-level charge audit history.",
+        "Charge-level historical data logs for modal and accessorial spend analysis.",
         "Integrated ERP/TMS data flows to ensure clean, audit-ready financial statements."
       ],
       "value_logic": "Generic accounting software lacks freight-specific logic like detention clauses and dynamic fuel surcharges. Our expert financial processing corrects billing errors at the root cause before they hit the general ledger."
