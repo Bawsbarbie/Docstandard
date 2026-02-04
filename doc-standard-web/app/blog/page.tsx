@@ -1,4 +1,5 @@
 import Link from "next/link"
+import type { Route } from "next"
 import { getAllBlogPosts } from "@/lib/blog/fs"
 
 export default async function BlogIndexPage() {
@@ -31,6 +32,7 @@ export default async function BlogIndexPage() {
           )}
           {posts.map((post, index) => {
             const label = index % 2 === 0 ? "Operational Protocol" : "Authority Guide"
+            const postHref = `/blog/${post.slug}` as Route
             return (
             <article
               key={post.slug}
@@ -44,13 +46,13 @@ export default async function BlogIndexPage() {
                 <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
               </div>
               <h2 className="text-2xl font-semibold text-slate-900 mt-3">
-                <Link className="hover:text-brand-600" href={`/blog/${post.slug}`}>
+                <Link className="hover:text-brand-600" href={postHref}>
                   {post.title}
                 </Link>
               </h2>
               <p className="text-slate-600 mt-3">{post.description}</p>
               <div className="mt-4">
-                <Link className="text-sm font-semibold text-brand-600 hover:underline" href={`/blog/${post.slug}`}>
+                <Link className="text-sm font-semibold text-brand-600 hover:underline" href={postHref}>
                   Read the analysis
                 </Link>
               </div>
