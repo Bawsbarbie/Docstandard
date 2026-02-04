@@ -8,6 +8,7 @@ export interface BlogPostMeta {
   description: string
   readingTime: string
   publishedAt: string
+  clusterId?: string
 }
 
 export interface BlogPostContent extends BlogPostMeta {
@@ -36,17 +37,34 @@ const extractDescription = (content: string) => {
   return firstParagraph || "DocStandard technical authority notes."
 }
 
+const extractClusterId = (data: Record<string, unknown>) => {
+  if (typeof data.cluster === "string") return data.cluster
+  if (typeof data.cluster_id === "string") return data.cluster_id
+  if (typeof data.clusterId === "string") return data.clusterId
+  return undefined
+}
+
 const estimateReadingTime = (content: string) => {
   const words = content.replace(/\[Internal Link to:[^\]]+\]/g, "").split(/\s+/).filter(Boolean).length
   const minutes = Math.max(3, Math.round(words / 200))
   return `${minutes} min read`
 }
 
+const normalizeInternalHref = (href: string) => {
+  const trimmed = href.trim()
+  if (!trimmed.startsWith("/")) return trimmed
+  const isSingleSegment = trimmed.slice(1).split("/").length === 1
+  if (isSingleSegment) {
+    return `/blog${trimmed}`
+  }
+  return trimmed
+}
+
 const transformInternalLinks = (content: string) => {
-  return content.replace(
-    /^\[Internal Link to:\s*(.+?)\s*\]$/gm,
-    (_match, link) => `- [${link}](${link})`
-  )
+  return content.replace(/^\[Internal Link to:\s*(.+?)\s*\]$/gm, (_match, link) => {
+    const normalized = normalizeInternalHref(link)
+    return `- [${link.trim()}](${normalized})`
+  })
 }
 
 export async function getBlogSlugs(): Promise<string[]> {
@@ -58,16 +76,18 @@ export async function getBlogPost(slug: string): Promise<BlogPostContent | null>
   const filePath = path.join(BLOG_DIR, `${slug}.md`)
   try {
     const raw = await fs.readFile(filePath, "utf-8")
-    const { content } = matter(raw)
+    const { content, data } = matter(raw)
     const normalizedContent = transformInternalLinks(content)
     const title = ensureYearTag(extractTitle(content))
     const description = extractDescription(content)
+    const clusterId = extractClusterId(data)
     return {
       slug,
       title,
       description,
       readingTime: estimateReadingTime(content),
       publishedAt: "2026-02-04",
+      clusterId,
       content: normalizedContent,
     }
   } catch {

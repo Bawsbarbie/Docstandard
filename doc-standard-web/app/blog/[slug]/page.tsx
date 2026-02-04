@@ -4,6 +4,16 @@ import Link from "next/link"
 import type { Route } from "next"
 import ReactMarkdown from "react-markdown"
 import { getBlogPost, getBlogSlugs } from "@/lib/blog/fs"
+import { HeaderBanner } from "@/components/blog/HeaderBanner"
+
+const inferClusterId = (slug: string) => {
+  const normalized = slug.toLowerCase()
+  if (/(invoice|ap|ledger|payable|finance)/.test(normalized)) return "Finance"
+  if (/(customs|license|permit|export|compliance|hs-code|classification)/.test(normalized)) return "Customs"
+  if (/(shipping|freight|bill-of-lading|awb|airway|packing-list)/.test(normalized)) return "Shipping"
+  if (/(integration|erp|tms|cargowise|netsuite|sap|quickbooks)/.test(normalized)) return "Integration"
+  return "Logistics"
+}
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getBlogPost(params.slug)
@@ -30,6 +40,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   if (!post) {
     notFound()
   }
+  const clusterId = post.clusterId || inferClusterId(post.slug)
 
   const schema = {
     "@context": "https://schema.org",
@@ -58,19 +69,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         {JSON.stringify(schema)}
       </script>
 
-      <section className="px-4 pt-16 pb-10">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.35em] text-slate-400 font-semibold">
-            Expert Perspective
-          </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mt-4 leading-tight">
-            {post.title}
-          </h1>
-          <p className="text-lg text-slate-600 mt-6">{post.description}</p>
-          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-slate-500">
-            <span>{post.readingTime}</span>
-            <span>•</span>
-            <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+      <section className="px-4 pt-12 pb-10">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <HeaderBanner title={post.title} clusterId={clusterId} />
+          <div className="max-w-3xl">
+            <p className="text-lg text-slate-600">{post.description}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-slate-500">
+              <span>{post.readingTime}</span>
+              <span>•</span>
+              <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+            </div>
           </div>
         </div>
       </section>
@@ -80,10 +88,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <ReactMarkdown
             components={{
               h2: ({ children }) => (
-                <h2 className="text-2xl font-semibold text-slate-900 mt-10">{children}</h2>
+                <h2 className="text-2xl font-semibold text-slate-900 mt-10 mb-2">{children}</h2>
               ),
               h3: ({ children }) => (
-                <h3 className="text-xl font-semibold text-slate-900 mt-8">{children}</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mt-8 mb-2">{children}</h3>
               ),
               ul: ({ children }) => <ul className="list-disc pl-6 space-y-2">{children}</ul>,
               li: ({ children }) => <li className="text-slate-700">{children}</li>,
@@ -103,7 +111,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   </a>
                 )
               },
-              p: ({ children }) => <p className="mt-4">{children}</p>,
+              img: () => null,
+              p: ({ children }) => <p className="mt-4 leading-relaxed">{children}</p>,
             }}
           >
             {post.content}
