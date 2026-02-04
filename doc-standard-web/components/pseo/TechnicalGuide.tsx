@@ -6,6 +6,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import type { TmsErpGuide, CustomsGuide, CustomsGuideSection, ExpertSection, FinanceGuide, FinanceGuideSection, ShippingGuide, ShippingGuideSection, InventoryGuide, InventoryGuideSection, ComplianceGuide, ComplianceGuideSection, MotiveGuide, MotiveGuideSection, HSCodeGuide, HSCodeGuideSection, InvoiceGuide, InvoiceGuideSection } from "@/lib/pseo/types"
 
+interface IntegrationGuide {
+  systemA: string
+  systemB: string
+  friction: string
+  solution: string
+}
+
 interface TechnicalGuideProps {
   guide?: TmsErpGuide
   customsGuide?: CustomsGuide
@@ -16,9 +23,10 @@ interface TechnicalGuideProps {
   motiveGuide?: MotiveGuide
   hsCodeGuide?: HSCodeGuide
   invoiceGuide?: InvoiceGuide
+  integrationGuide?: IntegrationGuide
 }
 
-export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuide, inventoryGuide, complianceGuide, motiveGuide, hsCodeGuide, invoiceGuide }: TechnicalGuideProps) {
+export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuide, inventoryGuide, complianceGuide, motiveGuide, hsCodeGuide, invoiceGuide, integrationGuide }: TechnicalGuideProps) {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({})
 
   const toggleSection = (key: string) => {
@@ -97,6 +105,32 @@ export function TechnicalGuide({ guide, customsGuide, financeGuide, shippingGuid
           <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-brand-500/10 blur-3xl" />
         </div>
       </motion.div>
+    )
+  }
+
+  if (integrationGuide) {
+    const { systemA, systemB, friction, solution } = integrationGuide
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-white to-slate-50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-slate-200/60 blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="space-y-10">
+            {renderSectionChrome(
+              "integration-friction",
+              `${systemA} → ${systemB} Data Friction`,
+              friction
+            )}
+            {renderSectionChrome(
+              "integration-solution",
+              `${systemA} → ${systemB} Normalization Plan`,
+              solution
+            )}
+          </div>
+        </div>
+      </section>
     )
   }
 

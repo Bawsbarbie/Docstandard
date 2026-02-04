@@ -14,6 +14,16 @@
       "id": "intro_ops_3",
       "text": "Operational bottlenecks in {vertical} are often caused by unstructured {intentName} files. DocStandard cleans, validates, and re-structures these batches for immediate system ingestion.",
       "tags": ["ops"]
+    },
+    {
+      "id": "intro_ops_4",
+      "text": "Data integrity shouldn't be a manual bottleneck. DocStandard automates the normalization of {intentName} batches, ensuring your {vertical} systems receive clean, validated inputs every time.",
+      "tags": ["ops"]
+    },
+    {
+      "id": "intro_ops_5",
+      "text": "Stop letting messy {intentName} files stall your operations. We provide technical-grade cleanup and structuring for {vertical} documents, delivered at a flat $799 per standard batch.",
+      "tags": ["ops"]
     }
   ],
   "pain": [
@@ -31,6 +41,16 @@
       "id": "pain_ops_3",
       "text": "System Incompatibility: Raw exports from systems like {vertical} platforms are often not formatted correctly for ERP or accounting imports.",
       "tags": ["general"]
+    },
+    {
+      "id": "pain_ops_4",
+      "text": "The 'Invisible Drain': Manual data correction in {vertical} workflows isn't just slow; it introduces silent schema errors that break downstream reporting and audit trails.",
+      "tags": ["general"]
+    },
+    {
+      "id": "pain_ops_5",
+      "text": "Legacy Friction: Standard OCR fails on complex {intentName} layouts, leaving your team to fix the same formatting errors repeatedly instead of focusing on high-value logistics.",
+      "tags": ["general"]
     }
   ],
   "benefit": [
@@ -47,6 +67,16 @@
     {
       "id": "benefit_ops_3",
       "text": "Operational Scalability: Remove the data-cleansing bottleneck so your team can focus on moving cargo, not fixing PDFs.",
+      "tags": ["general"]
+    },
+    {
+      "id": "benefit_ops_4",
+      "text": "Deterministic Consistency: Our normalization engine treats every {intentName} in your batch with the same rigorous logic, ensuring 100% field alignment across your entire history.",
+      "tags": ["general"]
+    },
+    {
+      "id": "benefit_ops_5",
+      "text": "Rapid System Onboarding: Bridge the gap between raw document exports and your ERP's strict ingestion requirements without writing a single line of custom code.",
       "tags": ["general"]
     }
   ],
@@ -270,6 +300,44 @@
       "author": "Dmitri Novak",
       "role": "Broker Relations",
       "company": "ClearPath Brokers",
+      "tags": ["customs"]
+    }
+  ],
+  "process": [
+    {
+      "id": "process_logistics",
+      "title": "Logistics Normalization Workflow",
+      "steps": [
+        { "name": "Batch Ingestion", "desc": "We ingest PDF or scanned BOLs, AWBs, and Packing Lists in bulk." },
+        { "name": "Structural Mapping", "desc": "Carrier-specific layouts are normalized into a single, carrier-neutral schema." },
+        { "name": "Field Validation", "desc": "Automated verification of Container IDs, Seal numbers, and Equipment types." },
+        { "name": "TMS Formatting", "desc": "Data is structured specifically for CargoWise, Magaya, or proprietary TMS ingestion." },
+        { "name": "System Delivery", "desc": "Final files are delivered in your choice of JSON, CSV, or XML for direct import." }
+      ],
+      "tags": ["logistics"]
+    },
+    {
+      "id": "process_finance",
+      "title": "Financial Data Extraction Workflow",
+      "steps": [
+        { "name": "Document Capture", "desc": "Bulk ingestion of Freight Bills, Commercial Invoices, and AP documents." },
+        { "name": "Line-Item Extraction", "desc": "We separate accessorials, fuel surcharges, and base rates into distinct fields." },
+        { "name": "Logic Audit", "desc": "Automated GL coding and multi-currency reconciliation against your reference data." },
+        { "name": "ERP Alignment", "desc": "Mapping normalized data to NetSuite, SAP, or QuickBooks import templates." },
+        { "name": "Audit-Ready Delivery", "desc": "Clean, structured data ready for immediate posting and 7-year audit retention." }
+      ],
+      "tags": ["finance"]
+    },
+    {
+      "id": "process_customs",
+      "title": "Customs Compliance Workflow",
+      "steps": [
+        { "name": "Entry Pull", "desc": "Secure ingestion of CF 7501s, Commercial Invoices, and Bond documents." },
+        { "name": "Data Normalization", "desc": "Standardizing HTS codes, Country of Origin, and Valuation fields for filing." },
+        { "name": "Compliance Check", "desc": "Verification of license limits, expiry windows, and permit requirement flags." },
+        { "name": "Broker Hand-off", "desc": "Files are structured to match customs filing system (ABI/ACE) requirements." },
+        { "name": "Retention Record", "desc": "Full digital audit trail generated for long-term regulatory compliance." }
+      ],
       "tags": ["customs"]
     }
   ]

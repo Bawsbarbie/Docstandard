@@ -1,64 +1,100 @@
-{
-  "integrations": {
-    "motive-quickbooks": {
-      "pair": "Motive ↔️ QuickBooks",
-      "data_flow": [
-        "Automatic import of vehicle details and GPS trip miles from Motive ELDs.",
-        "Fuel-up data synchronization from Motive fuel cards to QuickBooks expense categories.",
-        "Automated IFTA reporting data generation (distance by state/province).",
-        "Driver HOS (Hours of Service) logs for payroll reconciliation."
-      ],
-      "use_case": "A trucking fleet using Motive can automatically sync fuel card transactions into QuickBooks, saving ~10 hours per week on manual expense categorization and ensuring IFTA audit readiness.",
-      "technical_specs": "REST API based synchronization with Webhook support for real-time trip completion events.",
-      "prerequisites": "Motive Enterprise or Pro plan; QuickBooks Online Plus or Advanced / QuickBooks Desktop Enterprise."
-    },
-    "cargowise-sap-s4hana": {
-      "pair": "CargoWise ↔️ SAP S/4HANA",
-      "data_flow": [
-        "Forwarding Settlement Documents (FSD) mapped to SAP Billing Documents.",
-        "Supplier invoice accruals transferred from Freight Orders to SAP General Ledger.",
-        "Real-time shipment milestone updates (ETA, ATD) synced to SAP Sales & Distribution (SD).",
-        "Master data sync (Business Partners, UNLOCO codes) between both systems."
-      ],
-      "use_case": "International forwarders can automate the transfer of accruals and actual costs into SAP S/4HANA, eliminating the 'financial lag' between operations and corporate finance.",
-      "technical_specs": "eAdapter (XML) or REST API integration using SAP Cloud Integration (CPI) as middleware.",
-      "prerequisites": "CargoWise One (latest version); SAP S/4HANA 2020 or newer; eAdapter module enabled."
-    },
-    "magaya-quickbooks": {
-      "pair": "Magaya ↔️ QuickBooks Enterprise",
-      "data_flow": [
-        "Syncing Magaya Invoices and Credit Memos directly to QuickBooks AR.",
-        "Magaya Bills and Bill Credits pushed to QuickBooks AP.",
-        "Automated sync of Business Entities (Customer/Vendor address books).",
-        "Inventory adjustment sync for warehousing operations."
-      ],
-      "use_case": "Small to mid-sized forwarders can run operations in Magaya while maintaining a clean ledger in QuickBooks without manual double-entry of commercial invoices.",
-      "technical_specs": "Magaya QuickBooks Extension using Desktop Sync Tool (XML-based) or QBO API.",
-      "prerequisites": "Magaya Supply Chain; QuickBooks Desktop Enterprise v21.0+ or QBO."
-    },
-    "cargowise-netsuite": {
-      "pair": "CargoWise ↔️ Oracle NetSuite",
-      "data_flow": [
-        "Direct mapping of CargoWise AR Invoices to NetSuite Sales Invoices.",
-        "Shipment Landed Cost data pushed to NetSuite for accurate inventory valuation.",
-        "Payment status feedback (NetSuite → CargoWise) to update operational credit holds.",
-        "Automated currency conversion and multi-subsidiary mapping."
-      ],
-      "use_case": "Logistics companies can automate 'Multi-Entity' billing, ensuring that freight costs in CargoWise match the corporate financial reporting in NetSuite in real-time.",
-      "technical_specs": "Middleware integration (Celigo, Boomi) using CargoWise eAdapter and NetSuite SuiteTalk API.",
-      "prerequisites": "CargoWise One; NetSuite OneWorld (for multi-subsidiary); API Enablement."
-    },
-    "mercurygate-netsuite": {
-      "pair": "MercuryGate ↔️ NetSuite",
-      "data_flow": [
-        "Voucher and load financial data sync from MercuryGate to NetSuite AP/AR.",
-        "Carrier payment status updates for visibility inside the TMS.",
-        "GL account mapping for specific freight modes (LTL, FTL, Ocean).",
-        "Customer credit limit sync from NetSuite to MercuryGate."
-      ],
-      "use_case": "3PLs can ensure that carrier payments are only released in NetSuite after the load is marked as 'Financial Approved' in MercuryGate, preventing overpayments.",
-      "technical_specs": "REST API based integration using MercuryGate Integration Manager.",
-      "prerequisites": "MercuryGate TMS; NetSuite ERP; REST Web Services enabled in NetSuite."
-    }
+[
+  {
+    "slug": "cargowise-to-netsuite-data-bridge",
+    "systemA": "CargoWise",
+    "systemB": "NetSuite",
+    "friction": "Operational exports in CargoWise (Universal XML/CSV) do not align with NetSuite's strict Journal Entry or Bill schemas.",
+    "solution": "DocStandard normalizes CargoWise XML into NetSuite-aligned CSV/JSON files, mapping VAT, currency, and GL codes at the line level."
+  },
+  {
+    "slug": "magaya-to-quickbooks-bridge",
+    "systemA": "Magaya",
+    "systemB": "QuickBooks",
+    "friction": "Magaya invoice exports often require manual re-keying to handle multi-currency accessorials in QuickBooks Online/Desktop.",
+    "solution": "We transform raw Magaya data into QuickBooks-ready import templates, preserving all charge-level detail without manual entry."
+  },
+  {
+    "slug": "motive-to-sap-ifta-normalization",
+    "systemA": "Motive (ELD)",
+    "systemB": "SAP",
+    "friction": "ELD logs and IFTA mileage data from Motive need to be reconciled against SAP financial periods for audit-proof fuel tax reporting.",
+    "solution": "DocStandard structures Motive ELD exports into SAP-ready financial schemas, ensuring distance and fuel data are audit-ready."
+  },
+  {
+    "slug": "mercurygate-to-oracle-integration",
+    "systemA": "MercuryGate",
+    "systemB": "Oracle",
+    "friction": "MercuryGate's complex freight audit data needs to be normalized for Oracle ERP ingestion to avoid AP reconciliation delays.",
+    "solution": "We normalize MercuryGate freight bills into Oracle-compatible schemas, separating fuel, base, and detention charges."
+  },
+  {
+    "slug": "descartes-to-netsuite-customs-bridge",
+    "systemA": "Descartes",
+    "systemB": "NetSuite",
+    "friction": "Customs filing data and entry summaries in Descartes don't align with NetSuite's item receipt and land-cost allocation logic.",
+    "solution": "DocStandard maps Descartes entry details directly to NetSuite landed cost categories for precise margin reporting."
+  },
+  {
+    "slug": "flexport-to-netsuite-bridge",
+    "systemA": "Flexport",
+    "systemB": "NetSuite",
+    "friction": "Extracting line-item SKU details from Flexport commercial invoices for NetSuite inventory reconciliation is a manual, error-prone process.",
+    "solution": "We transform Flexport digital exports into NetSuite-ready SKU-level receipts, automating the inventory matching workflow."
+  },
+  {
+    "slug": "blueyonder-to-dynamics365-normalization",
+    "systemA": "BlueYonder",
+    "systemB": "Microsoft Dynamics 365",
+    "friction": "BlueYonder TMS load data requires structural normalization before it can be posted as a freight bill in Dynamics 365 Finance.",
+    "solution": "Our engine maps BlueYonder load IDs and carrier charges to D365 vendor invoice schemas for automated AP posting."
+  },
+  {
+    "slug": "freightpop-to-netsuite-normalization",
+    "systemA": "FreightPOP",
+    "systemB": "NetSuite",
+    "friction": "Multi-carrier shipping data in FreightPOP needs to be consolidated and normalized to match NetSuite's fulfillment record requirements.",
+    "solution": "DocStandard structures FreightPOP carrier data into NetSuite-aligned CSVs, ensuring tracking and cost data are 100% accurate."
+  },
+  {
+    "slug": "roserocket-to-quickbooks-bridge",
+    "systemA": "Rose Rocket",
+    "systemB": "QuickBooks",
+    "friction": "Trucking brokerage data in Rose Rocket requires manual GL mapping before it can be imported as bills or invoices into QuickBooks.",
+    "solution": "We automate the mapping of Rose Rocket accessorials and carrier payables into QuickBooks-ready journal entries."
+  },
+  {
+    "slug": "shipstation-to-sage-normalization",
+    "systemA": "ShipStation",
+    "systemB": "Sage",
+    "friction": "High-volume e-commerce fulfillment data from ShipStation doesn't match the batch import requirements of Sage 100/300 systems.",
+    "solution": "Our engine aggregates ShipStation daily batches into Sage-compatible import files, reducing manual data entry by 95%."
+  },
+  {
+    "slug": "cargowise-to-dynamics-bc-bridge",
+    "systemA": "CargoWise",
+    "systemB": "Dynamics Business Central",
+    "friction": "CargoWise Universal XML files are too complex for direct ingestion into Dynamics Business Central without significant manual cleanup.",
+    "solution": "DocStandard simplifies and structures CargoWise XML data specifically for Business Central's Purchase Invoice and G/L schemas."
+  },
+  {
+    "slug": "3pl-central-to-dynamics365-bridge",
+    "systemA": "3PL Central (Extensiv)",
+    "systemB": "Microsoft Dynamics 365",
+    "friction": "Warehouse receipts and billing data in 3PL Central require normalization to match Dynamics 365 SCM and Finance schemas.",
+    "solution": "We transform Extensiv warehouse exports into D365-ready inventory and billing files, ensuring 3PL costs are correctly allocated."
+  },
+  {
+    "slug": "kuebix-to-quickbooks-bridge",
+    "systemA": "Kuebix",
+    "systemB": "QuickBooks",
+    "friction": "Kuebix freight quotes and bills need to be reconciled and normalized for QuickBooks Online/Desktop AP workflows.",
+    "solution": "DocStandard bridges the gap by converting Kuebix exports into QuickBooks-ready bills, including all fuel and accessorial lines."
+  },
+  {
+    "slug": "manhattan-to-sap-normalization",
+    "systemA": "Manhattan Associates",
+    "systemB": "SAP",
+    "friction": "Enterprise WMS data from Manhattan requires complex structural mapping before it can be ingested into SAP S/4HANA for financial close.",
+    "solution": "Our engine normalizes Manhattan warehouse activity logs into SAP-ready financial postings for automated cost reconciliation."
   }
-}
+]

@@ -4,6 +4,7 @@ import { PainSection } from "./PainSection"
 import { TechnicalGuide } from "./TechnicalGuide"
 import { BenefitsGrid } from "./BenefitsGrid"
 import { ProcessingBatchSection } from "./ProcessingBatchSection"
+import { TechnicalProcess } from "./TechnicalProcess"
 import { FAQSection } from "./FAQSection"
 import { TestimonialsSection } from "./TestimonialsSection"
 import { MiddleCTA } from "./MiddleCTA"
@@ -126,6 +127,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         prerequisites={integrationDetails?.prerequisites}
         isIntegration={isIntegration}
       />
+
+      <TechnicalProcess process={content.process} />
 
       <ProcessingBatchSection kind={intent.kind} />
 

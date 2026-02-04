@@ -47,6 +47,18 @@ export interface BlockItem {
   tags?: string[] // For filtering/targeting specific scenarios
 }
 
+export interface ProcessStep {
+  name: string
+  desc: string
+}
+
+export interface ProcessBlock {
+  id: string
+  title: string
+  steps: ProcessStep[]
+  tags?: string[]
+}
+
 export interface TestimonialItem {
   id: string
   quote: string

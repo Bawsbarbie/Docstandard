@@ -14,7 +14,12 @@
           "intro_industry_3",
           "intro_software_1",
           "intro_software_2",
-          "intro_general_1"
+          "intro_general_1",
+          "intro_ops_1",
+          "intro_ops_2",
+          "intro_ops_3",
+          "intro_ops_4",
+          "intro_ops_5"
         ],
         "pain": [
           "pain_1",
@@ -26,7 +31,12 @@
           "pain_7",
           "pain_8",
           "pain_9",
-          "pain_10"
+          "pain_10",
+          "pain_ops_1",
+          "pain_ops_2",
+          "pain_ops_3",
+          "pain_ops_4",
+          "pain_ops_5"
         ],
         "what_we_structure": [
           "structure_1",
@@ -62,7 +72,12 @@
           "benefits_7",
           "benefits_8",
           "benefits_9",
-          "benefits_10"
+          "benefits_10",
+          "benefit_ops_1",
+          "benefit_ops_2",
+          "benefit_ops_3",
+          "benefit_ops_4",
+          "benefit_ops_5"
         ],
         "faq": [
           "faq_scope_1",

@@ -15,6 +15,7 @@ import type {
   Intent,
   BlockItem,
   TestimonialItem,
+  ProcessBlock,
   ContentPool,
   IntegrationDetails,
   ServiceDetails,
@@ -74,6 +75,7 @@ interface BlockCollection {
   cta: BlockItem[]
   faq: Array<{ id: string; question: string; answer: string; tags?: string[] }>
   testimonials: TestimonialItem[]
+  process: ProcessBlock[]
 }
 
 interface PoolConfig {
@@ -91,6 +93,7 @@ export interface PageModel {
     cta: BlockItem
     faq: Array<{ question: string; answer: string }>
     testimonials: TestimonialItem[]
+    process?: ProcessBlock
   }
   meta: {
     title: string
@@ -171,6 +174,7 @@ export class ContentFactory {
       cta: rawBlocks.cta || [],
       faq: rawBlocks.faq || rawFaqs || [],
       testimonials: rawBlocks.testimonials || [],
+      process: rawBlocks.process || [],
     }
 
     return this.blocks
@@ -198,7 +202,12 @@ export class ContentFactory {
     const detailsPath = path.join(process.cwd(), "data", "content", "integration-details.json")
     try {
       const content = await fs.readFile(detailsPath, "utf-8")
-      this.integrationDetails = JSON.parse(content) as IntegrationDetailsFile
+      const parsed = JSON.parse(content)
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed) && "integrations" in parsed) {
+        this.integrationDetails = parsed as IntegrationDetailsFile
+      } else {
+        this.integrationDetails = { integrations: {} }
+      }
     } catch {
       this.integrationDetails = { integrations: {} }
     }
@@ -761,6 +770,21 @@ export class ContentFactory {
       .replace(/\{vertical\}/g, "logistics") // Default vertical
   }
 
+  private selectProcessBlock(intent: Intent, blocks: ProcessBlock[]): ProcessBlock | null {
+    if (!blocks || blocks.length === 0) return null
+    const kind = (intent.kind || "").toLowerCase()
+    const slug = intent.slug.toLowerCase()
+
+    let targetId = "process_logistics"
+    if (["finance", "invoice", "audit"].includes(kind) || slug.includes("audit")) {
+      targetId = "process_finance"
+    } else if (["customs", "compliance"].includes(kind)) {
+      targetId = "process_customs"
+    }
+
+    return blocks.find((block) => block.id === targetId) || blocks[0] || null
+  }
+
   /**
    * Assemble a complete page model
    * This is the main public API
@@ -852,6 +876,19 @@ export class ContentFactory {
       text: this.replaceVariables(b.text, city, intent, state),
     }))
 
+    const processBlock = this.selectProcessBlock(intent, blocks.process)
+    const processedProcess = processBlock
+      ? {
+          ...processBlock,
+          title: this.replaceVariables(processBlock.title, city, intent, state),
+          steps: processBlock.steps.map((step) => ({
+            ...step,
+            name: this.replaceVariables(step.name, city, intent, state),
+            desc: this.replaceVariables(step.desc, city, intent, state),
+          })),
+        }
+      : undefined
+
     const processedFaqs = selectedFaqs.map((f) => ({
       question: this.replaceVariables(f.question, city, intent, state),
       answer: this.replaceVariables(f.answer, city, intent, state),
@@ -915,6 +952,7 @@ export class ContentFactory {
         cta: processedCta,
         faq: processedFaqs,
         testimonials: processedTestimonials,
+        process: processedProcess,
       },
       meta: {
         title,
