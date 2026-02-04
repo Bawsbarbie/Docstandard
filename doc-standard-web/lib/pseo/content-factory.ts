@@ -938,9 +938,11 @@ export class ContentFactory {
     const imageUrl = this.getImageUrlForIntent(intent)
 
     // Debug logging to help diagnose matching issues
-    console.log(
-      `[ContentFactory] Intent ID: ${intent.id}, Kind: ${intent.kind}, Slug: ${intent.slug}, Technical Found: ${!!technicalData}, Image URL: ${imageUrl.substring(0, 60)}...`
-    )
+    if (process.env.NODE_ENV !== "production") {
+      console.log(
+        `[ContentFactory] Intent ID: ${intent.id}, Kind: ${intent.kind}, Slug: ${intent.slug}, Technical Found: ${!!technicalData}, Image URL: ${imageUrl.substring(0, 60)}...`
+      )
+    }
 
     return {
       city,
