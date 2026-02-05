@@ -5,5 +5,10 @@
     "postinstall": "npm --prefix doc-standard-web install",
     "build": "npm --prefix doc-standard-web run build",
     "start": "npm --prefix doc-standard-web run start"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "googleapis": "^171.2.0"
   }
 }
