@@ -23,6 +23,7 @@ interface IntegrationEntry {
   systemB: string
   friction: string
   solution: string
+  technicalData?: string
 }
 
 const INTEGRATION_IMAGE_URL =
@@ -109,7 +110,7 @@ export default async function IntegrationPage({ params }: PageProps) {
     notFound()
   }
 
-  const { systemA, systemB, friction, solution } = entry
+  const { systemA, systemB, friction, solution, technicalData } = entry
   const integrationPair = `${systemA} <-> ${systemB}`
   const serviceName = `${systemA} to ${systemB} Integration`
 
@@ -161,6 +162,13 @@ export default async function IntegrationPage({ params }: PageProps) {
         vertical="integration"
         integrationGuide={{ systemA, systemB, friction, solution }}
       />
+
+      {technicalData && (
+        <div
+          className="prose prose-slate max-w-none mt-8 border-t border-slate-200 pt-8"
+          dangerouslySetInnerHTML={{ __html: technicalData }}
+        />
+      )}
 
       <BenefitsGrid benefits={benefits} />
 
