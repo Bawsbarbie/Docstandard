@@ -176,7 +176,7 @@ export default async function IntegrationPage({ params }: PageProps) {
       />
 
       {cleanedTechnicalData && (
-        <section className="mt-12 mb-20 px-4 md:px-0">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-20">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
             <div className="bg-slate-50 border-b border-slate-200 p-6">
               <h3 className="text-xl font-bold text-slate-900">
@@ -188,7 +188,7 @@ export default async function IntegrationPage({ params }: PageProps) {
             </div>
             <div className="p-0 overflow-x-auto">
               <div
-                className="technical-table-container prose prose-slate max-w-none [&_table]:w-full [&_table]:mb-0 [&_thead]:bg-slate-50 [&_th]:p-4 [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_td]:p-4 [&_td]:text-sm [&_tr]:border-b [&_tr:last-child]:border-0"
+                className="technical-table-container prose prose-slate max-w-none [&_table]:w-full [&_table]:mb-0 [&_thead]:bg-slate-50 [&_th]:p-4 [&_th]:text-sm [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-wider [&_td]:p-4 [&_td]:text-sm [&_tr]:border-b [&_tr:last-child]:border-0"
                 dangerouslySetInnerHTML={{ __html: cleanedTechnicalData }}
               />
             </div>
