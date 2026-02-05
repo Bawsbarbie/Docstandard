@@ -1,8 +1,10 @@
 import { Metadata } from "next"
+import type { Route } from "next"
 import Link from "next/link"
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
 import { loadIntents } from "@/lib/pseo/intents"
+import type { Intent } from "@/lib/pseo/types"
 import { ArrowRight, FileText, Globe, Layers, ShieldCheck } from "lucide-react"
 import { promises as fs } from "fs"
 import path from "path"
@@ -47,16 +49,16 @@ const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
 }
 
 export default async function ServicesPage() {
-  const intents = await loadIntents().catch(() => [])
+  const intents = await loadIntents().catch(() => [] as Intent[])
   const integrations = await loadIntegrationDetails().catch(() => [])
 
   // Group intents by kind
-  const grouped = intents.reduce((acc, intent) => {
+  const grouped = intents.reduce<Record<string, Intent[]>>((acc, intent) => {
     const kind = intent.kind || "other"
     if (!acc[kind]) acc[kind] = []
     acc[kind].push(intent)
     return acc
-  }, {} as Record<string, typeof intents>)
+  }, {})
 
   const integrationIntents = grouped.integration || []
   delete grouped.integration
@@ -141,7 +143,7 @@ export default async function ServicesPage() {
               {mergedIntegrations.map((integration) => (
                 <Link
                   key={integration.key}
-                  href={integration.href}
+                  href={integration.href as Route}
                   className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 border border-gray-100 hover:border-brand-200"
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -176,7 +178,7 @@ export default async function ServicesPage() {
                     <Link
                       key={intent.id}
                       // Linking to NY as a canonical example for now
-                      href={`/us/ny/new-york/${intent.slug}`}
+                      href={`/us/ny/new-york/${intent.slug}` as Route}
                       className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 border border-gray-100 hover:border-brand-200"
                     >
                       <h3 className="font-semibold text-gray-900 group-hover:text-brand-600 mb-2 flex items-center justify-between">
