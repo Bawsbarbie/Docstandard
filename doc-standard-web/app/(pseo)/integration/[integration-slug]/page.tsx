@@ -2,15 +2,14 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BenefitsGrid } from "@/components/pseo/BenefitsGrid"
 import { Hero } from "@/components/pseo/dynamic/hero"
-import { RiskSection } from "@/components/pseo/RiskSection"
 import { PainSection } from "@/components/pseo/PainSection"
-import { MiddleCTA } from "@/components/pseo/MiddleCTA"
-import { TechnicalGuideSection } from "@/components/pseo/dynamic/technical-guide"
-import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
+import { TechnicalGuide } from "@/components/pseo/TechnicalGuide"
+import { TechnicalProcess } from "@/components/pseo/TechnicalProcess"
 import { FAQSection } from "@/components/pseo/FAQSection"
 import { TestimonialsSection } from "@/components/pseo/TestimonialsSection"
 import { ROISection } from "@/components/pseo/ROISection"
 import type { BlockItem } from "@/lib/pseo/types"
+import { getDynamicROI } from "@/lib/pseo/roi-helper"
 import {
   loadBlocks,
   loadPools,
@@ -31,9 +30,6 @@ interface IntegrationEntry {
   solution: string
   technicalData?: string
 }
-
-const INTEGRATION_IMAGE_URL =
-  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1200"
 
 const isIntegrationEntry = (value: unknown): value is IntegrationEntry => {
   if (!value || typeof value !== "object") return false
@@ -68,7 +64,14 @@ const getIntegrationBySlug = async (slug: string): Promise<IntegrationEntry | nu
 
   const intent = await getIntentBySlug(slug)
   if (!intent || intent.kind !== "integration") {
-    return null
+    const { systemA, systemB } = deriveSystemsFromSlug(slug)
+    return {
+      slug,
+      systemA,
+      systemB,
+      friction: `Manual ${systemA} exports and ${systemB} imports create re-keying, delays, and audit risk.`,
+      solution: `Normalize ${systemA} and ${systemB} data into clean, system-ready exports.`,
+    }
   }
 
   const { systemA, systemB } = deriveSystemsFromIntentName(intent.name)
@@ -203,6 +206,22 @@ const deriveSystemsFromIntentName = (name: string): { systemA: string; systemB: 
   return { systemA, systemB: "Core Systems" }
 }
 
+const deriveSystemsFromSlug = (slug: string): { systemA: string; systemB: string } => {
+  const cleaned = slug
+    .replace(/-(integration|bridge|data-bridge|sync|connector|pipeline)$/i, "")
+    .replace(/-to-/i, "|")
+    .replace(/-/g, " ")
+  const parts = cleaned.split("|").map((part) => part.trim()).filter(Boolean)
+  if (parts.length >= 2) {
+    return {
+      systemA: normalizeSystemName(parts[0]) || parts[0],
+      systemB: normalizeSystemName(parts.slice(1).join(" ")) || parts.slice(1).join(" "),
+    }
+  }
+  const fallback = normalizeSystemName(cleaned)
+  return { systemA: fallback || slug, systemB: "Core Systems" }
+}
+
 interface PageProps {
   params: {
     "integration-slug": string
@@ -237,27 +256,6 @@ export default async function IntegrationPage({ params }: PageProps) {
   const integrationPair = `${systemA} <-> ${systemB}`
   const serviceName = `${systemA} to ${systemB} Integration`
 
-  const extractTableRows = (html: string) => {
-    if (!html) return ""
-    const tbodyMatch = html.match(/<tbody[^>]*>([\s\S]*?)<\/tbody>/i)
-    if (tbodyMatch && tbodyMatch[1]) return tbodyMatch[1].trim()
-    const rowMatches = html.match(/<tr[\s\S]*?<\/tr>/gi)
-    if (rowMatches && rowMatches.length > 0) return rowMatches.join("")
-    return ""
-  }
-
-  const normalizeTableRows = (html: string) =>
-    html.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, (_match, rowContent: string) => {
-      const matches = rowContent.match(/<td[^>]*>[\s\S]*?<\/td>/gi) || []
-      const cells = matches.map((cell) => cell)
-      if (cells.length === 0) return _match
-      const missing = Math.max(0, 5 - cells.length)
-      const filler = Array.from({ length: missing }, () => "<td></td>").join("")
-      return `<tr>${cells.join("")}${filler}</tr>`
-    })
-
-  const technicalRows = technicalData ? normalizeTableRows(extractTableRows(technicalData)) : ""
-
   const [blocks, poolConfig] = await Promise.all([loadBlocks(), loadPools()])
   const pool = resolvePool(poolConfig.pools, { kind: "integration", intentSlug: params["integration-slug"] })
   const seed = `integration-${params["integration-slug"]}`
@@ -265,14 +263,10 @@ export default async function IntegrationPage({ params }: PageProps) {
   const introBlock =
     selectBlock("intro", pool, blocks, seed) ||
     ({ id: "intro-default", text: `Normalize ${systemA} and ${systemB} data into clean exports.` } as BlockItem)
-  const ctaBlock =
-    selectBlock("cta", pool, blocks, seed) ||
-    ({ id: "cta-default", text: "Process your first batch for a flat $799 fee." } as BlockItem)
 
   const variables = { intentName: serviceName, vertical: "integration", systemA, systemB }
   const processedIntro = { ...introBlock, text: replaceVariables(introBlock.text, variables) }
   const processedPain: BlockItem = { id: "integration-friction", text: friction }
-  const processedCta = { ...ctaBlock, text: replaceVariables(ctaBlock.text, variables) }
 
   const painPoints = splitToPoints(friction, 4)
   const benefits = getStaticBenefits(systemA, systemB)
@@ -292,84 +286,8 @@ export default async function IntegrationPage({ params }: PageProps) {
       }
     : undefined
 
-  // Helper function to extract ROI values from text (same as PseoPageTemplate)
-  const extractROIValue = (text: string, type: 'manualEffort' | 'withDocStandard' | 'annualSavings' | 'errorReduction'): string | null => {
-    if (!text) return null
-    
-    switch (type) {
-      case 'manualEffort': {
-        const hourMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\b/i)
-        if (hourMatch) return `${hourMatch[1]}h`
-        const minuteMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:minutes?|mins?|m)\b/i)
-        if (minuteMatch) return `${minuteMatch[1]}m`
-        const timeMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h|minutes?|mins?|m)/i)
-        if (timeMatch) {
-          const value = timeMatch[1]
-          const unit = timeMatch[0].toLowerCase().includes('hour') || timeMatch[0].toLowerCase().includes('hr') || timeMatch[0].toLowerCase().includes('h') ? 'h' : 'm'
-          return `${value}${unit}`
-        }
-        return null
-      }
-      case 'withDocStandard': {
-        const minuteMatch = text.match(/(?:<|less than|under)?\s*(\d+(?:\.\d+)?)\s*(?:minutes?|mins?|m)\s*(?:\/|per|for)/i)
-        if (minuteMatch) return `${minuteMatch[1]}m`
-        const secondMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:seconds?|secs?|s)\s*(?:per|for)/i)
-        if (secondMatch) {
-          const seconds = parseFloat(secondMatch[1])
-          if (seconds < 60) return `${seconds}s`
-          const minutes = Math.round(seconds / 60)
-          return `${minutes}m`
-        }
-        const hourMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\s*(?:\/|per|for)/i)
-        if (hourMatch) return `${hourMatch[1]}h`
-        return null
-      }
-      case 'annualSavings': {
-        const dollarMatch = text.match(/~?\s*\$([\d,.]+)\s*(?:k|thousand|annually|per year|yearly)?/i)
-        if (dollarMatch) {
-          let value = dollarMatch[1].replace(/,/g, '')
-          const numValue = parseFloat(value)
-          if (numValue >= 1000) {
-            const kValue = Math.round(numValue / 1000)
-            return `$${kValue}k`
-          }
-          return `$${value}`
-        }
-        const kMatch = text.match(/\$(\d+)k/i)
-        if (kMatch) return `$${kMatch[1]}k`
-        return null
-      }
-      case 'errorReduction': {
-        const percentMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:reduction|accuracy|error|rate)?/i)
-        if (percentMatch) {
-          const value = parseFloat(percentMatch[1])
-          if (value >= 90) return "100%"
-          return `${Math.round(value)}%`
-        }
-        const plusMatch = text.match(/(\d+(?:\.\d+)?)%\+/i)
-        if (plusMatch) {
-          const value = parseFloat(plusMatch[1])
-          if (value >= 99) return "100%"
-          return `${Math.round(value)}%`
-        }
-        return null
-      }
-      default:
-        return null
-    }
-  }
-
-  // Try to extract ROI from solution or friction text
-  const roiSourceText = solution || friction || ""
-  const extractedManualEffort = extractROIValue(roiSourceText, 'manualEffort')
-  const extractedWithDocStandard = extractROIValue(roiSourceText, 'withDocStandard')
-  const extractedAnnualSavings = extractROIValue(roiSourceText, 'annualSavings')
-  const extractedErrorReduction = extractROIValue(roiSourceText, 'errorReduction')
-
-  const manualEffort = extractedManualEffort ?? undefined
-  const withDocStandard = extractedWithDocStandard ?? undefined
-  const annualSavings = extractedAnnualSavings ?? undefined
-  const errorReduction = extractedErrorReduction ?? undefined
+  const roiSourceText = [solution, friction].filter(Boolean).join(" ")
+  const roiData = getDynamicROI(undefined, roiSourceText)
 
   return (
     <main className="min-h-screen">
@@ -386,8 +304,6 @@ export default async function IntegrationPage({ params }: PageProps) {
         painPoints={painPoints}
       />
 
-      <RiskSection quote={processedPain.text} painPoints={painPoints} />
-
       <PainSection
         content={processedPain}
         painPoints={painPoints}
@@ -398,56 +314,22 @@ export default async function IntegrationPage({ params }: PageProps) {
         systemB={systemB}
       />
 
-      <TechnicalGuideSection
-        vertical="integration"
-        integrationGuide={{ systemA, systemB, friction, solution }}
+      <TechnicalGuide
+        integrationGuide={{ systemA, systemB, friction, solution, technicalData }}
+        systemA={systemA}
+        systemB={systemB}
       />
 
-      {technicalData && technicalRows && (
-        <section className="py-12 bg-slate-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">The Master Mapping Blueprint</h2>
-              <p className="text-slate-600 max-w-2xl">
-                To achieve high-integrity data bridging, DocStandard normalizes critical field pairs across major systems.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-slate-900 text-white">
-                      <th className="p-4 font-semibold text-sm">SOURCE</th>
-                      <th className="p-4 font-semibold text-sm">SYSTEM TARGET</th>
-                      <th className="p-4 font-semibold text-sm">FIELD</th>
-                      <th className="p-4 font-semibold text-sm">ERP FIELD</th>
-                      <th className="p-4 font-semibold text-sm">NORMALIZATION LOGIC</th>
-                    </tr>
-                  </thead>
-                  <tbody
-                    className="divide-y divide-slate-100 text-sm [&_tr]:hover:bg-blue-50/50 [&_tr]:transition-colors [&_td]:p-4 [&_td]:text-slate-600"
-                    dangerouslySetInnerHTML={{ __html: technicalRows }}
-                  />
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      <MiddleCTA />
-
-      <BenefitsGrid benefits={benefits} isIntegration />
-
-      <ProcessSteps process={processedProcess} />
+      <TechnicalProcess process={processedProcess} />
 
       <ROISection
-        manualEffort={manualEffort}
-        withDocStandard={withDocStandard}
-        annualSavings={annualSavings}
-        errorReduction={errorReduction}
+        manualEffort={roiData.manualEffort}
+        withDocStandard={roiData.withDocStandard}
+        annualSavings={roiData.annualSavings}
+        errorReduction={roiData.errorReduction}
       />
+
+      <BenefitsGrid benefits={benefits} isIntegration />
 
       <FAQSection faqs={defaultFaqs} />
       <TestimonialsSection testimonials={defaultTestimonials} kind="general" />

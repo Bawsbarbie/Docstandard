@@ -10,7 +10,6 @@ import type {
   MotiveGuide,
   HSCodeGuide,
   InvoiceGuide,
-  ExpertSection,
 } from "@/lib/pseo/types"
 
 interface IntegrationGuide {
@@ -18,6 +17,7 @@ interface IntegrationGuide {
   systemB: string
   friction: string
   solution: string
+  technicalData?: string
 }
 
 interface TechnicalGuideProps {
@@ -31,6 +31,8 @@ interface TechnicalGuideProps {
   hsCodeGuide?: HSCodeGuide
   invoiceGuide?: InvoiceGuide
   integrationGuide?: IntegrationGuide
+  systemA?: string
+  systemB?: string
 }
 
 type MappingRow = Record<string, string>
@@ -42,6 +44,19 @@ const toLabel = (value: string) =>
 
 const getTableConfig = (rows: MappingRow[]) => {
   const sample = rows[0] || {}
+
+  if ("source" in sample && "system_target" in sample && "field" in sample) {
+    return {
+      headers: ["SOURCE", "SYSTEM TARGET", "FIELD", "ERP FIELD", "NORMALIZATION LOGIC"],
+      getRow: (row: MappingRow) => [
+        row.source || row.source_system || "",
+        row.system_target || row.erp_system || row.system_field || "",
+        row.field || row.source_field || "",
+        row.erp_field || row.system_field || "",
+        row.normalization_logic || "",
+      ],
+    }
+  }
 
   if ("bol_field" in sample) {
     return {
@@ -106,6 +121,12 @@ const getTableConfig = (rows: MappingRow[]) => {
 }
 
 const stripMarkdown = (value: string) => value.replace(/(\*\*|__|\*|_)/g, "").trim()
+const stripHtml = (value: string) =>
+  value
+    .replace(/<[^>]*>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim()
 
 type BulletParseResult =
   | { type: "table"; rows: Array<{ left: string; right: string }> }
@@ -148,6 +169,31 @@ const parseBulletsToTable = (content: string): BulletParseResult => {
   return { type: "table", rows }
 }
 
+const parseIntegrationTable = (html?: string): MappingRow[] => {
+  if (!html) return []
+  const rowMatches = html.match(/<tr[\s\S]*?<\/tr>/gi) || []
+  const rows = rowMatches
+    .filter((row) => !/<th[\s\S]*?>/i.test(row))
+    .map((row) => {
+      const cellMatches = row.match(/<td[^>]*>[\s\S]*?<\/td>/gi) || []
+      return cellMatches.map((cell) => stripHtml(cell))
+    })
+    .filter((row) => row.length > 0)
+
+  return rows.map((row) => {
+    const padded = [...row]
+    while (padded.length < 5) padded.push("")
+    const [source, systemTarget, field, erpField, normalizationLogic] = padded
+    return {
+      source,
+      system_target: systemTarget,
+      field,
+      erp_field: erpField,
+      normalization_logic: normalizationLogic,
+    }
+  })
+}
+
 export function TechnicalGuide({
   guide,
   customsGuide,
@@ -160,9 +206,20 @@ export function TechnicalGuide({
   invoiceGuide,
   integrationGuide,
 }: TechnicalGuideProps) {
-  if (integrationGuide) return null
+  const integrationSections = integrationGuide
+    ? [
+        {
+          id: "integration_blueprint",
+          title: "The Master Mapping Blueprint",
+          content:
+            "To achieve high-integrity data bridging, DocStandard normalizes critical field pairs across major systems.",
+          mapping_data: parseIntegrationTable(integrationGuide.technicalData),
+        },
+      ]
+    : null
 
   const sections =
+    integrationSections ||
     guide?.expert_sections ||
     customsGuide?.expert_sections ||
     financeGuide?.expert_sections ||

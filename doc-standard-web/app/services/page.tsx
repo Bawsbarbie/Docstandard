@@ -4,6 +4,8 @@ import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
 import { loadIntents } from "@/lib/pseo/intents"
 import { ArrowRight, FileText, Globe, Layers, ShieldCheck } from "lucide-react"
+import { promises as fs } from "fs"
+import path from "path"
 
 export const metadata: Metadata = {
   title: "Logistics Document Services & Integrations | DocStandard",
@@ -25,8 +27,28 @@ const KIND_CONFIG: Record<string, { label: string; icon: any }> = {
   insurance: { label: "Insurance", icon: ShieldCheck },
 }
 
+interface IntegrationEntry {
+  slug: string
+  systemA: string
+  systemB: string
+  friction?: string
+  solution?: string
+}
+
+const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
+  const filePath = path.join(process.cwd(), "data", "content", "integration-details.json")
+  try {
+    const content = await fs.readFile(filePath, "utf-8")
+    const parsed = JSON.parse(content)
+    return Array.isArray(parsed) ? (parsed as IntegrationEntry[]) : []
+  } catch {
+    return []
+  }
+}
+
 export default async function ServicesPage() {
-  const intents = await loadIntents()
+  const intents = await loadIntents().catch(() => [])
+  const integrations = await loadIntegrationDetails().catch(() => [])
 
   // Group intents by kind
   const grouped = intents.reduce((acc, intent) => {
@@ -36,6 +58,9 @@ export default async function ServicesPage() {
     return acc
   }, {} as Record<string, typeof intents>)
 
+  const integrationIntents = grouped.integration || []
+  delete grouped.integration
+
   // Sort groups by config order
   const sortedKinds = Object.keys(grouped).sort((a, b) => {
     // Integration first
@@ -43,6 +68,51 @@ export default async function ServicesPage() {
     if (b === "integration") return 1
     return 0
   })
+
+  const normalizeKey = (value: string) =>
+    value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+
+  const mergedIntegrations = (() => {
+    const seen = new Set<string>()
+    const items: Array<{
+      key: string
+      title: string
+      description: string
+      href: string
+    }> = []
+
+    integrations.forEach((integration) => {
+      const title = `${integration.systemA} to ${integration.systemB}`
+      const key = integration.slug || normalizeKey(title)
+      if (seen.has(key)) return
+      seen.add(key)
+      items.push({
+        key,
+        title,
+        description:
+          integration.solution ||
+          integration.friction ||
+          `Streamlined ${integration.systemA} to ${integration.systemB} data flows.`,
+        href: `/integration/${integration.slug}`,
+      })
+    })
+
+    integrationIntents.forEach((intent) => {
+      const key = intent.slug || normalizeKey(intent.name)
+      if (seen.has(key)) return
+      seen.add(key)
+      items.push({
+        key,
+        title: intent.name,
+        description:
+          intent.description ||
+          `Professional ${intent.name} processing and standardization.`,
+        href: `/us/ny/new-york/${intent.slug}`,
+      })
+    })
+
+    return items
+  })()
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -59,6 +129,34 @@ export default async function ServicesPage() {
         </div>
 
         <div className="space-y-16">
+          <div id="enterprise-software-integrations" className="scroll-mt-28">
+            <div className="flex items-center space-x-3 mb-6 border-b border-gray-200 pb-4">
+              <div className="p-2 bg-brand-100 rounded-lg">
+                <Layers className="w-6 h-6 text-brand-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">Enterprise Software Integrations</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mergedIntegrations.map((integration) => (
+                <Link
+                  key={integration.key}
+                  href={integration.href}
+                  className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 border border-gray-100 hover:border-brand-200"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900 group-hover:text-brand-600">
+                      {integration.title}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-500 line-clamp-2">
+                    {integration.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {sortedKinds.map((kind) => {
             const config = KIND_CONFIG[kind] || { label: kind, icon: FileText }
             const Icon = config.icon

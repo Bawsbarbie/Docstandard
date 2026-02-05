@@ -24,7 +24,7 @@ function ContactForm() {
 
   // Pre-fill document type from URL query parameter
   useEffect(() => {
-    const service = searchParams.get("service")
+    const service = searchParams?.get("service")
     if (service) {
       setFormData((prev) => ({ ...prev, documentTypes: service }))
     }

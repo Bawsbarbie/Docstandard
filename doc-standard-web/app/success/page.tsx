@@ -9,7 +9,7 @@ function SuccessContent() {
   const router = useRouter()
   const [countdown, setCountdown] = useState(5)
 
-  const sessionId = searchParams.get("session_id")
+  const sessionId = searchParams?.get("session_id")
 
   useEffect(() => {
     // Countdown timer
