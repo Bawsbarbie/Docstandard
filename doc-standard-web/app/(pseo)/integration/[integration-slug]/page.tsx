@@ -247,8 +247,9 @@ export default async function IntegrationPage({ params }: PageProps) {
   }
 
   const normalizeTableRows = (html: string) =>
-    html.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, (_match, rowContent) => {
-      const cells = Array.from(rowContent.matchAll(/<td[^>]*>[\s\S]*?<\/td>/gi)).map((m) => m[0])
+    html.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, (_match, rowContent: string) => {
+      const matches = rowContent.match(/<td[^>]*>[\s\S]*?<\/td>/gi) || []
+      const cells = matches.map((cell) => cell)
       if (cells.length === 0) return _match
       const missing = Math.max(0, 5 - cells.length)
       const filler = Array.from({ length: missing }, () => "<td></td>").join("")
