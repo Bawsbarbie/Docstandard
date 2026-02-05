@@ -1,14 +1,15 @@
 import type { PageModel } from "@/lib/pseo/content-factory"
 import { getDynamicROI } from "@/lib/pseo/roi-helper"
 import { IntroBlock } from "./IntroBlock"
+import { RiskSection } from "./RiskSection"
 import { PainSection } from "./PainSection"
 import { TechnicalGuide } from "./TechnicalGuide"
 import { BenefitsGrid } from "./BenefitsGrid"
 import { TechnicalProcess } from "./TechnicalProcess"
 import { FAQSection } from "./FAQSection"
-import { TestimonialsSection } from "./TestimonialsSection"
-import { MiddleCTA } from "./MiddleCTA"
 import { ROISection } from "./ROISection"
+import { MiddleCTA } from "./MiddleCTA"
+import { TestimonialsSection } from "./TestimonialsSection"
 
 interface PseoPageTemplateProps {
   pageModel: PageModel
@@ -128,6 +129,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         operationalRequirements={serviceDetails?.operational_requirements}
       />
 
+      <RiskSection quote={content.pain?.text} painPoints={derivedPainPoints} />
+
       <PainSection
         content={content.pain}
         // Service-specific pain points (high-stakes problems)
@@ -150,8 +153,6 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         motiveGuide={motiveGuide}
         hsCodeGuide={hsCodeGuide}
         invoiceGuide={invoiceGuide}
-        systemA={integrationSystemA}
-        systemB={integrationSystemB}
       />
 
       <TechnicalProcess process={content.process} />
@@ -167,6 +168,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         errorReductionNote={roiData.errorReductionNote}
       />
 
+      <MiddleCTA />
+
       <BenefitsGrid
         benefits={content.benefits}
         // Integration-specific data flow
@@ -175,11 +178,8 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         isIntegration={isIntegration}
       />
 
-      <MiddleCTA />
-
       <FAQSection faqs={content.faq} />
 
-      {/* Pass intent kind to render domain-relevant testimonials */}
       <TestimonialsSection kind={intent.kind} testimonials={content.testimonials} />
     </main>
   )

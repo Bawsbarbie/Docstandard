@@ -18,7 +18,10 @@ export function TechnicalProcess({ process }: TechnicalProcessProps) {
          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
                <h2 className="text-3xl font-bold text-slate-900 mb-6">The DocStandard Approach</h2>
-               <p className="text-lg text-slate-600 mb-10">{process.title}</p>
+               <p className="text-lg text-slate-600 mb-10">
+                 DocStandard acts as the "Intelligent Filter" between operational chaos and your financial ledger. We
+                 prioritize normalization before ingestion.
+               </p>
                
                <div className="space-y-8">
                  {steps.map((step, idx) => (

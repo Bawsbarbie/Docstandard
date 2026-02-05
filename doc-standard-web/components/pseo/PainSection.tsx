@@ -63,25 +63,54 @@ export function PainSection({ content, painPoints, valueLogic, intentName, verti
     "Unit-of-measure desync causes invoice rejection.",
     "Rounding errors create reconciliation gaps.",
   ]
-  const points = (painPoints && painPoints.length > 0 ? painPoints : fallbackPoints)
-    .filter(Boolean)
-    .slice(0, 3)
+  const normalizePoints = (points: string[]) => {
+    const cleaned = points.filter(Boolean)
+    if (cleaned.length >= 3) return cleaned.slice(0, 3)
+    if (cleaned.length === 0) return fallbackPoints
+    const padded = [...cleaned]
+    while (padded.length < 3) {
+      padded.push(fallbackPoints[padded.length % fallbackPoints.length])
+    }
+    return padded.slice(0, 3)
+  }
+
+  const points = normalizePoints(painPoints && painPoints.length > 0 ? painPoints : fallbackPoints)
 
   const iconSet = [FileJson, RefreshCw, BarChart]
 
-  const splitPoint = (text: string) => {
+  const fallbackTitles = [
+    "Schema & Format Mismatch",
+    "Manual Keying Errors",
+    "Reconciliation Gaps",
+  ]
+
+  const splitPoint = (text: string, index: number) => {
     const divider = text.match(/[:—-]|\. /)
     if (!divider) {
-      return { title: text, description: "" }
+      return { title: fallbackTitles[index] || "Operational Risk", description: text }
     }
     const parts = text.split(/[:—-]|\.\s/).map((part) => part.trim()).filter(Boolean)
-    if (parts.length === 0) return { title: text, description: "" }
+    if (parts.length === 0) return { title: fallbackTitles[index] || "Operational Risk", description: text }
     const [title, ...rest] = parts
+    const wordCount = title.split(/\s+/).filter(Boolean).length
+    if (wordCount > 6 || wordCount < 3) {
+      return { title: fallbackTitles[index] || "Operational Risk", description: text }
+    }
     return { title, description: rest.join(". ") }
   }
 
+  const frictionText = content?.text || ""
+  const useStaticTitles = !painPoints || painPoints.length === 0
+
   const cards = points.map((point, index) => {
-    const { title, description } = splitPoint(point)
+    if (useStaticTitles) {
+      return {
+        title: fallbackTitles[index] || "Operational Risk",
+        description: frictionText || point,
+        Icon: iconSet[index % iconSet.length],
+      }
+    }
+    const { title, description } = splitPoint(point, index)
     return { title, description, Icon: iconSet[index % iconSet.length] }
   })
 

@@ -22,20 +22,25 @@ export function extractROIValue(
 
   switch (type) {
     case "manualEffort": {
-      // Match patterns like "13.3 hours/day", "42 hours/month", "8 minutes per invoice"
-      const hourMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\b/i)
-      if (hourMatch) return `${hourMatch[1]}h`
-
-      const minuteMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:minutes?|mins?|m)\b/i)
-      if (minuteMatch) return `${minuteMatch[1]}m`
-
-      // Fallback: look for any time pattern
-      const timeMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h|minutes?|mins?|m)/i)
+      // Match patterns like "13.3 hours/day", "42 hours/month", "8 minutes per invoice", "8m", "4h"
+      const timeMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:m|min|minute|hour|h|hr)s?/i)
       if (timeMatch) {
         const value = timeMatch[1]
-        const unit = timeMatch[0].toLowerCase().includes("hour") ||
-          timeMatch[0].toLowerCase().includes("hr") ||
-          timeMatch[0].toLowerCase().includes("h")
+        const unitText = timeMatch[0].toLowerCase()
+        const isHour =
+          unitText.includes("hour") ||
+          unitText.includes("hr") ||
+          /\bh\b/.test(unitText)
+        return `${value}${isHour ? "h" : "m"}`
+      }
+
+      // Fallback: look for any time pattern
+      const fallbackMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h|minutes?|mins?|m)/i)
+      if (fallbackMatch) {
+        const value = fallbackMatch[1]
+        const unit = fallbackMatch[0].toLowerCase().includes("hour") ||
+          fallbackMatch[0].toLowerCase().includes("hr") ||
+          fallbackMatch[0].toLowerCase().includes("h")
           ? "h"
           : "m"
         return `${value}${unit}`
@@ -65,7 +70,7 @@ export function extractROIValue(
       // Match patterns like "$120,000 annually", "$25,000+", "$120k", "$300k"
       const dollarMatch =
         text.match(/~\s*\$([\d,.]+)/i) ||
-        text.match(/\$([\d,.]+)\s*(?:k|thousand|annually|per year|yearly)?/i)
+        text.match(/[\$]\s?([\d,.]+)\s?(?:k|thousand|annually|year)?/i)
       if (dollarMatch) {
         let value = dollarMatch[1].replace(/,/g, "")
         const numValue = parseFloat(value)
@@ -84,7 +89,7 @@ export function extractROIValue(
 
     case "errorReduction": {
       // Match patterns like "100% reduction", "99.5%+", "2-4%"
-      const percentMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:reduction|accuracy|error|rate)?/i)
+      const percentMatch = text.match(/(\d+(?:\.\d+)?)\s*%\s*(?:reduction|accuracy|error|rate)?/i)
       if (percentMatch) {
         const value = parseFloat(percentMatch[1])
         if (value >= 90) return "100%"
@@ -92,7 +97,7 @@ export function extractROIValue(
       }
 
       // Match "99.5%+" pattern
-      const plusMatch = text.match(/(\d+(?:\.\d+)?)%\+/i)
+      const plusMatch = text.match(/(\d+(?:\.\d+)?)\s*%\s*\+/i)
       if (plusMatch) {
         const value = parseFloat(plusMatch[1])
         if (value >= 99) return "100%"
@@ -129,6 +134,8 @@ export function getDynamicROI(pageModel: PageModel): DynamicROI {
 
   // Extract ROI text from all possible sources
   const roiText =
+    technical?.integrationDetails?.solution ||
+    technical?.integrationDetails?.friction ||
     technical?.motiveGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||
     technical?.tmsErpGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||
     technical?.customsGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||
@@ -152,16 +159,38 @@ export function getDynamicROI(pageModel: PageModel): DynamicROI {
   console.log(`Extracted: ${extractedAnnualSavings}`)
 
   const extractedManualEffortNote = roiText ? extractManualEffortNote(roiText) : null
+  const isIntegration = technical?.isIntegration || pageModel.intent?.kind === "integration"
+  const isCustoms = pageModel.intent?.kind === "customs"
+  const manualEffortNoteFallback = isIntegration
+    ? "Per processing batch"
+    : isCustoms
+      ? "Per entry summary"
+      : "Calculated"
+  const annualSavingsNoteFallback = isIntegration
+    ? "Operational Value"
+    : isCustoms
+      ? "Compliance Value"
+      : "Calculated"
+  const withDocStandardNoteFallback = isIntegration
+    ? "Per processing batch"
+    : isCustoms
+      ? "Per entry summary"
+      : "Calculated"
+  const errorReductionNoteFallback = isIntegration
+    ? "Operational Value"
+    : isCustoms
+      ? "Compliance Value"
+      : "Calculated"
 
   // Use extracted values only (avoid mock defaults)
   return {
-    manualEffort: extractedManualEffort ?? "13.3h",
-    withDocStandard: extractedWithDocStandard ?? "5m",
-    annualSavings: extractedAnnualSavings ?? "$120k",
-    errorReduction: extractedErrorReduction ?? "100%",
-    manualEffortNote: extractedManualEffortNote ?? "8 mins per invoice",
-    withDocStandardNote: "30 secs per batch",
-    annualSavingsNote: "Reclaimed Capacity",
-    errorReductionNote: "Audit Value",
+    manualEffort: extractedManualEffort ?? "Calculated",
+    withDocStandard: extractedWithDocStandard ?? "Calculated",
+    annualSavings: extractedAnnualSavings ?? "Calculated",
+    errorReduction: extractedErrorReduction ?? "Calculated",
+    manualEffortNote: extractedManualEffortNote ?? manualEffortNoteFallback,
+    withDocStandardNote: withDocStandardNoteFallback,
+    annualSavingsNote: annualSavingsNoteFallback,
+    errorReductionNote: errorReductionNoteFallback,
   }
 }

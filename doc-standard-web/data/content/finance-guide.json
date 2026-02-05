@@ -57,8 +57,8 @@
       },
       {
         "id": "operational_roi",
-        "title": "ROI Analysis: Manual vs. Automated Processing",
-        "content": "For a finance team processing 500 vendor invoices per month:\n\n- **Manual Entry:** 5 minutes per invoice = 42 hours/month of data entry\n- **Error Rate:** 2-4% requiring correction = 10-20 invoices with downstream issues\n- **DocStandard Processing:** Batch upload + review = 2 hours/month\n- **Accuracy:** 99.5%+ with exception flagging\n\n**Annual Savings:**\n- Labor: $25,000+ in reclaimed AP staff time\n- Error Cost Avoidance: $15,000+ in late payment penalties and vendor disputes\n- Audit Prep: $10,000+ in reduced external audit fees"
+        "title": "ROI Analysis: AP Normalization Value",
+        "content": "Processing multi-currency vendor invoices takes 15 minutes per batch. DocStandard normalizes these in 30 seconds, resulting in ~$95,000 in annual savings and 100% audit accuracy."
       }
     ]
   }

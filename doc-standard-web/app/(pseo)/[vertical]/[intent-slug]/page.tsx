@@ -2,9 +2,13 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BenefitsGrid } from "@/components/pseo/BenefitsGrid"
 import { Hero } from "@/components/pseo/dynamic/hero"
+import { RiskSection } from "@/components/pseo/RiskSection"
+import { PainSection } from "@/components/pseo/PainSection"
+import { MiddleCTA } from "@/components/pseo/MiddleCTA"
 import { TechnicalGuideSection } from "@/components/pseo/dynamic/technical-guide"
 import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
 import { ConversionCta } from "@/components/pseo/dynamic/conversion-cta"
+import { TestimonialsSection } from "@/components/pseo/TestimonialsSection"
 import { getIntentBySlug } from "@/lib/pseo/intents"
 import type { BlockItem } from "@/lib/pseo/types"
 import {
@@ -135,10 +139,19 @@ export default async function VerticalIntentPage({ params }: PageProps) {
   return (
     <main className="min-h-screen">
       <Hero intro={processedIntro} pain={processedPain} intentName={intent.name} imageUrl={imageUrl} />
+      <RiskSection quote={processedPain.text} />
+      <PainSection
+        content={processedPain}
+        intentName={intent.name}
+        vertical={resolvedVertical}
+        kind={resolvedVertical}
+      />
       <TechnicalGuideSection vertical={resolvedVertical} />
+      <MiddleCTA />
       <BenefitsGrid benefits={processedBenefits} />
       <ProcessSteps process={processedProcess} />
       <ConversionCta cta={processedCta} />
+      <TestimonialsSection kind={resolvedVertical} />
     </main>
   )
 }

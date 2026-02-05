@@ -5,7 +5,7 @@
     "systemB": "NetSuite",
     "friction": "Operational exports in CargoWise (Universal XML/CSV) do not align with NetSuite's strict Journal Entry or Bill schemas.",
     "solution": "DocStandard normalizes CargoWise XML into NetSuite-aligned CSV/JSON files, mapping VAT, currency, and GL codes at the line level.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"CargoWise\" data-system-b=\"NetSuite\"><h3>Technical Field Mapping: CargoWise → NetSuite</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for CargoWise to NetSuite.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>UniversalShipment XML</td><td>UniversalShipment XML is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v4)</td></tr><tr><td>InterimReceipt</td><td>InterimReceipt is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v1)</td></tr><tr><td>VGM_Submission</td><td>VGM_Submission is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v2)</td></tr><tr><td>ARInvoice Mapping</td><td>ARInvoice Mapping is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v3)</td></tr><tr><td>SuiteTalk SOAP</td><td>SuiteTalk SOAP is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v4)</td></tr><tr><td>RESTlet JSON</td><td>RESTlet JSON is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v1)</td></tr><tr><td>InternalID Mapping</td><td>InternalID Mapping is persisted as Storage Field</td><td>Canonical record (CargoWise → NetSuite v2)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>CargoWise</td><td>NetSuite</td><td>UniversalShipment XML</td><td>Maps to Transaction.SalesOrder</td><td>Parses XML header for OrderDate and CustomerID; validates against NetSuite Entity list.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>InterimReceipt</td><td>Maps to ItemReceipt.LineItem</td><td>Extracts received quantities and matches against open PO lines; flags over-receipts.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>VGM_Submission</td><td>Maps to CustomRecord.VGM</td><td>Normalizes weight fields and verifies carrier reference IDs before posting.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>ARInvoice Mapping</td><td>Maps to Transaction.Invoice</td><td>Validates invoice totals and currency codes; enforces GL segment mapping.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>SuiteTalk SOAP</td><td>Maps to SOAP.RecordRef</td><td>Resolves internal IDs for Customer and Subsidiary; enforces role permissions.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>RESTlet JSON</td><td>Maps to RESTlet.Payload</td><td>Transforms JSON keys to NetSuite field IDs; validates required fields.</td></tr><tr><td>CargoWise</td><td>NetSuite</td><td>InternalID Mapping</td><td>Maps to InternalID</td><td>Crosswalks external reference IDs to NetSuite internal IDs; de-duplicates records.</td></tr></tbody></table>"
   },
   {
     "slug": "magaya-to-quickbooks-bridge",
@@ -13,7 +13,7 @@
     "systemB": "QuickBooks",
     "friction": "Magaya invoice exports often require manual re-keying to handle multi-currency accessorials in QuickBooks Online/Desktop.",
     "solution": "We transform raw Magaya data into QuickBooks-ready import templates, preserving all charge-level detail without manual entry.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"Magaya\" data-system-b=\"QuickBooks\"><h3>Technical Field Mapping: Magaya → QuickBooks</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for Magaya to QuickBooks.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>Magaya XML</td><td>Magaya XML maps to Canonical Field</td><td>Normalized value (Magaya → QuickBooks v4)</td></tr><tr><td>WarehouseReceipt</td><td>WarehouseReceipt maps to Canonical Field</td><td>Normalized value (Magaya → QuickBooks v1)</td></tr><tr><td>CargoRelease</td><td>CargoRelease maps to Canonical Field</td><td>Normalized value (Magaya → QuickBooks v2)</td></tr><tr><td>PackingList Mapping</td><td>PackingList Mapping maps to Canonical Field</td><td>Normalized value (Magaya → QuickBooks v3)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Magaya</td><td>QuickBooks</td><td>Magaya XML</td><td>Maps to Invoice.LineItem</td><td>Extracts charge codes and maps to QB Item Service list; splits tax lines automatically.</td></tr><tr><td>Magaya</td><td>QuickBooks</td><td>WarehouseReceipt</td><td>Maps to Bill.LineItem</td><td>Normalizes vendor IDs and receipt dates; validates SKU against QuickBooks items.</td></tr><tr><td>Magaya</td><td>QuickBooks</td><td>CargoRelease</td><td>Maps to SalesReceipt</td><td>Converts release charges into QB sales receipts; validates currency and customer.</td></tr><tr><td>Magaya</td><td>QuickBooks</td><td>PackingList Mapping</td><td>Maps to ItemReceipt</td><td>Aggregates quantities by SKU; enforces unit-of-measure consistency.</td></tr></tbody></table>"
   },
   {
     "slug": "motive-to-sap-ifta-normalization",
@@ -21,14 +21,15 @@
     "systemB": "SAP",
     "friction": "ELD logs and IFTA mileage data from Motive need to be reconciled against SAP financial periods for audit-proof fuel tax reporting.",
     "solution": "DocStandard structures Motive ELD exports into SAP-ready financial schemas, ensuring distance and fuel data are audit-ready.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"Motive (ELD)\" data-system-b=\"SAP\"><h3>Technical Field Mapping: Motive (ELD) → SAP</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for Motive (ELD) to SAP.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>IDoc ORDERS</td><td>IDoc ORDERS maps to Canonical Field</td><td>Normalized value (Motive (ELD) → SAP v1)</td></tr><tr><td>BAPI_ACC_DOCUMENT_POST</td><td>BAPI_ACC_DOCUMENT_POST maps to Canonical Field</td><td>Normalized value (Motive (ELD) → SAP v2)</td></tr><tr><td>RFC Destination</td><td>RFC Destination maps to Canonical Field</td><td>Normalized value (Motive (ELD) → SAP v3)</td></tr><tr><td>Partner Function WE</td><td>Partner Function WE maps to Canonical Field</td><td>Normalized value (Motive (ELD) → SAP v4)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Motive (ELD)</td><td>SAP</td><td>IDoc ORDERS</td><td>Maps to SAP Record</td><td>Normalizes IDoc ORDERS fields; validates required identifiers before import.</td></tr><tr><td>Motive (ELD)</td><td>SAP</td><td>BAPI_ACC_DOCUMENT_POST</td><td>Maps to SAP Record</td><td>Normalizes BAPI_ACC_DOCUMENT_POST fields; validates required identifiers before import.</td></tr><tr><td>Motive (ELD)</td><td>SAP</td><td>RFC Destination</td><td>Maps to SAP Record</td><td>Normalizes RFC Destination fields; validates required identifiers before import.</td></tr><tr><td>Motive (ELD)</td><td>SAP</td><td>Partner Function WE</td><td>Maps to SAP Record</td><td>Normalizes Partner Function WE fields; validates required identifiers before import.</td></tr></tbody></table>"
   },
   {
     "slug": "mercurygate-to-oracle-integration",
     "systemA": "MercuryGate",
     "systemB": "Oracle",
     "friction": "MercuryGate's complex freight audit data needs to be normalized for Oracle ERP ingestion to avoid AP reconciliation delays.",
-    "solution": "We normalize MercuryGate freight bills into Oracle-compatible schemas, separating fuel, base, and detention charges."
+    "solution": "We normalize MercuryGate freight bills into Oracle-compatible schemas, separating fuel, base, and detention charges.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>MercuryGate</td><td>Oracle</td><td>MercuryGate Export</td><td>Maps to Oracle Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "descartes-to-netsuite-customs-bridge",
@@ -36,7 +37,7 @@
     "systemB": "NetSuite",
     "friction": "Customs filing data and entry summaries in Descartes don't align with NetSuite's item receipt and land-cost allocation logic.",
     "solution": "DocStandard maps Descartes entry details directly to NetSuite landed cost categories for precise margin reporting.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"Descartes\" data-system-b=\"NetSuite\"><h3>Technical Field Mapping: Descartes → NetSuite</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for Descartes to NetSuite.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>SuiteTalk SOAP</td><td>SuiteTalk SOAP is persisted as Storage Field</td><td>Canonical record (Descartes → NetSuite v4)</td></tr><tr><td>RESTlet JSON</td><td>RESTlet JSON is persisted as Storage Field</td><td>Canonical record (Descartes → NetSuite v1)</td></tr><tr><td>InternalID Mapping</td><td>InternalID Mapping is persisted as Storage Field</td><td>Canonical record (Descartes → NetSuite v2)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Descartes</td><td>NetSuite</td><td>SuiteTalk SOAP</td><td>Maps to NetSuite Record</td><td>Normalizes SuiteTalk SOAP fields; validates required identifiers before import.</td></tr><tr><td>Descartes</td><td>NetSuite</td><td>RESTlet JSON</td><td>Maps to NetSuite Record</td><td>Normalizes RESTlet JSON fields; validates required identifiers before import.</td></tr><tr><td>Descartes</td><td>NetSuite</td><td>InternalID Mapping</td><td>Maps to NetSuite Record</td><td>Normalizes InternalID Mapping fields; validates required identifiers before import.</td></tr></tbody></table>"
   },
   {
     "slug": "flexport-to-netsuite-bridge",
@@ -44,14 +45,15 @@
     "systemB": "NetSuite",
     "friction": "Extracting line-item SKU details from Flexport commercial invoices for NetSuite inventory reconciliation is a manual, error-prone process.",
     "solution": "We transform Flexport digital exports into NetSuite-ready SKU-level receipts, automating the inventory matching workflow.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"Flexport\" data-system-b=\"NetSuite\"><h3>Technical Field Mapping: Flexport → NetSuite</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for Flexport to NetSuite.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>SuiteTalk SOAP</td><td>SuiteTalk SOAP is persisted as Storage Field</td><td>Canonical record (Flexport → NetSuite v2)</td></tr><tr><td>RESTlet JSON</td><td>RESTlet JSON is persisted as Storage Field</td><td>Canonical record (Flexport → NetSuite v3)</td></tr><tr><td>InternalID Mapping</td><td>InternalID Mapping is persisted as Storage Field</td><td>Canonical record (Flexport → NetSuite v4)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Flexport</td><td>NetSuite</td><td>SuiteTalk SOAP</td><td>Maps to NetSuite Record</td><td>Normalizes SuiteTalk SOAP fields; validates required identifiers before import.</td></tr><tr><td>Flexport</td><td>NetSuite</td><td>RESTlet JSON</td><td>Maps to NetSuite Record</td><td>Normalizes RESTlet JSON fields; validates required identifiers before import.</td></tr><tr><td>Flexport</td><td>NetSuite</td><td>InternalID Mapping</td><td>Maps to NetSuite Record</td><td>Normalizes InternalID Mapping fields; validates required identifiers before import.</td></tr></tbody></table>"
   },
   {
     "slug": "blueyonder-to-dynamics365-normalization",
     "systemA": "BlueYonder",
     "systemB": "Microsoft Dynamics 365",
     "friction": "BlueYonder TMS load data requires structural normalization before it can be posted as a freight bill in Dynamics 365 Finance.",
-    "solution": "Our engine maps BlueYonder load IDs and carrier charges to D365 vendor invoice schemas for automated AP posting."
+    "solution": "Our engine maps BlueYonder load IDs and carrier charges to D365 vendor invoice schemas for automated AP posting.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>BlueYonder</td><td>Microsoft Dynamics 365</td><td>BlueYonder Export</td><td>Maps to Microsoft Dynamics 365 Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "freightpop-to-netsuite-normalization",
@@ -59,21 +61,23 @@
     "systemB": "NetSuite",
     "friction": "Multi-carrier shipping data in FreightPOP needs to be consolidated and normalized to match NetSuite's fulfillment record requirements.",
     "solution": "DocStandard structures FreightPOP carrier data into NetSuite-aligned CSVs, ensuring tracking and cost data are 100% accurate.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"FreightPOP\" data-system-b=\"NetSuite\"><h3>Technical Field Mapping: FreightPOP → NetSuite</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for FreightPOP to NetSuite.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>SuiteTalk SOAP</td><td>SuiteTalk SOAP translates into Integration Field</td><td>Outbound payload (FreightPOP → NetSuite v2)</td></tr><tr><td>RESTlet JSON</td><td>RESTlet JSON translates into Integration Field</td><td>Outbound payload (FreightPOP → NetSuite v3)</td></tr><tr><td>InternalID Mapping</td><td>InternalID Mapping translates into Integration Field</td><td>Outbound payload (FreightPOP → NetSuite v4)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>FreightPOP</td><td>NetSuite</td><td>SuiteTalk SOAP</td><td>Maps to NetSuite Record</td><td>Normalizes SuiteTalk SOAP fields; validates required identifiers before import.</td></tr><tr><td>FreightPOP</td><td>NetSuite</td><td>RESTlet JSON</td><td>Maps to NetSuite Record</td><td>Normalizes RESTlet JSON fields; validates required identifiers before import.</td></tr><tr><td>FreightPOP</td><td>NetSuite</td><td>InternalID Mapping</td><td>Maps to NetSuite Record</td><td>Normalizes InternalID Mapping fields; validates required identifiers before import.</td></tr></tbody></table>"
   },
   {
     "slug": "roserocket-to-quickbooks-bridge",
     "systemA": "Rose Rocket",
     "systemB": "QuickBooks",
     "friction": "Trucking brokerage data in Rose Rocket requires manual GL mapping before it can be imported as bills or invoices into QuickBooks.",
-    "solution": "We automate the mapping of Rose Rocket accessorials and carrier payables into QuickBooks-ready journal entries."
+    "solution": "We automate the mapping of Rose Rocket accessorials and carrier payables into QuickBooks-ready journal entries.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Rose Rocket</td><td>QuickBooks</td><td>Rose Rocket Export</td><td>Maps to QuickBooks Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "shipstation-to-sage-normalization",
     "systemA": "ShipStation",
     "systemB": "Sage",
     "friction": "High-volume e-commerce fulfillment data from ShipStation doesn't match the batch import requirements of Sage 100/300 systems.",
-    "solution": "Our engine aggregates ShipStation daily batches into Sage-compatible import files, reducing manual data entry by 95%."
+    "solution": "Our engine aggregates ShipStation daily batches into Sage-compatible import files, reducing manual data entry by 95%.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>ShipStation</td><td>Sage</td><td>ShipStation Export</td><td>Maps to Sage Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "cargowise-to-dynamics-bc-bridge",
@@ -81,21 +85,23 @@
     "systemB": "Dynamics Business Central",
     "friction": "CargoWise Universal XML files are too complex for direct ingestion into Dynamics Business Central without significant manual cleanup.",
     "solution": "DocStandard simplifies and structures CargoWise XML data specifically for Business Central's Purchase Invoice and G/L schemas.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"CargoWise\" data-system-b=\"Dynamics Business Central\"><h3>Technical Field Mapping: CargoWise → Dynamics Business Central</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for CargoWise to Dynamics Business Central.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>UniversalShipment XML</td><td>UniversalShipment XML translates into Integration Field</td><td>Outbound payload (CargoWise → Dynamics Business Central v2)</td></tr><tr><td>InterimReceipt</td><td>InterimReceipt translates into Integration Field</td><td>Outbound payload (CargoWise → Dynamics Business Central v3)</td></tr><tr><td>VGM_Submission</td><td>VGM_Submission translates into Integration Field</td><td>Outbound payload (CargoWise → Dynamics Business Central v4)</td></tr><tr><td>ARInvoice Mapping</td><td>ARInvoice Mapping translates into Integration Field</td><td>Outbound payload (CargoWise → Dynamics Business Central v1)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>CargoWise</td><td>Dynamics Business Central</td><td>UniversalShipment XML</td><td>Maps to Dynamics Business Central Record</td><td>Normalizes UniversalShipment XML fields; validates required identifiers before import.</td></tr><tr><td>CargoWise</td><td>Dynamics Business Central</td><td>InterimReceipt</td><td>Maps to Dynamics Business Central Record</td><td>Normalizes InterimReceipt fields; validates required identifiers before import.</td></tr><tr><td>CargoWise</td><td>Dynamics Business Central</td><td>VGM_Submission</td><td>Maps to Dynamics Business Central Record</td><td>Normalizes VGM_Submission fields; validates required identifiers before import.</td></tr><tr><td>CargoWise</td><td>Dynamics Business Central</td><td>ARInvoice Mapping</td><td>Maps to Dynamics Business Central Record</td><td>Normalizes ARInvoice Mapping fields; validates required identifiers before import.</td></tr></tbody></table>"
   },
   {
     "slug": "3pl-central-to-dynamics365-bridge",
     "systemA": "3PL Central (Extensiv)",
     "systemB": "Microsoft Dynamics 365",
     "friction": "Warehouse receipts and billing data in 3PL Central require normalization to match Dynamics 365 SCM and Finance schemas.",
-    "solution": "We transform Extensiv warehouse exports into D365-ready inventory and billing files, ensuring 3PL costs are correctly allocated."
+    "solution": "We transform Extensiv warehouse exports into D365-ready inventory and billing files, ensuring 3PL costs are correctly allocated.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>3PL Central (Extensiv)</td><td>Microsoft Dynamics 365</td><td>3PL Central (Extensiv) Export</td><td>Maps to Microsoft Dynamics 365 Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "kuebix-to-quickbooks-bridge",
     "systemA": "Kuebix",
     "systemB": "QuickBooks",
     "friction": "Kuebix freight quotes and bills need to be reconciled and normalized for QuickBooks Online/Desktop AP workflows.",
-    "solution": "DocStandard bridges the gap by converting Kuebix exports into QuickBooks-ready bills, including all fuel and accessorial lines."
+    "solution": "DocStandard bridges the gap by converting Kuebix exports into QuickBooks-ready bills, including all fuel and accessorial lines.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Kuebix</td><td>QuickBooks</td><td>Kuebix Export</td><td>Maps to QuickBooks Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   },
   {
     "slug": "manhattan-to-sap-normalization",
@@ -103,6 +109,22 @@
     "systemB": "SAP",
     "friction": "Enterprise WMS data from Manhattan requires complex structural mapping before it can be ingested into SAP S/4HANA for financial close.",
     "solution": "Our engine normalizes Manhattan warehouse activity logs into SAP-ready financial postings for automated cost reconciliation.",
-    "technicalData": "<section class=\"technical-field-mapping\" data-system-a=\"Manhattan Associates\" data-system-b=\"SAP\"><h3>Technical Field Mapping: Manhattan Associates → SAP</h3><p>Veteran engineers know the fastest way to de-duplicate integration pages is to show the exact field-level wiring. Below is a technical field mapping snapshot for Manhattan Associates to SAP.</p><table><thead><tr><th>Anchor</th><th>Mapping</th><th>Example</th></tr></thead><tbody><tr><td>IDoc ORDERS</td><td>IDoc ORDERS maps to Canonical Field</td><td>Normalized value (Manhattan Associates → SAP v2)</td></tr><tr><td>BAPI_ACC_DOCUMENT_POST</td><td>BAPI_ACC_DOCUMENT_POST maps to Canonical Field</td><td>Normalized value (Manhattan Associates → SAP v3)</td></tr><tr><td>RFC Destination</td><td>RFC Destination maps to Canonical Field</td><td>Normalized value (Manhattan Associates → SAP v4)</td></tr><tr><td>Partner Function WE</td><td>Partner Function WE maps to Canonical Field</td><td>Normalized value (Manhattan Associates → SAP v1)</td></tr></tbody></table></section>"
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Manhattan Associates</td><td>SAP</td><td>IDoc ORDERS</td><td>Maps to SAP Record</td><td>Normalizes IDoc ORDERS fields; validates required identifiers before import.</td></tr><tr><td>Manhattan Associates</td><td>SAP</td><td>BAPI_ACC_DOCUMENT_POST</td><td>Maps to SAP Record</td><td>Normalizes BAPI_ACC_DOCUMENT_POST fields; validates required identifiers before import.</td></tr><tr><td>Manhattan Associates</td><td>SAP</td><td>RFC Destination</td><td>Maps to SAP Record</td><td>Normalizes RFC Destination fields; validates required identifiers before import.</td></tr><tr><td>Manhattan Associates</td><td>SAP</td><td>Partner Function WE</td><td>Maps to SAP Record</td><td>Normalizes Partner Function WE fields; validates required identifiers before import.</td></tr></tbody></table>"
+  },
+  {
+    "slug": "edi-document-normalization-services",
+    "systemA": "EDI 210/214",
+    "systemB": "ERP Systems",
+    "friction": "Manual EDI 210 (Invoices) and 214 (Status) corrections take 15 minutes per document and cause reconciliation delays.",
+    "solution": "DocStandard automates EDI normalization, reducing manual effort to under 30 seconds per batch and saving ~$85,000 annually.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>EDI 210/214</td><td>ERP Systems</td><td>EDI 210/214 Export</td><td>Maps to ERP Systems Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
+  },
+  {
+    "slug": "clean-logistics-data-for-sap-s4hana",
+    "systemA": "Logistics Data",
+    "systemB": "SAP S/4HANA",
+    "friction": "Unstructured logistics data takes 13.3 hours of manual effort daily to align with SAP S/4HANA's strict IDoc requirements.",
+    "solution": "We normalize field mappings for SAP ingestion, delivering 100% error reduction and ~$300k in annual savings.",
+    "technicalData": "<table><thead><tr><th>SOURCE</th><th>SYSTEM TARGET</th><th>FIELD</th><th>ERP FIELD</th><th>NORMALIZATION LOGIC</th></tr></thead><tbody><tr><td>Logistics Data</td><td>SAP S/4HANA</td><td>Logistics Data Export</td><td>Maps to SAP S/4HANA Record</td><td>Normalizes identifiers and validates required fields before ingestion.</td></tr></tbody></table>"
   }
 ]

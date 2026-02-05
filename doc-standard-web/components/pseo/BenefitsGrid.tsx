@@ -202,7 +202,7 @@ export function BenefitsGrid({ benefits, dataFlow, prerequisites, isIntegration 
                   <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center mb-6 group-hover:bg-brand-600 transition-colors">
                     <IconComponent className="w-6 h-6 text-brand-600 group-hover:text-white transition-colors" />
                   </div>
-                  <p className="text-xl font-semibold leading-snug text-gray-900 relative z-10">{benefit.text}</p>
+                  <p className="text-lg font-semibold leading-snug text-gray-900 relative z-10">{benefit.text}</p>
                 </motion.div>
               )
             })}

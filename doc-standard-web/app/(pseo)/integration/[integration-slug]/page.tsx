@@ -2,9 +2,13 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { BenefitsGrid } from "@/components/pseo/BenefitsGrid"
 import { Hero } from "@/components/pseo/dynamic/hero"
+import { RiskSection } from "@/components/pseo/RiskSection"
+import { PainSection } from "@/components/pseo/PainSection"
+import { MiddleCTA } from "@/components/pseo/MiddleCTA"
 import { TechnicalGuideSection } from "@/components/pseo/dynamic/technical-guide"
 import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
-import { ConversionCta } from "@/components/pseo/dynamic/conversion-cta"
+import { FAQSection } from "@/components/pseo/FAQSection"
+import { TestimonialsSection } from "@/components/pseo/TestimonialsSection"
 import { ROISection } from "@/components/pseo/ROISection"
 import type { BlockItem } from "@/lib/pseo/types"
 import {
@@ -105,6 +109,65 @@ const toBlocks = (text: string, prefix: string): BlockItem[] => {
     text: point,
   }))
 }
+
+const getStaticBenefits = (systemA: string, systemB: string): BlockItem[] => [
+  {
+    id: "integration-benefit-1",
+    text: `Field-level normalization between ${systemA} and ${systemB} to prevent schema mismatches.`,
+  },
+  {
+    id: "integration-benefit-2",
+    text: `System-ready exports that post cleanly into ${systemB} without manual rework.`,
+  },
+  {
+    id: "integration-benefit-3",
+    text: "Reduced reconciliation time with consistent mappings across every batch.",
+  },
+  {
+    id: "integration-benefit-4",
+    text: "Operational visibility with validated records and audit-ready output.",
+  },
+]
+
+const getDefaultFAQs = (systemA: string, systemB: string) => [
+  {
+    question: `Can you handle ${systemA} custom fields?`,
+    answer: `Yes. We map custom ${systemA} fields to ${systemB} targets and validate them against your business rules before delivery.`,
+  },
+  {
+    question: `How do you validate ${systemA} data before sending to ${systemB}?`,
+    answer: `We normalize field formats, verify identifiers against master records, and run consistency checks so only clean data reaches ${systemB}.`,
+  },
+  {
+    question: `What formats do you deliver to ${systemB}?`,
+    answer: `We deliver ${systemB}-ready CSV, JSON, or XML depending on your import method and schema requirements.`,
+  },
+  {
+    question: `How fast can you turn around a ${systemA} to ${systemB} batch?`,
+    answer: `Most batches are processed within 24–48 hours, with expedited options available for urgent runs.`,
+  },
+]
+
+const getDefaultTestimonials = (systemA: string, systemB: string) => [
+  {
+    quote: `Connecting ${systemA} to ${systemB} used to be a nightmare. Now it's automatic, and the data arrives clean every time.`,
+    author: "Jordan Miles",
+    role: "Operations Lead",
+    company: "North River Logistics",
+  },
+  {
+    quote: `We stopped re-keying ${systemA} exports and eliminated reconciliation gaps in ${systemB} within the first batch.`,
+    author: "Priya Shah",
+    role: "Controller",
+    company: "Summit Freight Group",
+  },
+  {
+    quote: `DocStandard normalized our ${systemA} data to match ${systemB} rules without extra back-and-forth. It just works.`,
+    author: "Carlos Vega",
+    role: "Systems Manager",
+    company: "Atlas 3PL",
+  },
+]
 
 const normalizeSystemName = (value: string) =>
   value
@@ -211,7 +274,9 @@ export default async function IntegrationPage({ params }: PageProps) {
   const processedCta = { ...ctaBlock, text: replaceVariables(ctaBlock.text, variables) }
 
   const painPoints = splitToPoints(friction, 4)
-  const benefits = toBlocks(solution, "integration-benefit")
+  const benefits = getStaticBenefits(systemA, systemB)
+  const defaultFaqs = getDefaultFAQs(systemA, systemB)
+  const defaultTestimonials = getDefaultTestimonials(systemA, systemB)
 
   const processBlock = selectProcessBlock("integration", blocks.process)
   const processedProcess = processBlock
@@ -310,11 +375,26 @@ export default async function IntegrationPage({ params }: PageProps) {
       <Hero
         intro={processedIntro}
         pain={processedPain}
-        intentName={serviceName}
-        imageUrl={INTEGRATION_IMAGE_URL}
+        intentName={`${systemA} to ${systemB} Integration`}
+        systemA={systemA}
+        systemB={systemB}
+        visual="data-card"
+        showVisual
         integrationPair={integrationPair}
         useCase={solution}
         painPoints={painPoints}
+      />
+
+      <RiskSection quote={processedPain.text} painPoints={painPoints} />
+
+      <PainSection
+        content={processedPain}
+        painPoints={painPoints}
+        intentName={serviceName}
+        vertical="integration"
+        kind="integration"
+        systemA={systemA}
+        systemB={systemB}
       />
 
       <TechnicalGuideSection
@@ -323,9 +403,9 @@ export default async function IntegrationPage({ params }: PageProps) {
       />
 
       {technicalData && technicalRows && (
-        <section className="py-24 bg-slate-50 border-y border-slate-200">
+        <section className="py-12 bg-slate-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-12">
+            <div className="mb-6">
               <h2 className="text-3xl font-bold text-slate-900 mb-4">The Master Mapping Blueprint</h2>
               <p className="text-slate-600 max-w-2xl">
                 To achieve high-integrity data bridging, DocStandard normalizes critical field pairs across major systems.
@@ -355,7 +435,9 @@ export default async function IntegrationPage({ params }: PageProps) {
         </section>
       )}
 
-      <BenefitsGrid benefits={benefits} />
+      <MiddleCTA />
+
+      <BenefitsGrid benefits={benefits} isIntegration />
 
       <ProcessSteps process={processedProcess} />
 
@@ -366,7 +448,9 @@ export default async function IntegrationPage({ params }: PageProps) {
         errorReduction={errorReduction}
       />
 
-      <ConversionCta cta={processedCta} />
+      <FAQSection faqs={defaultFaqs} />
+      <TestimonialsSection testimonials={defaultTestimonials} kind="general" />
+
     </main>
   )
 }

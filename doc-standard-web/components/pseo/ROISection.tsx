@@ -19,7 +19,6 @@ export function ROISection({
   errorReduction,
   errorReductionNote,
 }: ROISectionProps) {
-  // Use props with baselines to guarantee display
   const manualEffortValue = manualEffort ?? "13.3h"
   const withDocStandardValue = withDocStandard ?? "5m"
   const annualSavingsValue = annualSavings ?? "$120k"
@@ -31,7 +30,7 @@ export function ROISection({
   const errorReductionNoteValue = errorReductionNote ?? "Audit Value"
 
   return (
-    <section className="bg-blue-600 py-24 text-white relative overflow-hidden">
+    <section className="bg-blue-600 py-20 text-white relative overflow-hidden">
        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">

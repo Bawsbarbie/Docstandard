@@ -634,4 +634,44 @@ const Footer = () => {
     );
 };
 
-export default App;
+export default App;// ... existing components ...
+
+const BlueprintSection = ({ title, tableTitle, rows }) => {
+  return (
+    <section className="py-24 bg-slate-50 border-y border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-slate-900 mb-4">{title}</h2>
+          <p className="text-slate-600 max-w-2xl">To achieve high-integrity data bridging, DocStandard normalizes critical field pairs across major systems.</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-900 text-white">
+                  <th className="p-4 font-semibold text-sm">SOURCE</th>
+                  <th className="p-4 font-semibold text-sm">SYSTEM TARGET</th>
+                  <th className="p-4 font-semibold text-sm">FIELD</th>
+                  <th className="p-4 font-semibold text-sm">ERP FIELD</th>
+                  <th className="p-4 font-semibold text-sm">NORMALIZATION LOGIC</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-sm">
+                {rows.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
+                    <td className="p-4 font-medium text-slate-900">{row.source}</td>
+                    <td className="p-4 text-slate-600">{row.target}</td>
+                    <td className="p-4 font-mono text-blue-600 bg-slate-50 rounded">{row.field}</td>
+                    <td className="p-4 text-slate-600">{row.erpField}</td>
+                    <td className="p-4 text-slate-600">{row.logic}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

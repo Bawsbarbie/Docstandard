@@ -67,8 +67,8 @@
       },
       {
         "id": "operational_roi",
-        "title": "ROI Analysis: Manual vs. Automated BOL Processing",
-        "content": "For a logistics operation processing 1,000 BOLs per week:\n\n- **Manual Entry:** 3 minutes per BOL = 50 hours/week of data entry\n- **Error Rate:** 5-8% requiring correction = 50-80 BOLs with downstream issues (billing errors, tracking gaps)\n- **DocStandard Processing:** Batch upload + automated extraction = 2 hours/week\n- **Accuracy:** 99%+ with exception flagging for review\n\n**Annual Savings:**\n- Labor: $60,000+ in reclaimed operations staff time\n- Error Cost Avoidance: $25,000+ in billing corrections and customer disputes\n- Visibility: 100% shipment tracking coverage vs. 85% with manual entry"
+        "title": "ROI Analysis: Freight Documentation Value",
+        "content": "Standard BOL/AWB data prep takes 10 minutes per shipment. We reduce this to 15 seconds per document, delivering ~$110k in annual reclaimed capacity."
       }
     ]
   }
