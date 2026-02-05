@@ -82,7 +82,14 @@ export async function generateMetadataForVertical(vertical: string): Promise<Met
   }
 }
 
-const buildIntentItems = (intents: Intent[]) =>
+type HubItem = {
+  id: string
+  name: string
+  description?: string
+  slug?: string
+}
+
+const buildIntentItems = (intents: Intent[]): HubItem[] =>
   intents.map((intent) => ({
     id: intent.id,
     name: intent.name,
@@ -90,7 +97,7 @@ const buildIntentItems = (intents: Intent[]) =>
     slug: intent.slug,
   }))
 
-const buildFallbackItems = (vertical: string) =>
+const buildFallbackItems = (vertical: string): HubItem[] =>
   (fallbackServices[vertical] || []).map((name) => ({
     id: name.toLowerCase().replace(/\s+/g, "-"),
     name,
@@ -112,7 +119,7 @@ export async function VerticalHub({ vertical }: { vertical: string }) {
     intents = []
   }
 
-  const items = intents.length
+  const items: HubItem[] = intents.length
     ? buildIntentItems(intents.sort((a, b) => a.priority - b.priority))
     : buildFallbackItems(resolved)
 
