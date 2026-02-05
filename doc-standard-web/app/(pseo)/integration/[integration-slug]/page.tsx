@@ -14,6 +14,7 @@ import {
   replaceVariables,
   selectProcessBlock,
 } from "@/lib/pseo/dynamic-content"
+import { getIntentBySlug } from "@/lib/pseo/intents"
 import { promises as fs } from "fs"
 import path from "path"
 
@@ -57,7 +58,27 @@ const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
 
 const getIntegrationBySlug = async (slug: string): Promise<IntegrationEntry | null> => {
   const entries = await loadIntegrationDetails()
-  return entries.find((entry) => entry.slug === slug) || null
+  const match = entries.find((entry) => entry.slug === slug)
+  if (match) return match
+
+  const intent = await getIntentBySlug(slug)
+  if (!intent || intent.kind !== "integration") {
+    return null
+  }
+
+  const { systemA, systemB } = deriveSystemsFromIntentName(intent.name)
+  const solution =
+    intent.description ||
+    `Normalize ${systemA} and ${systemB} data into clean, system-ready exports.`
+  const friction = `Manual ${systemA} exports and ${systemB} imports create re-keying, delays, and audit risk.`
+
+  return {
+    slug: intent.slug,
+    systemA,
+    systemB,
+    friction,
+    solution,
+  }
 }
 
 const splitToPoints = (text: string, max = 4): string[] => {
@@ -82,6 +103,40 @@ const toBlocks = (text: string, prefix: string): BlockItem[] => {
     id: `${prefix}-${index + 1}`,
     text: point,
   }))
+}
+
+const normalizeSystemName = (value: string) =>
+  value
+    .replace(/\b(data|normalization|normalizing|processing|preparation|prep|digitization|extraction)\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim()
+
+const deriveSystemsFromIntentName = (name: string): { systemA: string; systemB: string } => {
+  const lower = name.toLowerCase()
+  const splitOn = (token: string) => {
+    const parts = name.split(new RegExp(`\\s${token}\\s`, "i")).map((part) => part.trim())
+    if (parts.length >= 2) {
+      return { systemA: parts[0], systemB: parts.slice(1).join(` ${token} `) }
+    }
+    return null
+  }
+
+  const tokens = ["to", "for", "into", "and", "&", "/"]
+  for (const token of tokens) {
+    if (token === "&" && !name.includes("&")) continue
+    if (token === "/" && !name.includes("/")) continue
+    if (token !== "&" && token !== "/" && !lower.includes(` ${token} `)) continue
+    const result = splitOn(token)
+    if (result) {
+      const systemA = normalizeSystemName(result.systemA) || result.systemA
+      const systemB = normalizeSystemName(result.systemB) || result.systemB
+      return { systemA, systemB }
+    }
+  }
+
+  const words = name.split(/\s+/).filter(Boolean)
+  const systemA = normalizeSystemName(words[0] || name) || name
+  return { systemA, systemB: "Core Systems" }
 }
 
 interface PageProps {
