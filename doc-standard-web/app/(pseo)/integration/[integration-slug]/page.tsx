@@ -118,6 +118,14 @@ export default async function IntegrationPage({ params }: PageProps) {
   const integrationPair = `${systemA} <-> ${systemB}`
   const serviceName = `${systemA} to ${systemB} Integration`
 
+  const cleanTechnicalData = (html: string) => {
+    // Extract content between <table...> and </table> (inclusive)
+    const match = html.match(/<table[\s\S]*?<\/table>/)
+    return match ? match[0] : html
+  }
+
+  const cleanedTechnicalData = technicalData ? cleanTechnicalData(technicalData) : null
+
   const [blocks, poolConfig] = await Promise.all([loadBlocks(), loadPools()])
   const pool = resolvePool(poolConfig.pools, { kind: "integration", intentSlug: params["integration-slug"] })
   const seed = `integration-${params["integration-slug"]}`
@@ -167,7 +175,7 @@ export default async function IntegrationPage({ params }: PageProps) {
         integrationGuide={{ systemA, systemB, friction, solution }}
       />
 
-      {technicalData && (
+      {cleanedTechnicalData && (
         <section className="mt-12 mb-20 px-4 md:px-0">
           <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
             <div className="bg-slate-50 border-b border-slate-200 p-6">
@@ -181,7 +189,7 @@ export default async function IntegrationPage({ params }: PageProps) {
             <div className="p-0 overflow-x-auto">
               <div
                 className="technical-table-container prose prose-slate max-w-none [&_table]:w-full [&_table]:mb-0 [&_thead]:bg-slate-50 [&_th]:p-4 [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_td]:p-4 [&_td]:text-sm [&_tr]:border-b [&_tr:last-child]:border-0"
-                dangerouslySetInnerHTML={{ __html: technicalData }}
+                dangerouslySetInnerHTML={{ __html: cleanedTechnicalData }}
               />
             </div>
           </div>
