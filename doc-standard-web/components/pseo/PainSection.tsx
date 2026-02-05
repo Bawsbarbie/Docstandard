@@ -1,99 +1,117 @@
 "use client"
 
 import type { BlockItem } from "@/lib/pseo/types"
-import { AlertTriangle, ShieldAlert, ArrowRight } from "lucide-react"
-import { motion } from "framer-motion"
-import Link from "next/link"
+import { FileJson, RefreshCw, BarChart } from "lucide-react"
 
 interface PainSectionProps {
   content: BlockItem
   // Technical pain points from Leah's research
   painPoints?: string[]
   valueLogic?: string
+  intentName?: string
+  vertical?: string
+  kind?: string
+  systemA?: string
+  systemB?: string
 }
 
-export function PainSection({ content, painPoints, valueLogic }: PainSectionProps) {
+export function PainSection({ content, painPoints, valueLogic, intentName, vertical, kind, systemA, systemB }: PainSectionProps) {
+  // Generate dynamic headline based on vertical/kind
+  const getHeadline = (): string => {
+    const normalizedKind = (kind || vertical || "").toLowerCase()
+    const serviceName = intentName || "Document Processing"
+    
+    // For integration pages with systemA and systemB, show system-specific headline
+    if ((normalizedKind === "integration" || normalizedKind === "tms") && systemA && systemB) {
+      return `Why ${systemA} to ${systemB} Syncs Fail`
+    }
+    
+    // For other integration-like pages (EDI, etc.), use intentName-based headline
+    if (normalizedKind === "integration" || normalizedKind === "tms") {
+      return intentName ? `Why Manual ${intentName} Processes Fail` : "The Cost of Manual Operational Friction"
+    }
+    
+    if (normalizedKind === "customs") {
+      return `Why Manual ${serviceName} Processes Fail`
+    }
+    
+    if (normalizedKind === "finance" || normalizedKind === "audit") {
+      return `The Operational Risk of Unstructured ${serviceName} Data`
+    }
+    
+    if (normalizedKind === "shipping" || normalizedKind === "logistics") {
+      return `Why ${serviceName} Data Inconsistencies Create Delays`
+    }
+    
+    if (normalizedKind === "invoice") {
+      return `The Hidden Cost of Manual ${serviceName} Processing`
+    }
+    
+    if (normalizedKind === "compliance") {
+      return `Why ${serviceName} Compliance Failures Risk Audits`
+    }
+    
+    if (normalizedKind === "inventory") {
+      return `Why Unstructured ${serviceName} Data Breaks Workflows`
+    }
+    
+    // Default fallback
+    return `Why Manual ${serviceName} Processes Create Risk`
+  }
   const fallbackPoints: string[] = [
-    "Inconsistent document formats force manual cleanup and slow processing.",
-    "Missing or mismatched reference fields create reconciliation delays.",
-    "Unvalidated data increases audit risk and downstream exceptions.",
+    "XML encoding mismatches trigger failed ERP ingestion.",
+    "Unit-of-measure desync causes invoice rejection.",
+    "Rounding errors create reconciliation gaps.",
   ]
-  const pointsToRender = painPoints && painPoints.length > 0 ? painPoints : fallbackPoints
+  const points = (painPoints && painPoints.length > 0 ? painPoints : fallbackPoints)
+    .filter(Boolean)
+    .slice(0, 3)
+
+  const iconSet = [FileJson, RefreshCw, BarChart]
+
+  const splitPoint = (text: string) => {
+    const divider = text.match(/[:—-]|\. /)
+    if (!divider) {
+      return { title: text, description: "" }
+    }
+    const parts = text.split(/[:—-]|\.\s/).map((part) => part.trim()).filter(Boolean)
+    if (parts.length === 0) return { title: text, description: "" }
+    const [title, ...rest] = parts
+    return { title, description: rest.join(". ") }
+  }
+
+  const cards = points.map((point, index) => {
+    const { title, description } = splitPoint(point)
+    return { title, description, Icon: iconSet[index % iconSet.length] }
+  })
 
   return (
-    <section className="bg-slate-900 text-white py-24 relative overflow-hidden">
-      {/* Background patterns */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:40px_40px]" />
-      </div>
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl font-bold text-slate-900 mb-4">
+            {getHeadline()}
+          </h2>
+          <p className="text-slate-600">
+            {content?.text || "Operational bottlenecks in logistics are often caused by unstructured data files. DocStandard cleans, validates, and re-structures these batches for immediate system ingestion."}
+          </p>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Left Content */}
-          <div>
-            <div className="inline-block px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-xs font-bold uppercase tracking-wide mb-6">
-              Industry Risk Report
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
-              The High-Stakes Reality of Processing Failures
-            </h2>
-            <p className="text-slate-400 text-lg mb-8 italic">
-              &ldquo;{content.text}&rdquo;
-            </p>
-            
-            <Link
-              href="/login"
-              className="text-white border-b border-red-500 pb-1 hover:text-red-400 transition-colors inline-flex items-center gap-2"
+        <div className="grid md:grid-cols-3 gap-8">
+          {cards.map(({ title, description, Icon }, idx) => (
+            <div
+              key={`${title}-${idx}`}
+              className="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
             >
-              Mitigate Risk Now <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* Right Pain Points Box */}
-          <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">
-             <div className="space-y-6">
-                <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-slate-700 rounded-lg flex-shrink-0 flex items-center justify-center">
-                        <span className="text-2xl font-bold">40%</span>
-                    </div>
-                    <div>
-                        <h4 className="font-semibold text-lg">Direct Sync Failure Rate</h4>
-                        <p className="text-sm text-slate-400">
-                          Processing errors often lead to &ldquo;Data Friction&rdquo;&mdash;unstructured,
-                          inconsistent, or invalid data that fails ERP ingestion.
-                        </p>
-                    </div>
-                </div>
-                <div className="h-px bg-slate-700 w-full"></div>
-                <div className="space-y-4">
-                   {pointsToRender.slice(0, 3).map((point, index) => (
-                      <div key={index} className="flex gap-3">
-                          <AlertTriangle className="text-yellow-500 w-5 h-5 flex-shrink-0 mt-0.5" />
-                          <p className="text-sm text-slate-300">{point}</p>
-                      </div>
-                   ))}
-                </div>
-             </div>
-          </div>
-          
-          {/* Value Logic - Optional */}
-          {valueLogic && (
-             <div className="md:col-span-2 mt-8 p-6 bg-blue-900/20 border border-blue-800 rounded-xl">
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <ShieldAlert className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">
-                      The DocStandard Advantage
-                    </h3>
-                    <p className="text-base text-slate-300">
-                      {valueLogic}
-                    </p>
-                  </div>
-                </div>
-             </div>
-          )}
+              <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <Icon className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{title}</h3>
+              {description && (
+                <p className="text-slate-600 leading-relaxed text-sm">{description}</p>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>

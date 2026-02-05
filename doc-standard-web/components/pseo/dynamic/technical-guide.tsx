@@ -28,51 +28,64 @@ export async function TechnicalGuideSection({
   vertical,
   integrationGuide,
 }: TechnicalGuideSectionProps) {
+  // If integration guide is provided, use it directly (common for integration pages)
   if (integrationGuide) {
     return <TechnicalGuide integrationGuide={integrationGuide} />
   }
 
   const normalized = vertical.toLowerCase()
 
+  // Load guide data based on vertical
+  let guideData = null
+  let guideType = ""
+
   if (normalized === "finance" || normalized === "audit") {
     const data = await loadJson("finance-guide.json", { finance_operations_guide: null })
-    return <TechnicalGuide financeGuide={data.finance_operations_guide || undefined} />
-  }
-
-  if (normalized === "invoice") {
+    guideData = data.finance_operations_guide
+    guideType = "finance"
+  } else if (normalized === "invoice") {
     const data = await loadJson("invoice-guide.json", { invoice_digitization_guide: null })
-    return <TechnicalGuide invoiceGuide={data.invoice_digitization_guide || undefined} />
-  }
-
-  if (normalized === "customs") {
+    guideData = data.invoice_digitization_guide
+    guideType = "invoice"
+  } else if (normalized === "customs") {
     const data = await loadJson("customs-guide.json", { customs_clearance_guide: null })
-    return <TechnicalGuide customsGuide={data.customs_clearance_guide || undefined} />
-  }
-
-  if (normalized === "compliance") {
+    guideData = data.customs_clearance_guide
+    guideType = "customs"
+  } else if (normalized === "compliance") {
     const data = await loadJson("compliance-guide.json", { compliance_extraction_guide: null })
-    return <TechnicalGuide complianceGuide={data.compliance_extraction_guide || undefined} />
-  }
-
-  if (normalized === "shipping" || normalized === "logistics") {
+    guideData = data.compliance_extraction_guide
+    guideType = "compliance"
+  } else if (normalized === "shipping" || normalized === "logistics") {
     const data = await loadJson("shipping-guide.json", { shipping_documentation_guide: null })
-    return <TechnicalGuide shippingGuide={data.shipping_documentation_guide || undefined} />
-  }
-
-  if (normalized === "tms" || normalized === "integration") {
+    guideData = data.shipping_documentation_guide
+    guideType = "shipping"
+  } else if (normalized === "tms" || normalized === "integration") {
     const data = await loadJson("tms-erp-guide.json", { tms_erp_bridging_guide: null })
-    return <TechnicalGuide guide={data.tms_erp_bridging_guide || undefined} />
-  }
-
-  if (normalized === "inventory") {
+    guideData = data.tms_erp_bridging_guide
+    guideType = "tms"
+  } else if (normalized === "inventory") {
     const data = await loadJson("inventory-guide.json", { inventory_management_guide: null })
-    return <TechnicalGuide inventoryGuide={data.inventory_management_guide || undefined} />
-  }
-
-  if (normalized === "hs-code" || normalized === "classification") {
+    guideData = data.inventory_management_guide
+    guideType = "inventory"
+  } else if (normalized === "hs-code" || normalized === "classification") {
     const data = await loadJson("hscode-guide.json", { hscode_extraction_guide: null })
-    return <TechnicalGuide hsCodeGuide={data.hscode_extraction_guide || undefined} />
+    guideData = data.hscode_extraction_guide
+    guideType = "hscode"
   }
 
-  return null
+  // Pass the loaded guide data to the TechnicalGuide component
+  // We use specific props for type safety, but the component handles the unified layout
+  if (!guideData) return null
+
+  switch (guideType) {
+    case "finance": return <TechnicalGuide financeGuide={guideData as any} />
+    case "invoice": return <TechnicalGuide invoiceGuide={guideData as any} />
+    case "customs": return <TechnicalGuide customsGuide={guideData as any} />
+    case "compliance": return <TechnicalGuide complianceGuide={guideData as any} />
+    case "shipping": return <TechnicalGuide shippingGuide={guideData as any} />
+    case "tms": return <TechnicalGuide guide={guideData as any} />
+    case "inventory": return <TechnicalGuide inventoryGuide={guideData as any} />
+    case "hscode": return <TechnicalGuide hsCodeGuide={guideData as any} />
+    default: return null
+  }
 }

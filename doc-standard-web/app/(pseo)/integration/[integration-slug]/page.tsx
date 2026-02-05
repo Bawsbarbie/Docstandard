@@ -5,6 +5,7 @@ import { Hero } from "@/components/pseo/dynamic/hero"
 import { TechnicalGuideSection } from "@/components/pseo/dynamic/technical-guide"
 import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
 import { ConversionCta } from "@/components/pseo/dynamic/conversion-cta"
+import { ROISection } from "@/components/pseo/ROISection"
 import type { BlockItem } from "@/lib/pseo/types"
 import {
   loadBlocks,
@@ -173,13 +174,25 @@ export default async function IntegrationPage({ params }: PageProps) {
   const integrationPair = `${systemA} <-> ${systemB}`
   const serviceName = `${systemA} to ${systemB} Integration`
 
-  const cleanTechnicalData = (html: string) => {
-    // Extract content between <table...> and </table> (inclusive)
-    const match = html.match(/<table[\s\S]*?<\/table>/)
-    return match ? match[0] : html
+  const extractTableRows = (html: string) => {
+    if (!html) return ""
+    const tbodyMatch = html.match(/<tbody[^>]*>([\s\S]*?)<\/tbody>/i)
+    if (tbodyMatch && tbodyMatch[1]) return tbodyMatch[1].trim()
+    const rowMatches = html.match(/<tr[\s\S]*?<\/tr>/gi)
+    if (rowMatches && rowMatches.length > 0) return rowMatches.join("")
+    return ""
   }
 
-  const cleanedTechnicalData = technicalData ? cleanTechnicalData(technicalData) : null
+  const normalizeTableRows = (html: string) =>
+    html.replace(/<tr[^>]*>([\s\S]*?)<\/tr>/gi, (_match, rowContent) => {
+      const cells = Array.from(rowContent.matchAll(/<td[^>]*>[\s\S]*?<\/td>/gi)).map((m) => m[0])
+      if (cells.length === 0) return _match
+      const missing = Math.max(0, 5 - cells.length)
+      const filler = Array.from({ length: missing }, () => "<td></td>").join("")
+      return `<tr>${cells.join("")}${filler}</tr>`
+    })
+
+  const technicalRows = technicalData ? normalizeTableRows(extractTableRows(technicalData)) : ""
 
   const [blocks, poolConfig] = await Promise.all([loadBlocks(), loadPools()])
   const pool = resolvePool(poolConfig.pools, { kind: "integration", intentSlug: params["integration-slug"] })
@@ -213,6 +226,85 @@ export default async function IntegrationPage({ params }: PageProps) {
       }
     : undefined
 
+  // Helper function to extract ROI values from text (same as PseoPageTemplate)
+  const extractROIValue = (text: string, type: 'manualEffort' | 'withDocStandard' | 'annualSavings' | 'errorReduction'): string | null => {
+    if (!text) return null
+    
+    switch (type) {
+      case 'manualEffort': {
+        const hourMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\b/i)
+        if (hourMatch) return `${hourMatch[1]}h`
+        const minuteMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:minutes?|mins?|m)\b/i)
+        if (minuteMatch) return `${minuteMatch[1]}m`
+        const timeMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h|minutes?|mins?|m)/i)
+        if (timeMatch) {
+          const value = timeMatch[1]
+          const unit = timeMatch[0].toLowerCase().includes('hour') || timeMatch[0].toLowerCase().includes('hr') || timeMatch[0].toLowerCase().includes('h') ? 'h' : 'm'
+          return `${value}${unit}`
+        }
+        return null
+      }
+      case 'withDocStandard': {
+        const minuteMatch = text.match(/(?:<|less than|under)?\s*(\d+(?:\.\d+)?)\s*(?:minutes?|mins?|m)\s*(?:\/|per|for)/i)
+        if (minuteMatch) return `${minuteMatch[1]}m`
+        const secondMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:seconds?|secs?|s)\s*(?:per|for)/i)
+        if (secondMatch) {
+          const seconds = parseFloat(secondMatch[1])
+          if (seconds < 60) return `${seconds}s`
+          const minutes = Math.round(seconds / 60)
+          return `${minutes}m`
+        }
+        const hourMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:hours?|hrs?|h)\s*(?:\/|per|for)/i)
+        if (hourMatch) return `${hourMatch[1]}h`
+        return null
+      }
+      case 'annualSavings': {
+        const dollarMatch = text.match(/~?\s*\$([\d,.]+)\s*(?:k|thousand|annually|per year|yearly)?/i)
+        if (dollarMatch) {
+          let value = dollarMatch[1].replace(/,/g, '')
+          const numValue = parseFloat(value)
+          if (numValue >= 1000) {
+            const kValue = Math.round(numValue / 1000)
+            return `$${kValue}k`
+          }
+          return `$${value}`
+        }
+        const kMatch = text.match(/\$(\d+)k/i)
+        if (kMatch) return `$${kMatch[1]}k`
+        return null
+      }
+      case 'errorReduction': {
+        const percentMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:reduction|accuracy|error|rate)?/i)
+        if (percentMatch) {
+          const value = parseFloat(percentMatch[1])
+          if (value >= 90) return "100%"
+          return `${Math.round(value)}%`
+        }
+        const plusMatch = text.match(/(\d+(?:\.\d+)?)%\+/i)
+        if (plusMatch) {
+          const value = parseFloat(plusMatch[1])
+          if (value >= 99) return "100%"
+          return `${Math.round(value)}%`
+        }
+        return null
+      }
+      default:
+        return null
+    }
+  }
+
+  // Try to extract ROI from solution or friction text
+  const roiSourceText = solution || friction || ""
+  const extractedManualEffort = extractROIValue(roiSourceText, 'manualEffort')
+  const extractedWithDocStandard = extractROIValue(roiSourceText, 'withDocStandard')
+  const extractedAnnualSavings = extractROIValue(roiSourceText, 'annualSavings')
+  const extractedErrorReduction = extractROIValue(roiSourceText, 'errorReduction')
+
+  const manualEffort = extractedManualEffort ?? undefined
+  const withDocStandard = extractedWithDocStandard ?? undefined
+  const annualSavings = extractedAnnualSavings ?? undefined
+  const errorReduction = extractedErrorReduction ?? undefined
+
   return (
     <main className="min-h-screen">
       <Hero
@@ -230,22 +322,34 @@ export default async function IntegrationPage({ params }: PageProps) {
         integrationGuide={{ systemA, systemB, friction, solution }}
       />
 
-      {cleanedTechnicalData && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-20">
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div className="bg-slate-50 border-b border-slate-200 p-6">
-              <h3 className="text-xl font-bold text-slate-900">
-                Technical Field Mapping Architecture
-              </h3>
-              <p className="text-sm text-slate-500 mt-1">
-                Direct system-to-system field normalization protocols.
+      {technicalData && technicalRows && (
+        <section className="py-24 bg-slate-50 border-y border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">The Master Mapping Blueprint</h2>
+              <p className="text-slate-600 max-w-2xl">
+                To achieve high-integrity data bridging, DocStandard normalizes critical field pairs across major systems.
               </p>
             </div>
-            <div className="p-0 overflow-x-auto">
-              <div
-                className="technical-table-container prose prose-slate max-w-none [&_table]:w-full [&_table]:mb-0 [&_thead]:bg-slate-50 [&_th]:p-4 [&_th]:text-sm [&_th]:font-bold [&_th]:uppercase [&_th]:tracking-wider [&_td]:p-4 [&_td]:text-sm [&_tr]:border-b [&_tr:last-child]:border-0"
-                dangerouslySetInnerHTML={{ __html: cleanedTechnicalData }}
-              />
+
+            <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-900 text-white">
+                      <th className="p-4 font-semibold text-sm">SOURCE</th>
+                      <th className="p-4 font-semibold text-sm">SYSTEM TARGET</th>
+                      <th className="p-4 font-semibold text-sm">FIELD</th>
+                      <th className="p-4 font-semibold text-sm">ERP FIELD</th>
+                      <th className="p-4 font-semibold text-sm">NORMALIZATION LOGIC</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    className="divide-y divide-slate-100 text-sm [&_tr]:hover:bg-blue-50/50 [&_tr]:transition-colors [&_td]:p-4 [&_td]:text-slate-600"
+                    dangerouslySetInnerHTML={{ __html: technicalRows }}
+                  />
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -254,6 +358,13 @@ export default async function IntegrationPage({ params }: PageProps) {
       <BenefitsGrid benefits={benefits} />
 
       <ProcessSteps process={processedProcess} />
+
+      <ROISection
+        manualEffort={manualEffort}
+        withDocStandard={withDocStandard}
+        annualSavings={annualSavings}
+        errorReduction={errorReduction}
+      />
 
       <ConversionCta cta={processedCta} />
     </main>
