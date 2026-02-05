@@ -63,18 +63,22 @@ const getIntegrationBySlug = async (slug: string): Promise<IntegrationEntry | nu
 const splitToPoints = (text: string, max = 4): string[] => {
   if (!text) return []
   return text
-    .split(/(?:\.\s+|;\s+|\n+)/)
+    .split(/(?:\.\s+|;\s+|,\s+|\n+)/)
     .map((part) => part.trim())
     .filter(Boolean)
     .slice(0, max)
 }
 
 const toBlocks = (text: string, prefix: string): BlockItem[] => {
-  const points = splitToPoints(text, 3)
+  const points = splitToPoints(text, 6)
   if (points.length === 0) {
     return [{ id: `${prefix}-1`, text }]
   }
-  return points.map((point, index) => ({
+
+  const uniquePoints = Array.from(new Set(points))
+  const ensuredPoints = uniquePoints.length >= 3 ? uniquePoints : uniquePoints.concat(uniquePoints).slice(0, 3)
+
+  return ensuredPoints.map((point, index) => ({
     id: `${prefix}-${index + 1}`,
     text: point,
   }))
@@ -164,10 +168,24 @@ export default async function IntegrationPage({ params }: PageProps) {
       />
 
       {technicalData && (
-        <div
-          className="prose prose-slate max-w-none mt-8 border-t border-slate-200 pt-8"
-          dangerouslySetInnerHTML={{ __html: technicalData }}
-        />
+        <section className="mt-12 mb-20 px-4 md:px-0">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-slate-50 border-b border-slate-200 p-6">
+              <h3 className="text-xl font-bold text-slate-900">
+                Technical Field Mapping Architecture
+              </h3>
+              <p className="text-sm text-slate-500 mt-1">
+                Direct system-to-system field normalization protocols.
+              </p>
+            </div>
+            <div className="p-0 overflow-x-auto">
+              <div
+                className="technical-table-container prose prose-slate max-w-none [&_table]:w-full [&_table]:mb-0 [&_thead]:bg-slate-50 [&_th]:p-4 [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_td]:p-4 [&_td]:text-sm [&_tr]:border-b [&_tr:last-child]:border-0"
+                dangerouslySetInnerHTML={{ __html: technicalData }}
+              />
+            </div>
+          </div>
+        </section>
       )}
 
       <BenefitsGrid benefits={benefits} />
