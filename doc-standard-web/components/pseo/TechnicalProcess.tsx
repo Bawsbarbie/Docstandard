@@ -19,7 +19,7 @@ export function TechnicalProcess({ process }: TechnicalProcessProps) {
             <div>
                <h2 className="text-3xl font-bold text-slate-900 mb-6">The DocStandard Approach</h2>
                <p className="text-lg text-slate-600 mb-10">
-                 DocStandard acts as the "Intelligent Filter" between operational chaos and your financial ledger. We
+                 DocStandard acts as the &ldquo;Intelligent Filter&rdquo; between operational chaos and your financial ledger. We
                  prioritize normalization before ingestion.
                </p>
                
@@ -64,8 +64,8 @@ export function TechnicalProcess({ process }: TechnicalProcessProps) {
                          <div className="text-green-400 text-sm font-bold mb-2">OUTPUT: Structure</div>
                          <div className="bg-white text-slate-900 rounded-lg p-3 font-mono text-xs text-left shadow-lg">
                             <span className="text-blue-600">{"{"}</span><br/>
-                            &nbsp;&nbsp;"status": <span className="text-green-600">"validated"</span>,<br/>
-                            &nbsp;&nbsp;"erp_ready": <span className="text-blue-600">true</span><br/>
+                            &nbsp;&nbsp;{"\"status\""}: <span className="text-green-600">{"\"validated\""}</span>,<br/>
+                            &nbsp;&nbsp;{"\"erp_ready\""}: <span className="text-blue-600">true</span><br/>
                             <span className="text-blue-600">{"}"}</span>
                          </div>
                     </div>
