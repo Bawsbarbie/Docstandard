@@ -133,9 +133,10 @@ export function getDynamicROI(pageModel: PageModel): DynamicROI {
   const { technical } = pageModel
 
   // Extract ROI text from all possible sources
+  const integrationText = technical?.integrationDetails as { solution?: string; friction?: string } | undefined
   const roiText =
-    technical?.integrationDetails?.solution ||
-    technical?.integrationDetails?.friction ||
+    integrationText?.solution ||
+    integrationText?.friction ||
     technical?.motiveGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||
     technical?.tmsErpGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||
     technical?.customsGuide?.expert_sections?.find((section) => section.id === "operational_roi")?.content ||

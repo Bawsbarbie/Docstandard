@@ -184,7 +184,9 @@ export function TechnicalGuide({
         const mappingData = section.mapping_data || []
         const tableConfig = mappingData.length > 0 ? getTableConfig(mappingData as MappingRow[]) : null
         const tableRows = tableConfig ? mappingData.map((row) => tableConfig.getRow(row as MappingRow)) : []
-        const parsedBullets = tableConfig ? { type: "none" } : parseBulletsToTable(section.content)
+        const parsedBullets: BulletParseResult = tableConfig
+          ? { type: "none" }
+          : parseBulletsToTable(section.content)
         const bulletRows =
           parsedBullets.type === "table" ? parsedBullets.rows.map((item) => [item.left, item.right]) : []
         const headers = tableConfig

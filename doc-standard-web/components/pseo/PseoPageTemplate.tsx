@@ -107,9 +107,9 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
 
   const { systemA: integrationSystemA, systemB: integrationSystemB } = parseIntegrationPair(integrationDetails?.pair)
   
-  // Extract systemA and systemB from integration details if available
-  const systemA = integrationSystemA || integrationDetails?.systemA
-  const systemB = integrationSystemB || integrationDetails?.systemB
+  // Extract systemA and systemB from integration pair when available
+  const systemA = integrationSystemA
+  const systemB = integrationSystemB
 
   // Get dynamic ROI data from technical guides
   const roiData = getDynamicROI(pageModel)
