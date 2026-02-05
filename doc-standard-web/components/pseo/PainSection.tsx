@@ -38,7 +38,7 @@ export function PainSection({ content, painPoints, valueLogic }: PainSectionProp
               The High-Stakes Reality of Processing Failures
             </h2>
             <p className="text-slate-400 text-lg mb-8 italic">
-              "{content.text}"
+              &ldquo;{content.text}&rdquo;
             </p>
             
             <Link
@@ -58,7 +58,10 @@ export function PainSection({ content, painPoints, valueLogic }: PainSectionProp
                     </div>
                     <div>
                         <h4 className="font-semibold text-lg">Direct Sync Failure Rate</h4>
-                        <p className="text-sm text-slate-400">Processing errors often lead to "Data Friction"—unstructured, inconsistent, or invalid data that fails ERP ingestion.</p>
+                        <p className="text-sm text-slate-400">
+                          Processing errors often lead to &ldquo;Data Friction&rdquo;&mdash;unstructured,
+                          inconsistent, or invalid data that fails ERP ingestion.
+                        </p>
                     </div>
                 </div>
                 <div className="h-px bg-slate-700 w-full"></div>
