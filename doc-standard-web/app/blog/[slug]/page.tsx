@@ -41,12 +41,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     notFound()
   }
   const clusterId = post.clusterId || inferClusterId(post.slug)
+  const canonicalUrl = `https://docstandard.co/blog/${post.slug}`
 
+  // Sanitize strings to prevent JSON breaking
+  const sanitize = (str: string) => str.replace(/[\x00-\x1F\x7F]/g, "")
+  
   const schema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: post.title,
-    description: post.description,
+    headline: sanitize(post.title),
+    description: sanitize(post.description),
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
     author: {
@@ -56,18 +60,27 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     publisher: {
       "@type": "Organization",
       name: "DocStandard",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://docstandard.co/logo.png",
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `/blog/${post.slug}`,
+      "@id": canonicalUrl,
     },
+    url: canonicalUrl,
   }
+
+  const jsonLdString = JSON.stringify(schema)
 
   return (
     <main className="bg-white">
-      <script type="application/ld+json" suppressHydrationWarning>
-        {JSON.stringify(schema)}
-      </script>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: jsonLdString }}
+      />
 
       <section className="px-4 pt-12 pb-10">
         <div className="max-w-4xl mx-auto space-y-6">
