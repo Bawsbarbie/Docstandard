@@ -5,6 +5,39 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 const crypto = require("crypto");
+const BATCHES = ["batch2", "batch3", "batch4", "batch5"];
+
+function listGeneratedSlugs(root) {
+  const slugs = [];
+  for (const batch of BATCHES) {
+    const dir = path.join(root, "generated", batch);
+    if (!fs.existsSync(dir)) continue;
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isFile()) continue;
+      if (!/\.tsx?$/.test(entry.name)) continue;
+      const slug = entry.name.replace(/\.(t|j)sx?$/, "");
+      if (slug) slugs.push({ slug, batch });
+    }
+  }
+  return slugs;
+}
+
+function buildPageMap(root) {
+  const slugs = listGeneratedSlugs(root).sort((a, b) => a.slug.localeCompare(b.slug));
+  const lines = [];
+  lines.push("export const generatedPageImports = {");
+  for (const { slug, batch } of slugs) {
+    lines.push(`  "${slug}": () => import("./${batch}/${slug}"),`);
+  }
+  lines.push("} as const;");
+  lines.push("");
+  lines.push("export const generatedSlugs = Object.keys(generatedPageImports);");
+  lines.push("");
+  const outPath = path.join(root, "generated", "page-map.ts");
+  fs.writeFileSync(outPath, lines.join("\n"), "utf8");
+  console.log(`Wrote ${slugs.length} entries to ${outPath}`);
+}
 
 const COMPONENT_MARKERS = [
   "Hero",
@@ -334,8 +367,7 @@ function main() {
 
   // Refresh generated page map for routing
   try {
-    const mapScript = path.join(root, "scripts", "build-generated-page-map.js");
-    execSync(`node ${mapScript}`, { stdio: "inherit" });
+    buildPageMap(root);
   } catch (error) {
     console.warn("Warning: failed to update generated page map:", error?.message || error);
   }
