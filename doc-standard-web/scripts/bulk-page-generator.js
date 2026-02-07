@@ -25,9 +25,15 @@ function listGeneratedSlugs(root) {
 
 function buildPageMap(root) {
   const slugs = listGeneratedSlugs(root).sort((a, b) => a.slug.localeCompare(b.slug));
+  const unique = new Map();
+  for (const { slug, batch } of slugs) {
+    if (!unique.has(slug)) {
+      unique.set(slug, batch);
+    }
+  }
   const lines = [];
   lines.push("export const generatedPageImports = {");
-  for (const { slug, batch } of slugs) {
+  for (const [slug, batch] of unique.entries()) {
     lines.push(`  "${slug}": () => import("./${batch}/${slug}"),`);
   }
   lines.push("} as const;");
@@ -36,7 +42,7 @@ function buildPageMap(root) {
   lines.push("");
   const outPath = path.join(root, "generated", "page-map.ts");
   fs.writeFileSync(outPath, lines.join("\n"), "utf8");
-  console.log(`Wrote ${slugs.length} entries to ${outPath}`);
+  console.log(`Wrote ${unique.size} entries to ${outPath}`);
 }
 
 const COMPONENT_MARKERS = [
