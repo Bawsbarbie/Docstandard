@@ -57,7 +57,7 @@ export default function PrivacyPolicyPage() {
                   Deliver document cleaning, structuring, and standardization
                   services
                 </li>
-                <li>Communicate with you about your request or order</li>
+                <li>Communicate with you about your request or batch</li>
                 <li>Improve our website and service quality</li>
                 <li>
                   Meet legal or compliance requirements if necessary

@@ -28,7 +28,7 @@ export default function SecurityPage() {
               </h2>
               <p className="text-gray-600">
                 Files are processed in private environments with least privilege
-                access. Data is scoped to your order and never mixed across
+                access. Data is scoped to your batch and never mixed across
                 clients.
               </p>
             </section>
@@ -49,7 +49,7 @@ export default function SecurityPage() {
               </h2>
               <p className="text-gray-600">
                 We retain files only for the period required to complete your
-                order and deliver outputs. Extended retention is available on
+                batch and deliver outputs. Extended retention is available on
                 request.
               </p>
             </section>

@@ -54,7 +54,7 @@ function SuccessContent() {
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-4">Payment Successful!</h1>
             <p className="text-xl text-muted-foreground mb-2">
-              Your order has been confirmed and payment processed
+              Your batch has been confirmed and payment processed
             </p>
             {sessionId && (
               <p className="text-sm text-muted-foreground font-mono">
@@ -85,7 +85,7 @@ function SuccessContent() {
                 <h2 className="text-lg font-semibold mb-2">Processing Started</h2>
                 <p className="text-sm text-muted-foreground">
                   Your documents are now queued for processing. Our expert team will
-                  begin working on your order shortly.
+                  begin working on your batch shortly.
                 </p>
               </div>
             </div>
@@ -96,7 +96,7 @@ function SuccessContent() {
                 <li className="flex items-start gap-2">
                   <span className="font-semibold text-foreground">1.</span>
                   <span>
-                    You&apos;ll receive a confirmation email with your order details
+                    You&apos;ll receive a confirmation email with your batch details
                   </span>
                 </li>
                 <li className="flex items-start gap-2">

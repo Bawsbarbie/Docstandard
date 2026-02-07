@@ -1,0 +1,275 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DocStandard Logistics Data Glossary",
+  "description": "Comprehensive glossary of logistics, supply chain, and ERP integration terms for pSEO content",
+  "type": "object",
+  "properties": {
+    "glossary": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/glossaryEntry"
+      }
+    }
+  },
+  "definitions": {
+    "glossaryEntry": {
+      "type": "object",
+      "required": ["term", "slug", "definition", "technicalContext", "category"],
+      "properties": {
+        "term": {
+          "type": "string",
+          "description": "The glossary term or acronym"
+        },
+        "slug": {
+          "type": "string",
+          "description": "URL-friendly identifier"
+        },
+        "definition": {
+          "type": "string",
+          "description": "Comprehensive definition (150+ words)",
+          "minLength": 100
+        },
+        "technicalContext": {
+          "type": "string",
+          "description": "Technical implementation details and field mappings"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["customs", "shipping", "documentation", "compliance", "financial", "technical", "regulatory"],
+          "description": "Primary category for the term"
+        },
+        "relatedIntegrations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Related integration slugs"
+        },
+        "relatedDocuments": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Related document types"
+        },
+        "synonyms": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alternative names or abbreviations"
+        },
+        "sourceStandards": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Governing standards bodies (CBP, IATA, WCO, etc.)"
+        }
+      }
+    }
+  },
+  "glossary": [
+    {
+      "term": "ISF-10",
+      "slug": "isf-10-importer-security-filing",
+      "definition": "Importer Security Filing (ISF), commonly known as '10+2', is a U.S. Customs and Border Protection (CBP) regulation requiring importers and vessel carriers to submit specific cargo information before goods are loaded onto vessels destined for the United States. The '10' refers to ten data elements that importers must file at least 24 hours before cargo is laden aboard a vessel at the foreign port. These elements include manufacturer/supplier name and address, seller name and address, buyer name and address, ship-to name and address, container stuffing location, consolidator name and address, importer of record number, consignee number, country of origin, and commodity HTSUS number. Failure to comply with ISF-10 requirements can result in significant penalties up to $5,000 per violation, cargo holds, and increased inspections.",
+      "technicalContext": "ISF-10 data is typically captured in ERP systems through Descartes, Flexport, or CargoWise customs modules. Key fields include: ISF_Filer (Internal ID), ImporterNumber (EIN/IRS), ConsigneeNumber (Internal ID), and HTSCode (10-digit harmonized code). EDI transmission uses ANSI X.12 309 or EDIFACT CUSCAR messages. Integration points require mapping to NetSuite customs records, SAP GTS (Global Trade Services), or Oracle Global Trade Management.",
+      "category": "customs",
+      "relatedIntegrations": ["descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge", "cargowise-to-netsuite-data-bridge", "cargowise-to-sap-integration"],
+      "relatedDocuments": ["Customs Entry", "Commercial Invoice", "Packing List", "Bill of Lading"],
+      "synonyms": ["10+2", "Importer Security Filing", "ISF Filing"],
+      "sourceStandards": ["CBP", "WCO", "ISO"]
+    },
+    {
+      "term": "HTS Classification",
+      "slug": "hts-harmonized-tariff-schedule",
+      "definition": "The Harmonized Tariff Schedule (HTS) is the primary classification system used by the United States to categorize imported goods for customs purposes. Based on the international Harmonized System (HS) maintained by the World Customs Organization, the HTS uses a hierarchical 10-digit code structure to classify products. The first six digits align with international HS codes, while digits 7-10 are U.S.-specific. Accurate HTS classification is critical for determining duty rates, eligibility for free trade agreements, and compliance with import restrictions. Misclassification can result in underpayment or overpayment of duties, penalties, and seizure of goods. Classification requires understanding the General Rules of Interpretation (GRI) and examining product composition, function, and intended use.",
+      "technicalContext": "HTS codes are stored in NetSuite custom item fields (custitem_hts_code), SAP Material Master classification views, or Oracle Item Master attributes. Integration requires mapping supplier-provided HS codes to internal HTS classifications. EDI X.12 850 and INVOIC segments transmit HTS data. API integrations must validate 10-digit format and check against CBP's updated tariff schedule via AESDirect or ACE portal connectivity.",
+      "category": "customs",
+      "relatedIntegrations": ["descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge", "magaya-to-quickbooks-bridge"],
+      "relatedDocuments": ["Commercial Invoice", "Entry Summary", "Certification of Origin"],
+      "synonyms": ["HTS Code", "Harmonized Code", "HS Code", "Schedule B"],
+      "sourceStandards": ["USITC", "WCO", "CBP"]
+    },
+    {
+      "term": "eAdapter",
+      "slug": "cargowise-eadapter-integration",
+      "definition": "The eAdapter is CargoWise's proprietary integration framework that enables electronic data interchange between CargoWise (WiseTech Global) and external systems including ERPs, carrier systems, customs authorities, and trading partner platforms. It supports multiple connectivity methods including XML messaging (Universal XML), EDI (ANSI X.12 and EDIFACT), API calls, and direct database connections. The eAdapter processes inbound and outbound messages through configurable workflows, applying business rules, validations, and transformations. It supports real-time and batch processing modes, with message tracking and error handling capabilities. The eAdapter is critical for automating data flows such as shipment bookings, customs declarations, billing, and inventory updates without manual re-entry.",
+      "technicalContext": "eAdapter uses Universal XML schemas (UniversalShipment, UniversalBooking, UniversalInvoice) with namespace http://www.cargowise.com/Schemas/Universal/2011/11. Integration requires configuring eHub endpoints, message types, and code mappings. Key XML nodes include DataContext, Organization, Shipment, Order, and ChargeLine. REST/SOAP APIs support GET/POST operations for real-time queries. Error handling uses EDI CONTRL and XML acknowledgment messages.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "cargowise-to-sap-integration", "cargowise-to-dynamics-bc-bridge"],
+      "relatedDocuments": ["Universal XML Schema", "eAdapter Developer Guide", "Code Mapping Tables"],
+      "synonyms": ["CargoWise Adapter", "WiseTech Adapter", "eHub"],
+      "sourceStandards": ["WiseTech Global", "UN/EDIFACT", "ANSI X.12"]
+    },
+    {
+      "term": "EDI 214",
+      "slug": "edi-214-transportation-carrier-shipment-status",
+      "definition": "EDI 214, the Transportation Carrier Shipment Status Message, is an ANSI X.12 electronic data interchange transaction set used by transportation carriers to communicate shipment status updates to shippers, consignees, and logistics service providers. The 214 provides detailed information about shipment location, status events, appointments, and proof of delivery. Common status codes include X3 (Arrived at Pickup Location), AF (Departed Pickup Location), X6 (Arrived at Destination), and D1 (Delivered). The document contains hierarchical structure with shipment-level and order-level information, including reference numbers (BOL, PO, PRO), dates and times, location details, and reason codes for delays or exceptions. Real-time 214 visibility is essential for supply chain planning and customer service.",
+      "technicalContext": "EDI 214 structure includes: ISA/GS envelopes, ST214 header, B2A (Beginning Segment), AT7 (Shipment Status Details), REF (Reference Numbers - BM for BOL, CO for Customer Order), DTM (Date/Time Reference), and N1 (Name/Address segments for shipper/consignee). Status codes in AT701/AT702 pairs define events. Integration maps 214 data to NetSuite custom records, SAP Event Management, or Oracle Transportation Management via IDoc or BAPI interfaces. Parsing requires handling nested loops (0200-0220) for multi-order shipments.",
+      "category": "shipping",
+      "relatedIntegrations": ["edi-document-normalization-services", "blueyonder-to-dynamics365-normalization", "motive-to-sap-ifta-normalization"],
+      "relatedDocuments": ["Bill of Lading", "Delivery Receipt", "Proof of Delivery"],
+      "synonyms": ["214 Status", "Shipment Status Message", "Carrier Status"],
+      "sourceStandards": ["ANSI X.12", "ASC X12", "WASC"]
+    },
+    {
+      "term": "Bill of Lading Consignee Field",
+      "slug": "bill-of-lading-consignee-field",
+      "definition": "The consignee field on a Bill of Lading (BOL) designates the party to whom the goods are to be delivered and who has the legal right to claim the cargo upon arrival. In international shipping, this field determines ownership transfer, customs clearance authority, and payment responsibility depending on the Incoterm used. The consignee can be the actual buyer, a bank (in letter of credit transactions), a freight forwarder acting as agent, or a subsidiary of the buying company. For negotiable bills of lading (order bills), the consignee field may show 'To Order' or 'To Order of [Bank]', allowing transfer of title through endorsement. For straight bills, the named consignee is the only party who can receive the goods. Accuracy in this field is critical to prevent delivery disputes and customs delays.",
+      "technicalContext": "In CargoWise, the consignee maps to Organization.OrganizationName with Address elements. EDI X.12 304 (Shipping Instructions) and 310 (Freight Receipt) use N1*CN segment for consignee. IDoc segments E1EDKA1 with PARVW=WE (ship-to) or AG (sold-to) map to consignee roles. NetSuite integrations populate Transaction.entity or custom consignee fields. Data validation requires matching consignee against customer master, validating tax IDs, and checking denied party screening lists.",
+      "category": "documentation",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "edi-document-normalization-services", "mercurygate-to-oracle-integration"],
+      "relatedDocuments": ["Bill of Lading", "Packing List", "Commercial Invoice"],
+      "synonyms": ["BOL Consignee", "Recipient", "Deliver To Party"],
+      "sourceStandards": ["FIATA", "ICC", "UCP 600"]
+    },
+    {
+      "term": "3-Way Match",
+      "slug": "three-way-match-ap-process",
+      "definition": "Three-way match is an accounts payable control process that verifies invoices before payment by comparing three documents: the purchase order (PO), the receiving report or goods receipt note (GRN), and the vendor invoice. The process ensures that the business only pays for goods that were properly ordered (PO validation), actually received (quantity and condition verification), and correctly billed (price and terms validation). Discrepancies in quantity, price, or terms trigger exception handling workflows. Three-way matching is a critical internal control for preventing fraud, reducing overpayments, and maintaining accurate inventory records. In automated ERP systems, this process is handled through matching engines that flag exceptions for manual review while auto-approving matching invoices for payment.",
+      "technicalContext": "ERP implementations require integration of: (1) PO data from Procurement (SAP ME2N, Oracle PO tables, NetSuite PurchaseOrder), (2) Receipt data from Inventory/WMS (SAP MIGO, NetSuite ItemReceipt), and (3) Invoice data from AP (SAP MIRO, Oracle AP_INVOICES_INTERFACE, NetSuite Bill). Matching tolerances (quantity %, price %) are configured in vendor master or system parameters. EDI 810 (Invoice) integration must validate against 850 (PO) and 856 (ASN) reference data.",
+      "category": "financial",
+      "relatedIntegrations": ["3pl-central-to-dynamics365-bridge", "manhattan-to-sap-normalization", "mercurygate-to-oracle-integration"],
+      "relatedDocuments": ["Purchase Order", "Goods Receipt", "Vendor Invoice", "Packing Slip"],
+      "synonyms": ["3-Way Matching", "Invoice Matching", "PO Matching"],
+      "sourceStandards": ["GAAP", "SOX", "COSO"]
+    },
+    {
+      "term": "AWB",
+      "slug": "air-waybill",
+      "definition": "An Air Waybill (AWB) is a non-negotiable transport document issued by an air carrier or its agent that serves as evidence of the contract of carriage between shipper and airline, a receipt for goods, and a freight bill. Unlike ocean bills of lading, an AWB is not a document of title and cannot be transferred through endorsement. The AWB contains 11 digits in three parts: the first 3 digits are the airline prefix (assigned by IATA), followed by an 8-digit serial number and a check digit. There are two types: Master Air Waybill (MAWB) issued by the main carrier to the freight forwarder, and House Air Waybill (HAWB) issued by the freight forwarder to the actual shipper. Electronic AWB (e-AWB) eliminates paper documentation through IATA's multilateral e-AWB agreement.",
+      "technicalContext": "AWB data structure includes: Shipper (Name, Address, Account), Consignee (Name, Address), Issuing Carrier (Agent code, Airport), Routing (From, To, By), Flight/Date, Declared Value, Handling Information, Rate/Charge calculation (Chargeable Weight, Rate Class, Rate, Total). IATA Cargo-IMP messages (FSM, FFM, FWB) transmit AWB data electronically. Integration requires mapping to NetSuite custom records, SAP LO (Logistics) modules, or Oracle Transportation Management via Cargo-IMP or XML interfaces.",
+      "category": "shipping",
+      "relatedIntegrations": ["descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge", "cargowise-to-netsuite-data-bridge"],
+      "relatedDocuments": ["Master Air Waybill", "House Air Waybill", "Cargo Manifest"],
+      "synonyms": ["Air Waybill", "Air Consignment Note", "Air Freight Document"],
+      "sourceStandards": ["IATA", "ICAO", "WCO"]
+    },
+    {
+      "term": "House Bill",
+      "slug": "house-bill-of-lading",
+      "definition": "A House Bill of Lading (HBL) is a transport document issued by a freight forwarder or Non-Vessel Operating Common Carrier (NVOCC) to the actual shipper/exporter. The HBL serves as a contract of carriage between the shipper and the forwarder, while the forwarder holds a Master Bill of Lading (MBL) with the actual ocean carrier. The shipper and consignee on the HBL reflect the true trading parties, whereas the MBL shows the forwarder as shipper and their agent as consignee. House bills are used in consolidations (LCL shipments) where multiple shippers' cargo is combined into one container, and in forwarding arrangements where the forwarder manages the entire transport chain. The HBL provides the shipper with documentation for Letters of Credit and customs clearance at destination.",
+      "technicalContext": "House Bill data includes: HBL Number, Shipper (actual exporter), Consignee (actual importer), Notify Party, Vessel/Voyage, Port of Loading/Discharge, Place of Receipt/Delivery, Container Numbers, Seal Numbers, Goods Description, Packages, Weight/Measure. Forwarder systems (CargoWise, Magaya, Descartes) generate HBLs and transmit via EDI 310 or EDIFACT IFTMIN. Integration to ERP systems requires linking HBL to MBL references for visibility and customs filing. In NetSuite/SAP, HBL numbers track with shipment records and customs entries.",
+      "category": "shipping",
+      "relatedIntegrations": ["magaya-to-quickbooks-bridge", "cargowise-to-netsuite-data-bridge", "descartes-to-netsuite-customs-bridge"],
+      "relatedDocuments": ["Master Bill of Lading", "House Air Waybill", "Forwarder Cargo Receipt"],
+      "synonyms": ["HBL", "House B/L", "Forwarder Bill of Lading"],
+      "sourceStandards": ["FIATA", "FMC", "NVOCC"]
+    },
+    {
+      "term": "Master Bill",
+      "slug": "master-bill-of-lading",
+      "definition": "A Master Bill of Lading (MBL or M/L) is the primary transport document issued by an ocean carrier (VOCC - Vessel Operating Common Carrier) to a freight forwarder or NVOCC. The MBL covers the entire shipment from port of loading to port of discharge, regardless of how many individual House Bills of Lading may exist underneath it for consolidated cargo. On the MBL, the shipper is typically the freight forwarder or consolidator at origin, and the consignee is the forwarder's agent or branch at destination. The MBL represents the actual contract between the ocean carrier and the party contracting for space. It serves as evidence of receipt of goods, contract of carriage, and in negotiable form, as a document of title. The carrier releases cargo at destination only against surrender of an original negotiable MBL or through telex release authorization.",
+      "technicalContext": "Master Bill structure includes: B/L Number (carrier format), Carrier Name, Shipper (NVOCC/Forwarder), Consignee (Destination Agent), Vessel/Voyage, POL/POD, Cargo Description (consolidated), Container Details (FCL) or Cargo Summary (LCL). Carrier EDI (310, 323) and carrier portals transmit MBL data. Integration requires matching MBL to underlying HBLs for manifest visibility. SAP TM (Transportation Management) and Oracle GTM track MBL references for ocean freight management. NetSuite custom records store MBL data linked to purchase orders.",
+      "category": "shipping",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "flexport-to-netsuite-bridge", "descartes-to-netsuite-customs-bridge"],
+      "relatedDocuments": ["House Bill of Lading", "Ocean Manifest", "Delivery Order"],
+      "synonyms": ["MBL", "Master B/L", "Ocean Bill of Lading", "Carrier B/L"],
+      "sourceStandards": ["FIATA", "COGSA", "Hague-Visby Rules"]
+    },
+    {
+      "term": "Incoterms",
+      "slug": "incoterms-international-commerce-terms",
+      "definition": "Incoterms (International Commercial Terms) are standardized trade terms published by the International Chamber of Commerce (ICC) that define the responsibilities of buyers and sellers in international transactions. The current version, Incoterms 2020, includes 11 terms organized into two groups: rules for any mode of transport (EXW, FCA, CPT, CIP, DAP, DPU, DDP) and rules for sea and inland waterway transport (FAS, FOB, CFR, CIF). Each term specifies: the point at which risk transfers from seller to buyer, which party arranges and pays for transport, export/import clearance responsibilities, and insurance obligations. Proper Incoterm selection impacts pricing, logistics planning, customs compliance, and dispute resolution. Common terms include FOB (Free On Board), CIF (Cost, Insurance and Freight), and DDP (Delivered Duty Paid).",
+      "technicalContext": "Incoterms are stored in ERP purchase order headers (NetSuite PurchaseOrder.custbody_incoterm, SAP EKKO-INCO1, Oracle PO_HEADERS_ALL.FOB). EDI X.12 850 uses FOB segment (FOB01=Transportation Terms Code, FOB02=Location Qualifier). Integration requires validating term compatibility with country regulations (e.g., DDP limitations in Brazil). Automated freight cost allocation uses Incoterm to determine prepaid/collect charges. SAP GTS and Oracle GTM perform export license checking based on Incoterm and destination.",
+      "category": "regulatory",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "cargowise-to-sap-integration", "flexport-to-netsuite-bridge"],
+      "relatedDocuments": ["Purchase Order", "Commercial Invoice", "Sales Contract"],
+      "synonyms": ["Trade Terms", "Delivery Terms", "Shipping Terms", "FOB", "CIF", "DDP"],
+      "sourceStandards": ["ICC", "Incoterms 2020", "UN/CEFACT"]
+    },
+    {
+      "term": "IDoc",
+      "slug": "sap-idoc-intermediate-document",
+      "definition": "IDoc (Intermediate Document) is SAP's standard format for electronic data interchange between SAP systems and external systems. An IDoc consists of a control record (administrative data), one or more data records (segment data), and a status record (processing history). IDocs support both inbound (external to SAP) and outbound (SAP to external) processing. Common message types include ORDERS (purchase orders), INVOIC (invoices), SHPMNT (shipments), and DELVRY (deliveries). IDocs are structured according to a basic type definition that specifies segment sequence and hierarchy. Status codes (01-75) track processing stages from creation through posting. IDoc monitoring via transaction WE02, WE05, and BD87 is essential for troubleshooting integration failures and ensuring business document flow continuity.",
+      "technicalContext": "IDoc structure: Control Record (EDIDC) with MESTYP (message type), IDOCTP (IDoc type), SNDPOR/RCVPOR (ports), status; Data Records (EDID4) with segments like E1EDK01 (header), E1EDP01 (items), E1EDKA1 (partners); Status Records (EDIDS). Segments have hierarchical levels (000, 001, 002). Integration uses ALE (Application Link Enabling) for distribution and EDI subsystems for external communication. RFC destinations (SM59) and ports (WE21) configure connectivity. BAPIs provide alternative real-time integration methods.",
+      "category": "technical",
+      "relatedIntegrations": ["motive-to-sap-ifta-normalization", "manhattan-to-sap-normalization", "cargowise-to-sap-integration", "clean-logistics-data-for-sap-s4hana"],
+      "relatedDocuments": ["IDoc Type Definition", "Segment Documentation", "Message Type Configuration"],
+      "synonyms": ["Intermediate Document", "EDI Document", "SAP EDI"],
+      "sourceStandards": ["SAP AG", "ANSI X.12", "EDIFACT"]
+    },
+    {
+      "term": "SAP REF_QUAL",
+      "slug": "sap-idoc-reference-qualifier",
+      "definition": "The REF_QUAL (Reference Qualifier) is a data element used in SAP IDocs to identify the type of reference number being transmitted in a reference segment. In EDI and IDoc communications, the same segment structure often carries different types of reference numbers - purchase order numbers, delivery note numbers, contract references, or internal document numbers. The REF_QUAL distinguishes these through standardized code values. For example, in E1EDK02 (document header reference data), qualifier '001' indicates a purchase order number, '002' a delivery note, '012' an internal vendor document, and '050' a delivery order. Correct qualifier assignment is critical for proper document matching in SAP (ME23N for POs, VL03N for deliveries) and automated three-way matching in accounts payable.",
+      "technicalContext": "REF_QUAL values are defined in SAP domain QUALF (WE31 segment definition). Common qualifiers: 001=Bestellung (PO), 002=Lieferschein (Delivery), 003=Rechnung (Invoice), 006=Auftragsbestätigung (Order Ack), 012=Interne Belegnummer, 050=Lieferauftrag. E1EDK02 segment carries header references with IDDAT (document ID) and QUALF (qualifier). Integration mappings must translate external reference types to correct SAP qualifiers for proper document linkage. Errors in qualifier assignment cause IDoc status 51 (application document not posted) with specific segment errors.",
+      "category": "technical",
+      "relatedIntegrations": ["motive-to-sap-ifta-normalization", "manhattan-to-sap-normalization", "cargowise-to-sap-integration"],
+      "relatedDocuments": ["IDoc Segment Reference", "EDI Implementation Guide", "SAP F1 Help"],
+      "synonyms": ["Reference Qualifier", "QUALF", "Document Qualifier"],
+      "sourceStandards": ["SAP AG", "UN/EDIFACT", "ANSI X.12"]
+    },
+    {
+      "term": "BGM02",
+      "slug": "sap-bgm02-message-name",
+      "definition": "BGM02 is a data element within the BGM (Beginning of Message) segment of EDIFACT messages and corresponding SAP IDoc segments (E1EDK01 in ORDERS IDocs). It contains the document number or message identifier assigned by the sender. In purchase order IDocs (ORDERS), BGM02 holds the purchase order number. In invoice IDocs (INVOIC), it contains the vendor invoice number. In shipping notifications (DESADV), it carries the delivery note number. This field serves as the primary document reference for matching, tracking, and archival purposes. In SAP, BGM02 maps to key fields like EKKO-EBELN (PO number) for orders or RBKP-BELNR (invoice document) for invoices. Proper population of BGM02 is essential for document uniqueness and duplicate checking.",
+      "technicalContext": "In IDoc E1EDK01 segment: BGM02 corresponds to BELNR (document number). For ORDERS05 IDocs: E1EDK01-BELNR = Purchase Order Number. For INVOIC02: E1EDK01-BELNR = Invoice Reference. EDIFACT mapping: BGM+220+PO12345+9' where PO12345 is BGM02. Integration requires ensuring unique numbering and validating against existing documents to prevent duplicates. SAP standard function modules IDOC_INPUT_ORDERS and IDOC_INPUT_INVOIC perform duplicate checks against BGM02 values before posting.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-sap-integration", "manhattan-to-sap-normalization", "clean-logistics-data-for-sap-s4hana"],
+      "relatedDocuments": ["EDIFACT Message", "IDoc Control Record", "SAP Message Mapping"],
+      "synonyms": ["Document Number", "Message Identifier", "BGM Element"],
+      "sourceStandards": ["UN/EDIFACT", "SAP AG"]
+    },
+    {
+      "term": "CargoWise Universal XML",
+      "slug": "cargowise-universal-xml-schema",
+      "definition": "CargoWise Universal XML is the native XML data interchange format used by WiseTech Global's CargoWise (formerly ediEnterprise) platform for integration with external systems. The schema uses a hierarchical structure with root element UniversalInterchange containing Body elements that wrap specific transaction types: UniversalShipment, UniversalBooking, UniversalInvoice, UniversalJournal, and UniversalActivity. Each transaction type has standardized child elements for DataContext (organization, data source), entities (Organization, Address, Contact), and transaction-specific details (Shipment, Order, ChargeLine). The namespace http://www.cargowise.com/Schemas/Universal/2011/11 is consistent across versions. Universal XML supports both inbound (import to CargoWise) and outbound (export from CargoWise) processing with configurable eAdapter workflows, code mappings, and validation rules.",
+      "technicalContext": "Key XML nodes: UniversalInterchange/Header (Version, SenderID, RecipientID), Body/UniversalShipment/Shipment (DataContext containing DataSourceCollection, Company, EnterpriseID), OrderCollection/Order (OrderNumber, ClientReference, TransportMode), ChargeLineCollection/ChargeLine (ChargeCode, ChargeDescription, ChargeAmount, ChargeCurrency). Integration uses XML parsing with namespaces. eAdapter workflows trigger on import/export. REST API endpoints support Universal XML payloads. Validation requires schema compliance (XSD) and business rule checking through CargoWise Code Mapping tables.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "cargowise-to-sap-integration", "cargowise-to-dynamics-bc-bridge"],
+      "relatedDocuments": ["Universal XML Schema (XSD)", "eAdapter Developer Guide", "CargoWise Web Services API"],
+      "synonyms": ["WiseTech XML", "CargoWise XML", "Universal Format"],
+      "sourceStandards": ["WiseTech Global", "W3C XML Schema"]
+    },
+    {
+      "term": "NetSuite RESTlet",
+      "slug": "netsuite-restlet-integration",
+      "definition": "A NetSuite RESTlet is a server-side SuiteScript that exposes custom RESTful web services for integration with external systems. RESTlets support GET, POST, PUT, and DELETE HTTP methods and can return data in JSON or XML format. Unlike SuiteTalk SOAP web services, RESTlets provide flexible, custom-tailored endpoints that execute specific business logic within NetSuite. They can perform searches, create/update records, execute saved searches, and trigger workflows. RESTlets authenticate via NLAuth (legacy), OAuth 1.0a, or Token-Based Authentication (TBA). They are deployed with specific script deployments that define access permissions and logging levels. RESTlets are commonly used for real-time integrations where standard SOAP operations are insufficient or where performance optimization is required, offering faster execution than equivalent SOAP calls for complex operations.",
+      "technicalContext": "RESTlet development uses SuiteScript 2.1 with define(['N/record', 'N/search', 'N/log'], function(record, search, log) {...}). Entry points: get(context), post(context), put(context), delete(context). Context object contains parameters/body. Return format: JSON.stringify({success: true, data: result}). Authentication headers: Authorization: NLAuth nlauth_account=ACCT, nlauth_email=EMAIL, nlauth_signature=SIG, nlauth_role=ROLE or OAuth oauth_consumer_key, oauth_token, oauth_signature_method, oauth_signature, oauth_timestamp, oauth_nonce, oauth_version. URL format: https://ACCT.suitetalk.api.netsuite.com/app/site/hosting/restlet.nl?script=SCRIPT_ID&deploy=DEPLOY_ID.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge"],
+      "relatedDocuments": ["SuiteScript API Reference", "RESTlet Deployment Guide", "Token-Based Authentication Setup"],
+      "synonyms": ["SuiteScript REST", "NetSuite REST API", "Custom REST Endpoint"],
+      "sourceStandards": ["Oracle NetSuite", "OAuth 1.0a", "REST Architecture"]
+    },
+    {
+      "term": "SuiteTalk SOAP",
+      "slug": "netsuite-suitetalk-soap-api",
+      "definition": "SuiteTalk is NetSuite's SOAP-based web services platform that enables external applications to access NetSuite data and business processes using standard web service protocols. It supports record CRUD operations (get, add, update, delete, upsert), saved search execution, and asynchronous processing. SuiteTalk uses WSDL (Web Services Description Language) definitions that describe available operations and data types. The platform supports token-based authentication (TBA) and SAML single sign-on for secure access. SuiteTalk handles complex record types including Transactions (Sales Orders, Invoices, Bills), Entities (Customers, Vendors), Custom Records, and Item records. It provides synchronous and asynchronous operation modes, with the latter used for large data volumes to avoid timeouts. SuiteTalk is ideal for batch integrations and scenarios requiring strict schema adherence.",
+      "technicalContext": "SuiteTalk uses WSDL endpoints: https://ACCT.suitetalk.api.netsuite.com/wsdl/v2023_1_0/netsuite.wsdl. Core operations: get(recordType, internalId), add(record), update(record), delete(recordType, internalId), search(searchRecord). Authentication: Passport (email/password - deprecated), TokenPassport (TBA with consumer key/secret, token key/secret). RecordRef objects reference records by internalId, externalId, or name. SOAP headers include: passport/tokenPassport, searchPreferences (pageSize, bodyFieldsOnly), preferences (warningAsError, disableMandatoryCustomFieldValidation). Integration uses SOAP libraries (Apache CXF, .NET WCF, Python Zeep) with WSSE security headers.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge"],
+      "relatedDocuments": ["SuiteTalk Web Services Platform Guide", "WSDL Reference", "Token-Based Authentication"],
+      "synonyms": ["NetSuite SOAP", "SuiteTalk API", "NetSuite Web Services"],
+      "sourceStandards": ["Oracle NetSuite", "W3C SOAP", "WS-Security"]
+    },
+    {
+      "term": "NetSuite InternalID",
+      "slug": "netsuite-internalid-externalid",
+      "definition": "InternalID is NetSuite's system-generated unique identifier for every record in the database. Unlike user-visible record names or numbers, the InternalID is an immutable integer that permanently identifies a record regardless of changes to other fields. When integrating external systems with NetSuite, InternalIDs are required for referencing existing records in SuiteTalk SOAP and RESTlet operations. ExternalID is an optional alternative identifier that allows external systems to use their own unique keys when creating NetSuite records. Using ExternalID enables idempotent operations - the same request can be sent multiple times without creating duplicates, as NetSuite matches on ExternalID. Best practices recommend maintaining cross-reference tables mapping external system IDs to NetSuite InternalIDs for optimal integration performance and reliability.",
+      "technicalContext": "InternalID usage: recordRef element with internalId attribute in SOAP. ExternalID usage: record element with externalId attribute. Upsert operation: updates if externalId exists, creates if not. Cross-reference tables store: SourceSystem, ExternalID, NetSuiteInternalID, LastSyncDate. Common record types and their InternalID patterns: Transaction (internalId), Entity (internalId), Item (internalId), CustomRecord (internalId). Search filters use internalIdNumber or internalId for exact matching. CSV imports support internalId or externalId columns for record matching.",
+      "category": "technical",
+      "relatedIntegrations": ["cargowise-to-netsuite-data-bridge", "descartes-to-netsuite-customs-bridge", "flexport-to-netsuite-bridge", "freightpop-to-netsuite-normalization"],
+      "relatedDocuments": ["SuiteTalk Record Reference", "Integration Best Practices", "Data Migration Guide"],
+      "synonyms": ["Internal ID", "Record ID", "nKey", "Entity ID"],
+      "sourceStandards": ["Oracle NetSuite"]
+    },
+    {
+      "term": "MercuryGate TMS",
+      "slug": "mercurygate-transportation-management",
+      "definition": "MercuryGate is a cloud-based Transportation Management System (TMS) that provides logistics planning, execution, settlement, and business intelligence capabilities. The platform supports multimodal transportation including parcel, LTL, truckload, rail, ocean, and air freight. MercuryGate's rating engine aggregates carrier rates across modes to optimize shipping decisions. The system manages freight audit and payment workflows, validating carrier invoices against contracted rates and shipment details before payment authorization. MercuryGate offers native EDI/API connectivity to carriers, ERP systems, and visibility platforms. Its optimization algorithms consider constraints like delivery windows, equipment availability, and cost to recommend optimal routing and carrier selection. The platform supports 4PL and managed transportation services with granular cost allocation and GL coding capabilities essential for enterprise financial management.",
+      "technicalContext": "MercuryGate data entities: Shipment (ShipmentNumber, Mode, Status), Load (LoadID, Stops, Equipment), Rate (BaseRate, FuelSurcharge, Accessorials), Invoice (InvoiceNumber, Amount, DiscrepancyCode). Integration methods: REST API (JSON/XML), EDI (204, 210, 214, 990), flat file exchange. ERP connectors available for SAP, Oracle, NetSuite, Microsoft Dynamics. API endpoints: /api/v1/shipments, /api/v1/rates, /api/v1/invoices. Authentication: OAuth 2.0 with client credentials flow. Webhooks support real-time status updates. MercuryGate's settlement module performs automated freight audit using configurable tolerance rules.",
+      "category": "technical",
+      "relatedIntegrations": ["mercurygate-to-oracle-integration", "blueyonder-to-dynamics365-normalization"],
+      "relatedDocuments": ["Shipment Record", "Rate Contract", "Freight Invoice", "Carrier SCAC List"],
+      "synonyms": ["Mojo", "MercuryGate TMS", "Mojo MercuryGate"],
+      "sourceStandards": ["MercuryGate International", "TMC", "ANSI X.12"]
+    },
+    {
+      "term": "Dynamics 365 Data Entity",
+      "slug": "dynamics-365-data-entity-dmf",
+      "definition": "A Data Entity in Microsoft Dynamics 365 Finance and Operations is a reusable abstraction layer that encapsulates business data and logic, enabling integration scenarios through the Data Management Framework (DMF). Data entities combine multiple physical tables into a single logical object with a consistent API for import, export, and data manipulation. Standard entities cover core business areas: Customers (CustCustomerV3Entity), Vendors (VendVendorV2Entity), Purchase Orders (PurchaseOrderHeaderEntity), Sales Orders (SalesOrderHeaderEntity), and Inventory (InventInventoryEntityLineEntity). Custom entities can be created using Visual Studio to expose specific business data. Data entities support multiple integration patterns: recurring integrations (via Data Management API), OData services for real-time queries, and Excel add-in for business user data manipulation. They provide field-level validation, default value population, and business logic execution during data operations.",
+      "technicalContext": "Data Entity structure: EntityKey (unique identifier), StagingTable (intermediate import table), EntityCategory (Master, Transaction, Reference, Document). DMF processing: Import (validate, transform, stage, target), Export (source, transform, export). Integration API: REST/OData endpoints at /data/EntityName. Recurring integrations use Azure Logic Apps or custom services polling the DMF API. Key entities for logistics: InventTransOriginEntity, WHSWorkLineEntity, TMSRateRouteEntity. Data packages (zip with manifest and data files) enable bulk data movement. Entity mappings define field transformations between source and target formats.",
+      "category": "technical",
+      "relatedIntegrations": ["3pl-central-to-dynamics365-bridge", "blueyonder-to-dynamics365-normalization"],
+      "relatedDocuments": ["Data Entity Definitions", "DMF Configuration", "OData Service Reference"],
+      "synonyms": ["D365 Entity", "Data Management Entity", "Integration Entity"],
+      "sourceStandards": ["Microsoft", "OData Protocol", "Azure Integration"]
+    }
+  ]
+}

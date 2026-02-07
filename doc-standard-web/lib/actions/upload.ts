@@ -2,25 +2,24 @@
 
 /**
  * Upload Actions
- * Server actions for file upload and order management
+ * Server actions for file upload and batch management
  */
 
 import { createClient } from "@/lib/supabase/server"
-import { createAdminClient } from "@/lib/supabase/admin"
 import type {
-  Order,
-  OrderFile,
-  OrderWithFiles,
-  CreateOrderInput,
-  CreateOrderFileInput,
+  Batch,
+  Upload,
+  BatchWithUploads,
+  CreateBatchInput,
+  CreateUploadInput,
 } from "@/lib/types/database"
 
 /**
- * Create a new order for the authenticated user
+ * Create a new batch for the authenticated user
  */
-export async function createOrder(
-  input?: CreateOrderInput
-): Promise<{ data: Order | null; error: string | null }> {
+export async function createBatch(
+  input?: CreateBatchInput
+): Promise<{ data: Batch | null; error: string | null }> {
   try {
     const supabase = await createClient()
 
@@ -34,28 +33,31 @@ export async function createOrder(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Insert order
+    // Insert batch
     const { data, error } = await supabase
-      .from("orders")
+      .from("batches")
       .insert({
         user_id: user.id,
-        scope: input?.scope || "standard",
+        tier: input?.tier || "standard",
         notes: input?.notes || null,
         status: "created",
         price_cents: 79900, // $799.00
+        total_pages: input?.total_pages ?? 2000,
+        total_files: input?.total_files ?? 1000,
+        customer_email: user.email ?? null,
       })
       .select()
       .single()
 
     if (error) {
-      console.error("Error creating order:", error)
+      console.error("Error creating batch:", error)
       return { data: null, error: error.message }
     }
 
     return { data, error: null }
   } catch (error) {
-    console.error("Exception creating order:", error)
-    return { data: null, error: "Failed to create order" }
+    console.error("Exception creating batch:", error)
+    return { data: null, error: "Failed to create batch" }
   }
 }
 
@@ -64,7 +66,7 @@ export async function createOrder(
  * This allows the client to upload directly to storage securely
  */
 export async function getSignedUploadUrl(
-  orderId: string,
+  batchId: string,
   fileName: string,
   fileType: string
 ): Promise<{ data: { url: string; path: string } | null; error: string | null }> {
@@ -81,29 +83,29 @@ export async function getSignedUploadUrl(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Verify user owns this order
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    // Verify user owns this batch
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("id, user_id")
-      .eq("id", orderId)
+      .eq("id", batchId)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
-    if (order.user_id !== user.id) {
+    if (batch.user_id !== user.id) {
       return { data: null, error: "Unauthorized" }
     }
 
     // Generate unique file path
     const fileExt = fileName.split(".").pop()
     const uniqueId = crypto.randomUUID()
-    const path = `orders/${orderId}/inputs/${uniqueId}.${fileExt}`
+    const path = `batches/${batchId}/inputs/${uniqueId}.${fileExt}`
 
     // Generate signed URL (valid for 1 hour)
     const { data: urlData, error: urlError } = await supabase.storage
-      .from("order-files")
+      .from("batch-files")
       .createSignedUploadUrl(path)
 
     if (urlError) {
@@ -125,11 +127,11 @@ export async function getSignedUploadUrl(
 }
 
 /**
- * Create an order file record after successful upload
+ * Create an upload record after successful upload
  */
-export async function createOrderFile(
-  input: CreateOrderFileInput
-): Promise<{ data: OrderFile | null; error: string | null }> {
+export async function createUpload(
+  input: CreateUploadInput
+): Promise<{ data: Upload | null; error: string | null }> {
   try {
     const supabase = await createClient()
 
@@ -143,50 +145,57 @@ export async function createOrderFile(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Verify user owns this order
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    // Verify user owns this batch
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("id, user_id")
-      .eq("id", input.order_id)
+      .eq("id", input.batch_id)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
-    if (order.user_id !== user.id) {
+    if (batch.user_id !== user.id) {
       return { data: null, error: "Unauthorized" }
     }
 
-    // Generate storage path
-    const fileExt = input.original_name.split(".").pop()
-    const uniqueId = crypto.randomUUID()
-    const storagePath = `orders/${input.order_id}/inputs/${uniqueId}.${fileExt}`
+    // Use provided storage path when available to match actual upload
+    let storagePath = input.storage_path ?? null
+    if (!storagePath) {
+      const fileExt = input.original_name.split(".").pop()
+      const uniqueId = crypto.randomUUID()
+      storagePath = `batches/${input.batch_id}/inputs/${uniqueId}.${fileExt}`
+    }
 
-    // Insert order file record
+    // Insert upload record
     const { data, error } = await supabase
-      .from("order_files")
+      .from("uploads")
       .insert({
-        order_id: input.order_id,
-        role: "input",
+        batch_id: input.batch_id,
+        role: input.role ?? "input",
         storage_path: storagePath,
         original_name: input.original_name,
         file_size_bytes: input.file_size_bytes,
         mime_type: input.mime_type,
+        page_count: input.page_count ?? null,
+        document_types: input.document_types ?? null,
+        status: input.status ?? "completed",
+        delivery_eta: input.delivery_eta ?? null,
         uploaded_at: new Date().toISOString(),
       })
       .select()
       .single()
 
     if (error) {
-      console.error("Error creating order file:", error)
+      console.error("Error creating upload:", error)
       return { data: null, error: error.message }
     }
 
     return { data, error: null }
   } catch (error) {
-    console.error("Exception creating order file:", error)
-    return { data: null, error: "Failed to create file record" }
+    console.error("Exception creating upload:", error)
+    return { data: null, error: "Failed to create upload record" }
   }
 }
 
@@ -222,10 +231,10 @@ export async function uploadFileToStorage(
 }
 
 /**
- * Complete order upload (mark as uploaded)
+ * Complete batch upload (mark as uploaded)
  */
-export async function completeOrderUpload(
-  orderId: string
+export async function completeBatchUpload(
+  batchId: string
 ): Promise<{ success: boolean; error: string | null }> {
   try {
     const supabase = await createClient()
@@ -240,30 +249,30 @@ export async function completeOrderUpload(
       return { success: false, error: "Not authenticated" }
     }
 
-    // Update order status
+    // Update batch status
     const { error } = await supabase
-      .from("orders")
+      .from("batches")
       .update({ status: "uploaded" })
-      .eq("id", orderId)
+      .eq("id", batchId)
       .eq("user_id", user.id)
 
     if (error) {
-      console.error("Error updating order:", error)
+      console.error("Error updating batch:", error)
       return { success: false, error: error.message }
     }
 
     return { success: true, error: null }
   } catch (error) {
     console.error("Exception completing upload:", error)
-    return { success: false, error: "Failed to complete upload" }
+    return { success: false, error: "Failed to complete batch upload" }
   }
 }
 
 /**
- * Get user's orders
+ * Get user's batches
  */
-export async function getUserOrders(): Promise<{
-  data: Order[] | null
+export async function getUserBatches(): Promise<{
+  data: Batch[] | null
   error: string | null
 }> {
   try {
@@ -279,28 +288,28 @@ export async function getUserOrders(): Promise<{
     }
 
     const { data, error } = await supabase
-      .from("orders")
+      .from("batches")
       .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("Error fetching orders:", error)
+      console.error("Error fetching batches:", error)
       return { data: null, error: error.message }
     }
 
     return { data, error: null }
   } catch (error) {
-    console.error("Exception fetching orders:", error)
-    return { data: null, error: "Failed to fetch orders" }
+    console.error("Exception fetching batches:", error)
+    return { data: null, error: "Failed to fetch batches" }
   }
 }
 
 /**
- * Get user's orders with file metadata
+ * Get user's batches with upload metadata
  */
-export async function getUserOrdersWithFiles(): Promise<{
-  data: OrderWithFiles[] | null
+export async function getUserBatchesWithUploads(): Promise<{
+  data: BatchWithUploads[] | null
   error: string | null
 }> {
   try {
@@ -316,31 +325,31 @@ export async function getUserOrdersWithFiles(): Promise<{
     }
 
     const { data, error } = await supabase
-      .from("orders")
+      .from("batches")
       .select(
-        "*, order_files(id, order_id, role, storage_path, original_name, file_size_bytes, mime_type, created_at, uploaded_at)"
+        "*, uploads(id, batch_id, role, storage_path, original_name, file_size_bytes, mime_type, page_count, created_at, uploaded_at)"
       )
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("Error fetching orders with files:", error)
+      console.error("Error fetching batches with uploads:", error)
       return { data: null, error: error.message }
     }
 
-    return { data: data as OrderWithFiles[], error: null }
+    return { data: data as BatchWithUploads[], error: null }
   } catch (error) {
-    console.error("Exception fetching orders with files:", error)
-    return { data: null, error: "Failed to fetch orders" }
+    console.error("Exception fetching batches with uploads:", error)
+    return { data: null, error: "Failed to fetch batches" }
   }
 }
 
 /**
- * Get files for an order
+ * Get uploads for a batch
  */
-export async function getOrderFiles(
-  orderId: string
-): Promise<{ data: OrderFile[] | null; error: string | null }> {
+export async function getBatchUploads(
+  batchId: string
+): Promise<{ data: Upload[] | null; error: string | null }> {
   try {
     const supabase = await createClient()
 
@@ -353,35 +362,35 @@ export async function getOrderFiles(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Verify user owns this order
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    // Verify user owns this batch
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("id, user_id")
-      .eq("id", orderId)
+      .eq("id", batchId)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
-    if (order.user_id !== user.id) {
+    if (batch.user_id !== user.id) {
       return { data: null, error: "Unauthorized" }
     }
 
     const { data, error } = await supabase
-      .from("order_files")
+      .from("uploads")
       .select("*")
-      .eq("order_id", orderId)
+      .eq("batch_id", batchId)
       .order("created_at", { ascending: false })
 
     if (error) {
-      console.error("Error fetching order files:", error)
+      console.error("Error fetching uploads:", error)
       return { data: null, error: error.message }
     }
 
     return { data, error: null }
   } catch (error) {
-    console.error("Exception fetching order files:", error)
-    return { data: null, error: "Failed to fetch files" }
+    console.error("Exception fetching uploads:", error)
+    return { data: null, error: "Failed to fetch uploads" }
   }
 }

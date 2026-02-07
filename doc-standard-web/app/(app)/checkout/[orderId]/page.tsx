@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { getOrderForCheckout, createCheckoutSession } from "@/lib/actions/checkout"
+import { getBatchForCheckout, createCheckoutSession } from "@/lib/actions/checkout"
 
-interface OrderDetails {
+interface BatchDetails {
   id: string
   status: string
   price_cents: number
@@ -14,7 +14,7 @@ interface OrderDetails {
 
 export default function CheckoutPage({ params }: { params: { orderId: string } }) {
   const router = useRouter()
-  const [order, setOrder] = useState<OrderDetails | null>(null)
+  const [order, setOrder] = useState<BatchDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [processingPayment, setProcessingPayment] = useState(false)
@@ -24,10 +24,10 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
       setLoading(true)
       setError(null)
 
-      const { data, error: fetchError } = await getOrderForCheckout(params.orderId)
+      const { data, error: fetchError } = await getBatchForCheckout(params.orderId)
 
       if (fetchError || !data) {
-        setError(fetchError || "Failed to load order")
+        setError(fetchError || "Failed to load batch")
         setLoading(false)
         return
       }
@@ -82,7 +82,7 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
           <div className="p-6 rounded-lg bg-destructive/10 border border-destructive/20">
             <p className="text-destructive font-medium">Error</p>
             <p className="text-sm text-destructive/80 mt-1">
-              {error || "Order not found"}
+              {error || "Batch not found"}
             </p>
           </div>
           <button
@@ -100,19 +100,19 @@ export default function CheckoutPage({ params }: { params: { orderId: string } }
     <div className="container py-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Complete Your Order</h1>
+          <h1 className="text-4xl font-bold mb-2">Complete Your Batch</h1>
           <p className="text-muted-foreground">
-            Review your order details and proceed to payment
+            Review your batch details and proceed to payment
           </p>
         </div>
 
-        {/* Order Summary Card */}
+        {/* Batch Summary Card */}
         <div className="rounded-lg border bg-card p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold mb-4">Batch Summary</h2>
 
           <div className="space-y-3">
             <div className="flex justify-between py-2 border-b">
-              <span className="text-muted-foreground">Order ID</span>
+              <span className="text-muted-foreground">Batch ID</span>
               <span className="font-mono text-sm">{order.id.slice(0, 8)}</span>
             </div>
 

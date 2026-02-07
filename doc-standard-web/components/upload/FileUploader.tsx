@@ -5,9 +5,10 @@
  * Drag-and-drop file uploader with progress tracking
  */
 
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useDropzone } from "react-dropzone"
-import { createOrder, getSignedUploadUrl, completeOrderUpload } from "@/lib/actions/upload"
+import { PDFDocument } from "pdf-lib"
+import { createBatch, getSignedUploadUrl, createUpload, completeBatchUpload } from "@/lib/actions/upload"
 
 interface UploadFile {
   file: File
@@ -16,10 +17,11 @@ interface UploadFile {
   status: "pending" | "uploading" | "success" | "error"
   error?: string
   storagePath?: string
+  pageCount?: number
 }
 
 interface FileUploaderProps {
-  onUploadComplete?: (orderId: string) => void
+  onUploadComplete?: (batchId: string) => void
   onFilesChange?: (fileCount: number) => void
   maxFiles?: number
   maxSizeMB?: number
@@ -42,12 +44,12 @@ export function FileUploader({
   dropzoneDetail,
 }: FileUploaderProps) {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([])
-  const [orderId, setOrderId] = useState<string | null>(null)
+  const [batchId, setBatchId] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       // Check file count limit
       if (uploadFiles.length + acceptedFiles.length > maxFiles) {
         setUploadError(`Maximum ${maxFiles} files allowed`)
@@ -77,6 +79,14 @@ export function FileUploader({
         return next
       })
       setUploadError(null)
+
+      // Calculate page counts for new files
+      for (const uploadFile of newFiles) {
+        const pageCount = await getPageCount(uploadFile.file)
+        setUploadFiles((prev) =>
+          prev.map((f) => (f.id === uploadFile.id ? { ...f, pageCount } : f))
+        )
+      }
     },
     [uploadFiles.length, maxFiles, maxSizeMB, onFilesChange]
   )
@@ -105,7 +115,7 @@ export function FileUploader({
 
   const uploadSingleFile = async (
     uploadFile: UploadFile,
-    currentOrderId: string
+    currentBatchId: string
   ): Promise<boolean> => {
     try {
       // Update status to uploading
@@ -117,7 +127,7 @@ export function FileUploader({
 
       // Get signed URL
       const { data: urlData, error: urlError } = await getSignedUploadUrl(
-        currentOrderId,
+        currentBatchId,
         uploadFile.file.name,
         uploadFile.file.type
       )
@@ -131,9 +141,7 @@ export function FileUploader({
         prev.map((f) => (f.id === uploadFile.id ? { ...f, progress: 30 } : f))
       )
 
-      // Upload to storage using signed URL
-      const formData = new FormData()
-      formData.append("file", uploadFile.file)
+      const pageCount = await getPageCount(uploadFile.file)
 
       const uploadResponse = await fetch(urlData.url, {
         method: "PUT",
@@ -148,6 +156,19 @@ export function FileUploader({
         throw new Error(`Upload failed: ${uploadResponse.statusText}`)
       }
 
+      const { error: recordError } = await createUpload({
+        batch_id: currentBatchId,
+        original_name: uploadFile.file.name,
+        file_size_bytes: uploadFile.file.size,
+        mime_type: uploadFile.file.type,
+        page_count: pageCount,
+        storage_path: urlData.path,
+      })
+
+      if (recordError) {
+        throw new Error(recordError)
+      }
+
       // Update progress to complete
       setUploadFiles((prev) =>
         prev.map((f) =>
@@ -157,6 +178,7 @@ export function FileUploader({
                 status: "success",
                 progress: 100,
                 storagePath: urlData.path,
+                pageCount,
               }
             : f
         )
@@ -180,6 +202,19 @@ export function FileUploader({
     }
   }
 
+  const getPageCount = async (file: File): Promise<number> => {
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+    if (!isPdf) return 1
+    try {
+      const buffer = await file.arrayBuffer()
+      const doc = await PDFDocument.load(buffer)
+      return doc.getPageCount()
+    } catch (error) {
+      console.error("Failed to read PDF pages:", error)
+      return 1
+    }
+  }
+
   const startUpload = async () => {
     if (uploadFiles.length === 0) {
       setUploadError("Please add files to upload")
@@ -190,32 +225,39 @@ export function FileUploader({
     setUploadError(null)
 
     try {
-      // Create order
-      const derivedScope = uploadFiles.length > 1000 ? "complex" : uploadFiles.length > 50 ? "large" : "standard"
-      const { data: order, error: orderError } = await createOrder({
-        scope: scopeOverride || derivedScope,
+      // Create batch
+      const derivedTier =
+        uploadFiles.length > 1000 ? "compliance" : uploadFiles.length > 50 ? "expedited" : "standard"
+      const tierOverride =
+        scopeOverride === "complex"
+          ? "compliance"
+          : scopeOverride === "large"
+            ? "expedited"
+            : "standard"
+      const { data: batch, error: batchError } = await createBatch({
+        tier: scopeOverride ? tierOverride : derivedTier,
         notes: orderNotes || undefined,
       })
 
-      if (orderError || !order) {
-        throw new Error(orderError || "Failed to create order")
+      if (batchError || !batch) {
+        throw new Error(batchError || "Failed to create batch")
       }
 
-      setOrderId(order.id)
+      setBatchId(batch.id)
 
       // Upload all files
       let successCount = 0
       for (const uploadFile of uploadFiles) {
-        const success = await uploadSingleFile(uploadFile, order.id)
+        const success = await uploadSingleFile(uploadFile, batch.id)
         if (success) successCount++
       }
 
       // Complete the upload
       if (successCount > 0) {
-        await completeOrderUpload(order.id)
+        await completeBatchUpload(batch.id)
 
         if (onUploadComplete) {
-          onUploadComplete(order.id)
+          onUploadComplete(batch.id)
         }
       } else {
         throw new Error("No files uploaded successfully")
@@ -235,6 +277,12 @@ export function FileUploader({
   }
 
   const allFilesUploaded = uploadFiles.length > 0 && uploadFiles.every((f) => f.status === "success")
+  const totalPages = useMemo(() => {
+    return uploadFiles.reduce(
+      (sum, f) => sum + (typeof f.pageCount === "number" ? f.pageCount : 0),
+      0
+    )
+  }, [uploadFiles])
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -275,6 +323,12 @@ export function FileUploader({
               {dropzoneDetail ||
                 `PDF, Images, DOCX, XLSX • Max ${maxSizeMB}MB per file • Up to ${maxFiles} files`}
             </p>
+            {uploadFiles.length > 0 && (
+              <p className="text-xs text-muted-foreground mt-2">
+                Detected: {uploadFiles.length} file{uploadFiles.length === 1 ? "" : "s"} •{" "}
+                {totalPages} page{totalPages === 1 ? "" : "s"}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -293,6 +347,7 @@ export function FileUploader({
             <h3 className="text-lg font-semibold">
               Files ({uploadFiles.length}/{maxFiles})
             </h3>
+            <div className="text-sm text-muted-foreground">Total pages: {totalPages}</div>
             {!isUploading && !allFilesUploaded && (
               <button
                 onClick={() => {
@@ -326,7 +381,10 @@ export function FileUploader({
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      {formatFileSize(uploadFile.file.size)}
+                      {formatFileSize(uploadFile.file.size)} •{" "}
+                      {typeof uploadFile.pageCount === "number"
+                        ? `${uploadFile.pageCount} page${uploadFile.pageCount === 1 ? "" : "s"}`
+                        : "Calculating pages…"}
                     </p>
 
                     {/* Progress bar */}
@@ -385,13 +443,13 @@ export function FileUploader({
           )}
 
           {/* Success message */}
-          {allFilesUploaded && orderId && (
+          {allFilesUploaded && batchId && (
             <div className="p-4 rounded-lg bg-green-50 border border-green-200">
               <p className="text-sm font-medium text-green-900">
                 ✓ All files uploaded successfully!
               </p>
               <p className="text-xs text-green-700 mt-1">
-                Order ID: {orderId}
+                Batch ID: {batchId}
               </p>
               {onUploadComplete ? (
                 <p className="text-xs text-green-700 mt-2">

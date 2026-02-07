@@ -83,34 +83,38 @@ async function handleCheckoutSessionCompleted(
   console.log("Processing checkout.session.completed:", session.id)
 
   const orderId = session.metadata?.order_id
+  const batchId = session.metadata?.batch_id
   const userId = session.metadata?.user_id
 
-  if (!orderId || !userId) {
-    console.error("Missing order_id or user_id in session metadata")
+  const targetId = batchId || orderId
+
+  if (!targetId || !userId) {
+    console.error("Missing batch_id/order_id or user_id in session metadata")
     return
   }
 
   const supabase = createAdminClient()
 
   try {
-    // Update order status to queued and set paid_at timestamp
+    // Update batch status to queued and set paid_at timestamp
     const { error: updateError } = await supabase
-      .from("orders")
+      .from("batches")
       .update({
         status: "queued",
         paid_at: new Date().toISOString(),
         stripe_payment_intent_id: session.payment_intent as string,
         updated_at: new Date().toISOString(),
+        customer_email: session.customer_email ?? session.customer_details?.email ?? null,
       })
-      .eq("id", orderId)
+      .eq("id", targetId)
       .eq("user_id", userId)
 
     if (updateError) {
-      console.error("Error updating order:", updateError)
+      console.error("Error updating batch:", updateError)
       throw updateError
     }
 
-    console.log(`Order ${orderId} marked as paid and queued`)
+    console.log(`Batch ${targetId} marked as paid and queued`)
 
     // TODO: Send email notification to user
     // TODO: Trigger processing worker
@@ -128,32 +132,35 @@ async function handleCheckoutSessionFailed(session: Stripe.Checkout.Session) {
   console.log("Processing checkout.session.async_payment_failed:", session.id)
 
   const orderId = session.metadata?.order_id
+  const batchId = session.metadata?.batch_id
   const userId = session.metadata?.user_id
 
-  if (!orderId || !userId) {
-    console.error("Missing order_id or user_id in session metadata")
+  const targetId = batchId || orderId
+
+  if (!targetId || !userId) {
+    console.error("Missing batch_id/order_id or user_id in session metadata")
     return
   }
 
   const supabase = createAdminClient()
 
   try {
-    // Update order status to failed
+    // Update batch status to failed
     const { error: updateError } = await supabase
-      .from("orders")
+      .from("batches")
       .update({
         status: "failed",
         updated_at: new Date().toISOString(),
       })
-      .eq("id", orderId)
+      .eq("id", targetId)
       .eq("user_id", userId)
 
     if (updateError) {
-      console.error("Error updating order:", updateError)
+      console.error("Error updating batch:", updateError)
       throw updateError
     }
 
-    console.log(`Order ${orderId} marked as failed`)
+    console.log(`Batch ${targetId} marked as failed`)
 
     // TODO: Send email notification to user about failed payment
 

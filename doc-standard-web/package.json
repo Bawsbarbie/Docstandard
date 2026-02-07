@@ -5,8 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "node scripts/bulk-page-generator.js --batch=2 --count=155 && node scripts/bulk-page-generator.js --batch=3 --count=100 && node scripts/bulk-page-generator.js --batch=4 --count=110 && node scripts/bulk-page-generator.js --batch=5 --count=100",
+    "generate:pages": "node scripts/bulk-page-generator.js --batch=2 --count=155 && node scripts/bulk-page-generator.js --batch=3 --count=100 && node scripts/bulk-page-generator.js --batch=4 --count=110 && node scripts/bulk-page-generator.js --batch=5 --count=100",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "backfill:pages": "tsx scripts/backfill-page-counts.ts",
+    "migrate:bucket": "tsx scripts/migrate-bucket-order-to-batch.ts",
+    "delete:old-bucket": "tsx scripts/delete-order-files-bucket.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -15,26 +20,29 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.29.2",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.563.0",
     "next": "^14.2.0",
+    "pdf-lib": "^1.17.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-dropzone": "^14.4.0",
     "react-markdown": "^9.0.1",
     "stripe": "^20.3.0",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7",
-    "gray-matter": "^4.0.3"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.0",
+    "dotenv": "^16.4.5",
     "eslint": "^8",
     "eslint-config-next": "^14.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.0",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

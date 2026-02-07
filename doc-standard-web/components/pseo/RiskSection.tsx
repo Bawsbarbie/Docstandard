@@ -1,6 +1,7 @@
 "use client"
 
 import { AlertTriangle, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 interface RiskSectionProps {
   quote?: string
@@ -34,9 +35,12 @@ export function RiskSection({ quote, painPoints, compact = false }: RiskSectionP
             <p className="text-slate-400 text-lg mb-8">
               “{quote || fallbackQuote}”
             </p>
-            <button className="text-white border-b border-red-500 pb-1 hover:text-red-400 transition-colors flex items-center gap-2">
+            <Link
+              href="/login"
+              className="text-white border-b border-red-500 pb-1 hover:text-red-400 transition-colors flex items-center gap-2"
+            >
               Mitigate Risk Now <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
 
           <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700">

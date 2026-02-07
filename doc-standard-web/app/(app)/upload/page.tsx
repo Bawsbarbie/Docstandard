@@ -6,10 +6,10 @@ import { FileUploader } from "@/components/upload/FileUploader"
 export default function UploadPage() {
   const router = useRouter()
 
-  const handleUploadComplete = (orderId: string) => {
+  const handleUploadComplete = (batchId: string) => {
     // Redirect to checkout after successful upload
     setTimeout(() => {
-      router.push(`/checkout/${orderId}`)
+      router.push(`/checkout/${batchId}`)
     }, 2000)
   }
 
@@ -51,7 +51,7 @@ export default function UploadPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold text-foreground">2.</span>
-              <span>Review your order and proceed to payment</span>
+              <span>Review your batch and proceed to payment</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="font-semibold text-foreground">3.</span>

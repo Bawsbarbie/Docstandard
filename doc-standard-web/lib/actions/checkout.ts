@@ -7,14 +7,14 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { getStripe, STRIPE_CONFIG } from "@/lib/stripe"
-import type { Order } from "@/lib/types/database"
+import type { Batch } from "@/lib/types/database"
 
 /**
- * Create a Stripe Checkout Session for an order
+ * Create a Stripe Checkout Session for a batch
  * Returns the session URL for redirect
  */
 export async function createCheckoutSession(
-  orderId: string
+  batchId: string
 ): Promise<{ data: { url: string } | null; error: string | null }> {
   try {
     const supabase = await createClient()
@@ -29,36 +29,36 @@ export async function createCheckoutSession(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Get order and verify ownership
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    // Get batch and verify ownership
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("*")
-      .eq("id", orderId)
+      .eq("id", batchId)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
-    if (order.user_id !== user.id) {
+    if (batch.user_id !== user.id) {
       return { data: null, error: "Unauthorized" }
     }
 
-    // Check if order already paid
-    if (order.paid_at) {
-      return { data: null, error: "Order already paid" }
+    // Check if batch already paid
+    if (batch.paid_at) {
+      return { data: null, error: "Batch already paid" }
     }
 
-    // Check if order has a valid status
-    if (order.status !== "uploaded" && order.status !== "created") {
-      return { data: null, error: "Order cannot be paid at this time" }
+    // Check if batch has a valid status
+    if (batch.status !== "uploaded" && batch.status !== "created") {
+      return { data: null, error: "Batch cannot be paid at this time" }
     }
 
-    // Get file count for the order
+    // Get file count for the batch
     const { data: files, error: filesError } = await supabase
-      .from("order_files")
+      .from("uploads")
       .select("id")
-      .eq("order_id", orderId)
+      .eq("batch_id", batchId)
 
     const fileCount = files?.length || 0
 
@@ -66,7 +66,7 @@ export async function createCheckoutSession(
     const session = await getStripe().checkout.sessions.create({
       mode: "payment",
       customer_email: user.email,
-      client_reference_id: orderId,
+      client_reference_id: batchId,
       line_items: [
         {
           price_data: {
@@ -84,23 +84,23 @@ export async function createCheckoutSession(
       success_url: STRIPE_CONFIG.success_url,
       cancel_url: STRIPE_CONFIG.cancel_url,
       metadata: {
-        order_id: orderId,
+        batch_id: batchId,
         user_id: user.id,
         file_count: fileCount.toString(),
       },
     })
 
-    // Update order with Stripe session ID
+    // Update batch with Stripe session ID
     const { error: updateError } = await supabase
-      .from("orders")
+      .from("batches")
       .update({
         stripe_session_id: session.id,
       })
-      .eq("id", orderId)
+      .eq("id", batchId)
       .eq("user_id", user.id)
 
     if (updateError) {
-      console.error("Error updating order with session ID:", updateError)
+      console.error("Error updating batch with session ID:", updateError)
       // Don't fail the request - session is created
     }
 
@@ -116,11 +116,11 @@ export async function createCheckoutSession(
 }
 
 /**
- * Get order details for display
+ * Get batch details for display
  */
-export async function getOrderForCheckout(
-  orderId: string
-): Promise<{ data: (Order & { file_count: number }) | null; error: string | null }> {
+export async function getBatchForCheckout(
+  batchId: string
+): Promise<{ data: (Batch & { file_count: number }) | null; error: string | null }> {
   try {
     const supabase = await createClient()
 
@@ -134,26 +134,26 @@ export async function getOrderForCheckout(
       return { data: null, error: "Not authenticated" }
     }
 
-    // Get order
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    // Get batch
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("*")
-      .eq("id", orderId)
+      .eq("id", batchId)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
-    if (order.user_id !== user.id) {
+    if (batch.user_id !== user.id) {
       return { data: null, error: "Unauthorized" }
     }
 
     // Get file count
     const { data: files, error: filesError } = await supabase
-      .from("order_files")
+      .from("uploads")
       .select("id")
-      .eq("order_id", orderId)
+      .eq("batch_id", batchId)
 
     if (filesError) {
       console.error("Error getting files:", filesError)
@@ -161,22 +161,22 @@ export async function getOrderForCheckout(
 
     return {
       data: {
-        ...order,
+        ...batch,
         file_count: files?.length || 0,
       },
       error: null,
     }
   } catch (error) {
-    console.error("Exception getting order:", error)
-    return { data: null, error: "Failed to get order" }
+    console.error("Exception getting batch:", error)
+    return { data: null, error: "Failed to get batch" }
   }
 }
 
 /**
- * Check if an order is paid
+ * Check if a batch is paid
  */
-export async function checkOrderPayment(
-  orderId: string
+export async function checkBatchPayment(
+  batchId: string
 ): Promise<{ data: { paid: boolean; status: string } | null; error: string | null }> {
   try {
     const supabase = await createClient()
@@ -190,21 +190,21 @@ export async function checkOrderPayment(
       return { data: null, error: "Not authenticated" }
     }
 
-    const { data: order, error: orderError } = await supabase
-      .from("orders")
+    const { data: batch, error: batchError } = await supabase
+      .from("batches")
       .select("status, paid_at")
-      .eq("id", orderId)
+      .eq("id", batchId)
       .eq("user_id", user.id)
       .single()
 
-    if (orderError || !order) {
-      return { data: null, error: "Order not found" }
+    if (batchError || !batch) {
+      return { data: null, error: "Batch not found" }
     }
 
     return {
       data: {
-        paid: !!order.paid_at,
-        status: order.status,
+        paid: !!batch.paid_at,
+        status: batch.status,
       },
       error: null,
     }

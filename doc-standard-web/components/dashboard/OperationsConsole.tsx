@@ -1,12 +1,12 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import type { OrderWithFiles } from "@/lib/types/database"
+import type { BatchWithUploads } from "@/lib/types/database"
 import { UploadBatchModal } from "@/components/dashboard/UploadBatchModal"
 import { ShieldCheck, CircleUserRound, CreditCard, Layers } from "lucide-react"
 
 interface OperationsConsoleProps {
-  orders: OrderWithFiles[]
+  orders: BatchWithUploads[]
   error?: string | null
 }
 
@@ -35,7 +35,7 @@ export function OperationsConsole({ orders, error }: OperationsConsoleProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const stats = useMemo(() => {
-    const filesNormalized = orders.reduce((total, order) => total + (order.order_files?.length || 0), 0)
+    const filesNormalized = orders.reduce((total, order) => total + (order.uploads?.length || 0), 0)
     const linesAudited = filesNormalized * 120
     const auditScore = orders.length > 0 ? Math.min(99, 90 + Math.round(filesNormalized / 5)) : 96
     return { filesNormalized, linesAudited, auditScore }
@@ -164,7 +164,7 @@ export function OperationsConsole({ orders, error }: OperationsConsoleProps) {
                   <tbody>
                     {orders.map((order) => {
                       const status = statusLabels[order.status] || statusLabels.created
-                      const fileCount = order.order_files?.length || 0
+                      const fileCount = order.uploads?.length || 0
                       return (
                         <tr key={order.id} className="border-b border-slate-100">
                           <td className="py-4 font-semibold text-slate-900">
