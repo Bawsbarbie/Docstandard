@@ -5,9 +5,10 @@ import { AlertTriangle, ArrowRight } from "lucide-react"
 interface RiskSectionProps {
   quote?: string
   painPoints?: string[]
+  compact?: boolean
 }
 
-export function RiskSection({ quote, painPoints }: RiskSectionProps) {
+export function RiskSection({ quote, painPoints, compact = false }: RiskSectionProps) {
   const fallbackQuote =
     "Audit risk from 'Dirty Data': Unstructured reference numbers and mismatched dates create downstream reconciliation errors."
 
@@ -20,7 +21,7 @@ export function RiskSection({ quote, painPoints }: RiskSectionProps) {
     painPoints && painPoints.length >= 2 ? painPoints.slice(0, 2) : fallbackAlerts
 
   return (
-    <section className="bg-slate-900 text-white py-24">
+    <section className={`bg-slate-900 text-white ${compact ? "py-6" : "py-24"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>

@@ -260,7 +260,7 @@ export function TechnicalGuide({
             : rawRows
 
         return (
-          <section key={section.id} className="py-12 bg-slate-50">
+          <section key={section.id} className="py-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {isTextOnly ? (
                 <div className="text-center max-w-3xl mx-auto mb-12">

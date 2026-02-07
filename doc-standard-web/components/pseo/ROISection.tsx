@@ -20,12 +20,21 @@ export function ROISection({
   errorReductionNote,
 }: ROISectionProps) {
   const manualEffortValue = manualEffort ?? "13.3h"
-  const withDocStandardValue = withDocStandard ?? "5m"
-  const annualSavingsValue = annualSavings ?? "$120k"
+  const withDocStandardValue = withDocStandard ?? "24h turnaround"
+  const formatAnnualSavings = (value: string) => {
+    const match = value.match(/^\$([\d,]+)(?:\/year)?$/i)
+    if (!match) return value
+    const raw = Number(match[1].replace(/,/g, ""))
+    if (!Number.isFinite(raw)) return value
+    const short = raw >= 1000 ? `$${Math.round(raw / 1000)}K/year` : `$${raw}/year`
+    return short
+  }
+
+  const annualSavingsValue = formatAnnualSavings(annualSavings ?? "$120k")
   const errorReductionValue = errorReduction ?? "100%"
 
   const manualEffortNoteValue = manualEffortNote ?? "8 mins per invoice"
-  const withDocStandardNoteValue = withDocStandardNote ?? "30 secs per batch"
+  const withDocStandardNoteValue = withDocStandardNote ?? "1,000 files/batch"
   const annualSavingsNoteValue = annualSavingsNote ?? "Reclaimed Capacity"
   const errorReductionNoteValue = errorReductionNote ?? "Audit Value"
 

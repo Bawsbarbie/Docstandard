@@ -1,0 +1,10 @@
+[
+  {"systemA": "CargoWise", "systemB": "NetSuite"},
+  {"systemA": "SAP", "systemB": "QuickBooks"},
+  {"systemA": "Magaya", "systemB": "Oracle"},
+  {"systemA": "Motive", "systemB": "Microsoft Dynamics"},
+  {"systemA": "CargoWise", "systemB": "SAP"},
+  {"systemA": "NetSuite", "systemB": "QuickBooks"},
+  {"systemA": "Oracle", "systemB": "Microsoft Dynamics"},
+  {"systemA": "Magaya", "systemB": "NetSuite"}
+]

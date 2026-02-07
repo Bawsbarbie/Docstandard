@@ -13,9 +13,20 @@ interface PainSectionProps {
   kind?: string
   systemA?: string
   systemB?: string
+  compact?: boolean
 }
 
-export function PainSection({ content, painPoints, valueLogic, intentName, vertical, kind, systemA, systemB }: PainSectionProps) {
+export function PainSection({
+  content,
+  painPoints,
+  valueLogic,
+  intentName,
+  vertical,
+  kind,
+  systemA,
+  systemB,
+  compact = false,
+}: PainSectionProps) {
   // Generate dynamic headline based on vertical/kind
   const getHeadline = (): string => {
     const normalizedKind = (kind || vertical || "").toLowerCase()
@@ -115,7 +126,7 @@ export function PainSection({ content, painPoints, valueLogic, intentName, verti
   })
 
   return (
-    <section className="py-24 bg-white">
+    <section className={`bg-white ${compact ? "pt-6 pb-0" : "py-24"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">

@@ -5,9 +5,11 @@ import { ArrowRight, Layers, AlertTriangle, CheckCircle } from "lucide-react"
 import Link from "next/link"
 
 interface HeroProps {
-  intro: BlockItem
-  pain: BlockItem
-  intentName: string
+  intro?: BlockItem
+  pain?: BlockItem
+  intentName?: string
+  title?: string
+  subtitle?: string
   systemA?: string
   systemB?: string
   visual?: "data-card"
@@ -25,6 +27,8 @@ export function Hero({
   intro,
   pain,
   intentName,
+  title,
+  subtitle,
   systemA,
   systemB,
   visual,
@@ -38,8 +42,14 @@ export function Hero({
   valueLogic,
 }: HeroProps) {
   // Extract System A from intent name or integration pair for the dynamic headline
-  const derivedSystemA = integrationPair ? integrationPair.split("<->")[0].trim() : intentName.split(" ")[0]
+  const derivedSystemA = integrationPair
+    ? integrationPair.split("<->")[0].trim()
+    : intentName
+      ? intentName.split(" ")[0]
+      : systemA || "Source"
   const headlineSystemA = systemA || derivedSystemA
+  const headline = title || (intentName ? `Clean Data for ${intentName}` : "Clean Data for Your Systems")
+  const introText = useCase || intro?.text || subtitle || ""
 
   return (
     <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -58,15 +68,11 @@ export function Hero({
           </div>
           
           <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1]">
-            Clean{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              Data
-            </span>{" "}
-            for {intentName}
+            {headline}
           </h1>
           
           <p className="text-lg text-slate-600 leading-relaxed max-w-xl">
-            {useCase || intro.text}
+            {introText}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
