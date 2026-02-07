@@ -65,7 +65,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
     try {
       const parsed = JSON.parse(raw)
       if (parsed?.step) setStep(parsed.step)
-      if (parsed?.profile) setProfile({ ...profile, ...parsed.profile })
+      if (parsed?.profile) setProfile((prev) => ({ ...prev, ...parsed.profile }))
       if (parsed?.docTypes) setDocTypes(parsed.docTypes)
       if (parsed?.tier) setTier(parsed.tier)
       if (parsed?.fileSummary) setFileSummary(parsed.fileSummary)

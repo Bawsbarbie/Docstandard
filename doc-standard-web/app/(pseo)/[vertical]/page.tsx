@@ -10,7 +10,9 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const importer = generatedPageImports[params.vertical as keyof typeof generatedPageImports]
+  const importer = (generatedPageImports as Record<string, (() => Promise<any>) | undefined>)[
+    params.vertical
+  ]
   if (importer) {
     const title = params.vertical
       .split("-")
@@ -22,7 +24,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function VerticalHubPage({ params }: PageProps) {
-  const importer = generatedPageImports[params.vertical as keyof typeof generatedPageImports]
+  const importer = (generatedPageImports as Record<string, (() => Promise<any>) | undefined>)[
+    params.vertical
+  ]
   if (importer) {
     const mod = await importer()
     const Page = mod.default
