@@ -323,7 +323,7 @@ app/(pseo)/
 ## What's Next (Phase 3)
 
 ### 1. Database Integration
-- [ ] Create Supabase tables (orders, order_files)
+- [ ] Create Supabase tables (batches, uploads)
 - [ ] Implement RLS policies
 - [ ] Add service role functions
 
@@ -331,7 +331,7 @@ app/(pseo)/
 - [ ] Build upload widget component
 - [ ] Implement signed URL generation
 - [ ] Stripe payment integration
-- [ ] Order creation flow
+- [ ] Batch creation flow
 
 ### 3. Enhanced pSEO
 - [ ] Add more content variants (20+ per block type)

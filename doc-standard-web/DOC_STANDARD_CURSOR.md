@@ -99,28 +99,28 @@
 
 ### Enums
 ```sql
-create type order_status as enum ('created', 'uploaded', 'queued', 'processing', 'needs_review', 'delivered', 'failed');
-create type batch_scope as enum ('standard', 'large', 'complex');
+create type batch_status as enum ('created', 'uploaded', 'queued', 'processing', 'needs_review', 'delivered', 'failed');
+create type batch_tier as enum ('standard', 'large', 'complex');
 create type file_role as enum ('input', 'output');
 ```
 
-### Table: `orders`
+### Table: `batches`
 - **id:** UUID (PK)
 - **user_id:** UUID (FK Auth)
-- **status:** `order_status` (Default: 'created')
-- **scope:** `batch_scope` (Default: 'standard')
+- **status:** `batch_status` (Default: 'created')
+- **scope:** `batch_tier` (Default: 'standard')
 - **price_cents:** 79900
 - **stripe_session_id:** Text
 
-### Table: `order_files`
+### Table: `uploads`
 - **id:** UUID (PK)
-- **order_id:** UUID (FK Orders)
+- **batch_id:** UUID (FK Batches)
 - **role:** `file_role` ('input')
-- **storage_path:** Text (e.g., `orders/{order_id}/inputs/{file_id}.pdf`)
+- **storage_path:** Text (e.g., `batches/{batch_id}/inputs/{file_id}.pdf`)
 - **original_name:** Text
 
 ### RLS Policies
-- Users can only `SELECT/INSERT` their own Orders and Files.
+- Users can only `SELECT/INSERT` their own Batches and Files.
 - Service Role (Worker) has full access.
 
 ---

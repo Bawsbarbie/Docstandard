@@ -2,7 +2,7 @@
 
 ## Summary
 
-Phase 3 of DocStandard.co has been successfully implemented. The complete database schema, upload flow, and order management system are now operational.
+Phase 3 of DocStandard.co has been successfully implemented. The complete database schema, upload flow, and batch management system are now operational.
 
 ## What Was Built
 
@@ -12,27 +12,27 @@ Phase 3 of DocStandard.co has been successfully implemented. The complete databa
 
 #### Enums Created:
 ```sql
-order_status: created | uploaded | queued | processing | needs_review | delivered | failed
-batch_scope: standard | large | complex  
+batch_status: created | uploaded | queued | processing | needs_review | delivered | failed
+batch_tier: standard | large | complex  
 file_role: input | output
 ```
 
 #### Tables Created:
 
-**`orders` Table**:
+**`batches` Table**:
 - `id` (UUID, Primary Key)
 - `user_id` (UUID, Foreign Key to auth.users)
-- `status` (order_status, default: 'created')
-- `scope` (batch_scope, default: 'standard')
+- `status` (batch_status, default: 'created')
+- `scope` (batch_tier, default: 'standard')
 - `price_cents` (Integer, default: 79900)
 - `stripe_session_id` (Text)
 - `stripe_payment_intent_id` (Text)
 - `notes` (Text)
 - Timestamps: `created_at`, `updated_at`, `processed_at`, `delivered_at`
 
-**`order_files` Table**:
+**`uploads` Table**:
 - `id` (UUID, Primary Key)
-- `order_id` (UUID, Foreign Key to orders)
+- `batch_id` (UUID, Foreign Key to batches)
 - `role` (file_role, default: 'input')
 - `storage_path` (Text) - Path in Supabase Storage
 - `original_name` (Text)
@@ -41,45 +41,45 @@ file_role: input | output
 - Timestamps: `created_at`, `uploaded_at`
 
 #### RLS Policies:
-- ✅ Users can SELECT their own orders
-- ✅ Users can INSERT their own orders
-- ✅ Users can UPDATE their own orders
-- ✅ Users can SELECT files for their own orders
-- ✅ Users can INSERT files for their own orders
-- ✅ Users can UPDATE files for their own orders
+- ✅ Users can SELECT their own batches
+- ✅ Users can INSERT their own batches
+- ✅ Users can UPDATE their own batches
+- ✅ Users can SELECT files for their own batches
+- ✅ Users can INSERT files for their own batches
+- ✅ Users can UPDATE files for their own batches
 - ✅ Service role has full access (for workers)
 
 #### Indexes:
-- `idx_orders_user_id` - Fast user order lookups
-- `idx_orders_status` - Status filtering
-- `idx_orders_created_at` - Chronological sorting
-- `idx_order_files_order_id` - File lookups by order
-- `idx_order_files_role` - Input/output filtering
+- `idx_batches_user_id` - Fast user batch lookups
+- `idx_batches_status` - Status filtering
+- `idx_batches_created_at` - Chronological sorting
+- `idx_uploads_batch_id` - File lookups by batch
+- `idx_uploads_role` - Input/output filtering
 
 #### Functions & Triggers:
 - `update_updated_at_column()` - Auto-updates `updated_at` timestamp
-- Trigger on `orders` table for automatic timestamp updates
+- Trigger on `batches` table for automatic timestamp updates
 
 ### 2. Upload Actions ✅
 
 **Location**: `lib/actions/upload.ts`
 
-Server actions for secure file upload and order management:
+Server actions for secure file upload and batch management:
 
-#### `createOrder(input?)`
-- Creates new order for authenticated user
+#### `createBatch(input?)`
+- Creates new batch for authenticated user
 - Sets default price: $799.00 (79900 cents)
-- Returns order with ID
+- Returns batch with ID
 
-#### `getSignedUploadUrl(orderId, fileName, fileType)`
+#### `getSignedUploadUrl(batchId, fileName, fileType)`
 - Generates secure signed URL for Supabase Storage
 - Valid for 1 hour
-- Path format: `orders/{orderId}/inputs/{uniqueId}.{ext}`
-- Verifies user owns the order
+- Path format: `batches/{batchId}/inputs/{uniqueId}.{ext}`
+- Verifies user owns the batch
 
-#### `createOrderFile(input)`
+#### `createUpload(input)`
 - Creates database record for uploaded file
-- Links file to order
+- Links file to batch
 - Stores metadata (name, size, type)
 
 #### `uploadFileToStorage(signedUrl, file)`
@@ -87,17 +87,17 @@ Server actions for secure file upload and order management:
 - Uses signed URL for security
 - Handles upload errors
 
-#### `completeOrderUpload(orderId)`
-- Marks order as 'uploaded' after all files complete
-- Updates order status in database
+#### `completeBatchUpload(batchId)`
+- Marks batch as 'uploaded' after all files complete
+- Updates batch status in database
 
-#### `getUserOrders()`
-- Fetches all orders for authenticated user
+#### `getUserBatches()`
+- Fetches all batches for authenticated user
 - Ordered by creation date (newest first)
 
-#### `getOrderFiles(orderId)`
-- Fetches all files for a specific order
-- Verifies user owns the order
+#### `getBatchUploads(batchId)`
+- Fetches all files for a specific batch
+- Verifies user owns the batch
 
 ### 3. FileUploader Component ✅
 
@@ -114,21 +114,21 @@ Beautiful drag-and-drop file uploader with progress tracking.
 - **Status Indicators**: pending | uploading | success | error
 - **Error Handling**: User-friendly error messages
 - **Remove Files**: Delete files before upload
-- **Success Callback**: `onUploadComplete(orderId)`
+- **Success Callback**: `onUploadComplete(batchId)`
 
 #### Upload Flow:
 1. User drops/selects files
 2. Files validated (type, size, count)
 3. Files added to local state
 4. User clicks "Upload" button
-5. Creates order via `createOrder()`
+5. Creates batch via `createBatch()`
 6. For each file:
    - Gets signed URL via `getSignedUploadUrl()`
    - Uploads to Supabase Storage
    - Updates progress (0% → 10% → 30% → 100%)
    - Shows success/error status
-7. Completes order via `completeOrderUpload()`
-8. Shows success message with Order ID
+7. Completes batch via `completeBatchUpload()`
+8. Shows success message with Batch ID
 9. Calls `onUploadComplete()` callback
 
 #### UI Components:
@@ -156,22 +156,22 @@ Integrated upload page with FileUploader and instructions.
 
 **Location**: `app/(app)/dashboard/page.tsx`
 
-Order management dashboard showing all user orders.
+Batch management dashboard showing all user batches.
 
 #### Features:
 - **Stats Cards**:
-  - Total Orders
+  - Total Batches
   - In Progress (uploaded, queued, processing)
   - Completed (delivered)
-- **Orders List**:
-  - Order ID (first 8 chars)
+- **Batches List**:
+  - Batch ID (first 8 chars)
   - Status badge (color-coded)
   - Creation date
   - Price
   - Scope (standard/large/complex)
   - Notes
-- **Empty State**: Shows when no orders exist
-- **New Order Button**: Links to upload page
+- **Empty State**: Shows when no batches exist
+- **New Batch Button**: Links to upload page
 
 ### 6. App Layout ✅
 
@@ -192,13 +192,13 @@ Navigation layout for the authenticated app.
 TypeScript types matching the Supabase schema.
 
 #### Types:
-- `OrderStatus` - Order lifecycle states
-- `BatchScope` - Order complexity levels
+- `BatchStatus` - Batch lifecycle states
+- `BatchTier` - Batch complexity levels
 - `FileRole` - Input vs output files
-- `Order` - Complete order interface
-- `OrderFile` - Complete file interface
-- `CreateOrderInput` - Order creation input
-- `CreateOrderFileInput` - File record input
+- `Batch` - Complete batch interface
+- `Upload` - Complete file interface
+- `CreateBatchInput` - Batch creation input
+- `CreateUploadInput` - File record input
 - `SignedUploadUrl` - Signed URL response
 
 ## Architecture & Data Flow
@@ -210,37 +210,37 @@ TypeScript types matching the Supabase schema.
    User visits /upload → Selects files → Clicks "Upload"
    
 2. CREATE ORDER
-   createOrder() → Supabase orders table
-   Returns: { order_id: "abc-123..." }
+   createBatch() → Supabase batches table
+   Returns: { batch_id: "abc-123..." }
    
 3. FOR EACH FILE:
    a. Get Signed URL
-      getSignedUploadUrl(order_id, file_name, file_type)
-      → Returns: { url: "https://...", path: "orders/abc-123/inputs/xyz.pdf" }
+      getSignedUploadUrl(batch_id, file_name, file_type)
+      → Returns: { url: "https://...", path: "batches/abc-123/inputs/xyz.pdf" }
    
    b. Upload to Storage
       PUT file to signed URL
-      → Supabase Storage: order-files bucket
+      → Supabase Storage: batch-files bucket
    
    c. Update UI
       Progress: 0% → 10% → 30% → 100%
       Status: pending → uploading → success
    
 4. COMPLETE ORDER
-   completeOrderUpload(order_id)
-   → Updates order status to 'uploaded'
+   completeBatchUpload(batch_id)
+   → Updates batch status to 'uploaded'
    
 5. REDIRECT
    → Navigate to /dashboard
-   → Show order in list
+   → Show batch in list
 ```
 
 ### Storage Structure
 
 ```
-Supabase Storage: order-files/
-└── orders/
-    └── {order_id}/
+Supabase Storage: batch-files/
+└── batches/
+    └── {batch_id}/
         ├── inputs/
         │   ├── {uuid1}.pdf
         │   ├── {uuid2}.pdf
@@ -257,15 +257,15 @@ auth.users (Supabase Auth)
     │
     │ 1:N
     ▼
-orders
+batches
     │
     │ 1:N
     ▼
-order_files
+uploads
     │
     │ references
     ▼
-Supabase Storage (order-files bucket)
+Supabase Storage (batch-files bucket)
 ```
 
 ### Security Model
@@ -279,11 +279,11 @@ Supabase Storage (order-files bucket)
 - Private bucket (not public)
 - Signed URLs for uploads (1 hour expiry)
 - Path-based access control
-- Users can only upload to their order folders
+- Users can only upload to their batch folders
 
 **Server Actions**:
 - All actions verify authentication
-- Order ownership verified before operations
+- Batch ownership verified before operations
 - Signed URLs generated server-side only
 - No direct storage access from client
 
@@ -307,7 +307,7 @@ Supabase Storage (order-files bucket)
 ✅ app/(app)/
    ├── layout.tsx                       (App navigation)
    ├── dashboard/
-   │   └── page.tsx                     (Orders dashboard)
+   │   └── page.tsx                     (Batches dashboard)
    └── upload/
        └── page.tsx                     (Upload page)
 ```
@@ -331,7 +331,7 @@ supabase db push
 
 Via Supabase Dashboard:
 1. Go to Storage
-2. Create bucket: `order-files`
+2. Create bucket: `batch-files`
 3. Set as Private (not public)
 4. Apply storage policies (see `supabase/README.md`)
 
@@ -351,7 +351,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 3. Click "Upload" button
 4. Watch progress bars
 5. Wait for success message
-6. View order in dashboard
+6. View batch in dashboard
 
 ## Testing Checklist
 
@@ -366,26 +366,26 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ### Upload Flow ✅
 - [x] File selection works (drag & drop)
 - [x] File validation (type, size, count)
-- [x] Order creation succeeds
+- [x] Batch creation succeeds
 - [x] Signed URL generation works
 - [x] File upload to storage succeeds
 - [x] Progress tracking updates
 - [x] Success message displays
-- [x] Order status updates to 'uploaded'
+- [x] Batch status updates to 'uploaded'
 
 ### Dashboard ✅
-- [x] Orders list displays
+- [x] Batches list displays
 - [x] Stats cards show correct counts
-- [x] Empty state shows when no orders
-- [x] New order button links to upload
-- [x] Order cards show correct data
+- [x] Empty state shows when no batches
+- [x] New batch button links to upload
+- [x] Batch cards show correct data
 
 ### Security ✅
 - [x] RLS prevents cross-user access
 - [x] Signed URLs expire after 1 hour
-- [x] Users can't upload to others' orders
+- [x] Users can't upload to others' batches
 - [x] Server actions verify authentication
-- [x] Order ownership checked
+- [x] Batch ownership checked
 
 ### UI/UX ✅
 - [x] Responsive design (mobile/desktop)
@@ -402,7 +402,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 2. **No Payment Integration**: Stripe integration not yet implemented
 3. **No File Download**: Can't download processed files yet
 4. **No File Preview**: Can't preview uploaded files
-5. **No Order Editing**: Can't modify order after creation
+5. **No Batch Editing**: Can't modify batch after creation
 6. **No File Deletion**: Can't remove files after upload
 
 ### Phase 4 Enhancements:
@@ -410,9 +410,9 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 - [ ] Integrate Stripe for payment processing
 - [ ] Add file download functionality
 - [ ] Implement file preview (PDF viewer, image viewer)
-- [ ] Add order editing capabilities
+- [ ] Add batch editing capabilities
 - [ ] File deletion from storage
-- [ ] Email notifications (order created, completed)
+- [ ] Email notifications (batch created, completed)
 - [ ] Admin dashboard for processing team
 - [ ] Worker queue for document processing
 - [ ] Webhook for Stripe events
@@ -426,9 +426,9 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 - **Progress tracking**: Real-time updates
 
 ### Database Queries:
-- **getUserOrders()**: O(n) where n = user's order count
-- **getOrderFiles()**: O(m) where m = files in order
-- **Order insertion**: ~50ms average
+- **getUserBatches()**: O(n) where n = user's batch count
+- **getBatchUploads()**: O(m) where m = files in batch
+- **Batch insertion**: ~50ms average
 - **File record insertion**: ~30ms average
 
 ### Storage:
@@ -447,7 +447,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 ### Database Errors:
 - Authentication failure → Redirect to login
-- Order not found → 404 error
+- Batch not found → 404 error
 - Unauthorized access → 403 error
 - Connection timeout → Retry logic
 
@@ -462,43 +462,43 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 All endpoints are Next.js Server Actions (not REST):
 
 ```typescript
-// Create order
-createOrder(input?: CreateOrderInput): Promise<{ data: Order | null; error: string | null }>
+// Create batch
+createBatch(input?: CreateBatchInput): Promise<{ data: Batch | null; error: string | null }>
 
 // Get signed upload URL
-getSignedUploadUrl(orderId: string, fileName: string, fileType: string): Promise<{ data: { url: string; path: string } | null; error: string | null }>
+getSignedUploadUrl(batchId: string, fileName: string, fileType: string): Promise<{ data: { url: string; path: string } | null; error: string | null }>
 
 // Create file record
-createOrderFile(input: CreateOrderFileInput): Promise<{ data: OrderFile | null; error: string | null }>
+createUpload(input: CreateUploadInput): Promise<{ data: Upload | null; error: string | null }>
 
 // Complete upload
-completeOrderUpload(orderId: string): Promise<{ success: boolean; error: string | null }>
+completeBatchUpload(batchId: string): Promise<{ success: boolean; error: string | null }>
 
-// Get user's orders
-getUserOrders(): Promise<{ data: Order[] | null; error: string | null }>
+// Get user's batches
+getUserBatches(): Promise<{ data: Batch[] | null; error: string | null }>
 
-// Get order files
-getOrderFiles(orderId: string): Promise<{ data: OrderFile[] | null; error: string | null }>
+// Get batch files
+getBatchUploads(batchId: string): Promise<{ data: Upload[] | null; error: string | null }>
 ```
 
 ## Monitoring & Debugging
 
-### Check Order Status:
+### Check Batch Status:
 ```sql
--- View all orders
-SELECT * FROM orders ORDER BY created_at DESC;
+-- View all batches
+SELECT * FROM batches ORDER BY created_at DESC;
 
--- View orders by status
-SELECT * FROM orders WHERE status = 'uploaded';
+-- View batches by status
+SELECT * FROM batches WHERE status = 'uploaded';
 
--- View files for an order
-SELECT * FROM order_files WHERE order_id = 'your-order-id';
+-- View files for an batch
+SELECT * FROM uploads WHERE batch_id = 'your-batch-id';
 ```
 
 ### Check Storage:
 - Go to Supabase Dashboard → Storage
-- Navigate to `order-files` bucket
-- Browse `orders/{order_id}/inputs/` folder
+- Navigate to `batch-files` bucket
+- Browse `batches/{batch_id}/inputs/` folder
 
 ### Debug Upload Issues:
 1. Check browser console for errors

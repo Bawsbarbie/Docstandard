@@ -69,7 +69,7 @@ supabase db push
 1. Go to **Storage** in Dashboard
 2. Click **New Bucket**
 3. Settings:
-   - **Name**: `order-files`
+   - **Name**: `batch-files`
    - **Public**: ❌ No (keep private)
    - **File size limit**: 50MB
    - **Allowed MIME types**: Leave blank (allow all)
@@ -77,33 +77,33 @@ supabase db push
 
 ### 2.5 Apply Storage Policies
 
-Go to **Storage** → **Policies** → **order-files** bucket
+Go to **Storage** → **Policies** → **batch-files** bucket
 
-**Policy 1: Users can upload to own orders**
+**Policy 1: Users can upload to own batches**
 ```sql
-CREATE POLICY "Users can upload to own order folders"
+CREATE POLICY "Users can upload to own batch folders"
 ON storage.objects
 FOR INSERT
 WITH CHECK (
-  bucket_id = 'order-files' AND
-  (storage.foldername(name))[1] = 'orders' AND
+  bucket_id = 'batch-files' AND
+  (storage.foldername(name))[1] = 'batches' AND
   auth.uid()::text IN (
-    SELECT user_id::text FROM orders 
+    SELECT user_id::text FROM batches 
     WHERE id::text = (storage.foldername(name))[2]
   )
 );
 ```
 
-**Policy 2: Users can read own order files**
+**Policy 2: Users can read own batch files**
 ```sql
-CREATE POLICY "Users can read own order files"
+CREATE POLICY "Users can read own batch files"
 ON storage.objects
 FOR SELECT
 USING (
-  bucket_id = 'order-files' AND
-  (storage.foldername(name))[1] = 'orders' AND
+  bucket_id = 'batch-files' AND
+  (storage.foldername(name))[1] = 'batches' AND
   auth.uid()::text IN (
-    SELECT user_id::text FROM orders 
+    SELECT user_id::text FROM batches 
     WHERE id::text = (storage.foldername(name))[2]
   )
 );
@@ -115,7 +115,7 @@ CREATE POLICY "Service role has full access"
 ON storage.objects
 FOR ALL
 TO service_role
-USING (bucket_id = 'order-files');
+USING (bucket_id = 'batch-files');
 ```
 
 ## Step 3: Environment Variables
@@ -202,7 +202,7 @@ Should render pSEO content.
 ```
 http://localhost:3000/dashboard
 ```
-Should show orders dashboard (after login).
+Should show batches dashboard (after login).
 
 ### Test 4: Upload Flow (Requires Auth)
 ```
@@ -219,21 +219,21 @@ http://localhost:3000/upload
 ```sql
 -- Check tables exist
 SELECT table_name FROM information_schema.tables 
-WHERE table_schema = 'public' AND table_name IN ('orders', 'order_files');
+WHERE table_schema = 'public' AND table_name IN ('batches', 'uploads');
 
 -- Check enums
 SELECT typname FROM pg_type 
-WHERE typtype = 'e' AND typname IN ('order_status', 'batch_scope', 'file_role');
+WHERE typtype = 'e' AND typname IN ('batch_status', 'batch_tier', 'file_role');
 
 -- Check RLS enabled
 SELECT tablename, rowsecurity FROM pg_tables 
-WHERE schemaname = 'public' AND tablename IN ('orders', 'order_files');
+WHERE schemaname = 'public' AND tablename IN ('batches', 'uploads');
 ```
 
 Expected: All queries return results.
 
 ### Storage ✅
-- Go to Storage → Should see `order-files` bucket
+- Go to Storage → Should see `batch-files` bucket
 - Bucket should be **Private** (not public)
 - Policies tab should show 3 policies
 
@@ -254,14 +254,14 @@ npm run dev
 4. Upload test PDF
 5. Check database:
 ```sql
-SELECT * FROM orders ORDER BY created_at DESC LIMIT 1;
-SELECT * FROM order_files ORDER BY created_at DESC LIMIT 1;
+SELECT * FROM batches ORDER BY created_at DESC LIMIT 1;
+SELECT * FROM uploads ORDER BY created_at DESC LIMIT 1;
 ```
-6. Check storage: orders/{order_id}/inputs/
+6. Check storage: batches/{batch_id}/inputs/
 
 ## Troubleshooting
 
-### Issue: "Permission denied for table orders"
+### Issue: "Permission denied for table batches"
 
 **Cause**: RLS is enabled but user not authenticated.
 
@@ -269,16 +269,16 @@ SELECT * FROM order_files ORDER BY created_at DESC LIMIT 1;
 - Sign in as a user
 - Or disable RLS temporarily (not recommended):
 ```sql
-ALTER TABLE orders DISABLE ROW LEVEL SECURITY;
+ALTER TABLE batches DISABLE ROW LEVEL SECURITY;
 ```
 
-### Issue: "relation 'orders' does not exist"
+### Issue: "relation 'batches' does not exist"
 
 **Cause**: Migration not run.
 
 **Fix**: Run the SQL migration in Supabase Dashboard.
 
-### Issue: "Bucket 'order-files' not found"
+### Issue: "Bucket 'batch-files' not found"
 
 **Cause**: Storage bucket not created.
 
@@ -300,7 +300,7 @@ ALTER TABLE orders DISABLE ROW LEVEL SECURITY;
 **Fix**: 
 1. Check storage policies exist
 2. Verify user is authenticated
-3. Check RLS policies on orders table
+3. Check RLS policies on batches table
 
 ### Issue: "Failed to fetch" on upload
 
@@ -372,7 +372,7 @@ supabase status      # Check status
 ### URLs
 - Local dev: `http://localhost:3000`
 - Supabase Dashboard: `https://supabase.com/dashboard`
-- Storage browser: Dashboard → Storage → order-files
+- Storage browser: Dashboard → Storage → batch-files
 
 ---
 

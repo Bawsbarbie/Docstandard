@@ -7,7 +7,7 @@ Quick reference for testing the database and upload flow.
 Before testing, ensure:
 - ✅ Supabase project created
 - ✅ Database migration run
-- ✅ Storage bucket `order-files` created
+- ✅ Storage bucket `batch-files` created
 - ✅ Storage policies applied
 - ✅ Environment variables set in `.env.local`
 - ✅ Dev server running (`npm run dev`)
@@ -22,10 +22,10 @@ Before testing, ensure:
 SELECT table_name 
 FROM information_schema.tables 
 WHERE table_schema = 'public' 
-  AND table_name IN ('orders', 'order_files');
+  AND table_name IN ('batches', 'uploads');
 ```
 
-**Expected**: Returns 2 rows (orders, order_files)
+**Expected**: Returns 2 rows (batches, uploads)
 
 ### Verify Enums Exist
 
@@ -33,7 +33,7 @@ WHERE table_schema = 'public'
 SELECT typname 
 FROM pg_type 
 WHERE typtype = 'e' 
-  AND typname IN ('order_status', 'batch_scope', 'file_role');
+  AND typname IN ('batch_status', 'batch_tier', 'file_role');
 ```
 
 **Expected**: Returns 3 rows
@@ -44,7 +44,7 @@ WHERE typtype = 'e'
 SELECT tablename, rowsecurity 
 FROM pg_tables 
 WHERE schemaname = 'public' 
-  AND tablename IN ('orders', 'order_files');
+  AND tablename IN ('batches', 'uploads');
 ```
 
 **Expected**: rowsecurity = true for both tables
@@ -57,20 +57,20 @@ FROM pg_policies
 WHERE schemaname = 'public';
 ```
 
-**Expected**: At least 6 policies (3 for orders, 3 for order_files)
+**Expected**: At least 6 policies (3 for batches, 3 for uploads)
 
 ## Test 2: Storage Setup ✅
 
 ### Via Dashboard:
 1. Go to **Storage**
-2. Should see `order-files` bucket
+2. Should see `batch-files` bucket
 3. Click bucket → Should be **Private**
 4. Go to **Policies** tab
 5. Should see 3 policies
 
 ### Via SQL:
 ```sql
-SELECT * FROM storage.buckets WHERE name = 'order-files';
+SELECT * FROM storage.buckets WHERE name = 'batch-files';
 ```
 
 **Expected**: Returns 1 row with public = false
@@ -158,32 +158,32 @@ http://localhost:3000/upload
 
 **5. Check Success**
 - ✅ Green success message
-- ✅ Order ID displayed
+- ✅ Batch ID displayed
 - ✅ Auto-redirect to dashboard (after 2 seconds)
 
 ### Check Database:
 
 ```sql
--- View latest order
-SELECT * FROM orders 
+-- View latest batch
+SELECT * FROM batches 
 ORDER BY created_at DESC 
 LIMIT 1;
 
--- View files for that order
-SELECT * FROM order_files 
-WHERE order_id = 'your-order-id-here'
+-- View files for that batch
+SELECT * FROM uploads 
+WHERE batch_id = 'your-batch-id-here'
 ORDER BY created_at DESC;
 ```
 
 **Expected**:
-- Order exists with status = 'uploaded'
+- Batch exists with status = 'uploaded'
 - Files exist with role = 'input'
 - storage_path populated
 
 ### Check Storage:
 
-1. Go to Storage → order-files
-2. Navigate to: `orders/{order_id}/inputs/`
+1. Go to Storage → batch-files
+2. Navigate to: `batches/{batch_id}/inputs/`
 3. Should see uploaded files
 
 ## Test 6: Dashboard ✅
@@ -194,25 +194,25 @@ http://localhost:3000/dashboard
 ```
 
 ### Expected:
-- Shows total orders count
+- Shows total batches count
 - Shows "In Progress" count
 - Shows "Completed" count
-- Lists recent orders
-- Each order shows:
-  - Order ID (first 8 chars)
+- Lists recent batches
+- Each batch shows:
+  - Batch ID (first 8 chars)
   - Status badge (color-coded)
   - Creation date
   - Price ($799.00)
   - Scope (standard/large/complex)
 
 ### Test Empty State:
-1. Delete all orders:
+1. Delete all batches:
 ```sql
-DELETE FROM order_files;
-DELETE FROM orders;
+DELETE FROM uploads;
+DELETE FROM batches;
 ```
 2. Refresh dashboard
-3. Should show "No orders yet" message
+3. Should show "No batches yet" message
 4. Should show "Upload Documents" button
 
 ## Test 7: Error Handling ✅
@@ -273,7 +273,7 @@ DELETE FROM orders;
 3. Click "DocStandard" logo
    - **Expected**: Navigate to `/` (home)
 
-4. Click "New Order" button on dashboard
+4. Click "New Batch" button on dashboard
    - **Expected**: Navigate to `/upload`
 
 ## Test 10: Responsive Design ✅
@@ -304,13 +304,13 @@ DELETE FROM orders;
 ### Test Cross-User Access:
 
 1. Create 2 test users (User A, User B)
-2. User A uploads files (creates Order 1)
+2. User A uploads files (creates Batch 1)
 3. Sign in as User B
-4. Try to access Order 1:
+4. Try to access Batch 1:
 
 ```sql
--- As User B, try to view User A's order
-SELECT * FROM orders WHERE id = 'user-a-order-id';
+-- As User B, try to view User A's batch
+SELECT * FROM batches WHERE id = 'user-a-batch-id';
 ```
 
 **Expected**: Returns 0 rows (RLS blocks access)
@@ -322,11 +322,11 @@ SELECT * FROM orders WHERE id = 'user-a-order-id';
 3. Try to upload to expired URL
 4. **Expected**: Upload fails with 403 error
 
-### Test Order Ownership:
+### Test Batch Ownership:
 
 1. Sign in as User A
-2. Get User B's order ID
-3. Try to upload to User B's order
+2. Get User B's batch ID
+3. Try to upload to User B's batch
 4. **Expected**: getSignedUploadUrl() returns "Unauthorized"
 
 ## Common Issues & Fixes
@@ -337,11 +337,11 @@ SELECT * FROM orders WHERE id = 'user-a-order-id';
 - Check user is signed in
 - Verify auth token in browser DevTools → Application → Cookies
 
-### Issue: "Order not found" error
+### Issue: "Batch not found" error
 
 **Fix**:
-- Check order exists in database
-- Verify order_id is correct UUID format
+- Check batch exists in database
+- Verify batch_id is correct UUID format
 
 ### Issue: Upload succeeds but files not in storage
 
@@ -350,11 +350,11 @@ SELECT * FROM orders WHERE id = 'user-a-order-id';
 - Verify storage policies applied
 - Check browser console for PUT request errors
 
-### Issue: Dashboard shows no orders
+### Issue: Dashboard shows no batches
 
 **Fix**:
-- Check RLS policies allow user to view their orders
-- Verify user_id matches in orders table
+- Check RLS policies allow user to view their batches
+- Verify user_id matches in batches table
 - Check browser console for SQL errors
 
 ### Issue: Progress bar doesn't update
@@ -373,7 +373,7 @@ All tests passing means:
 - ✅ Storage bucket configured
 - ✅ File upload functional
 - ✅ Progress tracking working
-- ✅ Dashboard displays orders
+- ✅ Dashboard displays batches
 - ✅ Navigation working
 - ✅ Error handling robust
 - ✅ Security enforced

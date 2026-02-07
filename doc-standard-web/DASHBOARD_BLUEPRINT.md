@@ -63,7 +63,7 @@ Build a responsive Client Dashboard in Next.js/Tailwind using the following spec
    - Include a select-field for 'Normalization Context' (mapping to our 3 core verticals).
    - Display a flat-fee confirmation ($799) before upload.
 4. Data Persistence:
-   - Integrate with the Supabase 'orders' and 'order_files' tables.
-   - Show 'Upload History' by querying authenticated user's orders.
+   - Integrate with the Supabase 'batches' and 'uploads' tables.
+   - Show 'Upload History' by querying authenticated user's batches.
 5. Tone: Use 'Engineering Veteran' labels from DocStandard Blueprint (e.g., 'Awaiting Ingestion' instead of 'Pending').
 ```

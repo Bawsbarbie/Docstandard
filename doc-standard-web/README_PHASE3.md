@@ -2,7 +2,7 @@
 
 ## Database & Upload Flow Operational
 
-Phase 3 of DocStandard.co is now **fully functional**. You have a complete file upload system with secure storage and order management.
+Phase 3 of DocStandard.co is now **fully functional**. You have a complete file upload system with secure storage and batch management.
 
 ## 🚀 What's Working
 
@@ -13,20 +13,20 @@ Phase 3 of DocStandard.co is now **fully functional**. You have a complete file 
 ```
 1. User selects files (drag & drop or click)
 2. Files validated (type, size, count)
-3. Order created in database
+3. Batch created in database
 4. Signed URLs generated for each file
 5. Files uploaded to Supabase Storage
 6. Progress tracked in real-time
-7. Order marked as "uploaded"
-8. Dashboard updated with new order
+7. Batch marked as "uploaded"
+8. Dashboard updated with new batch
 ```
 
 ### ✅ Database Schema
 
 **Comprehensive schema with security:**
 
-- **3 Enums**: order_status, batch_scope, file_role
-- **2 Tables**: orders, order_files
+- **4 Enums**: batch_status, batch_tier, file_role, upload_status
+- **2 Tables**: batches, uploads
 - **6 RLS Policies**: User data isolation
 - **5 Indexes**: Fast queries
 - **1 Trigger**: Auto-update timestamps
@@ -37,13 +37,13 @@ Phase 3 of DocStandard.co is now **fully functional**. You have a complete file 
 
 **8 secure server actions:**
 
-1. `createOrder()` - Create new order
+1. `createBatch()` - Create new batch
 2. `getSignedUploadUrl()` - Generate upload URL
-3. `createOrderFile()` - Create file record
+3. `createUpload()` - Create file record
 4. `uploadFileToStorage()` - Upload to storage
-5. `completeOrderUpload()` - Mark order complete
-6. `getUserOrders()` - Get user's orders
-7. `getOrderFiles()` - Get order's files
+5. `completeBatchUpload()` - Mark batch complete
+6. `getUserBatches()` - Get user's batches
+7. `getBatchUploads()` - Get batch's files
 8. Full TypeScript types in `lib/types/database.ts`
 
 **Path**: `lib/actions/upload.ts`
@@ -65,10 +65,10 @@ Phase 3 of DocStandard.co is now **fully functional**. You have a complete file 
 
 ### ✅ Dashboard
 
-**Order management interface:**
+**Batch management interface:**
 
 - Stats cards (Total, In Progress, Completed)
-- Orders list with status badges
+- Batches list with status badges
 - Creation dates and pricing
 - Empty state with CTA
 - Responsive design
@@ -107,7 +107,7 @@ components/upload/
 
 app/(app)/
 ├── layout.tsx                       (Navigation)
-├── dashboard/page.tsx               (Orders dashboard)
+├── dashboard/page.tsx               (Batches dashboard)
 └── upload/page.tsx                  (Upload page)
 
 Documentation:
@@ -124,7 +124,7 @@ Documentation:
 # Option A: Via Dashboard
 1. Go to SQL Editor
 2. Run supabase/migrations/20260201000000_initial_schema.sql
-3. Create bucket: order-files (private)
+3. Create bucket: batch-files (private)
 4. Apply storage policies
 
 # Option B: Via CLI
@@ -156,15 +156,15 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-key
 ### Row Level Security (RLS)
 
 **Users can ONLY:**
-- View their own orders
-- Create orders for themselves
-- Upload to their own orders
+- View their own batches
+- Create batches for themselves
+- Upload to their own batches
 - Read their own files
 
 **Service role can:**
 - Access all data (for workers)
 - Process documents
-- Update order status
+- Update batch status
 
 ### Signed URLs
 
@@ -184,17 +184,17 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-key
 ```
 Client (FileUploader)
   ↓
-createOrder() → Database (orders table)
+createBatch() → Database (batches table)
   ↓
 getSignedUploadUrl() → Generates secure URL
   ↓
-PUT to Supabase Storage → order-files bucket
+PUT to Supabase Storage → batch-files bucket
   ↓
-createOrderFile() → Database (order_files table)
+createUpload() → Database (uploads table)
   ↓
-completeOrderUpload() → Update order status
+completeBatchUpload() → Update batch status
   ↓
-Dashboard → Display orders
+Dashboard → Display batches
 ```
 
 ## 📖 Documentation
@@ -213,14 +213,14 @@ Dashboard → Display orders
 ```sql
 -- 1. Check tables exist
 SELECT table_name FROM information_schema.tables 
-WHERE table_schema = 'public' AND table_name IN ('orders', 'order_files');
+WHERE table_schema = 'public' AND table_name IN ('batches', 'uploads');
 
 -- 2. Check enums exist
 SELECT typname FROM pg_type WHERE typtype = 'e';
 
 -- 3. Check RLS enabled
 SELECT tablename, rowsecurity FROM pg_tables 
-WHERE tablename IN ('orders', 'order_files');
+WHERE tablename IN ('batches', 'uploads');
 ```
 
 ### Upload Test:
@@ -247,15 +247,15 @@ WHERE tablename IN ('orders', 'order_files');
 - Clean card-based layout
 - Color-coded status badges
 - Empty state with illustration
-- Quick actions (New Order button)
+- Quick actions (New Batch button)
 - Stats at a glance
 
 ## 💾 Storage Structure
 
 ```
-order-files/
-└── orders/
-    └── {order_id}/
+batch-files/
+└── batches/
+    └── {batch_id}/
         ├── inputs/
         │   ├── {uuid1}.pdf
         │   ├── {uuid2}.jpg
@@ -284,9 +284,9 @@ order-files/
 - Large files (50MB): ~15-30 seconds
 
 ### Database Queries:
-- Order creation: ~50ms
+- Batch creation: ~50ms
 - File record: ~30ms
-- User orders: ~100ms
+- User batches: ~100ms
 
 ### UI Responsiveness:
 - Progress updates: Real-time (every 100ms)
@@ -315,9 +315,9 @@ order-files/
    - File preview
 
 4. **Email Notifications**:
-   - Order created
-   - Order processing
-   - Order delivered
+   - Batch created
+   - Batch processing
+   - Batch delivered
    - Payment received
 
 ## ✅ Success Checklist
@@ -329,7 +329,7 @@ Phase 3 complete when:
 - [x] Storage bucket configured
 - [x] Upload actions functional
 - [x] FileUploader component built
-- [x] Dashboard shows orders
+- [x] Dashboard shows batches
 - [x] Upload page integrated
 - [x] Navigation working
 - [x] Security enforced
@@ -345,7 +345,7 @@ Phase 3 complete when:
 - ✅ Complete file upload system
 - ✅ Secure storage with RLS
 - ✅ Real-time progress tracking
-- ✅ Order management dashboard
+- ✅ Batch management dashboard
 - ✅ Beautiful UI components
 - ✅ Comprehensive documentation
 - ✅ Production-ready code
@@ -368,7 +368,7 @@ Phase 3 complete when:
 You now have a fully functional document upload system with:
 - Secure file storage
 - Real-time progress tracking
-- Order management
+- Batch management
 - Beautiful UI
 - Comprehensive security
 

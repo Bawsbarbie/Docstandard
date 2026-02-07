@@ -93,30 +93,30 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ### ✅ Phase 3: Database & Upload Flow (COMPLETE)
 - [x] Supabase schema migration
-  - Enums: order_status, batch_scope, file_role
-  - Tables: orders, order_files
+  - Enums: batch_status, batch_tier, file_role, upload_status
+  - Tables: batches, uploads
   - RLS policies for security
   - Indexes and triggers
 - [x] Upload actions (`lib/actions/upload.ts`)
-  - createOrder, getSignedUploadUrl
-  - createOrderFile, completeOrderUpload
-  - getUserOrders, getOrderFiles
+  - createBatch, getSignedUploadUrl
+  - createUpload, completeBatchUpload
+  - getUserBatches, getBatchUploads
 - [x] FileUploader component
   - Drag & drop with react-dropzone
   - Progress tracking per file
   - Error handling and validation
 - [x] Upload page integration
-- [x] Dashboard with order management
+- [x] Dashboard with batch management
 - [x] App layout with navigation
 
 ### ✅ Phase 4: Stripe & Checkout (COMPLETE)
 - [x] Stripe SDK integration
 - [x] Checkout session creation
 - [x] Webhook handler (checkout.session.completed)
-- [x] Checkout page with order summary
+- [x] Checkout page with batch summary
 - [x] Success page with confirmation
 - [x] Payment flow automation
-- [x] Order status updates (queued)
+- [x] Batch status updates (queued)
 - [x] paid_at timestamp tracking
 
 ### 🔜 Phase 5: Admin & Processing (TODO)

@@ -37,9 +37,10 @@ export function RiskSection({ quote, painPoints, compact = false }: RiskSectionP
             </p>
             <Link
               href="/login"
-              className="text-white border-b border-red-500 pb-1 hover:text-red-400 transition-colors flex items-center gap-2"
+              className="text-white hover:text-red-400 transition-colors inline-flex items-center gap-2"
             >
-              Mitigate Risk Now <ArrowRight className="w-4 h-4" />
+              <span className="border-b border-red-500 pb-1">Mitigate Risk Now</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
