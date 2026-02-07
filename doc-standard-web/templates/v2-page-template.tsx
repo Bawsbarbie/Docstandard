@@ -177,7 +177,7 @@ export default function V2Page({
       </section>
 
       {/* 4. TECHNICAL GUIDE */}
-      <section className="pt-0 pb-2 bg-slate-50">
+      <section className="pt-10 pb-2 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <TechnicalGuide
             integrationGuide={{
