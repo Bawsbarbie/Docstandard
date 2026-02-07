@@ -21,6 +21,27 @@ function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+function mirrorToStandalone(root, sitemapsDir, indexPath) {
+  const standalonePublic = path.join(root, ".next", "standalone", "public");
+  if (!fs.existsSync(standalonePublic)) return;
+
+  const standaloneSitemaps = path.join(standalonePublic, "sitemaps");
+  ensureDir(standaloneSitemaps);
+
+  if (fs.existsSync(indexPath)) {
+    fs.copyFileSync(indexPath, path.join(standalonePublic, "sitemap-index.xml"));
+  }
+
+  const files = fs.existsSync(sitemapsDir)
+    ? fs.readdirSync(sitemapsDir).filter((name) => name.startsWith("sitemap-batch-"))
+    : [];
+  for (const name of files) {
+    fs.copyFileSync(path.join(sitemapsDir, name), path.join(standaloneSitemaps, name));
+  }
+
+  console.log(`Mirrored sitemaps to ${standalonePublic}`);
+}
+
 function listGeneratedSlugs(root, batches) {
   const slugs = [];
   for (const batch of batches) {
@@ -132,6 +153,7 @@ function main() {
 
   console.log(`Generated ${batches.length} sitemap batches (${urls.length} URLs).`);
   console.log(`Index written to ${indexPath}`);
+  mirrorToStandalone(root, sitemapsDir, indexPath);
 
   if (args.submit) {
     const batchNum = parseBatchName(args.submit);
