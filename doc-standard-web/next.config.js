@@ -10,7 +10,7 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
     outputFileTracingIncludes: {
-      "/**/*": ["./data/**/*"],
+      "/**/*": ["./data/**/*", "./content/**/*"],
     },
   },
   async headers() {

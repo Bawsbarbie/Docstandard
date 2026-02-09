@@ -1,6 +1,7 @@
 import { promises as fs } from "fs"
 import path from "path"
 import matter from "gray-matter"
+import { resolveDataPath } from "@/lib/pseo/data-path"
 
 export interface BlogPostMeta {
   slug: string
@@ -16,7 +17,7 @@ export interface BlogPostContent extends BlogPostMeta {
   content: string
 }
 
-const BLOG_DIR = path.join(process.cwd(), "content", "blog")
+const BLOG_DIR = resolveDataPath("content", "blog")
 
 const ensureYearTag = (title: string) => {
   return /\b2026\b/.test(title) ? title : `${title} (2026)`

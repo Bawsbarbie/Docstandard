@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { promises as fs } from "fs"
-import path from "path"
 import { VerticalHub, generateMetadataForVertical } from "@/components/pseo/VerticalHub"
 import { generatedPageImports } from "@/generated/page-map"
+import { resolveDataPath } from "@/lib/pseo/data-path"
 
 interface PageProps {
   params: {
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .join(" ")
     return { title }
   }
-  const blogPath = path.join(process.cwd(), "content", "blog", `${params.vertical}.md`)
+  const blogPath = resolveDataPath("content", "blog", `${params.vertical}.md`)
   try {
     await fs.access(blogPath)
     return { title: "Redirecting..." }
@@ -45,7 +45,7 @@ export default async function VerticalHubPage({ params }: PageProps) {
     const Page = mod.default
     return <Page />
   }
-  const blogPath = path.join(process.cwd(), "content", "blog", `${params.vertical}.md`)
+  const blogPath = resolveDataPath("content", "blog", `${params.vertical}.md`)
   try {
     await fs.access(blogPath)
     redirect(`/blog/${params.vertical}`)

@@ -7,7 +7,7 @@ import { loadIntents } from "@/lib/pseo/intents"
 import type { Intent } from "@/lib/pseo/types"
 import { ArrowRight, FileText, Globe, Layers, ShieldCheck } from "lucide-react"
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "@/lib/pseo/data-path"
 
 export const metadata: Metadata = {
   title: "Logistics Document Services & Integrations | DocStandard",
@@ -38,7 +38,7 @@ interface IntegrationEntry {
 }
 
 const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
-  const filePath = path.join(process.cwd(), "data", "content", "integration-details.json")
+  const filePath = resolveDataPath("data", "content", "integration-details.json")
   try {
     const content = await fs.readFile(filePath, "utf-8")
     const parsed = JSON.parse(content)

@@ -4,7 +4,7 @@
  */
 
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "./data-path"
 import type { Intent } from "./types"
 
 // In-memory cache
@@ -37,7 +37,7 @@ function parseCSV<T>(csvContent: string, parser: (row: string[]) => T | null): T
 export async function loadIntents(): Promise<Intent[]> {
   if (intentsCache) return intentsCache
 
-  const csvPath = path.join(process.cwd(), "data", "intents.csv")
+  const csvPath = resolveDataPath("data", "intents.csv")
   const csvContent = await fs.readFile(csvPath, "utf-8")
 
   const intents = parseCSV<Intent>(csvContent, (cols) => {

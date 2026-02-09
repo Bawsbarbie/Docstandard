@@ -1,5 +1,5 @@
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "./data-path"
 import type { BlockItem, ContentPool, ProcessBlock } from "./types"
 
 export interface ContentBlocks {
@@ -15,7 +15,7 @@ interface PoolConfig {
 }
 
 export async function loadBlocks(): Promise<ContentBlocks> {
-  const blocksPath = path.join(process.cwd(), "data", "content", "blocks.json")
+  const blocksPath = resolveDataPath("data", "content", "blocks.json")
   const raw = await fs.readFile(blocksPath, "utf-8")
   const parsed = JSON.parse(raw)
 
@@ -29,7 +29,7 @@ export async function loadBlocks(): Promise<ContentBlocks> {
 }
 
 export async function loadPools(): Promise<PoolConfig> {
-  const poolsPath = path.join(process.cwd(), "data", "content", "pools.json")
+  const poolsPath = resolveDataPath("data", "content", "pools.json")
   const raw = await fs.readFile(poolsPath, "utf-8")
   return JSON.parse(raw) as PoolConfig
 }

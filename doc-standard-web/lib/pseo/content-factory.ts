@@ -9,7 +9,7 @@
  */
 
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "./data-path"
 import type {
   City,
   Intent,
@@ -158,8 +158,8 @@ export class ContentFactory {
   private async loadBlocks(): Promise<BlockCollection> {
     if (this.blocks) return this.blocks
 
-    const blocksPath = path.join(process.cwd(), "data", "content", "blocks.json")
-    const faqsPath = path.join(process.cwd(), "data", "content", "faqs.json")
+    const blocksPath = resolveDataPath("data", "content", "blocks.json")
+    const faqsPath = resolveDataPath("data", "content", "faqs.json")
     const [blocksContent, faqsContent] = await Promise.all([
       fs.readFile(blocksPath, "utf-8"),
       fs.readFile(faqsPath, "utf-8"),
@@ -186,7 +186,7 @@ export class ContentFactory {
   private async loadPools(): Promise<PoolConfig> {
     if (this.pools) return this.pools
 
-    const poolsPath = path.join(process.cwd(), "data", "content", "pools.json")
+    const poolsPath = resolveDataPath("data", "content", "pools.json")
     const poolsContent = await fs.readFile(poolsPath, "utf-8")
     this.pools = JSON.parse(poolsContent) as PoolConfig
 
@@ -199,7 +199,7 @@ export class ContentFactory {
   private async loadIntegrationDetails(): Promise<IntegrationDetailsFile> {
     if (this.integrationDetails) return this.integrationDetails
 
-    const detailsPath = path.join(process.cwd(), "data", "content", "integration-details.json")
+    const detailsPath = resolveDataPath("data", "content", "integration-details.json")
     try {
       const content = await fs.readFile(detailsPath, "utf-8")
       const parsed = JSON.parse(content)
@@ -221,7 +221,7 @@ export class ContentFactory {
   private async loadServiceDetails(): Promise<ServiceDetailsFile> {
     if (this.serviceDetails) return this.serviceDetails
 
-    const detailsPath = path.join(process.cwd(), "data", "content", "service-details.json")
+    const detailsPath = resolveDataPath("data", "content", "service-details.json")
     try {
       const content = await fs.readFile(detailsPath, "utf-8")
       this.serviceDetails = JSON.parse(content) as ServiceDetailsFile
@@ -238,7 +238,7 @@ export class ContentFactory {
   private async loadTmsErpGuide(): Promise<TmsErpGuideFile> {
     if (this.tmsErpGuide) return this.tmsErpGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "tms-erp-guide.json")
+    const guidePath = resolveDataPath("data", "content", "tms-erp-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.tmsErpGuide = JSON.parse(content) as TmsErpGuideFile
@@ -255,7 +255,7 @@ export class ContentFactory {
   private async loadCustomsGuide(): Promise<CustomsGuideFile> {
     if (this.customsGuide) return this.customsGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "customs-guide.json")
+    const guidePath = resolveDataPath("data", "content", "customs-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.customsGuide = JSON.parse(content) as CustomsGuideFile
@@ -272,7 +272,7 @@ export class ContentFactory {
   private async loadFinanceGuide(): Promise<FinanceGuideFile> {
     if (this.financeGuide) return this.financeGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "finance-guide.json")
+    const guidePath = resolveDataPath("data", "content", "finance-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.financeGuide = JSON.parse(content) as FinanceGuideFile
@@ -289,7 +289,7 @@ export class ContentFactory {
   private async loadShippingGuide(): Promise<ShippingGuideFile> {
     if (this.shippingGuide) return this.shippingGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "shipping-guide.json")
+    const guidePath = resolveDataPath("data", "content", "shipping-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.shippingGuide = JSON.parse(content) as ShippingGuideFile
@@ -306,7 +306,7 @@ export class ContentFactory {
   private async loadInventoryGuide(): Promise<InventoryGuideFile> {
     if (this.inventoryGuide) return this.inventoryGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "inventory-guide.json")
+    const guidePath = resolveDataPath("data", "content", "inventory-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.inventoryGuide = JSON.parse(content) as InventoryGuideFile
@@ -323,7 +323,7 @@ export class ContentFactory {
   private async loadComplianceGuide(): Promise<ComplianceGuideFile> {
     if (this.complianceGuide) return this.complianceGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "compliance-guide.json")
+    const guidePath = resolveDataPath("data", "content", "compliance-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.complianceGuide = JSON.parse(content) as ComplianceGuideFile
@@ -340,7 +340,7 @@ export class ContentFactory {
   private async loadMotiveGuide(): Promise<MotiveGuideFile> {
     if (this.motiveGuide) return this.motiveGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "motive-guide.json")
+    const guidePath = resolveDataPath("data", "content", "motive-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.motiveGuide = JSON.parse(content) as MotiveGuideFile
@@ -357,7 +357,7 @@ export class ContentFactory {
   private async loadHSCodeGuide(): Promise<HSCodeGuideFile> {
     if (this.hsCodeGuide) return this.hsCodeGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "hscode-guide.json")
+    const guidePath = resolveDataPath("data", "content", "hscode-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.hsCodeGuide = JSON.parse(content) as HSCodeGuideFile
@@ -374,7 +374,7 @@ export class ContentFactory {
   private async loadInvoiceGuide(): Promise<InvoiceGuideFile> {
     if (this.invoiceGuide) return this.invoiceGuide
 
-    const guidePath = path.join(process.cwd(), "data", "content", "invoice-guide.json")
+    const guidePath = resolveDataPath("data", "content", "invoice-guide.json")
     try {
       const content = await fs.readFile(guidePath, "utf-8")
       this.invoiceGuide = JSON.parse(content) as InvoiceGuideFile

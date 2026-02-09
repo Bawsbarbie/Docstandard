@@ -20,7 +20,7 @@ import {
 } from "@/lib/pseo/dynamic-content"
 import { getIntentBySlug, getIntentsByKind } from "@/lib/pseo/intents"
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "@/lib/pseo/data-path"
 
 interface IntegrationEntry {
   slug: string
@@ -44,7 +44,7 @@ const isIntegrationEntry = (value: unknown): value is IntegrationEntry => {
 }
 
 const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
-  const filePath = path.join(process.cwd(), "data", "content", "integration-details.json")
+  const filePath = resolveDataPath("data", "content", "integration-details.json")
   try {
     const content = await fs.readFile(filePath, "utf-8")
     const parsed = JSON.parse(content)

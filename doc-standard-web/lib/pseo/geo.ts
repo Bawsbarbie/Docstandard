@@ -5,7 +5,7 @@
  */
 
 import { promises as fs } from "fs"
-import path from "path"
+import { resolveDataPath } from "./data-path"
 import type { Country, State, City } from "./types"
 
 // In-memory caches (memoization)
@@ -46,7 +46,7 @@ function parseCSV<T>(csvContent: string, parser: (row: string[]) => T | null): T
 export async function loadCountries(): Promise<Country[]> {
   if (countriesCache) return countriesCache
 
-  const csvPath = path.join(process.cwd(), "data", "geo.csv")
+  const csvPath = resolveDataPath("data", "geo.csv")
   const csvContent = await fs.readFile(csvPath, "utf-8")
 
   // Parse countries (first pass - get unique countries)
@@ -79,7 +79,7 @@ export async function loadCountries(): Promise<Country[]> {
 export async function loadStates(): Promise<State[]> {
   if (statesCache) return statesCache
 
-  const csvPath = path.join(process.cwd(), "data", "geo.csv")
+  const csvPath = resolveDataPath("data", "geo.csv")
   const csvContent = await fs.readFile(csvPath, "utf-8")
 
   const states = parseCSV<State>(csvContent, (cols) => {
@@ -109,7 +109,7 @@ export async function loadStates(): Promise<State[]> {
 export async function loadCities(): Promise<City[]> {
   if (citiesCache) return citiesCache
 
-  const csvPath = path.join(process.cwd(), "data", "geo.csv")
+  const csvPath = resolveDataPath("data", "geo.csv")
   const csvContent = await fs.readFile(csvPath, "utf-8")
 
   const cities = parseCSV<City>(csvContent, (cols) => {
