@@ -104,7 +104,7 @@ export function IntroBlock({
         <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent rounded-3xl transform rotate-3"></div>
             <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden p-2 md:p-4">
-              <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden">
+              <div className="relative w-full h-[280px] md:h-[360px] rounded-xl overflow-hidden">
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
