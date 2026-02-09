@@ -150,8 +150,8 @@ export async function VerticalHub({ vertical }: { vertical: string }) {
             priority
             sizes="100vw"
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-black/90" />
+          {/* Dark overlay for text readability - lighter to show image */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-slate-900/40 to-slate-900/60" />
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto">

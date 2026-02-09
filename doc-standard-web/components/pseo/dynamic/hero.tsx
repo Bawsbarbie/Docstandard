@@ -81,8 +81,8 @@ export function Hero({
               priority
               sizes="100vw"
             />
-            {/* Dark overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-black/85" />
+            {/* Dark overlay for text readability - lighter to show image */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-slate-900/40 to-slate-900/60" />
           </>
         ) : (
           <>

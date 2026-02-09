@@ -7,7 +7,6 @@ import { PainSection } from "@/components/pseo/PainSection"
 import { MiddleCTA } from "@/components/pseo/MiddleCTA"
 import { TechnicalGuideSection } from "@/components/pseo/dynamic/technical-guide"
 import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
-import { ConversionCta } from "@/components/pseo/dynamic/conversion-cta"
 import { TestimonialsSection } from "@/components/pseo/TestimonialsSection"
 import { getIntentBySlug, getIntentsByKind } from "@/lib/pseo/intents"
 import type { BlockItem } from "@/lib/pseo/types"
@@ -119,9 +118,6 @@ export default async function VerticalIntentPage({ params }: PageProps) {
     selectBlock("pain", pool, blocks, seed) ||
     ({ id: "pain-default", text: "We solve your logistics challenges." } as BlockItem)
   const benefitBlocks = selectBlocks("benefit", pool, blocks, seed, 6)
-  const ctaBlock =
-    selectBlock("cta", pool, blocks, seed) ||
-    ({ id: "cta-default", text: "Process your first batch for a flat $799 fee." } as BlockItem)
 
   const processBlock = selectProcessBlock(resolvedVertical, blocks.process)
   const processedProcess = processBlock
@@ -152,7 +148,6 @@ export default async function VerticalIntentPage({ params }: PageProps) {
     ...benefit,
     text: replaceVariables(benefit.text, variables),
   }))
-  const processedCta = { ...ctaBlock, text: replaceVariables(ctaBlock.text, variables) }
 
   const imageUrl = getImageUrlForVertical(resolvedVertical)
 
@@ -170,7 +165,6 @@ export default async function VerticalIntentPage({ params }: PageProps) {
       <MiddleCTA />
       <BenefitsGrid benefits={processedBenefits} />
       <ProcessSteps process={processedProcess} />
-      <ConversionCta cta={processedCta} />
       <TestimonialsSection kind={resolvedVertical} />
     </main>
   )
