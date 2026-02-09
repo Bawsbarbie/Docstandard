@@ -35,6 +35,8 @@ function main() {
   const extraStandaloneRoot = path.join(standaloneRoot, projectName);
 
   const targets = [
+    { src: path.join(root, ".next", "static"), dest: path.join(standaloneRoot, ".next", "static") },
+    { src: path.join(root, "public"), dest: path.join(standaloneRoot, "public") },
     { src: path.join(root, "data"), dest: path.join(standaloneRoot, "data") },
     { src: path.join(root, "content"), dest: path.join(standaloneRoot, "content") },
     { src: path.join(root, "data"), dest: path.join(extraStandaloneRoot, "data") },
