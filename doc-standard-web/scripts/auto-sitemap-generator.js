@@ -77,17 +77,23 @@ function listIntegrationSlugs(root) {
 }
 
 function listBlogSlugs(root) {
-  try {
-    const blogDir = path.join(root, "content", "blog");
-    if (!fs.existsSync(blogDir)) return [];
-    const files = fs.readdirSync(blogDir);
-    return files
-      .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(".md", ""));
-  } catch (e) {
-    console.warn("Warning: Could not load blog posts");
+  const allSlugs = [];
+  const blogDirs = ['blog'];
+  
+  for (const dirName of blogDirs) {
+    try {
+      const blogDir = path.join(root, "content", dirName);
+      if (!fs.existsSync(blogDir)) continue;
+      const files = fs.readdirSync(blogDir);
+      const slugs = files
+        .filter((f) => f.endsWith(".md"))
+        .map((f) => f.replace(".md", ""));
+      allSlugs.push(...slugs);
+    } catch (e) {
+      console.warn(`Warning: Could not load ${dirName} posts`);
+    }
   }
-  return [];
+  return allSlugs;
 }
 
 function getStaticRoutes() {
