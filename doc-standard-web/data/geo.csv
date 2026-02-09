@@ -4,6 +4,7 @@ us,United States,CA,California,San Francisco,95,873965,37.7749,-122.4194
 us,United States,CA,California,San Diego,92,1386932,32.7157,-117.1611
 us,United States,CA,California,San Jose,88,1013240,37.3382,-121.8863
 us,United States,CA,California,Oakland,85,433031,37.8044,-122.2712
+us,United States,CA,California,Long Beach,90,466742,33.7701,-118.1937
 us,United States,NY,New York,New York,100,8336817,40.7128,-74.0060
 us,United States,NY,New York,Buffalo,87,278349,42.8864,-78.8784
 us,United States,NY,New York,Rochester,84,211328,43.1566,-77.6088
@@ -21,6 +22,8 @@ us,United States,WA,Washington,Seattle,95,753675,47.6062,-122.3321
 us,United States,WA,Washington,Tacoma,82,219346,47.2529,-122.4443
 us,United States,GA,Georgia,Atlanta,94,498715,33.7490,-84.3880
 us,United States,GA,Georgia,Savannah,83,147780,32.0809,-81.0912
+nl,Netherlands,ZH,Zuid-Holland,Rotterdam,90,651446,51.9244,4.4777
+be,Belgium,VAN,Antwerp,90,529247,51.2194,4.4025
 us,United States,PA,Pennsylvania,Philadelphia,93,1584064,39.9526,-75.1652
 us,United States,PA,Pennsylvania,Pittsburgh,86,302971,40.4406,-79.9959
 us,United States,AZ,Arizona,Phoenix,92,1680992,33.4484,-112.0740
