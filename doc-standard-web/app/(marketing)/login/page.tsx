@@ -1,12 +1,14 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { FileText, Star, AlertCircle } from "lucide-react"
 import { signUp, signIn } from "@/lib/actions/auth"
 
 export default function LoginSignupPage() {
-  const [isLogin, setIsLogin] = useState(false)
+  const searchParams = useSearchParams()
+  const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -14,6 +16,15 @@ export default function LoginSignupPage() {
     email: "",
     password: "",
   })
+
+  useEffect(() => {
+    const mode = searchParams.get("mode")
+    if (mode === "signup") {
+      setIsLogin(false)
+    } else if (mode === "login") {
+      setIsLogin(true)
+    }
+  }, [searchParams])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
