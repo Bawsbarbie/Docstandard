@@ -31,9 +31,14 @@ function main() {
     return;
   }
 
+  const projectName = path.basename(root);
+  const extraStandaloneRoot = path.join(standaloneRoot, projectName);
+
   const targets = [
     { src: path.join(root, "data"), dest: path.join(standaloneRoot, "data") },
     { src: path.join(root, "content"), dest: path.join(standaloneRoot, "content") },
+    { src: path.join(root, "data"), dest: path.join(extraStandaloneRoot, "data") },
+    { src: path.join(root, "content"), dest: path.join(extraStandaloneRoot, "content") },
   ];
 
   for (const { src, dest } of targets) {

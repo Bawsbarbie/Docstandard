@@ -11,11 +11,15 @@ export function resolveDataPath(...segments: string[]) {
   const moduleDir = typeof __dirname !== "undefined" ? __dirname : process.cwd()
   if (!roots.includes(moduleDir)) roots.push(moduleDir)
 
+  const projectFolder = "doc-standard-web"
+
   for (const root of roots) {
     let dir = root
     for (let i = 0; i < 6; i += 1) {
       const candidate = path.join(dir, ...segments)
       if (existsSync(candidate)) return candidate
+      const candidateInProject = path.join(dir, projectFolder, ...segments)
+      if (existsSync(candidateInProject)) return candidateInProject
       const parent = path.dirname(dir)
       if (parent === dir) break
       dir = parent
