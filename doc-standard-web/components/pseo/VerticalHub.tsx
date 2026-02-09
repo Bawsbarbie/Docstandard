@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { getIntentsByKind } from "@/lib/pseo/intents"
 import type { Intent } from "@/lib/pseo/types"
@@ -17,6 +18,16 @@ const verticalLabels: Record<string, string> = {
   invoice: "Invoice",
   shipping: "Shipping",
   integration: "Integrations",
+}
+
+const verticalImages: Record<string, string> = {
+  customs: "/images/banners/customs.webp",
+  compliance: "/images/banners/compliance.webp",
+  finance: "/images/banners/finance.webp",
+  invoice: "/images/banners/invoice.webp",
+  shipping: "/images/banners/shipping.webp",
+  logistics: "/images/banners/logistics.webp",
+  integration: "/images/banners/logistics.webp",
 }
 
 const fallbackServices: Record<string, string[]> = {
@@ -123,21 +134,42 @@ export async function VerticalHub({ vertical }: { vertical: string }) {
     ? buildIntentItems(intents.sort((a, b) => a.priority - b.priority))
     : buildFallbackItems(resolved)
 
+  const bannerImage = verticalImages[resolved] || verticalImages.logistics
+
   return (
-    <section className="max-w-5xl mx-auto px-6 py-14">
-      <header className="space-y-4">
-        <p className="text-sm uppercase tracking-[0.25em] text-gray-500">
-          {label} hub
-        </p>
-        <h1 className="text-4xl font-semibold text-gray-900">
-          {label} service intents, laid out for execution
-        </h1>
-        <p className="text-lg text-gray-600">
-          You are not here for marketing. You are here for throughput, control, and audit-ready
-          data. Pick the exact intent below and we will standardize it the way seasoned operators
-          expect.
-        </p>
-      </header>
+    <div>
+      {/* Hero Banner with Image */}
+      <section className="relative overflow-hidden py-20 px-6">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src={bannerImage}
+            alt={`${label} services background`}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-black/90" />
+        </div>
+        
+        <div className="relative z-10 max-w-5xl mx-auto">
+          <p className="text-sm uppercase tracking-[0.35em] text-white/60 mb-4">
+            {label} Hub
+          </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            {label} Services
+          </h1>
+          <p className="text-lg text-white/70 max-w-2xl">
+            Expert document processing for {label.toLowerCase()} operations. 
+            Standardized data, audit-ready outputs, ERP compatibility.
+          </p>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="max-w-5xl mx-auto px-6 py-14">
 
       <ul className="mt-10 grid gap-4 sm:grid-cols-2">
         {items.map((item) => (
@@ -164,5 +196,6 @@ export async function VerticalHub({ vertical }: { vertical: string }) {
         ))}
       </ul>
     </section>
+    </div>
   )
 }
