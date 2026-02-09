@@ -151,7 +151,8 @@ function buildIndex(entries, lastmod) {
 function readEnvBaseUrl() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
   if (base) return base.replace(/\/$/, "");
-  return "http://localhost:3000";
+  // Default to production domain (never localhost)
+  return "https://docstandard.co";
 }
 
 function parseBatchName(input) {
