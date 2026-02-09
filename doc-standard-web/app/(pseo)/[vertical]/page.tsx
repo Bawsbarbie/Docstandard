@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
-import { promises as fs } from "fs"
 import { VerticalHub, generateMetadataForVertical } from "@/components/pseo/VerticalHub"
 import { generatedPageImports } from "@/generated/page-map"
-import { resolveDataPath } from "@/lib/pseo/data-path"
+import { blogSlugSet } from "@/generated/blog-slugs"
 
 interface PageProps {
   params: {
@@ -22,12 +21,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .join(" ")
     return { title }
   }
-  const blogPath = resolveDataPath("content", "blog", `${params.vertical}.md`)
-  try {
-    await fs.access(blogPath)
+  if (blogSlugSet.has(params.vertical)) {
     return { title: "Redirecting..." }
-  } catch {
-    // ignore
   }
   return generateMetadataForVertical(params.vertical)
 }
@@ -45,12 +40,8 @@ export default async function VerticalHubPage({ params }: PageProps) {
     const Page = mod.default
     return <Page />
   }
-  const blogPath = resolveDataPath("content", "blog", `${params.vertical}.md`)
-  try {
-    await fs.access(blogPath)
+  if (blogSlugSet.has(params.vertical)) {
     redirect(`/blog/${params.vertical}`)
-  } catch {
-    // ignore
   }
   if (!params.vertical) {
     notFound()
