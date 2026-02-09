@@ -2,6 +2,14 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // Return 410 Gone for deprecated short slugs (no redirects)
+  const shortSlugGone = /^\/(finance|customs|compliance|invoice|shipping|logistics)\/[^/]+\/?$/
+  if (shortSlugGone.test(pathname)) {
+    return new Response("Gone", { status: 410 })
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
