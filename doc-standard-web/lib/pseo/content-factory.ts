@@ -9,6 +9,8 @@
  */
 
 import { promises as fs } from "fs"
+import { existsSync } from "fs"
+import path from "path"
 import { resolveDataPath } from "./data-path"
 import type {
   City,
@@ -723,30 +725,42 @@ export class ContentFactory {
     const kind = (intent.kind || "").toLowerCase()
 
     let photoId: string
+    let localSlug: string
 
     // Customs, compliance, insurance -> professional documents/business photo
     if (kind.includes("customs") || kind.includes("compliance") || kind.includes("insurance")) {
       photoId = "1554224154-26032ffc0d07" // Business/finance documents
+      localSlug = "customs"
     }
     // Shipping or forwarding -> cargo/shipping containers photo
     else if (kind.includes("shipping") || kind.includes("forwarding")) {
       photoId = "1494412651409-8963ce7935a7" // Cargo ship containers
+      localSlug = "shipping"
     }
     // Logistics or warehousing -> warehouse/logistics photo
     else if (kind.includes("logistics") || kind.includes("warehousing")) {
       photoId = "1586528116311-ad8dd3c8310d" // Modern warehouse
+      localSlug = "logistics"
     }
     // Finance or invoice -> financial/accounting photo
     else if (kind.includes("finance") || kind.includes("invoice")) {
       photoId = "1454165804606-c3d57bc86b40" // Business analytics
+      localSlug = "finance"
     }
     // Integration -> tech/software integration photo
     else if (kind.includes("integration")) {
       photoId = "1558618666-fcd25c85cd64" // Tech integration
+      localSlug = "integration"
     }
     // Default fallback -> professional logistics
     else {
       photoId = "1566576721346-d4a3b4eaeb55" // Logistics operations
+      localSlug = "default"
+    }
+
+    const localPath = path.join(process.cwd(), "public", "images", "pseo", `${localSlug}.webp`)
+    if (existsSync(localPath)) {
+      return `/images/pseo/${localSlug}.webp`
     }
 
     return `https://images.unsplash.com/photo-${photoId}?auto=format&fit=crop&q=80&w=1200`

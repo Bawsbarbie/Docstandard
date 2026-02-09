@@ -8,6 +8,7 @@
     "prebuild": "node scripts/build-blog-slug-map.js && node scripts/bulk-page-generator.js --batch=2 --count=155 && node scripts/bulk-page-generator.js --batch=3 --count=100 && node scripts/bulk-page-generator.js --batch=4 --count=110 && node scripts/bulk-page-generator.js --batch=5 --count=100",
     "postbuild": "node scripts/auto-sitemap-generator.js --all && node scripts/postbuild-copy-static.js",
     "generate:pages": "node scripts/bulk-page-generator.js --batch=2 --count=155 && node scripts/bulk-page-generator.js --batch=3 --count=100 && node scripts/bulk-page-generator.js --batch=4 --count=110 && node scripts/bulk-page-generator.js --batch=5 --count=100",
+    "optimize:images": "node scripts/optimize-images.mjs",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "backfill:pages": "tsx scripts/backfill-page-counts.ts",
@@ -43,6 +44,7 @@
     "eslint": "^8",
     "eslint-config-next": "^14.2.0",
     "postcss": "^8",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.4.0",
     "tsx": "^4.21.0",
     "typescript": "^5"

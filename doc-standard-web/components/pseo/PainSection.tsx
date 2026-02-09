@@ -132,9 +132,15 @@ export function PainSection({
           <h2 className="text-3xl font-bold text-slate-900 mb-4">
             {getHeadline()}
           </h2>
-          <p className="text-slate-600">
-            {content?.text || "Operational bottlenecks in logistics are often caused by unstructured data files. DocStandard cleans, validates, and re-structures these batches for immediate system ingestion."}
-          </p>
+          {(() => {
+            const fallbackText =
+              "Operational bottlenecks in logistics are often caused by unstructured data files. DocStandard cleans, validates, and re-structures these batches for immediate system ingestion."
+            const subheadline = content?.text || fallbackText
+            const firstCard = cards[0]?.description || ""
+            const normalize = (value: string) => value.toLowerCase().replace(/\s+/g, " ").trim()
+            if (normalize(subheadline) === normalize(firstCard)) return null
+            return <p className="text-slate-600">{subheadline}</p>
+          })()}
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">

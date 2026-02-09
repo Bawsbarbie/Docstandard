@@ -11,6 +11,52 @@ interface DynamicROI {
   errorReductionNote?: string
 }
 
+type PopulationTier = "high" | "medium" | "low"
+type ComplexityTier = "high" | "medium" | "low"
+
+function getPopulationTier(population?: number): PopulationTier {
+  if (!population || population <= 0) return "medium"
+  if (population >= 2000000) return "high"
+  if (population >= 500000) return "medium"
+  return "low"
+}
+
+function getComplexityTier(kind?: string, isIntegration?: boolean): ComplexityTier {
+  if (isIntegration) return "high"
+  const normalized = kind?.toLowerCase()
+  if (normalized === "customs" || normalized === "compliance") return "high"
+  if (normalized === "finance" || normalized === "invoice" || normalized === "shipping") return "medium"
+  return "low"
+}
+
+function buildFallbackROI(pageModel?: PageModel): DynamicROI {
+  const populationTier = getPopulationTier(pageModel?.city?.population)
+  const isIntegration = pageModel?.technical?.isIntegration || pageModel?.intent?.kind === "integration"
+  const complexity = getComplexityTier(pageModel?.intent?.kind, isIntegration)
+
+  const docsPerDay =
+    populationTier === "high" ? 120 : populationTier === "medium" ? 70 : 35
+  const minutesPerDoc =
+    complexity === "high" ? 12 : complexity === "medium" ? 8 : 6
+
+  const manualHours = Math.max(1, Math.round((docsPerDay * minutesPerDoc) / 6) / 10)
+  const withHours = Math.max(0.5, Math.round((manualHours * 0.05) * 10) / 10)
+  const annualSavingsRaw = Math.max(10000, Math.round((manualHours - withHours) * 260 * 45))
+  const annualSavings = `$${Math.round(annualSavingsRaw / 1000)}k`
+  const errorReduction = complexity === "high" ? "100%" : complexity === "medium" ? "98%" : "95%"
+
+  return {
+    manualEffort: `${manualHours}h`,
+    withDocStandard: `${withHours}h`,
+    annualSavings,
+    errorReduction,
+    manualEffortNote: `${minutesPerDoc} mins per document`,
+    withDocStandardNote: `${docsPerDay} docs/day`,
+    annualSavingsNote: "Annual labor savings",
+    errorReductionNote: "Accuracy gains",
+  }
+}
+
 /**
  * Extract ROI value from text using regex patterns
  */
@@ -160,48 +206,41 @@ export function getDynamicROI(pageModel?: PageModel, rawText?: string): DynamicR
     const extractedAnnualSavings = roiText ? extractROIValue(roiText, "annualSavings") : null
     const extractedErrorReduction = roiText ? extractROIValue(roiText, "errorReduction") : null
 
-    console.log(`ROI Raw Text: ${roiText}`)
-    console.log(`Extracted: ${extractedAnnualSavings}`)
-
     const extractedManualEffortNote = roiText ? extractManualEffortNote(roiText) : null
+    const fallback = buildFallbackROI(pageModel)
     const manualEffortNoteFallback = isIntegration
       ? "Per processing batch"
       : isCustoms
         ? "Per entry summary"
-        : "Calculated"
+        : fallback.manualEffortNote
     const annualSavingsNoteFallback = isIntegration
       ? "Operational Value"
       : isCustoms
         ? "Compliance Value"
-        : "Calculated"
+        : fallback.annualSavingsNote
     const withDocStandardNoteFallback = isIntegration
       ? "Per processing batch"
       : isCustoms
         ? "Per entry summary"
-        : "Calculated"
+        : fallback.withDocStandardNote
     const errorReductionNoteFallback = isIntegration
       ? "Operational Value"
       : isCustoms
         ? "Compliance Value"
-        : "Calculated"
+        : fallback.errorReductionNote
 
-    // Use extracted values only (avoid mock defaults)
+    // Use extracted values when available, otherwise deterministic fallback
     return {
-      manualEffort: extractedManualEffort ?? "Calculated",
-      withDocStandard: extractedWithDocStandard ?? "Calculated",
-      annualSavings: extractedAnnualSavings ?? "Calculated",
-      errorReduction: extractedErrorReduction ?? "Calculated",
+      manualEffort: extractedManualEffort ?? fallback.manualEffort,
+      withDocStandard: extractedWithDocStandard ?? fallback.withDocStandard,
+      annualSavings: extractedAnnualSavings ?? fallback.annualSavings,
+      errorReduction: extractedErrorReduction ?? fallback.errorReduction,
       manualEffortNote: extractedManualEffortNote ?? manualEffortNoteFallback,
       withDocStandardNote: withDocStandardNoteFallback,
       annualSavingsNote: annualSavingsNoteFallback,
       errorReductionNote: errorReductionNoteFallback,
     }
   } catch {
-    return {
-      manualEffort: "13.3h",
-      withDocStandard: "5m",
-      annualSavings: "$120k",
-      errorReduction: "100%",
-    }
+    return buildFallbackROI(pageModel)
   }
 }

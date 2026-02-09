@@ -8,10 +8,10 @@ interface HeaderBannerProps {
 }
 
 const clusterImageMap: Record<string, string> = {
-  finance: "/images/banners/finance.jpg",
-  customs: "/images/banners/customs.jpg",
-  logistics: "/images/banners/logistics.jpg",
-  integration: "/images/banners/integration.jpg",
+  finance: "/images/banners/finance.webp",
+  customs: "/images/banners/customs.webp",
+  logistics: "/images/banners/logistics.webp",
+  integration: "/images/banners/integration.webp",
 }
 
 const clusterLabelMap: Record<string, string> = {
@@ -33,7 +33,7 @@ export function HeaderBanner({ title, clusterId }: HeaderBannerProps) {
   return (
     <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-900">
       <div
-        className="min-h-[260px] md:min-h-[320px] w-full bg-cover bg-center"
+        className="min-h-[260px] md:min-h-[320px] w-full bg-slate-900 bg-cover bg-center"
         style={{ backgroundImage: `url(${imageUrl})` }}
         role="img"
         aria-label={`${label} banner`}
