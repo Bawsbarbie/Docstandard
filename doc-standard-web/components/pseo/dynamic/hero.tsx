@@ -3,6 +3,7 @@
 import type { BlockItem } from "@/lib/pseo/types"
 import { ArrowRight, Layers, AlertTriangle, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface HeroProps {
   intro?: BlockItem
@@ -21,6 +22,17 @@ interface HeroProps {
   operationalRequirements?: string[]
   painPoints?: string[]
   valueLogic?: string
+  vertical?: string
+}
+
+const verticalImages: Record<string, string> = {
+  customs: "/images/banners/customs.webp",
+  compliance: "/images/banners/compliance.webp",
+  finance: "/images/banners/finance.webp",
+  invoice: "/images/banners/invoice.webp",
+  shipping: "/images/banners/shipping.webp",
+  logistics: "/images/banners/logistics.webp",
+  integration: "/images/banners/logistics.webp",
 }
 
 export function Hero({
@@ -40,6 +52,7 @@ export function Hero({
   operationalRequirements,
   painPoints,
   valueLogic,
+  vertical,
 }: HeroProps) {
   // Extract System A from intent name or integration pair for the dynamic headline
   const derivedSystemA = integrationPair
@@ -50,28 +63,48 @@ export function Hero({
   const headlineSystemA = systemA || derivedSystemA
   const headline = title || (intentName ? `Clean Data for ${intentName}` : "Clean Data for Your Systems")
   const introText = useCase || intro?.text || subtitle || ""
+  
+  // Determine background image
+  const bgImage = imageUrl || (vertical ? verticalImages[vertical.toLowerCase()] : null)
 
   return (
     <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      {/* Abstract Background */}
+      {/* Background - Image or Abstract */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl opacity-60 animate-pulse-slow"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-3xl opacity-60"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        {bgImage ? (
+          <>
+            <Image
+              src={bgImage}
+              alt=""
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-black/85" />
+          </>
+        ) : (
+          <>
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl opacity-60 animate-pulse-slow"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-3xl opacity-60"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+          </>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider ${bgImage ? 'bg-white/10 border-white/20 text-blue-300' : 'bg-blue-50 border-blue-100 text-blue-700'}`}>
+            <span className={`w-2 h-2 rounded-full animate-pulse ${bgImage ? 'bg-blue-400' : 'bg-blue-600'}`}></span>
             Zero-latency data extraction enabled
           </div>
           
-          <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1]">
+          <h1 className={`text-4xl lg:text-6xl font-extrabold leading-[1.1] ${bgImage ? 'text-white' : 'text-slate-900'}`}>
             {headline}
           </h1>
           
-          <p className="text-lg text-slate-600 leading-relaxed max-w-xl">
+          <p className={`text-lg leading-relaxed max-w-xl ${bgImage ? 'text-white/80' : 'text-slate-600'}`}>
             {introText}
           </p>
 

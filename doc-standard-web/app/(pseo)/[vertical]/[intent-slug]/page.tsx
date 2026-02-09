@@ -36,16 +36,18 @@ const verticalAliases: Record<string, string> = {
 
 const getImageUrlForVertical = (vertical: string): string => {
   const normalized = vertical.toLowerCase()
-  if (normalized === "customs" || normalized === "compliance") {
-    return "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&q=80&w=1200"
+  const verticalImages: Record<string, string> = {
+    customs: "/images/banners/customs.webp",
+    compliance: "/images/banners/compliance.webp",
+    finance: "/images/banners/finance.webp",
+    invoice: "/images/banners/invoice.webp",
+    shipping: "/images/banners/shipping.webp",
+    logistics: "/images/banners/logistics.webp",
+    integration: "/images/banners/logistics.webp",
+    tms: "/images/banners/logistics.webp",
+    audit: "/images/banners/finance.webp",
   }
-  if (normalized === "finance" || normalized === "invoice" || normalized === "audit") {
-    return "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=1200"
-  }
-  if (normalized === "integration" || normalized === "tms") {
-    return "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=1200"
-  }
-  return "https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&q=80&w=1200"
+  return verticalImages[normalized] || "/images/banners/logistics.webp"
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -156,7 +158,7 @@ export default async function VerticalIntentPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen">
-      <Hero intro={processedIntro} pain={processedPain} intentName={intent.name} imageUrl={imageUrl} />
+      <Hero intro={processedIntro} pain={processedPain} intentName={intent.name} imageUrl={imageUrl} vertical={resolvedVertical} />
       <RiskSection quote={processedPain.text} />
       <PainSection
         content={processedPain}

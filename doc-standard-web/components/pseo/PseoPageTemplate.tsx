@@ -121,6 +121,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
         cityName={city.name}
         serviceName={intent.name}
         imageUrl={meta.imageUrl}
+        vertical={intent.kind}
         // Pass integration-specific data
         integrationPair={integrationDetails?.pair}
         useCase={integrationDetails?.use_case}

@@ -16,6 +16,17 @@ interface IntroBlockProps {
   technicalSpecs?: string
   useCase?: string
   integrationPair?: string
+  vertical?: string
+}
+
+const verticalImages: Record<string, string> = {
+  customs: "/images/banners/customs.webp",
+  compliance: "/images/banners/compliance.webp",
+  finance: "/images/banners/finance.webp",
+  invoice: "/images/banners/invoice.webp",
+  shipping: "/images/banners/shipping.webp",
+  logistics: "/images/banners/logistics.webp",
+  integration: "/images/banners/logistics.webp",
 }
 
 export function IntroBlock({
@@ -27,14 +38,34 @@ export function IntroBlock({
   technicalSpecs,
   useCase,
   integrationPair,
+  vertical,
 }: IntroBlockProps) {
+  const bgImage = imageUrl || (vertical ? verticalImages[vertical.toLowerCase()] : null)
+  const hasBgImage = !!bgImage
   return (
     <div className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      {/* Abstract Background */}
+      {/* Background - Image or Abstract */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl opacity-60 animate-pulse-slow"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-3xl opacity-60"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        {hasBgImage ? (
+          <>
+            <Image
+              src={bgImage!}
+              alt=""
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-black/85" />
+          </>
+        ) : (
+          <>
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-3xl opacity-60 animate-pulse-slow"></div>
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-3xl opacity-60"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+          </>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
@@ -42,17 +73,17 @@ export function IntroBlock({
         <div className="space-y-8">
           {/* Integration badge */}
           {integrationPair && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider ${hasBgImage ? 'bg-white/10 border-white/20 text-blue-300' : 'bg-blue-50 border-blue-100 text-blue-700'}`}>
+              <span className={`w-2 h-2 rounded-full animate-pulse ${hasBgImage ? 'bg-blue-400' : 'bg-blue-600'}`}></span>
               {integrationPair}
             </div>
           )}
 
-          <h1 className="text-4xl lg:text-6xl font-extrabold text-slate-900 leading-[1.1]">
-            Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{serviceName}</span>
+          <h1 className={`text-4xl lg:text-6xl font-extrabold leading-[1.1] ${hasBgImage ? 'text-white' : 'text-slate-900'}`}>
+            Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{serviceName}</span>
           </h1>
           
-          <p className="text-lg text-slate-600 leading-relaxed max-w-xl">
+          <p className={`text-lg leading-relaxed max-w-xl ${hasBgImage ? 'text-white/80' : 'text-slate-600'}`}>
             {useCase || content.text}
           </p>
 
@@ -74,24 +105,24 @@ export function IntroBlock({
 
           {/* Technical specs badge */}
           {technicalSpecs && (
-            <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium">
+            <div className={`mt-4 inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${hasBgImage ? 'bg-white/10 border-white/20 text-white/80' : 'bg-slate-50 border-slate-200 text-slate-600'}`}>
                Technical Protocol: {technicalSpecs}
             </div>
           )}
 
            {/* Operational Requirements (for services) */}
            {operationalRequirements && operationalRequirements.length > 0 && (
-              <div className="mt-8 p-6 bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-200/50">
-                <h3 className="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <div className="p-1 bg-blue-50 rounded-md">
-                    <FileCheck className="w-3 h-3 text-blue-600" />
+              <div className={`mt-8 p-6 rounded-2xl border shadow-xl ${hasBgImage ? 'bg-slate-900/50 border-white/10 shadow-black/20' : 'bg-white border-slate-100 shadow-slate-200/50'}`}>
+                <h3 className={`text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${hasBgImage ? 'text-white' : 'text-slate-900'}`}>
+                  <div className={`p-1 rounded-md ${hasBgImage ? 'bg-white/10' : 'bg-blue-50'}`}>
+                    <FileCheck className={`w-3 h-3 ${hasBgImage ? 'text-blue-400' : 'text-blue-600'}`} />
                   </div>
                   Required Documentation
                 </h3>
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {operationalRequirements.map((req, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle2 className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <li key={index} className={`flex items-start gap-2 text-sm ${hasBgImage ? 'text-white/80' : 'text-slate-600'}`}>
+                      <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${hasBgImage ? 'text-blue-400' : 'text-blue-500'}`} />
                       {req}
                     </li>
                   ))}
@@ -100,8 +131,9 @@ export function IntroBlock({
             )}
         </div>
 
-        {/* Right Column: Hero Image */}
-        <div className="relative">
+        {/* Right Column: Hero Image - Only show when no bgImage */}
+        {!hasBgImage && (
+          <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent rounded-3xl transform rotate-3"></div>
             <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden p-2 md:p-4">
               <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden">
@@ -121,7 +153,8 @@ export function IntroBlock({
                 )}
               </div>
             </div>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -138,6 +138,7 @@ export default function V2Page({
             systemB={systemB}
             visual="data-card"
             showVisual={true}
+            vertical="integration"
           />
         </div>
       </section>
