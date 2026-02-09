@@ -153,7 +153,7 @@ export default async function VerticalIntentPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen">
-      <Hero intro={processedIntro} pain={processedPain} intentName={intent.name} imageUrl={imageUrl} vertical={resolvedVertical} />
+      <Hero intro={processedIntro} pain={processedPain} intentName={intent.name} imageUrl={imageUrl} />
       <RiskSection quote={processedPain.text} />
       <PainSection
         content={processedPain}

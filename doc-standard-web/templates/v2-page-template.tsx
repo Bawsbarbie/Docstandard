@@ -136,9 +136,7 @@ export default function V2Page({
             intentName={`{{SYSTEM_A}} to {{SYSTEM_B}} Integration in {{CITY}}`}
             systemA={systemA}
             systemB={systemB}
-            visual="data-card"
-            showVisual={true}
-            vertical="integration"
+            imageUrl="/images/banners/logistics.webp"
           />
         </div>
       </section>
