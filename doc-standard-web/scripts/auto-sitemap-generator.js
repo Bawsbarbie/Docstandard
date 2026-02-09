@@ -43,6 +43,7 @@ function mirrorToStandalone(root, sitemapsDir, indexPath) {
 }
 
 function listGeneratedSlugs(root, batches) {
+  const seen = new Set();
   const slugs = [];
   for (const batch of batches) {
     const dir = path.join(root, "generated", batch);
@@ -52,7 +53,10 @@ function listGeneratedSlugs(root, batches) {
       if (!entry.isFile()) continue;
       if (!/\.tsx?$/.test(entry.name)) continue;
       const slug = entry.name.replace(/\.(t|j)sx?$/, "");
-      if (slug) slugs.push(slug);
+      if (slug && !seen.has(slug)) {
+        seen.add(slug);
+        slugs.push(slug);
+      }
     }
   }
   return slugs;
@@ -124,9 +128,11 @@ function main() {
   }
 
   const slugs = listGeneratedSlugs(root, ["batch2", "batch3", "batch4", "batch5"]);
-  const routes = slugs
-    .map((slug) => `/${slug}`)
-    .sort();
+  
+  // Sort and deduplicate slugs
+  const uniqueSlugs = [...new Set(slugs)].sort();
+  
+  const routes = uniqueSlugs.map((slug) => `/${slug}`);
 
   if (routes.length === 0) {
     console.error("No generated routes found in generated/batch2-5. Skipping sitemap generation.");
@@ -138,6 +144,15 @@ function main() {
 
   ensureDir(sitemapsDir);
   const lastmod = new Date().toISOString().split("T")[0];
+
+  // Clean up old sitemap batch files
+  const existingFiles = fs.existsSync(sitemapsDir) 
+    ? fs.readdirSync(sitemapsDir).filter((name) => name.startsWith("sitemap-batch-"))
+    : [];
+  for (const file of existingFiles) {
+    fs.unlinkSync(path.join(sitemapsDir, file));
+    console.log(`Removed old sitemap: ${file}`);
+  }
 
   const indexEntries = [];
   batches.forEach((batch, idx) => {
@@ -151,7 +166,7 @@ function main() {
   const indexPath = path.join(publicDir, "sitemap-index.xml");
   fs.writeFileSync(indexPath, buildIndex(indexEntries, lastmod), "utf8");
 
-  console.log(`Generated ${batches.length} sitemap batches (${urls.length} URLs).`);
+  console.log(`Generated ${batches.length} sitemap batches (${urls.length} unique URLs).`);
   console.log(`Index written to ${indexPath}`);
   mirrorToStandalone(root, sitemapsDir, indexPath);
 

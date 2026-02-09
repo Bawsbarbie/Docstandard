@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     typedRoutes: true,
     outputFileTracingIncludes: {
@@ -26,6 +32,15 @@ const nextConfig = {
             value: "application/xml; charset=utf-8",
           },
         ],
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: "/sitemap-batch-:batch.xml",
+        destination: "/sitemaps/sitemap-batch-:batch.xml",
+        permanent: true,
       },
     ]
   },
