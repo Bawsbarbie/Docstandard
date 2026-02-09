@@ -22,7 +22,6 @@ export async function generateStaticParams() {
   const intents = await getIntentsByKind("shipping")
   return intents
     .sort((a, b) => a.priority - b.priority)
-    .slice(0, 10)
     .map((intent) => ({ "intent-slug": intent.slug }))
 }
 
