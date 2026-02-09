@@ -178,7 +178,9 @@ function main() {
 
   const baseUrl = readEnvBaseUrl();
   if (baseUrl.includes("localhost")) {
-    console.warn("Warning: NEXT_PUBLIC_SITE_URL not set; using http://localhost:3000");
+    console.warn("Warning: NEXT_PUBLIC_SITE_URL not set; skipping sitemap regeneration to preserve existing URLs");
+    console.log("Sitemap URLs remain unchanged.");
+    process.exit(0);
   }
 
   // Collect all URLs
