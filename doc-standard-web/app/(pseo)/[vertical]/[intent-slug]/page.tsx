@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { BenefitsGrid } from "@/components/pseo/BenefitsGrid"
 import { Hero } from "@/components/pseo/dynamic/hero"
 import { RiskSection } from "@/components/pseo/RiskSection"
@@ -10,7 +10,6 @@ import { ProcessSteps } from "@/components/pseo/dynamic/process-steps"
 import { ConversionCta } from "@/components/pseo/dynamic/conversion-cta"
 import { TestimonialsSection } from "@/components/pseo/TestimonialsSection"
 import { getIntentBySlug, getIntentsByKind } from "@/lib/pseo/intents"
-import { loadCities } from "@/lib/pseo/geo"
 import type { BlockItem } from "@/lib/pseo/types"
 import {
   loadBlocks,
@@ -94,18 +93,6 @@ export async function generateStaticParams() {
 export default async function VerticalIntentPage({ params }: PageProps) {
   const intent = await getIntentBySlug(params["intent-slug"])
   if (!intent) {
-    const normalizedVertical = params.vertical.toLowerCase()
-    const resolvedVertical = verticalAliases[normalizedVertical] || normalizedVertical
-    const cities = await loadCities()
-    const matchedCity = cities.find((city) => city.slug === params["intent-slug"])
-    if (matchedCity) {
-      const intents = await getIntentsByKind(resolvedVertical)
-      const bestIntent = intents.sort((a, b) => a.priority - b.priority)[0]
-      if (bestIntent) {
-        const canonical = `/${matchedCity.countryCode}/${matchedCity.stateCode.toLowerCase()}/${matchedCity.slug}/${bestIntent.slug}`
-        redirect(canonical)
-      }
-    }
     notFound()
   }
 
