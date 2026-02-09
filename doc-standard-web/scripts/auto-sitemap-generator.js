@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 
-const MAX_URLS_PER_BATCH = 50;
+const MAX_URLS_PER_BATCH = 2000;
 
 function parseArgs(argv) {
   const out = {};
@@ -60,6 +60,53 @@ function listGeneratedSlugs(root, batches) {
     }
   }
   return slugs;
+}
+
+function listIntegrationSlugs(root) {
+  try {
+    const filePath = path.join(root, "data", "content", "integration-details.json");
+    const content = fs.readFileSync(filePath, "utf-8");
+    const parsed = JSON.parse(content);
+    if (Array.isArray(parsed)) {
+      return parsed.map((entry) => entry.slug).filter(Boolean);
+    }
+  } catch (e) {
+    console.warn("Warning: Could not load integration-details.json");
+  }
+  return [];
+}
+
+function listBlogSlugs(root) {
+  try {
+    const blogDir = path.join(root, "content", "blog");
+    if (!fs.existsSync(blogDir)) return [];
+    const files = fs.readdirSync(blogDir);
+    return files
+      .filter((f) => f.endsWith(".md"))
+      .map((f) => f.replace(".md", ""));
+  } catch (e) {
+    console.warn("Warning: Could not load blog posts");
+  }
+  return [];
+}
+
+function getStaticRoutes() {
+  return [
+    "/",
+    "/about",
+    "/contact",
+    "/services",
+    "/upload",
+    "/login",
+    "/dashboard",
+    "/success",
+    "/logistics",
+    "/finance",
+    "/customs",
+    "/compliance",
+    "/invoice",
+    "/shipping",
+  ];
 }
 
 function chunk(list, size) {
@@ -127,19 +174,34 @@ function main() {
     console.warn("Warning: NEXT_PUBLIC_SITE_URL not set; using http://localhost:3000");
   }
 
-  const slugs = listGeneratedSlugs(root, ["batch2", "batch3", "batch4", "batch5"]);
-  
-  // Sort and deduplicate slugs
-  const uniqueSlugs = [...new Set(slugs)].sort();
-  
-  const routes = uniqueSlugs.map((slug) => `/${slug}`);
+  // Collect all URLs
+  const allRoutes = [];
 
-  if (routes.length === 0) {
-    console.error("No generated routes found in generated/batch2-5. Skipping sitemap generation.");
+  // 1. Generated pages
+  const generatedSlugs = listGeneratedSlugs(root, ["batch2", "batch3", "batch4", "batch5"]);
+  generatedSlugs.forEach((slug) => allRoutes.push(`/${slug}`));
+
+  // 2. Integration pages
+  const integrationSlugs = listIntegrationSlugs(root);
+  integrationSlugs.forEach((slug) => allRoutes.push(`/integration/${slug}`));
+
+  // 3. Blog posts
+  const blogSlugs = listBlogSlugs(root);
+  blogSlugs.forEach((slug) => allRoutes.push(`/blog/${slug}`));
+
+  // 4. Static routes (including verticals)
+  const staticRoutes = getStaticRoutes();
+  staticRoutes.forEach((route) => allRoutes.push(route));
+
+  // Deduplicate and sort
+  const uniqueRoutes = [...new Set(allRoutes)].sort();
+
+  if (uniqueRoutes.length === 0) {
+    console.error("No routes found. Skipping sitemap generation.");
     process.exit(1);
   }
 
-  const urls = routes.map((route) => `${baseUrl}${route}`);
+  const urls = uniqueRoutes.map((route) => `${baseUrl}${route}`);
   const batches = chunk(urls, MAX_URLS_PER_BATCH);
 
   ensureDir(sitemapsDir);

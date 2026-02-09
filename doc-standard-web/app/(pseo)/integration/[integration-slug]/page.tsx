@@ -18,7 +18,7 @@ import {
   replaceVariables,
   selectProcessBlock,
 } from "@/lib/pseo/dynamic-content"
-import { getIntentBySlug } from "@/lib/pseo/intents"
+import { getIntentBySlug, getIntentsByKind } from "@/lib/pseo/intents"
 import { promises as fs } from "fs"
 import path from "path"
 
@@ -244,6 +244,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "website",
     },
   }
+}
+
+export async function generateStaticParams() {
+  const [entries, intents] = await Promise.all([
+    loadIntegrationDetails(),
+    getIntentsByKind("integration"),
+  ])
+  const slugs = new Set<string>()
+  entries.forEach((entry) => slugs.add(entry.slug))
+  intents.forEach((intent) => slugs.add(intent.slug))
+  return Array.from(slugs).map((slug) => ({ "integration-slug": slug }))
 }
 
 export default async function IntegrationPage({ params }: PageProps) {

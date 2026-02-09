@@ -346,12 +346,21 @@ function main() {
       continue;
     }
 
-    const slugBase = slugify(`${city}-${systemA}-${systemB}-integration`);
-    let slug = slugBase.slice(0, 50) || `page-${created + 1}`;
+    // Create unique slug including pain/benefit identifiers (Google limit: 75 chars max)
+    // Abbreviate pain point and benefit to keep under limit while ensuring uniqueness
+    const painAbbr = slugify(pain).split('-').map(w => w[0]).join('').slice(0, 4);
+    const benefitAbbr = slugify(benefit).split('-').map(w => w[0]).join('').slice(0, 4);
+    const cityAbbr = slugify(city).slice(0, 15);
+    const sysAAbbr = slugify(systemA).slice(0, 10);
+    const sysBAbbr = slugify(systemB).slice(0, 10);
+    
+    const slugBase = `${cityAbbr}-${sysAAbbr}-${sysBAbbr}-${painAbbr}-${benefitAbbr}`;
+    let slug = slugify(slugBase).slice(0, 72) || `page-${created + 1}`;
+    
     if (seenSlugs.has(slug)) {
       const suffix = hashToInt(`${slugBase}|${attempts}`, 1000, 9999);
-      const maxBase = Math.max(1, 50 - 5);
-      slug = `${slugBase.slice(0, maxBase)}-${suffix}`;
+      const maxBase = Math.max(1, 72 - 5);
+      slug = `${slug.slice(0, maxBase)}-${suffix}`;
     }
 
     const filePath = path.join(outDir, `${slug}.tsx`);
