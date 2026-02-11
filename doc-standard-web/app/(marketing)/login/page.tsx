@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { FileText, Star, AlertCircle } from "lucide-react"
 import { signUp, signIn } from "@/lib/actions/auth"
 
-export default function LoginSignupPage() {
+function LoginSignupForm() {
   const searchParams = useSearchParams()
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -37,9 +37,7 @@ export default function LoginSignupPage() {
     setLoading(true)
 
     try {
-      const result = isLogin
-        ? await signIn(formData)
-        : await signUp(formData)
+      const result = isLogin ? await signIn(formData) : await signUp(formData)
 
       if (result?.error) {
         setError(result.error)
@@ -286,5 +284,19 @@ export default function LoginSignupPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginSignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-white flex items-center justify-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      }
+    >
+      <LoginSignupForm />
+    </Suspense>
   )
 }
