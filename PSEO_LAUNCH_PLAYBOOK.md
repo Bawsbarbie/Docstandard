@@ -1,276 +1,474 @@
-# pSEO Launch Playbook: Lessons from DocStandard
+# PSEO Launch Playbook: The Unified System
 
-*A battle-tested guide for launching programmatic SEO without the painful mistakes.*
+*A battle-tested guide that enforces validation BEFORE generation. Based on Kalash Protocol + lisbeth718 framework + DocStandard hard lessons.*
+
+**Version:** 2.0 (Unified)  
+**Last Updated:** 2026-02-10  
+**Applies to:** All pSEO projects (DocStandard, ctomarketplace.com, future projects)
 
 ---
 
-## Phase 0: Pre-Launch Checklist (Critical)
+## Quick Reference: Where Things Live
 
-### 1. Domain & Infrastructure Setup
+| What | Where | Use When |
+|------|-------|----------|
+| **Memory** | `memory/MEMORY.md` | Remembering what worked/failed |
+| **Skills** | `skills/pseo-unified/SKILL.md` | Understanding protocols |
+| **This Playbook** | `PSEO_LAUNCH_PLAYBOOK.md` | Executing step-by-step |
+| **Validation Code** | `skills/pseo-unified/scripts/` | Running checks |
 
-**Domain Configuration:**
-- [ ] Set `NEXT_PUBLIC_SITE_URL=https://yourdomain.com` in production environment
-- [ ] Verify sitemap generates with correct domain (NOT localhost)
-- [ ] Test sitemap URL returns 200: `curl -s https://yourdomain.com/sitemap-index.xml`
-- [ ] Submit sitemap to GSC BEFORE launching pages
+---
 
-**Common Mistake:** Sitemap generates with localhost URLs → GSC can't fetch → no indexing.
+## Phase 0: Pre-Launch Foundation (Days -7 to 0)
 
-**Script Safety:**
+### 0.1 Domain & Infrastructure
+
+**CRITICAL: Do this FIRST. No exceptions.**
+
+```bash
+# Checklist
+[ ] Set NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+[ ] Verify sitemap generates with correct domain (NOT localhost)
+[ ] Test sitemap URL: curl -s https://yourdomain.com/sitemap-index.xml
+[ ] Confirm robots.txt allows crawling
+[ ] Set up Google Search Console property
+```
+
+**Safety Check (Add to sitemap generator):**
 ```javascript
-// In sitemap generator - exit if env var missing
-if (baseUrl.includes("localhost")) {
-  console.warn("SKIP: NEXT_PUBLIC_SITE_URL not set");
+if (baseUrl.includes("localhost") || !baseUrl) {
+  console.warn("SKIP: NEXT_PUBLIC_SITE_URL not set to production");
   process.exit(0); // Don't overwrite good sitemap
 }
 ```
 
----
+### 0.2 Data Audit (lisbeth718 Phase 0-2)
 
-## Phase 1: URL Architecture (Before Writing Code)
+**Before writing ANY code, audit your data:**
 
-### 2. Route Planning
-
-**DO:**
-- `/[vertical]/[intent-slug]` → Hub intent pages (built first)
-- `/[country]/[state]/[city]/[intent]` → Geo pages (Phase 2)
-- `/blog/[slug]` → Content pages
-
-**DON'T:**
-- `/[vertical]/[city]` → City-vertical pages (creates 404s if not built)
-- Short slug redirects that conflict with real pages
-- Multiple URL patterns for same content
-
-**DocStandard Mistake:** We had `/compliance/antwerp` in sitemap but routes weren't built → 73 pages 404ing.
-
-**Rule:** If it's in the sitemap, the route MUST exist and return 200.
-
----
-
-### 3. Slug Generation Strategy
-
-**For Generated Pages:**
-```
-{city}-{systemA}-{systemB}-{painAbbr}-{benefitAbbr}
-```
-
-**Requirements:**
-- [ ] Max 75 characters (Google limit)
-- [ ] Unique across all batches
-- [ ] No duplicate slugs (we had 310 duplicates across batch3/4/5)
-
-**Validation:**
-```javascript
-const seenSlugs = new Set();
-const slug = generateSlug(data);
-if (seenSlugs.has(slug)) {
-  throw new Error(`Duplicate slug: ${slug}`);
-}
-seenSlugs.add(slug);
-```
-
----
-
-## Phase 2: Content Standards
-
-### 4. Minimum Content Requirements
-
-| Page Type | Min Words | Why |
-|-----------|-----------|-----|
-| Blog Posts | 600+ | Google flags <400 as "thin content" |
-| pSEO Landing Pages | 1,500-2,500 | E-E-A-T requirements |
-| Hub Pages | 800+ | Navigation + value prop |
-
-**DocStandard Mistake:** 54 blog posts at 309-416 words → Google won't index them.
-
-**Solution:** Consolidate similar topics into fewer, longer guides.
-
----
-
-### 5. Content Differentiation
-
-**Indexed (Good):**
-- "Commercial Invoice Processing" (specific document type)
-- "Bill of Lading Processing" (specific workflow)
-- "Batch Document Ingestion Architecture" (technical depth)
-
-**Not Indexed (Too Generic):**
-- "Data Cleaning Services"
-- "Data Standardization"
-- "Data Enrichment Services"
-
-**Rule:** Specific operational workflows > Generic service descriptions
-
----
-
-## Phase 3: Technical Implementation
-
-### 6. Sitemap Strategy
-
-**Batching:**
-- Max 2,000 URLs per sitemap file
-- Submit ONE batch initially (not 11 batches of 50)
-- Wait for 40+ indexed before adding more
-
-**DocStandard Mistake:** 11 batches × 50 URLs = confusion and partial indexing.
-
-**Current Working Setup:**
-- 1 sitemap file: 287 URLs
-- Generated pages: 200 (batch2)
-- Blog: 54 posts
-- Integrations: 19 pages
-- Hub pages: 6 verticals
-- Main pages: 8
-
----
-
-### 7. Page Generation Workflow
-
-**Template → Generated Pages:**
-1. Update template with ALL changes first
-2. Test template renders correctly
-3. Delete old generated files
-4. Run generator script
-5. Verify no duplicate slugs
-6. Build and deploy
-7. Submit updated sitemap
-
-**DocStandard Mistake:** Template had `vertical` prop, but generated pages didn't include it → images not showing.
-
-**Always regenerate all batches after template changes.**
-
----
-
-## Phase 4: Google Search Console Management
-
-### 8. GSC Launch Sequence
-
-**Week 1:**
-1. Submit sitemap (validate it works)
-2. Wait 48 hours for initial crawl
-3. Check "Discovered - not indexed" count
-4. Fix any 404s immediately
-
-**Week 2-4:**
-5. Monitor Coverage report daily
-6. If pages 404 → remove from sitemap OR build routes
-7. Wait for 40+ indexed before expanding
-
----
-
-### 9. Handling "Discovered - Not Indexed"
-
-**First, check if URLs actually work:**
 ```bash
-for url in $(cat urls.txt); do
+# Run discovery
+node skills/pseo-unified/scripts/discovery.js
+
+# Check data sufficiency
+node skills/pseo-unified/scripts/data-audit.js --source=./data/
+```
+
+**Data Requirements by Scale:**
+
+| Pages | Architecture | Data Needed |
+|-------|-------------|-------------|
+| < 1K | JSON files | 50+ entities with 5+ attributes each |
+| 1K-10K | JSON + caching | 200+ entities, filtered combinations |
+| 10K+ | Database layer | Structured tables, cursor-based iteration |
+| 100K+ | DB + CDN + incremental | Full data pipeline with validation gates |
+
+**DocStandard Mistake:** We had data for 500 pages but tried to generate 5,000. Result: thin content.
+
+### 0.3 Select Playbooks
+
+**Choose 3-5 playbooks for Phase 1.** Don't do all 12 at once.
+
+Recommended starter set:
+1. **Glossary** (easy wins, educational intent)
+2. **Comparisons** (high commercial intent)
+3. **Integrations** (product-focused)
+4. **Locations** (if local SEO applies)
+5. **Examples** (inspiration intent)
+
+**Rule:** Each batch must contain **mixed playbook types** (min 3).
+
+---
+
+## Phase 1: Validation Gates (Day 0)
+
+### 1.1 Pre-Generation Gate (CRITICAL)
+
+**This is where DocStandard failed. We generated first, validated later.**
+
+**Create this file: `scripts/pre-generation-gate.js`**
+
+```javascript
+#!/usr/bin/env node
+
+const fs = require('fs');
+const crypto = require('crypto');
+
+// Gate 1: Data Sufficiency
+function checkDataSufficiency(data, minFields = 5) {
+  const fields = Object.keys(data).filter(k => data[k] !== null && data[k] !== undefined);
+  return {
+    passed: fields.length >= minFields,
+    fields: fields.length,
+    required: minFields
+  };
+}
+
+// Gate 2: Word Count Minimum
+const MIN_WORDS = {
+  informational: 900,
+  utility: 600,
+  pillar: 2500,
+  supporting: 1500,
+  glossary: 800,
+  comparison: 1200,
+  integration: 1500
+};
+
+function checkWordCount(pageType, estimatedWords) {
+  const min = MIN_WORDS[pageType] || 600;
+  return {
+    passed: estimatedWords >= min,
+    actual: estimatedWords,
+    required: min
+  };
+}
+
+// Gate 3: Title Similarity (< 30%)
+function calculateSimilarity(str1, str2) {
+  const s1 = str1.toLowerCase().split(' ');
+  const s2 = str2.toLowerCase().split(' ');
+  const intersection = s1.filter(word => s2.includes(word));
+  return intersection.length / Math.max(s1.length, s2.length);
+}
+
+function checkTitleSimilarity(newTitle, existingTitles) {
+  for (const existing of existingTitles) {
+    const similarity = calculateSimilarity(newTitle, existing);
+    if (similarity > 0.30) {
+      return { passed: false, similarity: similarity, existing: existing };
+    }
+  }
+  return { passed: true };
+}
+
+// Gate 4: Slug Uniqueness
+const seenSlugs = new Set();
+function checkSlugUnique(slug) {
+  if (seenSlugs.has(slug)) {
+    return { passed: false, reason: 'Duplicate slug' };
+  }
+  seenSlugs.add(slug);
+  return { passed: true };
+}
+
+// Main validation function
+function validatePage(pageData, existingTitles) {
+  const results = {
+    slug: checkSlugUnique(pageData.slug),
+    data: checkDataSufficiency(pageData.data),
+    words: checkWordCount(pageData.type, pageData.estimatedWords),
+    title: checkTitleSimilarity(pageData.title, existingTitles)
+  };
+  
+  const allPassed = Object.values(results).every(r => r.passed);
+  
+  return {
+    status: allPassed ? 'APPROVED' : 'REJECTED',
+    page: pageData.slug,
+    results: results
+  };
+}
+
+module.exports = { validatePage, checkDataSufficiency, checkWordCount };
+```
+
+### 1.2 Run Pre-Generation Check
+
+```bash
+# Test your data before generating
+node scripts/pre-generation-gate.js --data=./data/integrations.json --type=integration
+
+# If ANY page fails, fix data before generating
+```
+
+---
+
+## Phase 2: Content Generation (Days 1-3)
+
+### 2.1 Batch Configuration
+
+**Rules:**
+- Max 100 pages per batch
+- Min 3 different playbook types per batch
+- No repeated slugs
+- No repeated primary keywords
+
+**Example Batch Structure:**
+```json
+{
+  "batch_id": "batch-01",
+  "pages": [
+    { "type": "glossary", "slug": "what-is-isf-10", "count": 10 },
+    { "type": "comparison", "slug": "cargowise-vs-flexport", "count": 5 },
+    { "type": "integration", "slug": "cargowise-netsuite-bridge", "count": 15 },
+    { "type": "examples", "slug": "commercial-invoice-examples", "count": 10 }
+  ]
+}
+```
+
+### 2.2 Generation Script
+
+```bash
+# Generate with validation
+node scripts/generate-batch.js \
+  --batch=batch-01.json \
+  --template=./templates/v2-standard.tsx \
+  --validate \
+  --output=./generated/batch-01/
+```
+
+### 2.3 Post-Generation Validation
+
+```bash
+# Check word counts
+wc -w ./generated/batch-01/*.md
+
+# Check for duplicates
+node scripts/content-hash-validator.js --folder=./generated/batch-01/
+
+# Validate internal links
+node scripts/link-validator.js --folder=./generated/batch-01/
+```
+
+---
+
+## Phase 3: Technical Implementation (Days 4-5)
+
+### 3.1 Route Building
+
+**Rule: Build routes BEFORE adding to sitemap.**
+
+```bash
+# Check all routes exist
+for url in $(cat sitemap-urls.txt); do
   curl -s -o /dev/null -w "%{http_code} $url\n" "$url"
 done
+
+# Fix 404s BEFORE submitting to GSC
 ```
 
-**If 404:** Remove from sitemap immediately (temp removal in GSC)
-**If 200:** Content quality issue - expand or consolidate
+### 3.2 Sitemap Generation
 
-**DocStandard Mistake:** 73 URLs in sitemap that 404ed (city-vertical routes not built).
+```javascript
+// scripts/sitemap-generator.js
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
+if (!BASE_URL || BASE_URL.includes('localhost')) {
+  console.error('ERROR: Set NEXT_PUBLIC_SITE_URL to production domain');
+  process.exit(1);
+}
+
+// Generate sitemap with validation
+// - Max 2,000 URLs per file
+// - Only include 200 OK URLs
+// - Lastmod dates
+// - Priority based on page type
+```
+
+### 3.3 Schema Markup
+
+**Every page gets:**
+- Article schema (min)
+- FAQ schema (if FAQs present)
+- Breadcrumb schema
+- Additional: Product, Comparison, SoftwareApplication (as applicable)
 
 ---
 
-## Phase 5: Expansion Rules
+## Phase 4: Google Search Console (Day 6-7)
 
-### 10. Gatekeeper Protocol
+### 4.1 Launch Sequence
+
+**Week 1:**
+```
+Day 1: Submit sitemap
+Day 2-3: Wait for initial crawl
+Day 4: Check Coverage report
+Day 5-7: Fix any 404s immediately
+```
+
+**Week 2-4:**
+```
+Daily: Monitor Coverage report
+Daily: Check "Discovered - not indexed" count
+Weekly: Analyze which content types index
+```
+
+### 4.2 Gatekeeper Protocol
 
 **DO NOT expand until:**
 - [ ] 40+ pages indexed
 - [ ] No 404 errors in Coverage report
-- [ ] Previous batch shows healthy indexing
+- [ ] Previous batch shows healthy indexing rate (>30%)
 
-**Expansion Sequence:**
-1. Hub pages (6 verticals)
-2. Intent pages (per vertical)
-3. Geo pages (city-intent combinations)
-4. Scale to 100k+
-
-**DocStandard Mistake:** Added geo pages to sitemap before building routes → GSC confusion.
+**DocStandard Mistake:** Added 73 city-vertical URLs to sitemap before building routes. Result: 404s.
 
 ---
 
-## Quick Reference: Common Mistakes & Fixes
+## Phase 5: Expansion (Month 2+)
 
-| Mistake | Impact | Fix |
-|---------|--------|-----|
-| Sitemap has localhost URLs | GSC can't fetch | Hardcode production domain fallback |
-| Duplicate slugs across batches | Content cannibalization | Use Set() to track seen slugs |
-| City-vertical URLs not built | 73 pages 404 | Remove from sitemap until Phase 2 |
-| Blog posts <400 words | Thin content penalty | Merge into 800+ word guides |
-| Multiple small sitemaps | Crawl confusion | One sitemap, max 2000 URLs |
-| Template changes without regen | Props missing | Always regenerate all batches |
-
----
-
-## ctomarketplace.com Launch Checklist
-
-**Pre-Launch:**
-- [ ] Domain configured in env vars
-- [ ] Sitemap generates with correct URLs
-- [ ] Routes exist for ALL sitemap URLs
-- [ ] Content meets minimum word counts
-- [ ] Slug validation in place
-
-**Launch Week:**
-- [ ] Submit sitemap to GSC
-- [ ] Monitor Coverage report daily
-- [ ] Fix 404s within 24 hours
-- [ ] Remove broken URLs from sitemap
-
-**Post-Launch:**
-- [ ] Wait for 40+ indexed
-- [ ] Analyze which content types index
-- [ ] Expand winning content types
-- [ ] Consolidate underperformers
-
----
-
-## Domain Age Advantage (ctomarketplace.com)
-
-**2-year-old domain = Faster indexing:**
-- Higher crawl budget
-- More domain authority
-- Google trusts established sites
-
-**Expected vs DocStandard:**
-- DocStandard: ~40 indexed after 2 weeks (new domain)
-- CtoMarketplace: Likely 100+ indexed in first week
-
-**Still follow the same process** - domain age helps but doesn't fix broken URLs or thin content.
-
----
-
-## Files to Create for New Project
+### 5.1 Scaling Pattern
 
 ```
-ctomarketplace/
-├── .env.production          # Production env vars
-├── scripts/
-│   ├── sitemap-generator.js  # With safety checks
-│   ├── page-generator.js     # With duplicate detection
-│   └── validate-routes.js    # Check all URLs return 200
-├── content/
-│   └── blog/                 # 600+ word posts only
-└── docs/
-    └── PSEO_LAUNCH.md        # This playbook
+Phase 1: 100 pages (3 playbook types) → Wait for 40+ indexed
+Phase 2: 500 pages (5 playbook types) → Wait for 200+ indexed
+Phase 3: 2,000 pages (8 playbook types) → Wait for 800+ indexed
+Phase 4: 10,000+ pages (all 12 playbooks)
 ```
+
+### 5.2 Quality Maintenance
+
+```bash
+# Weekly quality audit
+node scripts/quality-guard.js --all-batches
+
+# Monthly content refresh
+node scripts/content-refresh.js --older-than=90days
+
+# Duplicate detection (SimHash)
+node scripts/simhash-check.js --threshold=0.85
+```
+
+---
+
+## Quick Reference: Decision Trees (Now Executable!)
+
+**All decision trees are now programmatic. Run them:**
+
+```bash
+# List all decision trees
+node skills/pseo-unified/scripts/decision-trees.js --list
+
+# Visualize a tree
+node skills/pseo-unified/scripts/decision-trees.js --show shouldGeneratePage
+
+# Run a decision
+node skills/pseo-unified/scripts/decision-trees.js shouldGeneratePage --data=./page.json
+```
+
+### Decision Tree 1: Should I Generate This Page?
+
+**Run:** `node skills/pseo-unified/scripts/decision-trees.js shouldGeneratePage --data=./page.json`
+
+```
+Data sufficient (5+ fields)?
+  ├─ NO → SKIP (insufficient data)
+  └─ YES → Word count >= minimum?
+      ├─ NO → REJECT (thin content)
+      └─ YES → Title < 30% similar?
+          ├─ NO → REJECT (duplicate)
+          └─ YES → Slug unique?
+              ├─ NO → REJECT (duplicate slug)
+              └─ YES → GENERATE ✓
+```
+
+**Example:**
+```bash
+$ node decision-trees.js shouldGeneratePage --data=page.json
+{
+  "outcome": "APPROVED",
+  "action": "GENERATE_PAGE",
+  "reason": "All validation gates passed",
+  "path": [
+    {"question": "Data sufficient (5+ fields)?", "condition": "data_check"},
+    {"question": "Estimated word count >= minimum?", "condition": "word_count_check"},
+    {"question": "Title similarity < 30%?", "condition": "title_similarity"},
+    {"question": "Slug is unique?", "condition": "slug_check"}
+  ],
+  "approved": true
+}
+```
+
+### Decision Tree 2: Should I Submit to GSC?
+
+**Run:** `node skills/pseo-unified/scripts/decision-trees.js shouldSubmitToGSC --data=./status.json`
+
+```
+All routes return 200?
+  ├─ NO → Fix 404s first
+  └─ YES → Sitemap valid?
+      ├─ NO → Fix sitemap
+      └─ YES → Previous batch 40+ indexed?
+          ├─ NO → Wait
+          └─ YES → SUBMIT ✓
+```
+
+### Decision Tree 3: Validate Batch
+
+**Run:** `node skills/pseo-unified/scripts/decision-trees.js validateBatch --data=./batch.json`
+
+```
+Batch size <= 100?
+  ├─ NO → SPLIT_BATCH
+  └─ YES ->= 3 playbook types?
+      ├─ NO → ADD_PLAYBOOK_DIVERSITY
+      └─ YES → No duplicate slugs?
+          ├─ NO → FIX_SLUG_DUPLICATES
+          └─ YES → No duplicate keywords?
+              ├─ NO → FIX_KEYWORD_DUPLICATES
+              └─ YES → PROCEED ✓
+```
+
+---
+
+## DocStandard Error Log (Learn From Our Mistakes)
+
+| Error | Impact | How This Playbook Prevents It |
+|-------|--------|------------------------------|
+| 309-416 word blog posts | Thin content penalty | Pre-generation word count gate |
+| 465 integration pages only | No playbook diversity | Batch diversity check (min 3 types) |
+| 73 URLs 404 | GSC confusion | Route validation BEFORE sitemap |
+| Duplicate slugs | Content cannibalization | Slug uniqueness gate |
+| No LLM visibility | Missing AI citations | llms.txt + answer capsules (Phase 6) |
+
+---
+
+## ctomarketplace.com Specifics
+
+**Domain Advantage:** 2 years old = faster indexing, higher trust
+
+**Still Required:**
+- All validation gates
+- Mixed playbook batches
+- Pre-generation data sufficiency checks
+- Route validation before sitemap submission
+
+**Expected Results (vs DocStandard):**
+- DocStandard: 40 indexed after 2 weeks (new domain)
+- ctomarketplace: Likely 100+ indexed in first week (aged domain)
+
+**But:** Domain age doesn't fix broken URLs or thin content. Follow the playbook.
+
+---
+
+## Tools Checklist
+
+Create these scripts in `scripts/`:
+
+- [ ] `pre-generation-gate.js` - 4-gate validation
+- [ ] `data-audit.js` - Data sufficiency check
+- [ ] `generate-batch.js` - Batch generation with validation
+- [ ] `content-hash-validator.js` - Duplicate detection
+- [ ] `link-validator.js` - Internal link check
+- [ ] `quality-guard.js` - Weekly audit
+- [ ] `sitemap-generator.js` - Validated sitemap
+- [ ] `simhash-check.js` - Near-duplicate detection
 
 ---
 
 ## Success Metrics
 
-| Metric | Week 1 | Week 4 | Month 3 |
-|--------|--------|--------|---------|
+| Metric | Week 1 | Month 1 | Month 3 |
+|--------|--------|---------|---------|
 | Indexed Pages | 20+ | 100+ | 500+ |
+| Avg Word Count | 800+ | 1000+ | 1200+ |
 | 404 Errors | 0 | 0 | 0 |
-| Avg Content Length | 800+ | 1000+ | 1200+ |
-| Sitemap Status | Success | Success | Success |
+| Duplicate Content | 0% | < 1% | < 1% |
+| GSC Status | Success | Success | Success |
 
 ---
 
-*Last Updated: 2026-02-09*
-*Based on DocStandard pSEO launch learnings*
+**Final Rule:** If you haven't run the pre-generation gate, you don't have permission to generate.
+
+*This playbook is law. Violation = rollback required.*

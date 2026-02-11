@@ -1,0 +1,15 @@
+{
+  "slug": "what-is-isf-10",
+  "type": "glossary",
+  "title": "What is ISF-10? Importer Security Filing Explained",
+  "estimatedWords": 1850,
+  "data": {
+    "term": "ISF-10",
+    "fullName": "Importer Security Filing",
+    "definition": "A mandatory CBP filing required 24 hours before cargo loading",
+    "requirements": ["10 data elements from importer", "2 from carrier"],
+    "penalty": "Up to $5,000 per violation",
+    "examples": ["Bill of Lading number", "Manufacturer details", "HTS codes"],
+    "relatedTerms": ["AMS", "AES", "CBP"]
+  }
+}

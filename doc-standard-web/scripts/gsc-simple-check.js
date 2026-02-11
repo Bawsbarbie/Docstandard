@@ -8,7 +8,7 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 
-const SITE_URL = 'https://docstandard.co/';
+const SITE_URL = 'sc-domain:docstandard.co';
 const AUDIT_PATH = path.join(__dirname, '../reports/gsc-audit-log.json');
 
 // Ensure reports directory exists
