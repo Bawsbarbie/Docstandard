@@ -115,6 +115,16 @@ function getStaticRoutes() {
   ];
 }
 
+function getBlockedRoutes() {
+  return new Set([
+    "/invoice/antwerp",
+    "/invoice/chicago",
+    "/finance/rotterdam",
+    "/customs/hamburg",
+    "/compliance/new-york",
+  ]);
+}
+
 function chunk(list, size) {
   const out = [];
   for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
@@ -202,8 +212,9 @@ function main() {
   const staticRoutes = getStaticRoutes();
   staticRoutes.forEach((route) => allRoutes.push(route));
 
-  // Deduplicate and sort
-  const uniqueRoutes = [...new Set(allRoutes)].sort();
+  // Deduplicate, remove explicitly blocked URLs, and sort
+  const blocked = getBlockedRoutes();
+  const uniqueRoutes = [...new Set(allRoutes)].filter((route) => !blocked.has(route)).sort();
 
   if (uniqueRoutes.length === 0) {
     console.error("No routes found. Skipping sitemap generation.");

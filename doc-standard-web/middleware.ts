@@ -1,6 +1,49 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
+const SYSTEM_SLUGS = [
+  "cargowise",
+  "magaya",
+  "sap",
+  "oracle",
+  "motive",
+  "descartes",
+  "mercurygate",
+  "flexport",
+  "freightos",
+  "kuebix",
+  "roserocket",
+  "manhattan",
+  "blueyonder",
+  "3pl-central",
+  "shipstation",
+] as const
+
+const SYSTEM_PATTERN = SYSTEM_SLUGS.join("|")
+
+// Matches: /{city}-{systemA}-{systemB}-{suffix}
+const CITY_SYSTEM_PAGE_REGEX = new RegExp(
+  `^/[a-z0-9-]+-(?:${SYSTEM_PATTERN})-(?:${SYSTEM_PATTERN})-[a-z0-9-]+/?$`,
+  "i"
+)
+
+function isCitySystemIntegrationPath(pathname: string): boolean {
+  // Explicit exclusions requested by user.
+  if (
+    pathname === "/" ||
+    pathname === "/logistics" ||
+    pathname === "/shipping" ||
+    pathname === "/finance" ||
+    pathname === "/compliance" ||
+    pathname.startsWith("/blog/") ||
+    pathname.startsWith("/integration/")
+  ) {
+    return false
+  }
+
+  return CITY_SYSTEM_PAGE_REGEX.test(pathname)
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
@@ -54,6 +97,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
 
+  if (isCitySystemIntegrationPath(pathname)) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow")
+  }
+
   return response
 }
 
@@ -66,7 +113,9 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public files (public folder)
      * - api routes
+     * - sitemap files
+     * - robots.txt
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots\\.txt|sitemap-index\\.xml|sitemaps|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|api).*)",
   ],
 }
