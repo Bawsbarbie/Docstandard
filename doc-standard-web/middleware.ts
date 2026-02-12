@@ -46,6 +46,22 @@ function isCitySystemIntegrationPath(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  const hostHeader = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? ""
+  const host = hostHeader.split(",")[0]?.trim().toLowerCase() ?? ""
+  const forwardedProtoHeader = request.headers.get("x-forwarded-proto") ?? ""
+  const forwardedProto = forwardedProtoHeader.split(",")[0]?.trim().toLowerCase() ?? ""
+  const isHttpRequest = forwardedProto
+    ? forwardedProto === "http"
+    : request.nextUrl.protocol === "http:"
+  const isDocstandardHost = host === "docstandard.co" || host === "www.docstandard.co"
+
+  // Enforce canonical domain/protocol for production host.
+  if (isDocstandardHost && (isHttpRequest || host === "www.docstandard.co")) {
+    const canonicalUrl = request.nextUrl.clone()
+    canonicalUrl.protocol = "https:"
+    canonicalUrl.host = "docstandard.co"
+    return NextResponse.redirect(canonicalUrl, 301)
+  }
 
   let response = NextResponse.next({
     request: {

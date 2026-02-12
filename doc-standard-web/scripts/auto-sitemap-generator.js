@@ -6,6 +6,7 @@ const path = require("path");
 const dotenv = require("dotenv");
 
 const MAX_URLS_PER_BATCH = 2000;
+const CITY_SYSTEM_SLUG_REGEX = /^\/[a-z0-9-]+-(cargowise|magaya|sap|oracle|motive|descartes|mercurygate|flexport|freightos|kuebix|roserocket|manhattan|blueyonder|3pl-central|shipstation)-([a-z0-9-]+)-[a-z0-9-]+$/i;
 
 function parseArgs(argv) {
   const out = {};
@@ -125,6 +126,62 @@ function getBlockedRoutes() {
   ]);
 }
 
+function isPseoRoute(route) {
+  return (
+    CITY_SYSTEM_SLUG_REGEX.test(route) ||
+    route.startsWith("/integration/") ||
+    route.startsWith("/blog/") ||
+    route === "/logistics" ||
+    route === "/shipping" ||
+    route === "/finance" ||
+    route === "/customs" ||
+    route === "/compliance" ||
+    route === "/invoice"
+  );
+}
+
+function checkPageHasNoindex(route, root) {
+  // Generated city-system pages are served via app/(pseo)/[vertical],
+  // where noindex is enforced in head.tsx and metadata generation.
+  if (CITY_SYSTEM_SLUG_REGEX.test(route)) {
+    const verticalHeadPath = path.join(root, "app", "(pseo)", "[vertical]", "head.tsx");
+    const verticalPagePath = path.join(root, "app", "(pseo)", "[vertical]", "page.tsx");
+    const headContent = fs.existsSync(verticalHeadPath)
+      ? fs.readFileSync(verticalHeadPath, "utf8")
+      : "";
+    const pageContent = fs.existsSync(verticalPagePath)
+      ? fs.readFileSync(verticalPagePath, "utf8")
+      : "";
+
+    const hasMetaNoindex =
+      headContent.includes('name="robots"') &&
+      (headContent.includes("noindex, nofollow") || headContent.includes("noindex,nofollow"));
+    const hasMetadataNoindex =
+      pageContent.includes("robots") &&
+      pageContent.includes("index: false") &&
+      pageContent.includes("follow: false");
+
+    return hasMetaNoindex || hasMetadataNoindex;
+  }
+
+  // For other pSEO routes, require explicit noindex declaration in source
+  // before allowing sitemap inclusion under this guard.
+  return false;
+}
+
+// BEFORE adding to sitemap, check for noindex
+function shouldIncludeInSitemap(route, root) {
+  // If it's a pSEO page, verify it has noindex meta or X-Robots-Tag
+  if (isPseoRoute(route)) {
+    const hasNoindex = checkPageHasNoindex(route, root);
+    if (!hasNoindex) {
+      console.warn(`⚠️ Skipping ${route} - missing noindex tag`);
+      return false; // Don't add to sitemap yet
+    }
+  }
+  return true;
+}
+
 function chunk(list, size) {
   const out = [];
   for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
@@ -212,9 +269,12 @@ function main() {
   const staticRoutes = getStaticRoutes();
   staticRoutes.forEach((route) => allRoutes.push(route));
 
-  // Deduplicate, remove explicitly blocked URLs, and sort
+  // Deduplicate, remove explicitly blocked URLs, apply noindex guard, and sort
   const blocked = getBlockedRoutes();
-  const uniqueRoutes = [...new Set(allRoutes)].filter((route) => !blocked.has(route)).sort();
+  const uniqueRoutes = [...new Set(allRoutes)]
+    .filter((route) => !blocked.has(route))
+    .filter((route) => shouldIncludeInSitemap(route, root))
+    .sort();
 
   if (uniqueRoutes.length === 0) {
     console.error("No routes found. Skipping sitemap generation.");
