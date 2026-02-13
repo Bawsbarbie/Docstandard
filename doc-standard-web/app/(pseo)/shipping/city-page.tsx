@@ -233,7 +233,7 @@ export default async function ShippingCityPage({ params }: PageProps) {
               <p className="text-sm text-slate-600">Original, surrender, and telex release bills. Handles straight, order, and bearer B/L formats from all major carriers.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-slate-200">
-              <h4 className="font-semibold text-slate-900 mb-2">VGM Integration</ch4>
+              <h4 className="font-semibold text-slate-900 mb-2">VGM Integration</h4>
               <p className="text-sm text-slate-600">Validates container weights against SOLAS VGM requirements. Flags discrepancies before port submission.</p>
             </div>
             <div className="bg-white p-6 rounded-xl border border-slate-200">

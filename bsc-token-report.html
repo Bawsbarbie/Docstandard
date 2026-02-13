@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSC Token Scanner - 100 Tokens Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #0a0a0f; }
+        .token-row:hover { background: rgba(99, 102, 241, 0.1); }
+        .sort-btn:hover { color: #6366f1; }
+        .sort-btn.active { color: #6366f1; }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen">
+    <div class="max-w-[1600px] mx-auto p-4">
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-white mb-2">🪙 BSC Token Scanner</h1>
+            <p class="text-gray-400">Live analysis of 100 BSC/PancakeSwap tokens</p>
+            <div class="flex gap-4 mt-4 text-sm">
+                <span class="bg-green-900/30 text-green-400 px-3 py-1 rounded">🟢 <span id="green-count">0</span> Positive 24h</span>
+                <span class="bg-red-900/30 text-red-400 px-3 py-1 rounded">🔴 <span id="red-count">0</span> Negative 24h</span>
+                <span class="bg-blue-900/30 text-blue-400 px-3 py-1 rounded">💰 Avg MC: <span id="avg-mc">$0</span></span>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-4 flex gap-2">
+            <input type="text" id="search" placeholder="Search token..." class="bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white w-64">
+            <select id="filter-change" class="bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white">
+                <option value="all">All Changes</option>
+                <option value="positive">Positive 24h</option>
+                <option value="negative">Negative 24h</option>
+                <option value="gainers">+20% or more</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-800 text-gray-400 sticky top-0">
+                        <tr>
+                            <th class="text-left p-3 cursor-pointer sort-btn" onclick="sort('rank')">#</th>
+                            <th class="text-left p-3">Token</th>
+                            <th class="text-right p-3 cursor-pointer sort-btn" onclick="sort('priceUsd')">Price</th>
+                            <th class="text-right p-3 cursor-pointer sort-btn" onclick="sort('change24h')">24h %</th>
+                            <th class="text-right p-3 cursor-pointer sort-btn" onclick="sort('volume24h')">Volume 24h</th>
+                            <th class="text-right p-3 cursor-pointer sort-btn" onclick="sort('liquidity')">Liquidity</th>
+                            <th class="text-right p-3 cursor-pointer sort-btn" onclick="sort('marketCap')">Market Cap</th>
+                            <th class="text-center p-3">Buys/Sells</th>
+                            <th class="text-center p-3">Links</th>
+                        </tr>
+                    </thead>
+                    <tbody id="token-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 text-xs text-gray-500 text-center">
+            Generated: <span id="timestamp"></span> | Data: DexScreener API
+        </div>
+    </div>
+
+    <script>
+        const tokens = [
+            {"name":"1SEN","symbol":"1SEN","priceUsd":4.163e-06,"volume24h":53163.59,"buys24h":384,"sells24h":839,"liquidity":135755.72,"marketCap":208154.0,"change24h":-5.63,"pairCreatedAt":1756128397000,"imageUrl":"https://cdn.dexscreener.com/cms/images/f293ae16109bfd8474641d92a6211990cf4cb55310576e0276d3c3c2f951e7e7?width=48&height=48&quality=90","pairAddress":"0x740B086Aee6ED09988Ac586e45C6D0dCA4792AEe"},
+            {"name":"Mubarakah","symbol":"Mubarakah","priceUsd":0.000703,"volume24h":85832.16,"buys24h":671,"sells24h":665,"liquidity":127482.78,"marketCap":462703.0,"change24h":5.02,"pairCreatedAt":1742002633000,"imageUrl":"https://cdn.dexscreener.com/cms/images/61f528219768cfc17eb93905f826829e3798ce1634a5cfa1df5ee8f6930f4782?width=48&height=48&quality=90","pairAddress":"0xacB622435b634e75b61473bE6F839c46E36BD754"},
+            {"name":"DOYR","symbol":"DOYR","priceUsd":0.0003578,"volume24h":26371.7,"buys24h":208,"sells24h":182,"liquidity":112107.88,"marketCap":357818.0,"change24h":5.16,"pairCreatedAt":1765027750000,"imageUrl":"https://cdn.dexscreener.com/cms/images/b0b5ffb235e8cfb5fb55d8c6321d06afbc68e6481272104aee0a934755c748fa?width=48&height=48&quality=90","pairAddress":"0x9B487fe6C7F4D62dF0A63dbFb0b56B60e55c55f5"},
+            {"name":"Dust","symbol":"Dust","priceUsd":0.0003587,"volume24h":35759.18,"buys24h":156,"sells24h":134,"liquidity":127337.25,"marketCap":358757.0,"change24h":-4.86,"pairCreatedAt":1758293771000,"imageUrl":"https://cdn.dexscreener.com/cms/images/45f1e01babdb4c37a65028409ec6aea87a0e2315402065e3cbedf3710eb094ef?width=48&height=48&quality=90","pairAddress":"0x19B2CAf222446d28906d0F3e66c877379951CbCB"},
+            {"name":"Non-Playable Coin","symbol":"NPC","priceUsd":0.007931,"volume24h":24781.7,"buys24h":447,"sells24h":420,"liquidity":390427.49,"marketCap":453723.0,"change24h":6.83,"pairCreatedAt":1728667060000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7e7fb7f886a5242920422ecfcc0764870223e38135256d8ee91435d2a1fcb5ca?width=48&height=48&quality=90","pairAddress":"0xb2F3279107DA5Fde24E6D7337CF4Ecaf6c5adA26"},
+            {"name":"GIANT","symbol":"GTAN","priceUsd":1.18e-09,"volume24h":1650.57,"buys24h":68,"sells24h":63,"liquidity":121480.34,"marketCap":441038.0,"change24h":1.92,"pairCreatedAt":1678699165000,"imageUrl":"https://cdn.dexscreener.com/cms/images/50123949bedca2c0a1a6d6ce595d8c5edb2c6f36e8c3ac0988fc4275ebee0581?width=48&height=48&quality=90","pairAddress":"0xE965E86BC7Da68fd489C4aB438eb81a48A4Ad6E5"},
+            {"name":"BNBXBT","symbol":"BNBXBT","priceUsd":0.0002944,"volume24h":6516.65,"buys24h":150,"sells24h":75,"liquidity":101651.69,"marketCap":275081.0,"change24h":1.57,"pairCreatedAt":1739638433000,"imageUrl":"https://cdn.dexscreener.com/cms/images/341b42c3a6aa5e00f2ebaa866f5072d132c994142011801664ec90349799be70?width=48&height=48&quality=90","pairAddress":"0x5Fd12BbB709A59c9f3bf9c690bFF75EDc6C4dCFD"},
+            {"name":"White Monkey","symbol":"WM","priceUsd":0.0002843,"volume24h":5025.55,"buys24h":80,"sells24h":69,"liquidity":102768.73,"marketCap":258421.0,"change24h":-0.12,"pairCreatedAt":1761741142000,"imageUrl":"https://cdn.dexscreener.com/cms/images/3132b966fe2eb1e9afa79453f1b8291dc5dd3fc38557d044c462494c82d2f5ab?width=48&height=48&quality=90","pairAddress":"0x9Bce578AbB591dD88e213BCfaeB5Bdf56A33b236"},
+            {"name":"meme rush","symbol":"meme rush","priceUsd":0.0001857,"volume24h":1547.85,"buys24h":17,"sells24h":50,"liquidity":158117.88,"marketCap":185778.0,"change24h":1.02,"pairCreatedAt":1759993392000,"imageUrl":"https://cdn.dexscreener.com/cms/images/638a430efde0f7e61c3642130b4ea730ee6eb5534b0bf47bc8948de59463ebb9?width=48&height=48&quality=90","pairAddress":"0x79733327603B067f6EC6A2F111a16799cFbaF99b"},
+            {"name":"gorilla","symbol":"gorilla","priceUsd":0.0003685,"volume24h":16369.27,"buys24h":107,"sells24h":109,"liquidity":145628.48,"marketCap":361783.0,"change24h":12.79,"pairCreatedAt":1746511312000,"imageUrl":"https://cdn.dexscreener.com/cms/images/44cf982be8632d82ee549a6c1e7e6753d0ed237a917b2df47d56cb539d95fdcb?width=48&height=48&quality=90","pairAddress":"0x1F7b009aCFb88aa5e1Be0b26BBb7006FE8Bda4C5"},
+            {"name":"BilliCat","symbol":"BCAT","priceUsd":0.005676,"volume24h":1299.55,"buys24h":30,"sells24h":27,"liquidity":297590.51,"marketCap":406109.0,"change24h":2.27,"pairCreatedAt":1701943059000,"imageUrl":"https://cdn.dexscreener.com/cms/images/050a27610c183a671697be654ac313c6fb18abd3fee7d7eaf5b2d066784b2a84?width=48&height=48&quality=90","pairAddress":"0x91E5de867f67cF90D3f658b22aFf4E8c881d4D2a"},
+            {"name":"USELESS COIN","symbol":"USELESS","priceUsd":0.03309,"volume24h":10870.56,"buys24h":70,"sells24h":65,"liquidity":176990.58,"marketCap":364279.0,"change24h":1.79,"pairCreatedAt":1752698942000,"imageUrl":"https://cdn.dexscreener.com/cms/images/4f8af59f26d45252fb4379d4b1a1e61d0b419fd34dab2ec9f3ba77585d1783cb?width=48&height=48&quality=90","pairAddress":"0x1B87567de134DbE30e29953c477f1Cbc3D626B6B"},
+            {"name":"Broccoli","symbol":"BROCCOLI","priceUsd":0.001278,"volume24h":9209.26,"buys24h":27,"sells24h":31,"liquidity":165283.43,"marketCap":235655.0,"change24h":3.51,"pairCreatedAt":1739466340000,"imageUrl":"https://cdn.dexscreener.com/cms/images/212648078f327f9e0a2edb3e6aa96d084cb2517c21c2933596ac7efb80230c16?width=48&height=48&quality=90","pairAddress":"0xC18CAa1658B91076425c8D287CA1B8e238344bfE"},
+            {"name":"MarsCoin","symbol":"MarsCoin","priceUsd":0.0001106,"volume24h":2627.76,"buys24h":3,"sells24h":4,"liquidity":106358.28,"marketCap":110664.0,"change24h":-9.32,"pairCreatedAt":1760000081000,"imageUrl":"https://cdn.dexscreener.com/cms/images/b7be80f2c902e8191e8633d6ad50f1579592890f4453987f5d7812bcf041c7b7?width=48&height=48&quality=90","pairAddress":"0x0851F88dee6313E34355CBd4caA3e97222F3caf5"},
+            {"name":"priceless","symbol":"priceless","priceUsd":0.0002237,"volume24h":11524.28,"buys24h":85,"sells24h":66,"liquidity":97083.43,"marketCap":223760.0,"change24h":0.48,"pairCreatedAt":1757345211000,"imageUrl":"https://cdn.dexscreener.com/cms/images/459bc4e618b71a9a52dfc4a68921874afaecbc44e2db8d6716063d94fdee683a?width=48&height=48&quality=90","pairAddress":"0x3DC2878f9F60476dbBb18aF7531fbe1A603c8Dc0"},
+            {"name":"蝴蝶拳头","symbol":"蝴蝶拳头","priceUsd":0.0003004,"volume24h":4849.16,"buys24h":52,"sells24h":22,"liquidity":111311.7,"marketCap":270869.0,"change24h":5.41,"pairCreatedAt":1767094773000,"imageUrl":"https://cdn.dexscreener.com/cms/images/ca689e0dcf0b97487c349eb66cf0872242d77c1ce5065c458fcac2507d0f80ae?width=48&height=48&quality=90","pairAddress":"0x3D58ca4929cE947917874A97F6E1fc2310e3304b"},
+            {"name":"Macrohard","symbol":"Macrohard","priceUsd":8.57e-05,"volume24h":6657.96,"buys24h":8,"sells24h":7,"liquidity":98075.48,"marketCap":85706.0,"change24h":-8.02,"pairCreatedAt":1760255981000,"imageUrl":"https://cdn.dexscreener.com/cms/images/126a1ff808c918519d4c940ae87b3e4dabf3096920ccc3cdc01714ee549877d9?width=48&height=48&quality=90","pairAddress":"0x72f698D628Bd5a4e867C99A6680613b7425cE1C9"},
+            {"name":"Blcio","symbol":"Blcio","priceUsd":0.002147,"volume24h":7030.44,"buys24h":27,"sells24h":38,"liquidity":98131.59,"marketCap":234324.0,"change24h":-10.42,"pairCreatedAt":1765377638000,"imageUrl":"https://cdn.dexscreener.com/cms/images/4858feca1cf3e845c3c347334cc15a1c425b1aefce38656d271c2a84a5507072?width=48&height=48&quality=90","pairAddress":"0x6dA9B5A7A59f887D9c3c83726225bd684a6261A7"},
+            {"name":"Space Nation Oikos","symbol":"OIK","priceUsd":0.0006002,"volume24h":278295.62,"buys24h":785,"sells24h":800,"liquidity":84018.92,"marketCap":198157.0,"change24h":-12.1,"pairCreatedAt":1748924160000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8b049ea31bbbc68e883bb2caa245b6b2f1db9842aa8fb341f112174b6aea9d6e?width=48&height=48&quality=90","pairAddress":"0x985c205bb3a294c4778A9318aecc42b9c07B0b1d"},
+            {"name":"Nelore Coin","symbol":"NLC","priceUsd":0.0008027,"volume24h":7923.73,"buys24h":96,"sells24h":39,"liquidity":88507.77,"marketCap":249231.0,"change24h":30.17,"pairCreatedAt":1644192026000,"imageUrl":"https://cdn.dexscreener.com/cms/images/44a72ba8b346af3aafdf9a763a2406e7c00938d04ef593c3ff8ad9cf2b282131?width=48&height=48&quality=90","pairAddress":"0x69d5b8870406617cCfb59C6a97d64BB8B8B40e2F"},
+            {"name":"Salamanca","symbol":"DON","priceUsd":0.0001963,"volume24h":2277.31,"buys24h":38,"sells24h":44,"liquidity":91501.21,"marketCap":194246.0,"change24h":1.65,"pairCreatedAt":1745505723000,"imageUrl":"https://cdn.dexscreener.com/cms/images/91beec2b503e03537b2e37dc14024e6c29228cb35b87ce3e78057a3534306f61?width=48&height=48&quality=90","pairAddress":"0x5513AF8e37489106DAE832EbcA9a314c5FCde6c5"},
+            {"name":"爱你老己 明天见","symbol":"爱你老己","priceUsd":0.0003732,"volume24h":37126.86,"buys24h":105,"sells24h":112,"liquidity":84511.97,"marketCap":373235.0,"change24h":30.77,"pairCreatedAt":1765694490000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7accf2eb3f3022c92caa1594914c24fd0be30436d2ab8bec48b3a9a40bb88209?width=48&height=48&quality=90","pairAddress":"0x9e8216a5189Da10cCB8483c4c45E64A562FDC236"},
+            {"name":"TENGE TENGE","symbol":"TENGE","priceUsd":0.000141,"volume24h":19396.46,"buys24h":1250,"sells24h":659,"liquidity":57652.04,"marketCap":141072.0,"change24h":-14.68,"pairCreatedAt":1753451631000,"imageUrl":"https://cdn.dexscreener.com/cms/images/51edb687b26ae2bbad8ff6bedd2c7409c6c01f68465f56c9ec064f306b5e350d?width=48&height=48&quality=90","pairAddress":"0xDe2f894E274c7d99273ceb6246CD7F281D40b09f"},
+            {"name":"BNB Card","symbol":"BNB Card","priceUsd":0.0005053,"volume24h":22708.41,"buys24h":166,"sells24h":185,"liquidity":81395.03,"marketCap":444073.0,"change24h":13.64,"pairCreatedAt":1742289572000,"imageUrl":"https://cdn.dexscreener.com/cms/images/1903198b051f5c246a70c0b688271171a50dfcebbb1e7b5bbe43cc389aa46837?width=48&height=48&quality=90","pairAddress":"0x78fc96f3543337cd5393533eA66dC8fe42Ad054d"},
+            {"name":"BIG DON","symbol":"BIG DON","priceUsd":0.0003749,"volume24h":250698.69,"buys24h":981,"sells24h":984,"liquidity":66487.7,"marketCap":374983.0,"change24h":-1.37,"pairCreatedAt":1768423705000,"imageUrl":"https://cdn.dexscreener.com/cms/images/161af7365d23bfad96e2f283b972707c4fcc4b43fa25544c2d18400e0dbcaf91?width=48&height=48&quality=90","pairAddress":"0x39c444FC9c7154246d26513f746C138d96AE529d"},
+            {"name":"小安助手","symbol":"小安助手","priceUsd":7.481e-05,"volume24h":1184.77,"buys24h":1,"sells24h":4,"liquidity":81923.53,"marketCap":74811.0,"change24h":-2.82,"pairCreatedAt":1760000131000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8ab53e04cd849bbc5719cdb338bbb8c9e78a06fc8bfe792914131b79ecd99deb?width=48&height=48&quality=90","pairAddress":"0x41B67B278896418130D3cB7a2BDA3572C00c0Bf6"},
+            {"name":"抖音热搜第四的狼格林","symbol":"格林","priceUsd":0.0003592,"volume24h":33829.74,"buys24h":142,"sells24h":121,"liquidity":75937.64,"marketCap":359202.0,"change24h":-4.41,"pairCreatedAt":1768288860000,"imageUrl":"https://cdn.dexscreener.com/cms/images/852792a1b2d6bba9a61f13642175f800b7eb3f7442c54111a1a09faa673398db?width=48&height=48&quality=90","pairAddress":"0xA88c49eBf717D14304743966C9D3D360a54Aba72"},
+            {"name":"DEW","symbol":"DEW","priceUsd":0.0004411,"volume24h":14798.23,"buys24h":89,"sells24h":80,"liquidity":72816.52,"marketCap":397064.0,"change24h":14.49,"pairCreatedAt":1758582051000,"imageUrl":"https://cdn.dexscreener.com/cms/images/0c708cc39542d2e27c1d669f1eaabef08e7e2c6ad26c59105b528060cd6fc783?width=48&height=48&quality=90","pairAddress":"0x87A2Cb3ffb71EA9940bA3b602047700eAaf8e24B"},
+            {"name":"JobIess","symbol":"JobIess","priceUsd":0.000124,"volume24h":1901.92,"buys24h":32,"sells24h":29,"liquidity":73454.58,"marketCap":123943.0,"change24h":5.38,"pairCreatedAt":1757258620000,"imageUrl":"https://cdn.dexscreener.com/cms/images/53edcd5fcde97c3d41e76f78c991b97b4741b626c168a43c8eed2f773d7b8480?width=48&height=48&quality=90","pairAddress":"0x1F6B2a35F1CA3ab808EF0c50F055ce5e24Ea9801"},
+            {"name":"Giggle Mascot","symbol":"Max","priceUsd":0.0002766,"volume24h":2894.64,"buys24h":19,"sells24h":31,"liquidity":73889.61,"marketCap":176570.0,"change24h":-9.77,"pairCreatedAt":1739024784000,"imageUrl":"https://cdn.dexscreener.com/cms/images/1a7b255d8ea27c242d843764f586aa232fec6b59c0585727bcdc6c35562f7690?width=48&height=48&quality=90","pairAddress":"0xDe3314393f7A2977e0A531f2A646c71D5A2c105C"},
+            {"name":"豆包","symbol":"豆包","priceUsd":0.0002246,"volume24h":71503.49,"buys24h":344,"sells24h":278,"liquidity":59534.91,"marketCap":224666.0,"change24h":30.81,"pairCreatedAt":1760242953000,"imageUrl":"https://cdn.dexscreener.com/cms/images/2c1528a6e7273ed71ab8fa95743dfa0eec69cc8362af1c1d0dcfb9a209c2084b?width=48&height=48&quality=90","pairAddress":"0xDE249d74f3db91fBBb4D7f1B842D1da55A9B2BcD"},
+            {"name":"ClipX","symbol":"ClipX","priceUsd":0.0003381,"volume24h":29473.71,"buys24h":350,"sells24h":170,"liquidity":63727.86,"marketCap":317475.0,"change24h":31.33,"pairCreatedAt":1763376380000,"imageUrl":"https://cdn.dexscreener.com/cms/images/75077e6f3ae4d42f055c300bcb9d95e8c6fbdc6565c5748ee562bc3f01ae9058?width=48&height=48&quality=90","pairAddress":"0x19Ae1813d020302E624Bd4a02703e0241264baF8"},
+            {"name":"BOSS","symbol":"老板","priceUsd":0.0005013,"volume24h":38649.4,"buys24h":219,"sells24h":180,"liquidity":68412.67,"marketCap":248790.0,"change24h":5.52,"pairCreatedAt":1769169536000,"imageUrl":"https://cdn.dexscreener.com/cms/images/9e0eff3a39627c19683334b4015e7ea204389048f7575cc2a04b20c3899b9be1?width=48&height=48&quality=90","pairAddress":"0x53722FfaBdaB016b6e87C0511978Cbd277C92a3D"},
+            {"name":"GhibliCZ","symbol":"Ghibli","priceUsd":0.0004297,"volume24h":3898.38,"buys24h":57,"sells24h":32,"liquidity":71421.58,"marketCap":369098.0,"change24h":2.31,"pairCreatedAt":1742985815000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7f3e972315df616e97aec1c328692e97f16968c983598d1b698bc2113d515ed6?width=48&height=48&quality=90","pairAddress":"0x6cFA5Cf1408b1bB9DB61b8285F6F2a0D616B00b0"},
+            {"name":"E","symbol":"E","priceUsd":0.0001162,"volume24h":26236.16,"buys24h":183,"sells24h":128,"liquidity":58973.48,"marketCap":116237.0,"change24h":9.11,"pairCreatedAt":1748095213000,"imageUrl":"https://cdn.dexscreener.com/cms/images/905133b2d76acae8cca14ed4c4e036f97145705d1df4b4038fcf22f33ae89086?width=48&height=48&quality=90","pairAddress":"0x72BdfDe78B4cCd308fA61a2B7572CE76063f026a"},
+            {"name":"Kurumi","symbol":"Kurumi","priceUsd":9.595e-05,"volume24h":1739.65,"buys24h":150,"sells24h":99,"liquidity":66950.25,"marketCap":95955.0,"change24h":-2.19,"pairCreatedAt":1760969951000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8edf14c270d086d15c24d5b1a9b2333c3594649846925fde42b0566c7b00ff84?width=48&height=48&quality=90","pairAddress":"0xD2F3C0a4CCF58fE8FaFFc07deAcad7201E33dE84"},
+            {"name":"欧易人生","symbol":"欧易人生","priceUsd":0.000344,"volume24h":2413.36,"buys24h":15,"sells24h":10,"liquidity":67614.81,"marketCap":344079.0,"change24h":1.69,"pairCreatedAt":1762845901000,"imageUrl":"https://cdn.dexscreener.com/cms/images/0dd296db398e0aee4135b42a04cf22a0aa7cf343d4d85dc9de9d5cae22d296cb?width=48&height=48&quality=90","pairAddress":"0x459284E6C55899f93F45512dafDA2566aE956D51"},
+            {"name":"Exchange the world","symbol":"Exchange the world","priceUsd":0.0002647,"volume24h":37506.8,"buys24h":233,"sells24h":156,"liquidity":63888.11,"marketCap":264726.0,"change24h":-1.79,"pairCreatedAt":1764849010000,"imageUrl":"https://cdn.dexscreener.com/cms/images/019e246b392db3e670f8852015ca8db727a7c27e179ec054dc434aef240e75a1?width=48&height=48&quality=90","pairAddress":"0xc5c497f6AA41934E3F35307262429041beE78cB6"},
+            {"name":"Bubb","symbol":"BUBB","priceUsd":0.0002983,"volume24h":9594.42,"buys24h":90,"sells24h":81,"liquidity":64886.06,"marketCap":265670.0,"change24h":3.72,"pairCreatedAt":1742418894000,"imageUrl":"https://cdn.dexscreener.com/cms/images/041c8728f08523c324a441e4eacb83d93fb48940733492a911c351aed484bb83?width=48&height=48&quality=90","pairAddress":"0xc8255e3fA0F4c6e6678807d663f9e2263e23a8E8"},
+            {"name":"马到成功success","symbol":"马到成功","priceUsd":0.0002388,"volume24h":74761.78,"buys24h":782,"sells24h":547,"liquidity":55527.71,"marketCap":238110.0,"change24h":25.51,"pairCreatedAt":1763210830000,"imageUrl":"https://cdn.dexscreener.com/cms/images/6d668fc0b2b7f94f9e36e8328f9f75acfcd7e48f7e5ae4aa4bac4cd15fb060d9?width=48&height=48&quality=90","pairAddress":"0x9F116e836FD5D44FAB87f541C19472B2e6356715"},
+            {"name":"小刘鸭","symbol":"小刘鸭","priceUsd":0.0003177,"volume24h":30455.79,"buys24h":192,"sells24h":204,"liquidity":58435.11,"marketCap":317709.0,"change24h":8.88,"pairCreatedAt":1769070200000,"imageUrl":"https://cdn.dexscreener.com/cms/images/c807a582c34010ff909befaa6711d767e773522cc4e818a8f694f0df0ebfbde6?width=48&height=48&quality=90","pairAddress":"0x49F4B4d1B62116AfCe8169D8052769887FAc73C9"},
+            {"name":"TTAI","symbol":"TTAI","priceUsd":0.0001142,"volume24h":3104.8,"buys24h":14,"sells24h":12,"liquidity":63466.48,"marketCap":112465.0,"change24h":-6.6,"pairCreatedAt":1739627918000,"imageUrl":"https://cdn.dexscreener.com/cms/images/d00fff2e7c30ef21160d8b2a73f0911d228306fd97fd9c3dcff6a796eb6cbb2f?width=48&height=48&quality=90","pairAddress":"0xA2e6b0F1E795F9b3E87aA2BDCfCdA0f4A41746C8"},
+            {"name":"BNB SZN","symbol":"szn","priceUsd":0.0001046,"volume24h":5314.55,"buys24h":80,"sells24h":185,"liquidity":61469.42,"marketCap":104626.0,"change24h":4.42,"pairCreatedAt":1758767921000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8b4914ff0e747c207161c2e285127e90882753b474577dff93b51fbf00261396?width=48&height=48&quality=90","pairAddress":"0x397699606a5cDD931eaC01738dEc0f97d0E5F624"},
+            {"name":"Machine Trader Fuel","symbol":"MTF","priceUsd":0.002123,"volume24h":11844.42,"buys24h":127,"sells24h":121,"liquidity":55034.28,"marketCap":212316.0,"change24h":16.24,"pairCreatedAt":1766325640000,"imageUrl":"https://cdn.dexscreener.com/cms/images/3103b788234400f37fea1f784a2f55ab57781c979870ca52850b19f4e551d378?width=48&height=48&quality=90","pairAddress":"0x88feaC5ac490d189457cDb87134f8A390b4080b7"},
+            {"name":"自动回购护盘系统","symbol":"天马守护","priceUsd":0.0003401,"volume24h":43591.56,"buys24h":508,"sells24h":186,"liquidity":55564.91,"marketCap":204794.0,"change24h":70.41,"pairCreatedAt":1768897119000,"imageUrl":"https://cdn.dexscreener.com/cms/images/647039c77ee60a2fdef3a647d821251d115d68c68525e2f7a18a2a2083fec1e4?width=48&height=48&quality=90","pairAddress":"0x8e510151f150A5208AEDb88Ada82f4b1D8c11AcC"},
+            {"name":"Belgian Malinois","symbol":"BELG","priceUsd":0.2735,"volume24h":15789.11,"buys24h":106,"sells24h":69,"liquidity":57305.24,"marketCap":247679.0,"change24h":7.83,"pairCreatedAt":1759661082000,"imageUrl":"https://cdn.dexscreener.com/cms/images/e76b52e07e78655ea7674efa39efc0b63e3d43522dfd155557ae3ecf52e590be?width=48&height=48&quality=90","pairAddress":"0x58cB3FfD716d813Ce4f7b4FfbCf9141ba28308F5"},
+            {"name":"Tell A Tale","symbol":"TAT","priceUsd":0.0002944,"volume24h":7300.82,"buys24h":45,"sells24h":39,"liquidity":58855.04,"marketCap":147878.0,"change24h":1.64,"pairCreatedAt":1742469885000,"imageUrl":"https://cdn.dexscreener.com/cms/images/2be62a52bb48490a29e136c0311329d2b2cc50b2be8befc881c94a04e455e46c?width=48&height=48&quality=90","pairAddress":"0x71cD938b95aD63cb724b986bD7628558A6aF5Bb1"},
+            {"name":"Bitcos Pro","symbol":"BOS","priceUsd":0.3416,"volume24h":79034.12,"buys24h":2049,"sells24h":2043,"liquidity":33618.77,"marketCap":357214.0,"change24h":-9.64,"pairCreatedAt":1760873861000,"imageUrl":"https://cdn.dexscreener.com/cms/images/ab2fe2696444f13659fa7582018558fa6459d65de7c8872eab00a36ecae0871d?width=48&height=48&quality=90","pairAddress":"0x8fF1658bB320aEB5B702Bf00FB9c3B8911fDA79D"},
+            {"name":"WAM","symbol":"WAM","priceUsd":0.000537,"volume24h":4901.38,"buys24h":42,"sells24h":34,"liquidity":58975.91,"marketCap":364902.0,"change24h":0.95,"pairCreatedAt":1639997533000,"imageUrl":"https://cdn.dexscreener.com/cms/images/5defbe5e2c17242a39b73c61d8da2f4b783b038227436fb1310141165900647e?width=48&height=48&quality=90","pairAddress":"0xc1fE0336456a8D4550ab0E1e528a684Bcf7bD3F8"},
+            {"name":"Janitor","symbol":"Janitor","priceUsd":0.0002928,"volume24h":28290.93,"buys24h":230,"sells24h":153,"liquidity":52386.58,"marketCap":263603.0,"change24h":7.18,"pairCreatedAt":1749025742000,"imageUrl":"https://cdn.dexscreener.com/cms/images/925cc750fa3da6c4f9d124072cd1f963cb17c913557a57101e14d9f038fec2f4?width=48&height=48&quality=90","pairAddress":"0xbaf9f711a39271701b837c5cC4F470d533bACf33"},
+            {"name":"纯自动回购护盘系统","symbol":"蝴蝶守护","priceUsd":0.0003627,"volume24h":13902.65,"buys24h":236,"sells24h":93,"liquidity":56835.76,"marketCap":202151.0,"change24h":10.22,"pairCreatedAt":1768938375000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8b551b5f7b42d0f41123a7632f0cf7ad434247b0ff7b27fc278680354e311691?width=48&height=48&quality=90","pairAddress":"0x455CFcE099b11b0aD11B08444aa13FfCc0177d76"},
+            {"name":"Pecunity","symbol":"PEC","priceUsd":0.02298,"volume24h":2985.2,"buys24h":6,"sells24h":1,"liquidity":54653.39,"marketCap":306098.0,"change24h":33.78,"pairCreatedAt":1762448165000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8fb0e2c9d646f10be397283dcd2ec186c52a592d39babaa670440ef8a6e68bd7?width=48&height=48&quality=90","pairAddress":"0xF5d650bB893A62a1ff15319F4913103004C2bE81"},
+            {"name":"蜜蜂狗","symbol":"蜜蜂狗","priceUsd":0.0001632,"volume24h":3478.75,"buys24h":152,"sells24h":175,"liquidity":48930.9,"marketCap":162944.0,"change24h":11.3,"pairCreatedAt":1759905891000,"imageUrl":"https://cdn.dexscreener.com/cms/images/964da7602b99f86c265d0451cc305add820b66ca9da49b944ea46cf9697c32bc?width=48&height=48&quality=90","pairAddress":"0xc36F0EC6Df0f4B9eB27ED31DEd603cd24035d26c"},
+            {"name":"骆马","symbol":"骆马","priceUsd":0.0001992,"volume24h":28854.9,"buys24h":171,"sells24h":138,"liquidity":49759.73,"marketCap":199249.0,"change24h":11.08,"pairCreatedAt":1765343670000,"imageUrl":"https://cdn.dexscreener.com/cms/images/2430b1a8040186f508eca6e51e4ec37b1c212aa443951291e0a7353449288e7c?width=48&height=48&quality=90","pairAddress":"0xB3c1B7AD352F42C69cD40b4712d083b795e6534a"},
+            {"name":"Z","symbol":"Z","priceUsd":9.682e-05,"volume24h":11216.98,"buys24h":70,"sells24h":69,"liquidity":48300.83,"marketCap":96816.0,"change24h":0.69,"pairCreatedAt":1748365422000,"imageUrl":"https://cdn.dexscreener.com/cms/images/6b12d7e011589a326122d6d1ea3111dd5c664406903c7bbb0c5299c21ff4cf57?width=48&height=48&quality=90","pairAddress":"0x4300D1f2703967EFdf62455e52C5cd3Ac295a695"},
+            {"name":"Shih Tzu","symbol":"Shih","priceUsd":0.0001537,"volume24h":1479.39,"buys24h":35,"sells24h":23,"liquidity":49491.22,"marketCap":144489.0,"change24h":3.01,"pairCreatedAt":1760487991000,"imageUrl":"https://cdn.dexscreener.com/cms/images/1bb82804bf5974e02dfdf0748ccdca75ca928dbc01fcb4d98abca8c986ab9341?width=48&height=48&quality=90","pairAddress":"0x87eaA639A43DC3149e6539F4c8d531a182BA912f"},
+            {"name":"Sora Oracle","symbol":"SORA","priceUsd":9.011e-05,"volume24h":1596.24,"buys24h":31,"sells24h":27,"liquidity":49187.31,"marketCap":90113.0,"change24h":4.06,"pairCreatedAt":1760995721000,"imageUrl":"https://cdn.dexscreener.com/cms/images/98e4c28869ad2383729356bc4abe498fa7e9e375547c7d92f7750ad23a789bea?width=48&height=48&quality=90","pairAddress":"0x3e1D78a38235d1fab9cfd02D7eb99Cd9bcb19f4f"},
+            {"name":"AGON Agent","symbol":"AGON","priceUsd":0.0002283,"volume24h":2408.73,"buys24h":19,"sells24h":19,"liquidity":49080.47,"marketCap":228376.0,"change24h":3.18,"pairCreatedAt":1737797085000,"imageUrl":"https://cdn.dexscreener.com/cms/images/b8cb75c82f9e936c78543fb90bce471713161b8aee228c7ae79374e01e9205c1?width=48&height=48&quality=90","pairAddress":"0xcc82E9B425386FA958900083E8C5feCce1Bd228f"},
+            {"name":"UNCHAINED","symbol":"UNCHAINED","priceUsd":0.0002185,"volume24h":11830.42,"buys24h":56,"sells24h":38,"liquidity":49109.43,"marketCap":218558.0,"change24h":-14.73,"pairCreatedAt":1765532871000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7c188dd69b727c0716267c4f421496ba4ade9932415cead8dcbd22ea1578f533?width=48&height=48&quality=90","pairAddress":"0x9fe63ED292f5dE5B75F8C3Cbfc5524DE8F389e95"},
+            {"name":"BAB","symbol":"BAB","priceUsd":0.0002362,"volume24h":2148.19,"buys24h":8,"sells24h":8,"liquidity":51348.48,"marketCap":196729.0,"change24h":-13.28,"pairCreatedAt":1742540934000,"imageUrl":"https://cdn.dexscreener.com/cms/images/73b255fe852350bc6b19ae972f440a49f52f632b72cd6d826a006d27fa81f4a7?width=48&height=48&quality=90","pairAddress":"0xe3F521E04e47fB4196249F8dF0F20F6b2a9f2a63"},
+            {"name":"Outter Finance","symbol":"OUT","priceUsd":2.39e-05,"volume24h":3677.67,"buys24h":67,"sells24h":292,"liquidity":46722.67,"marketCap":265283.0,"change24h":-10.16,"pairCreatedAt":1700636107000,"imageUrl":"https://cdn.dexscreener.com/cms/images/712e7026d028ba587cc4c3aff14b0d4d5130b6137b2314dbd63209742f9e9893?width=48&height=48&quality=90","pairAddress":"0x3a3509a6337e18ca8100A34f1473d7AB7752567e"},
+            {"name":"Planck","symbol":"PLANCK","priceUsd":0.003139,"volume24h":22354.16,"buys24h":540,"sells24h":568,"liquidity":36600.4,"marketCap":240364.0,"change24h":2.12,"pairCreatedAt":1762920457000,"imageUrl":"https://cdn.dexscreener.com/cms/images/6986bdc60f0bddc6af36f761e2e1160653e1b7c4b8583bfc2a4a079d4bbecc42?width=48&height=48&quality=90","pairAddress":"0xC36a3838C44D397aB3e9d88E5997A0EB942a2714"},
+            {"name":"MOONAI","symbol":"MOONAI","priceUsd":0.0001312,"volume24h":1975.69,"buys24h":6,"sells24h":10,"liquidity":47123.45,"marketCap":90248.0,"change24h":6.36,"pairCreatedAt":1760814793000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8823f6223e72ee4f60f376c9be23a7a04f1350adb17d0a2c8ed3960b80a11b8f?width=48&height=48&quality=90","pairAddress":"0x028F0C6f5BC05f425326ea7664aE631f3DC69ae5"},
+            {"name":"Utopia","symbol":"UTOPIA","priceUsd":0.0001647,"volume24h":1988.41,"buys24h":11,"sells24h":16,"liquidity":46875.8,"marketCap":148273.0,"change24h":-8.02,"pairCreatedAt":1761582201000,"imageUrl":"https://cdn.dexscreener.com/cms/images/a91ad90bcb39cadf95ff097c8c84a154407930e318e431437bb034a6c30c04d8?width=48&height=48&quality=90","pairAddress":"0xA024eE286C8d35996d129178ffd731CC85Bb3536"},
+            {"name":"自由人生","symbol":"自由人生","priceUsd":0.0002109,"volume24h":7768.27,"buys24h":63,"sells24h":54,"liquidity":44031.91,"marketCap":124959.0,"change24h":-8.21,"pairCreatedAt":1768530078000,"imageUrl":"https://cdn.dexscreener.com/cms/images/14e78cbd17b476cb0d970df9c8b4329f13493bd1c83e88e0b436c1f13dc4c134?width=48&height=48&quality=90","pairAddress":"0x27699D4a51AE0352E61f5489712961124ca2294A"},
+            {"name":"NotifAi News","symbol":"NotifAi","priceUsd":0.0001257,"volume24h":10528.58,"buys24h":170,"sells24h":117,"liquidity":39563.24,"marketCap":125678.0,"change24h":-10.71,"pairCreatedAt":1763087330000,"imageUrl":"https://cdn.dexscreener.com/cms/images/f8ec20b99485ccb917479ebc01bba51f019029878128645b359f5768cea904ad?width=48&height=48&quality=90","pairAddress":"0x30843f3F1A1A78Ff962D0ECdD3764D26894a05e0"},
+            {"name":"草地牛","symbol":"草地牛","priceUsd":0.0001524,"volume24h":11185.17,"buys24h":28,"sells24h":32,"liquidity":44432.49,"marketCap":152495.0,"change24h":9.86,"pairCreatedAt":1762851080000,"imageUrl":"https://cdn.dexscreener.com/cms/images/ff6f10d148d92b2223d4b3fbf220e3c625ac6e896cc2d99167aee1045a98975b?width=48&height=48&quality=90","pairAddress":"0x2Bb8D86Beb30262fa69905f90B8d3B224Bd7f70F"},
+            {"name":"SHISA","symbol":"SHISA","priceUsd":0.0001525,"volume24h":37353.0,"buys24h":927,"sells24h":819,"liquidity":40006.8,"marketCap":143347.0,"change24h":-21.46,"pairCreatedAt":1766333060000,"imageUrl":"https://cdn.dexscreener.com/cms/images/07aea282384122f26d6e35dc4af32c1b2a6de5f74186c13395e2b24e1e669f8c?width=48&height=48&quality=90","pairAddress":"0x80D4150938DFaC5313bB25eb4C121a40504617D0"},
+            {"name":"Binance Super Cycle","symbol":"BSC","priceUsd":7.223e-05,"volume24h":2658.64,"buys24h":22,"sells24h":19,"liquidity":43674.11,"marketCap":72237.0,"change24h":12.13,"pairCreatedAt":1759856711000,"imageUrl":"https://cdn.dexscreener.com/cms/images/207594269024794d1d015da53f579070e5a481cb8526bebd64cea52c7699e72d?width=48&height=48&quality=90","pairAddress":"0xff0A8df8c4A0332E28a4c94EBB3f633944B08a94"},
+            {"name":"crypto guy","symbol":"crypto guy","priceUsd":7.561e-05,"volume24h":12879.38,"buys24h":83,"sells24h":47,"liquidity":42109.57,"marketCap":71830.0,"change24h":-12.16,"pairCreatedAt":1762589470000,"imageUrl":"https://cdn.dexscreener.com/cms/images/4e8c6631f5c806aea9b2da84f2874fc0ae39b077b9acc5280e0fc4876e8d0034?width=48&height=48&quality=90","pairAddress":"0xe030Ba493b1dedF109cD4d0986755F39D93bbC55"},
+            {"name":"Khorus","symbol":"KHO","priceUsd":0.0001111,"volume24h":3590.63,"buys24h":17,"sells24h":16,"liquidity":41677.48,"marketCap":71043.0,"change24h":-7.79,"pairCreatedAt":1762372372000,"imageUrl":"https://cdn.dexscreener.com/cms/images/4edd5f4d49e608e9ab8e2218833f9c891a19aee206e31736c97c0234d6488ef9?width=48&height=48&quality=90","pairAddress":"0xd9c564aD18F49be80E2213204D8222B7645A753e"},
+            {"name":"火星","symbol":"火星","priceUsd":0.0001395,"volume24h":11075.47,"buys24h":103,"sells24h":55,"liquidity":36954.83,"marketCap":72653.0,"change24h":44.85,"pairCreatedAt":1768537167000,"imageUrl":"https://cdn.dexscreener.com/cms/images/4ffcca5196b876b4be47d07c7fa7e59ced50e99a64d97361b1c048cf25d4932f?width=48&height=48&quality=90","pairAddress":"0x0dDA13E9aeD0036F698f6F7a716413aA4cC6B2aD"},
+            {"name":"Limoverse","symbol":"Limo","priceUsd":0.002852,"volume24h":19075.9,"buys24h":1099,"sells24h":1050,"liquidity":30686.56,"marketCap":374618.0,"change24h":1.71,"pairCreatedAt":1724215293000,"imageUrl":"https://cdn.dexscreener.com/cms/images/3d31d14aa0223cb255ff92c06bdab7501d6544a760142f3336a20176c4d7ebe2?width=48&height=48&quality=90","pairAddress":"0x4fc622809b1f3e26E16082fA5B0845D6fd04BaBB"},
+            {"name":"Laika AI","symbol":"LKI","priceUsd":0.0005963,"volume24h":2033.98,"buys24h":67,"sells24h":69,"liquidity":38062.77,"marketCap":255381.0,"change24h":-1.4,"pairCreatedAt":1717665574000,"imageUrl":"https://cdn.dexscreener.com/cms/images/9381798dbd546ecb166cc9e9431abec6feaf1ea8f4b8171e089799e6a6e0df72?width=48&height=48&quality=90","pairAddress":"0x712903c3cA65aEeb2E5452d04Da090796fCAE0dF"},
+            {"name":"TIWI CAT","symbol":"TWC","priceUsd":2.601e-10,"volume24h":1173.06,"buys24h":45,"sells24h":22,"liquidity":38006.67,"marketCap":235757.0,"change24h":10.35,"pairCreatedAt":1683676798000,"imageUrl":"https://cdn.dexscreener.com/cms/images/c135d9cc87d8db4c1e74788c546ed3c7c4498a5da693cbefdc30e749cbea4843?width=48&height=48&quality=90","pairAddress":"0x955ED3d0E1d2615a1d7BEbb10fFab37F150bbb21"},
+            {"name":"Seal the Night Rider","symbol":"$Rider","priceUsd":0.0001093,"volume24h":14316.15,"buys24h":104,"sells24h":103,"liquidity":33149.94,"marketCap":109337.0,"change24h":23.04,"pairCreatedAt":1767007681000,"imageUrl":"https://cdn.dexscreener.com/cms/images/84806ee59b8ba27e85e2ac51ab787c454295d013905b4cc4d5f44e8257262367?width=48&height=48&quality=90","pairAddress":"0x16A132E74531bC4F8bC150F6413fba10Fd40E376"},
+            {"name":"TibiaToken","symbol":"TIB","priceUsd":0.04275,"volume24h":1579.45,"buys24h":7,"sells24h":9,"liquidity":41185.86,"marketCap":105078.0,"change24h":-0.03,"pairCreatedAt":1736853357000,"imageUrl":"https://cdn.dexscreener.com/cms/images/62be083f27cba44f2acdace1530016dfa571417d00457aa696a1507ba1078045?width=48&height=48&quality=90","pairAddress":"0xD2aCfaEc0E3B556F285Fbb9026eDE7E87885E611"},
+            {"name":"山野万里 你是我藏在微风里的欢喜","symbol":"山野万里 你是我藏在微风里的欢喜","priceUsd":7.367e-05,"volume24h":23171.27,"buys24h":66,"sells24h":84,"liquidity":36353.37,"marketCap":73670.0,"change24h":5.89,"pairCreatedAt":1768394160000,"imageUrl":"https://cdn.dexscreener.com/cms/images/d38511277a2f12913ab5149980874c1b7311c730891914bd9632a0440a389783?width=48&height=48&quality=90","pairAddress":"0x58824e275DbEE1720BfdFc75865A386a35B6d5c2"},
+            {"name":"AMA","symbol":"AMA","priceUsd":9.801e-05,"volume24h":2891.76,"buys24h":17,"sells24h":24,"liquidity":40096.98,"marketCap":98013.0,"change24h":-13.81,"pairCreatedAt":1759928429000,"imageUrl":"https://cdn.dexscreener.com/cms/images/bc7d16a420148589bfc7e721d2e4e5fa3a97c93ee3075609527f37ac969b18ca?width=48&height=48&quality=90","pairAddress":"0x9873F51Bd6eC0CDe08D0BE94A41F9f95e08A851C"},
+            {"name":"Markhor","symbol":"Markhor","priceUsd":4.901e-09,"volume24h":4773.84,"buys24h":36,"sells24h":32,"liquidity":37536.0,"marketCap":245084.0,"change24h":-0.43,"pairCreatedAt":1756371669000,"imageUrl":"https://cdn.dexscreener.com/cms/images/dddb44e69df0219b4ee4ebcfaf8d341e1019ffd914b2af9ef589ad86e341fdd7?width=48&height=48&quality=90","pairAddress":"0x2cfEc805Bf589ac77E39cf58D3716695CF1d08C9"},
+            {"name":"我是大黄啊","symbol":"大黄","priceUsd":7.304e-05,"volume24h":5733.54,"buys24h":32,"sells24h":24,"liquidity":38310.73,"marketCap":73045.0,"change24h":-1.86,"pairCreatedAt":1764140861000,"imageUrl":"https://cdn.dexscreener.com/cms/images/8dd45d8287904145d9b63dc20dfc9a7b46ce1538b7f0309d776362138e57b130?width=48&height=48&quality=90","pairAddress":"0xfBB43F2c9811E1ac5797a0a717105a657e0d5350"},
+            {"name":"Fire Horse","symbol":"FIREHORSE","priceUsd":0.0001329,"volume24h":20876.62,"buys24h":165,"sells24h":98,"liquidity":35596.43,"marketCap":132997.0,"change24h":65.2,"pairCreatedAt":1767389190000,"imageUrl":"https://cdn.dexscreener.com/cms/images/5bc171d79c555d38c679c6619d3b006c95895c01b0c466a2e5f349d129f29642?width=48&height=48&quality=90","pairAddress":"0x2888025fAa7172285607fbb0993FBA1EdfDce58D"},
+            {"name":"JAWGULAR","symbol":"JAWGULAR","priceUsd":0.0001175,"volume24h":1874.59,"buys24h":11,"sells24h":9,"liquidity":37741.91,"marketCap":110463.0,"change24h":7.84,"pairCreatedAt":1756164151000,"imageUrl":"https://cdn.dexscreener.com/cms/images/fd4109c549e90e38c049878218ef03dfd1eceff4401a9b919ddab84064c65b50?width=48&height=48&quality=90","pairAddress":"0xC2d3c8AEDbb2fC07541274095c26CF8e824275Ce"},
+            {"name":"Moonveil","symbol":"MORE","priceUsd":0.0006327,"volume24h":2559.78,"buys24h":38,"sells24h":51,"liquidity":38069.76,"marketCap":113830.0,"change24h":4.82,"pairCreatedAt":1750935905000,"imageUrl":"https://cdn.dexscreener.com/cms/images/44ef047c3f3632561fd48ff82ff09a71d065c2dcf6b21395b4083f4c3e7f42d4?width=48&height=48&quality=90","pairAddress":"0x9210f9cCa621AB4DBB39b0592389eE780bCdd15CB"},
+            {"name":"21Million","symbol":"21M","priceUsd":0.02799,"volume24h":3545.16,"buys24h":38,"sells24h":36,"liquidity":38838.41,"marketCap":470409.0,"change24h":3.68,"pairCreatedAt":1698481533000,"imageUrl":"https://cdn.dexscreener.com/cms/images/82d399a8a5c7eb518d930f42b6cc084b91cf21292c3aba5929cc81e0854cbd99?width=48&height=48&quality=90","pairAddress":"0x6923f81983fEb33849e8A65C31188F8f5C66C635"},
+            {"name":"比特币","symbol":"比特币","priceUsd":8.755e-05,"volume24h":1514.85,"buys24h":768,"sells24h":91,"liquidity":32751.02,"marketCap":87550.0,"change24h":20.29,"pairCreatedAt":1759883451000,"imageUrl":"https://cdn.dexscreener.com/cms/images/1d25b43a2b5fd194b97033d5ebc031089645da782f9d9549819b20eec6c1d73f?width=48&height=48&quality=90","pairAddress":"0x1Ed1daf29b1D26eBB3C4117e31f299a80767D9e3"},
+            {"name":"Blue Protocol","symbol":"BLUE","priceUsd":0.1732,"volume24h":1124.28,"buys24h":3,"sells24h":3,"liquidity":37018.53,"marketCap":218980.0,"change24h":3.52,"pairCreatedAt":1752786772000,"imageUrl":"https://cdn.dexscreener.com/cms/images/cc24f101f2b0b202c4b8413c8837a0faf134d328228fc275f90d15625dd3fa8e?width=48&height=48&quality=90","pairAddress":"0xeb7fE075B7677c98C75E105d4f5ACE0e19505567"},
+            {"name":"Shieldeum","symbol":"SDM","priceUsd":0.0002509,"volume24h":5986.83,"buys24h":97,"sells24h":63,"liquidity":38337.36,"marketCap":93825.0,"change24h":-1.01,"pairCreatedAt":1732800352000,"imageUrl":"https://cdn.dexscreener.com/cms/images/1360aa92bb58523e13ac111d13f5d4726804ff4e1c2eedc39678ef17d672642e?width=48&height=48&quality=90","pairAddress":"0xe08ae994283829a3e55aBB450Ec4deD4F762D1EA"},
+            {"name":"BNBshare","symbol":"SHARE","priceUsd":8.382e-05,"volume24h":7053.73,"buys24h":76,"sells24h":64,"liquidity":34021.11,"marketCap":72499.0,"change24h":-1.92,"pairCreatedAt":1768152848000,"imageUrl":"https://cdn.dexscreener.com/cms/images/333d2cb1c7773408e419f83d0722a38a984ed772cd786ecdf08003bcf668c406?width=48&height=48&quality=90","pairAddress":"0xd5DD05c11d5B5597B03569Ff31298eC6aCc49C9A"},
+            {"name":"PRIME","symbol":"$PRIME","priceUsd":0.0001114,"volume24h":2027.43,"buys24h":15,"sells24h":12,"liquidity":35607.03,"marketCap":109664.0,"change24h":4.39,"pairCreatedAt":1760284222000,"imageUrl":"https://cdn.dexscreener.com/cms/images/e2e36914a5017bdfcdb854d05544a178b32784ccdf9e9b9f0dde9517081c2982?width=48&height=48&quality=90","pairAddress":"0x0016146CE63C5eC4C8f0E1c4948b7E367E0D1B58"},
+            {"name":"超级无敌大开门","symbol":"大开门","priceUsd":7.162e-05,"volume24h":3571.22,"buys24h":37,"sells24h":12,"liquidity":33904.52,"marketCap":71625.0,"change24h":26.87,"pairCreatedAt":1766310610000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7bc9f230f9051613b15b01c0214fe1034b5dded402a8d1e20eb3f346fa9c81f6?width=48&height=48&quality=90","pairAddress":"0xd804d19f8Be8Cd5335CDa5C9e9dF6A0747B07E31"},
+            {"name":"Klink Finance","symbol":"KLINK","priceUsd":0.0007136,"volume24h":1611.21,"buys24h":52,"sells24h":52,"liquidity":31096.87,"marketCap":32257.0,"change24h":-3.96,"pairCreatedAt":1759735095000,"imageUrl":"https://cdn.dexscreener.com/cms/images/3a138ad5b676cc5c5d8765b285a54c5500bec501977eb04366848f357f7dbd6f?width=48&height=48&quality=90","pairAddress":"0x468aB8fD260878EbD44b7a28cEAb5f052e4833D2"},
+            {"name":"GAMER","symbol":"GMR","priceUsd":0.0005553,"volume24h":1536.89,"buys24h":2,"sells24h":19,"liquidity":34293.22,"marketCap":183068.0,"change24h":-9.42,"pairCreatedAt":1682775755000,"imageUrl":"https://cdn.dexscreener.com/cms/images/56406f9e3e53395f392965e44c98ff1457e2ee9d2c2836f6b828debeb823a131?width=48&height=48&quality=90","pairAddress":"0xE4110c22efAdf023482f6F28A35c458291D05c2F"},
+            {"name":"MOMO","symbol":"MOMO","priceUsd":0.0002356,"volume24h":12684.57,"buys24h":86,"sells24h":69,"liquidity":28865.4,"marketCap":217832.0,"change24h":9.68,"pairCreatedAt":1768326890000,"imageUrl":"https://cdn.dexscreener.com/cms/images/cc04c6d37156878a3ded9346df076f35318d9697588f863b7de72e0b71c91c4c?width=48&height=48&quality=90","pairAddress":"0x885FBD351ef3cdD6Ed2Fb84C3C2E7766313dDc26"},
+            {"name":"ZIBA","symbol":"ZIB","priceUsd":8.901e-05,"volume24h":1417.19,"buys24h":21,"sells24h":41,"liquidity":30961.91,"marketCap":89011.0,"change24h":-0.81,"pairCreatedAt":1759729851000,"imageUrl":"https://cdn.dexscreener.com/cms/images/e91a4d2821d0fc9fbf3fcfb120806c3068805769bf4fa50601bb2bb056606572?width=48&height=48&quality=90","pairAddress":"0x632Da57f69d4F1df7C8FaDC42075126598341D08"},
+            {"name":"FinnDuck for Autism","symbol":"FDUCK","priceUsd":0.000102,"volume24h":3896.76,"buys24h":36,"sells24h":25,"liquidity":30991.96,"marketCap":92609.0,"change24h":-7.58,"pairCreatedAt":1761401781000,"imageUrl":"https://cdn.dexscreener.com/cms/images/96fb77edacccf5529e1671fb613221a99abe5f342cca659d837b9e786c77ff2f?width=48&height=48&quality=90","pairAddress":"0xe6a7cc91E4E9C6d92858727E1a5C1829eede42e7"},
+            {"name":"春节暗号  解冻刘德华","symbol":"AEAEAEEOO","priceUsd":7.081e-05,"volume24h":10693.42,"buys24h":46,"sells24h":37,"liquidity":30137.47,"marketCap":70820.0,"change24h":0.11,"pairCreatedAt":1768453420000,"imageUrl":"https://cdn.dexscreener.com/cms/images/7499488212a348463f53f7d3bbd0af4797a65f27f2f0e0cbb2d4d5a990404a1a?width=48&height=48&quality=90","pairAddress":"0x2bd2C103C843D36336e5225a603F8Ba90e94B001"},
+            {"name":"TerraNewsEN","symbol":"TNEWS","priceUsd":9.308e-05,"volume24h":7171.64,"buys24h":112,"sells24h":92,"liquidity":29175.34,"marketCap":93031.0,"change24h":26.22,"pairCreatedAt":1767171920000,"imageUrl":"https://cdn.dexscreener.com/cms/images/cdab2acee9d5a4246a3316cd5cf09438727423fd047ac778daa589091a048bb0?width=48&height=48&quality=90","pairAddress":"0xB650D30833C50093BE8E3B1eb82e139A3dc6C350"},
+            {"name":"Noma Token SD","symbol":"NOMA","priceUsd":6.163e-05,"volume24h":1940.56,"buys24h":15,"sells24h":6,"liquidity":26716.04,"marketCap":417199.0,"change24h":-7.91,"pairCreatedAt":1722430488000,"imageUrl":"https://cdn.dexscreener.com/cms/images/201f2431b3976722158fab1b1d36514626ff0d4342d5bf25eb9a49a83e039951?width=48&height=48&quality=90","pairAddress":"0x446fB80547b418C79da96eee4FA88BA49FfEAF82"},
+            {"name":"aster dog","symbol":"adog","priceUsd":9.852e-05,"volume24h":3066.49,"buys24h":20,"sells24h":11,"liquidity":25429.25,"marketCap":98526.0,"change24h":6.31,"pairCreatedAt":1758452691000,"imageUrl":"https://cdn.dexscreener.com/cms/images/0763b9f7d0039511fc46a1d19da64c0ff3037fa60540f60d84289c7b63e87f7f?width=48&height=48&quality=90","pairAddress":"0x2D0003882357b788EC8109C648b02421e60bEED5"}
+        ];
+
+        let currentSort = { field: 'marketCap', dir: 'desc' };
+        let filteredTokens = [...tokens];
+
+        function formatNumber(num) {
+            if (num >= 1e9) return '$' + (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return '$' + (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return '$' + (num / 1e3).toFixed(2) + 'K';
+            return '$' + num.toFixed(2);
+        }
+
+        function formatPrice(price) {
+            if (price < 0.00001) return '$' + price.toExponential(2);
+            return '$' + price.toFixed(price < 0.01 ? 6 : 4);
+        }
+
+        function formatPercent(val) {
+            const color = val >= 0 ? 'text-green-400' : 'text-red-400';
+            const icon = val >= 0 ? '↑' : '↓';
+            return `<span class="${color}">${icon} ${Math.abs(val).toFixed(2)}%</span>`;
+        }
+
+        function render() {
+            const tbody = document.getElementById('token-table');
+            tbody.innerHTML = '';
+
+            filteredTokens.forEach((t, i) => {
+                const row = document.createElement('tr');
+                row.className = 'token-row border-b border-gray-800';
+                row.innerHTML = `
+                    <td class="p-3 text-gray-500">${i + 1}</td>
+                    <td class="p-3">
+                        <div class="flex items-center gap-3">
+                            <img src="${t.imageUrl}" class="w-8 h-8 rounded-full bg-gray-700" loading="lazy" onerror="this.src='https://via.placeholder.com/32?text=${t.symbol[0]}'">
+                            <div>
+                                <div class="font-semibold text-white">${t.name}</div>
+                                <div class="text-xs text-gray-500">${t.symbol}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-3 text-right text-white font-mono">${formatPrice(t.priceUsd)}</td>
+                    <td class="p-3 text-right font-mono">${formatPercent(t.change24h)}</td>
+                    <td class="p-3 text-right text-gray-400">${formatNumber(t.volume24h)}</td>
+                    <td class="p-3 text-right text-gray-400">${formatNumber(t.liquidity)}</td>
+                    <td class="p-3 text-right text-white font-semibold">${formatNumber(t.marketCap)}</td>
+                    <td class="p-3 text-center">
+                        <div class="text-xs">
+                            <span class="text-green-400">${t.buys24h}</span> / <span class="text-red-400">${t.sells24h}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-center">
+                        <a href="https://dexscreener.com/bsc/${t.pairAddress}" target="_blank" class="text-indigo-400 hover:text-indigo-300">Dex</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const green = tokens.filter(t => t.change24h > 0).length;
+            const red = tokens.filter(t => t.change24h < 0).length;
+            const avgMC = tokens.reduce((a, t) => a + t.marketCap, 0) / tokens.length;
+            
+            document.getElementById('green-count').textContent = green;
+            document.getElementById('red-count').textContent = red;
+            document.getElementById('avg-mc').textContent = formatNumber(avgMC);
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        }
+
+        function sort(field) {
+            if (currentSort.field === field) {
+                currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.dir = 'desc';
+            }
+
+            filteredTokens.sort((a, b) => {
+                let val = currentSort.dir === 'asc' ? a[field] - b[field] : b[field] - a[field];
+                return val;
+            });
+
+            render();
+        }
+
+        function filter() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const changeFilter = document.getElementById('filter-change').value;
+
+            filteredTokens = tokens.filter(t => {
+                const matchesSearch = t.name.toLowerCase().includes(search) || t.symbol.toLowerCase().includes(search);
+                let matchesChange = true;
+                if (changeFilter === 'positive') matchesChange = t.change24h > 0;
+                else if (changeFilter === 'negative') matchesChange = t.change24h < 0;
+                else if (changeFilter === 'gainers') matchesChange = t.change24h >= 20;
+                
+                return matchesSearch && matchesChange;
+            });
+
+            render();
+        }
+
+        document.getElementById('search').addEventListener('input', filter);
+        document.getElementById('filter-change').addEventListener('change', filter);
+
+        // Initial render
+        sort('marketCap');
+    </script>
+</body>
+</html>
