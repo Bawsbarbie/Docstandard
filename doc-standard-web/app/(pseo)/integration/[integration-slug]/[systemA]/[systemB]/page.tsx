@@ -40,6 +40,25 @@ interface PageProps {
   }
 }
 
+const slugifySystemName = (value: string): string =>
+  value
+    .replace(/\([^)]*\)/g, "")
+    .replace(/s\/4hana/gi, "s4hana")
+    .toLowerCase()
+    .replace(/[()]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/\//g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/--+/g, "-")
+
+const integrationRouteOverrides: Record<string, { systemA: string; systemB: string }> = {
+  "edi-document-normalization-services": { systemA: "edi-documents", systemB: "erp-systems" },
+  "clean-logistics-data-for-sap-s4hana": { systemA: "logistics-data", systemB: "sap-s4hana" },
+  "oracle-erp-cloud-ap-invoice-integration": { systemA: "source-systems", systemB: "oracle-erp-cloud" },
+  "sap-s4hana-logistics-integration-technical": { systemA: "tms-wms-systems", systemB: "sap-s4hana" },
+}
+
 // Load integration details
 const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
   try {
@@ -123,23 +142,54 @@ export async function generateStaticParams() {
   ])
   
   const params: Array<{ "integration-slug": string; systemA: string; systemB: string }> = []
+  const seen = new Set<string>()
   
   for (const city of cities) {
     for (const integration of integrations) {
-      // Parse integration slug to get system pair
-      // Handle formats like: "cargowise-to-netsuite-data-bridge" or "mercurygate-to-oracle-integration"
-      const cleanSlug = integration.slug.replace(/-(data-bridge|bridge|normalization|integration|services)$/i, "")
-      const toMatch = cleanSlug.match(/^([a-z0-9-]+)-to-([a-z0-9-]+)$/i)
-      
-      if (toMatch) {
-        const systemA = toMatch[1].toLowerCase()
-        const systemB = toMatch[2].toLowerCase()
-        
+      // Canonical params from declared system names (covers special integrations too).
+      const canonicalA = slugifySystemName(integration.systemA)
+      const canonicalB = slugifySystemName(integration.systemB)
+      const canonicalKey = `${city.slug}|${canonicalA}|${canonicalB}`
+
+      if (!seen.has(canonicalKey)) {
+        seen.add(canonicalKey)
         params.push({
           "integration-slug": city.slug,
-          systemA: systemA,
-          systemB: systemB
+          systemA: canonicalA,
+          systemB: canonicalB
         })
+      }
+
+      // Backward-compatible params for legacy `*-to-*` slugs.
+      const cleanSlug = integration.slug.replace(/-(data-bridge|bridge|normalization|integration|services|technical)$/i, "")
+      const toMatch = cleanSlug.match(/^([a-z0-9-]+)-to-([a-z0-9-]+)$/i)
+      if (toMatch) {
+        const legacyA = toMatch[1].toLowerCase()
+        const legacyB = toMatch[2].toLowerCase()
+        const legacyKey = `${city.slug}|${legacyA}|${legacyB}`
+
+        if (!seen.has(legacyKey)) {
+          seen.add(legacyKey)
+          params.push({
+            "integration-slug": city.slug,
+            systemA: legacyA,
+            systemB: legacyB
+          })
+        }
+      }
+
+      // Explicit aliases for special integration URLs used in sitemap/navigation.
+      const override = integrationRouteOverrides[integration.slug]
+      if (override) {
+        const overrideKey = `${city.slug}|${override.systemA}|${override.systemB}`
+        if (!seen.has(overrideKey)) {
+          seen.add(overrideKey)
+          params.push({
+            "integration-slug": city.slug,
+            systemA: override.systemA,
+            systemB: override.systemB
+          })
+        }
       }
     }
   }
@@ -156,10 +206,24 @@ export default async function CityIntegrationPage({ params }: PageProps) {
     notFound()
   }
   
-  // Find matching integration by matching slug pattern
+  const reqSystemA = slugifySystemName(params.systemA)
+  const reqSystemB = slugifySystemName(params.systemB)
+
+  // Match by canonical system names first; then fallback to legacy slug pattern.
   const integration = integrations.find(i => {
-    const cleanSlug = i.slug.replace(/-(data-bridge|bridge|normalization|integration|services)$/i, "")
-    return cleanSlug === `${params.systemA}-to-${params.systemB}`
+    const override = integrationRouteOverrides[i.slug]
+    if (override && override.systemA === reqSystemA && override.systemB === reqSystemB) {
+      return true
+    }
+
+    const canonicalA = slugifySystemName(i.systemA)
+    const canonicalB = slugifySystemName(i.systemB)
+    if (canonicalA === reqSystemA && canonicalB === reqSystemB) {
+      return true
+    }
+
+    const cleanSlug = i.slug.replace(/-(data-bridge|bridge|normalization|integration|services|technical)$/i, "")
+    return cleanSlug === `${reqSystemA}-to-${reqSystemB}`
   })
   
   if (!integration) {
