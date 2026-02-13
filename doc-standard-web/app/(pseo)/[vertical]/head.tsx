@@ -29,9 +29,7 @@ const CITY_SYSTEM_SLUG_REGEX = new RegExp(
 )
 
 export default function Head({ params }: HeadProps) {
-  if (!CITY_SYSTEM_SLUG_REGEX.test(params.vertical)) {
-    return null
-  }
-
-  return <meta name="robots" content="noindex, nofollow" />
+  // Noindex removed - city-system pages now redirect to new V2 URLs
+  // New URLs: /integration/[city]/[systemA]/[systemB]/
+  return null
 }
