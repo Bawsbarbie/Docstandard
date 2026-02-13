@@ -55,7 +55,7 @@ export default async function ShippingHubPage() {
       </section>
 
       <section className="mx-auto max-w-5xl space-y-14 px-6 py-14">
-        <div className="space-y-6">
+        <div id="pipeline" className="space-y-6">
           <h2 className="text-3xl font-bold">Why Shipping Documents Are Hard to Process</h2>
           <p className="text-lg text-slate-600">
             Ocean carriers issue more than 100 million bills of lading every year. Each BOL is both

@@ -110,7 +110,7 @@ export default async function LogisticsHubPage() {
           </blockquote>
         </div>
 
-        <div className="space-y-8">
+        <div id="pipeline" className="space-y-8">
           <div className="space-y-4">
             <h2 className="text-3xl font-bold">The DocStandard Logistics Pipeline</h2>
             <p className="text-lg text-slate-600">
