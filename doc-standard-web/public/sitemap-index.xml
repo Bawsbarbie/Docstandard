@@ -8,4 +8,8 @@
     <loc>https://docstandard.co/sitemap-city-verticals.xml</loc>
     <lastmod>2026-02-13</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>https://docstandard.co/sitemap-city-integrations.xml</loc>
+    <lastmod>2026-02-13</lastmod>
+  </sitemap>
 </sitemapindex>

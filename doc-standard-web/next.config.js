@@ -42,6 +42,27 @@ const nextConfig = {
         destination: "/sitemaps/sitemap-batch-:batch.xml",
         permanent: true,
       },
+      // Redirect old city-system URLs to new format
+      {
+        source: "/:city-:systemA-:systemB-integration",
+        destination: "/integration/:city/:systemA/:systemB",
+        permanent: true,
+      },
+      {
+        source: "/:city-:systemA-:systemB-data-bridge",
+        destination: "/integration/:city/:systemA/:systemB",
+        permanent: true,
+      },
+      {
+        source: "/:city-:systemA-:systemB-bridge",
+        destination: "/integration/:city/:systemA/:systemB",
+        permanent: true,
+      },
+      {
+        source: "/:city-:systemA-:systemB-normalization",
+        destination: "/integration/:city/:systemA/:systemB",
+        permanent: true,
+      },
     ]
   },
   images: {
