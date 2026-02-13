@@ -109,6 +109,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/antwerp/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/antwerp/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/antwerp/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/antwerp/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/hamburg/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -212,6 +236,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/hamburg/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hamburg/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hamburg/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hamburg/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hamburg/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -325,6 +373,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/london/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/london/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/london/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/london/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/rotterdam/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -428,6 +500,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/rotterdam/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/rotterdam/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/rotterdam/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/rotterdam/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/rotterdam/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -541,6 +637,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/new-york/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/new-york/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/new-york/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/new-york/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/savannah/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -644,6 +764,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/savannah/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/savannah/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/savannah/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/savannah/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/savannah/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -757,6 +901,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/charleston/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/charleston/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/charleston/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/charleston/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/miami/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -860,6 +1028,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/miami/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/miami/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/miami/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/miami/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/miami/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -973,6 +1165,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/houston/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/houston/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/houston/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/houston/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/los-angeles/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -1076,6 +1292,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/los-angeles/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/los-angeles/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/los-angeles/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/los-angeles/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/los-angeles/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1189,6 +1429,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/long-beach/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/long-beach/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/long-beach/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/long-beach/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/oakland/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -1292,6 +1556,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/oakland/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/oakland/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/oakland/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/oakland/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/oakland/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1405,6 +1693,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/chicago/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/chicago/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/chicago/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/chicago/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/memphis/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -1508,6 +1820,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/memphis/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/memphis/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/memphis/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/memphis/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/memphis/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1621,6 +1957,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/singapore/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/singapore/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/singapore/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/singapore/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/hong-kong/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -1724,6 +2084,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/hong-kong/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hong-kong/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hong-kong/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hong-kong/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/hong-kong/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -1837,6 +2221,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/shanghai/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/shanghai/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/shanghai/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/shanghai/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/dubai/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -1945,6 +2353,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://docstandard.co/integration/dubai/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/dubai/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/dubai/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/dubai/tms-wms-systems/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://docstandard.co/integration/busan/cargowise/netsuite</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -2048,6 +2480,30 @@
   </url>
   <url>
     <loc>https://docstandard.co/integration/busan/manhattan/sap</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/busan/edi-documents/erp-systems</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/busan/logistics-data/sap-s4hana</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/busan/source-systems/oracle-erp-cloud</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://docstandard.co/integration/busan/tms-wms-systems/sap-s4hana</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
