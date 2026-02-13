@@ -114,55 +114,58 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  const [{ default: cityData }, integrations] = await Promise.all([
-    import("@/lib/pseo/city-data"),
+  const [{ cities }, integrations] = await Promise.all([
+    import("@/lib/pseo/city-data").then(m => ({ cities: m.cities })),
     loadIntegrationDetails()
   ])
   
-  const { cities } = cityData
-  const params = []
+  const params: Array<{ city: string; systemA: string; systemB: string }> = []
   
   for (const city of cities) {
     for (const integration of integrations) {
       // Parse integration slug to get system pair
-      const systems = parseSystemSlug(integration.slug)
-      if (systems) {
+      // Handle formats like: "cargowise-to-netsuite-data-bridge" or "mercurygate-to-oracle-integration"
+      const cleanSlug = integration.slug.replace(/-(data-bridge|bridge|normalization|integration|services)$/i, "")
+      const toMatch = cleanSlug.match(/^([a-z0-9-]+)-to-([a-z0-9-]+)$/i)
+      
+      if (toMatch) {
+        const systemA = toMatch[1].toLowerCase()
+        const systemB = toMatch[2].toLowerCase()
+        
         params.push({
           city: city.slug,
-          systemA: systems.systemA.toLowerCase().replace(/\s/g, "-"),
-          systemB: systems.systemB.toLowerCase().replace(/\s/g, "-")
+          systemA: systemA,
+          systemB: systemB
         })
       }
     }
   }
   
+  console.log(`Generated ${params.length} static params for city-integration pages`)
   return params
 }
 
 export default async function CityIntegrationPage({ params }: PageProps) {
   const cityData = getCityBySlug(params.city)
-  const systems = parseSystemSlug(`${params.systemA}-${params.systemB}`)
   const integrations = await loadIntegrationDetails()
   
-  if (!cityData || !systems) {
+  if (!cityData) {
     notFound()
   }
   
-  const { name: cityName, country, region, majorPorts = [], airports = [] } = cityData
-  const { systemA: rawSystemA, systemB: rawSystemB } = systems
-  const systemA = formatSystemName(rawSystemA)
-  const systemB = formatSystemName(rawSystemB)
-  
-  // Find matching integration
-  const integration = integrations.find(i => 
-    i.systemA.toLowerCase() === rawSystemA.toLowerCase() &&
-    i.systemB.toLowerCase() === rawSystemB.toLowerCase()
-  )
+  // Find matching integration by matching slug pattern
+  const integration = integrations.find(i => {
+    const cleanSlug = i.slug.replace(/-(data-bridge|bridge|normalization|integration|services)$/i, "")
+    return cleanSlug === `${params.systemA}-to-${params.systemB}`
+  })
   
   if (!integration) {
     notFound()
   }
   
+  const { name: cityName, country, region, majorPorts = [], airports = [] } = cityData
+  const systemA = integration.systemA
+  const systemB = integration.systemB
   const { friction, solution, technicalData } = integration
 
   return (
