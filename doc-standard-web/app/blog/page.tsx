@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Route } from "next"
 import { getAllBlogPosts } from "@/lib/blog/fs"
+import { ArrowRight } from "lucide-react"
 
 export default async function BlogIndexPage() {
   const posts = await getAllBlogPosts()
@@ -58,6 +59,31 @@ export default async function BlogIndexPage() {
               </div>
             </article>
           )})}
+        </div>
+
+        {/* Funnel CTA - Awareness → Consideration */}
+        <div className="mt-16 rounded-2xl bg-slate-50 border border-slate-200 p-8 text-center">
+          <h3 className="text-xl font-bold text-slate-900 mb-3">
+            Explore integration options for your logistics stack
+          </h3>
+          <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
+            See how DocStandard connects with your TMS, ERP, and customs systems to eliminate manual data entry.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link
+              href="/integration"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              View System Integrations
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/comparison"
+              className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold hover:bg-slate-50 transition"
+            >
+              Compare Platforms
+            </Link>
+          </div>
         </div>
       </section>
     </main>

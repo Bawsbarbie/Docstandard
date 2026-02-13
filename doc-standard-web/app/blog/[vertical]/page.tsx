@@ -5,6 +5,7 @@ import type { Route } from "next"
 import ReactMarkdown from "react-markdown"
 import { getBlogPost, getBlogSlugs } from "@/lib/blog/fs"
 import { HeaderBanner } from "@/components/blog/HeaderBanner"
+import { ArrowRight } from "lucide-react"
 
 const inferClusterId = (slug: string) => {
   const normalized = slug.toLowerCase()
@@ -130,6 +131,34 @@ export default async function BlogPostPage({ params }: { params: { vertical: str
           >
             {post.content}
           </ReactMarkdown>
+
+          {/* Funnel CTA - Awareness → Consideration */}
+          <div className="mt-16 pt-10 border-t border-slate-200">
+            <div className="rounded-2xl bg-slate-50 border border-slate-200 p-8">
+              <h3 className="text-xl font-bold text-slate-900 mb-3">
+                Ready to streamline your document processing?
+              </h3>
+              <p className="text-slate-600 mb-6">
+                Explore how DocStandard integrates with your logistics systems or compare platforms 
+                to find the right fit for your operations.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/integration"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                  View System Integrations
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/comparison"
+                  className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-300 px-6 py-3 rounded-lg font-semibold hover:bg-slate-50 transition"
+                >
+                  Compare Platforms
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
