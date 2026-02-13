@@ -4,7 +4,7 @@ import Link from "next/link"
 import { getCityBySlug } from "@/lib/pseo/city-data"
 import { 
   ArrowRight, 
-  FileInvoice,
+  Receipt,
   ScanLine,
   Mail,
   AlertTriangle,
@@ -300,7 +300,7 @@ export default async function InvoiceCityPage({ params }: PageProps) {
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center">
-                      <FileInvoice className="w-5 h-5 text-violet-400" />
+                      <Receipt className="w-5 h-5 text-violet-400" />
                     </div>
                     <div>
                       <div className="text-white font-semibold">Invoice Dashboard</div>
