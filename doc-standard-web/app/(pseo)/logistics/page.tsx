@@ -38,12 +38,18 @@ export default async function LogisticsHubPage() {
             feeds to the systems your team already runs. No custom integrations. No implementation
             projects. Just clean data, fast.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/login"
+              href="/integration"
               className="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition"
             >
-              Upload Your Documents -&gt;
+              View System Integrations -&gt;
+            </Link>
+            <Link
+              href="#pipeline"
+              className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition"
+            >
+              See How It Works
             </Link>
           </div>
         </div>
@@ -427,6 +433,37 @@ export default async function LogisticsHubPage() {
           </div>
         </div>
 
+        <div className="space-y-6">
+          <h2 className="text-3xl font-bold">Popular System Integrations</h2>
+          <p className="text-lg text-slate-600">
+            Connect your logistics documents directly to the TMS and ERP systems your team already uses. 
+            Explore our most-requested integration pathways below.
+          </p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Link href="/integration/cargowise-to-dynamics-bc-bridge" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">CargoWise → Dynamics 365 BC</h3>
+              <p className="text-slate-600 text-sm">Normalize freight data from CargoWise into clean Dynamics 365 Business Central imports.</p>
+            </Link>
+            <Link href="/integration/clean-logistics-data-for-sap-s4hana" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">Logistics Data → SAP S/4HANA</h3>
+              <p className="text-slate-600 text-sm">Extract and standardize logistics documents for direct SAP S/4HANA integration.</p>
+            </Link>
+            <Link href="/integration/edi-document-normalization-services" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">EDI Document Normalization</h3>
+              <p className="text-slate-600 text-sm">Convert EDI X12 and EDIFACT messages into structured data for any ERP system.</p>
+            </Link>
+            <Link href="/integration/manhattan-to-sap-normalization" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">Manhattan WMS → SAP</h3>
+              <p className="text-slate-600 text-sm">Bridge warehouse operations data between Manhattan and SAP systems.</p>
+            </Link>
+          </div>
+          <div className="text-center">
+            <Link href="/integration" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+              View All Integrations →
+            </Link>
+          </div>
+        </div>
+
         <div className="space-y-4">
           <h2 className="text-3xl font-bold">Related Logistics Services</h2>
           <p className="text-lg text-slate-600">
@@ -446,6 +483,9 @@ export default async function LogisticsHubPage() {
             </Link>
             <Link href="/shipping" className="text-blue-600 font-semibold hover:underline">
               Ocean and air freight document processing
+            </Link>
+            <Link href="/comparison" className="text-blue-600 font-semibold hover:underline">
+              Compare logistics platforms
             </Link>
           </div>
         </div>

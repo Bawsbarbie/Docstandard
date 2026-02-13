@@ -37,12 +37,18 @@ export default async function ShippingHubPage() {
             from trusted records. Ocean and air workflows are processed separately to reflect their
             distinct legal structures, validation standards, and customs timelines.
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/login"
+              href="/integration"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 font-semibold text-slate-900 transition hover:bg-slate-100"
             >
-              Process Shipping Documents -&gt;
+              View System Integrations -&gt;
+            </Link>
+            <Link
+              href="#pipeline"
+              className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-6 py-3 font-semibold text-white border border-white/30 transition hover:bg-white/20"
+            >
+              See How It Works
             </Link>
           </div>
         </div>
@@ -408,6 +414,37 @@ export default async function ShippingHubPage() {
           </div>
         </div>
 
+        <div className="space-y-6">
+          <h2 className="text-3xl font-bold">Popular System Integrations</h2>
+          <p className="text-lg text-slate-600">
+            Connect your shipping documents directly to the freight systems your team already uses. 
+            Explore our most-requested integration pathways for ocean and air cargo workflows.
+          </p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Link href="/integration/cargowise-to-dynamics-bc-bridge" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">CargoWise → Dynamics 365</h3>
+              <p className="text-slate-600 text-sm">Streamline BOL and manifest data from ocean/air freight into Dynamics 365.</p>
+            </Link>
+            <Link href="/integration/edi-document-normalization-services" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">EDI Normalization</h3>
+              <p className="text-slate-600 text-sm">Convert shipping EDI (X12 204, 210, 214) into clean, structured data.</p>
+            </Link>
+            <Link href="/integration/mercurygate-to-oracle-integration" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">MercuryGate → Oracle</h3>
+              <p className="text-slate-600 text-sm">Sync freight execution data between MercuryGate TMS and Oracle systems.</p>
+            </Link>
+            <Link href="/integration/descartes-to-netsuite-customs-bridge" className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition">
+              <h3 className="font-semibold mb-2 group-hover:text-blue-600">Descartes → NetSuite</h3>
+              <p className="text-slate-600 text-sm">Bridge customs and shipping data from Descartes into NetSuite ERP.</p>
+            </Link>
+          </div>
+          <div className="text-center">
+            <Link href="/integration" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+              View All Integrations →
+            </Link>
+          </div>
+        </div>
+
         <div className="space-y-4">
           <h2 className="text-3xl font-bold">Related Services</h2>
           <p className="text-lg text-slate-600">
@@ -426,6 +463,9 @@ export default async function ShippingHubPage() {
             </Link>
             <Link href="/compliance" className="font-semibold text-blue-600 hover:underline">
               Regulatory compliance for international shipping
+            </Link>
+            <Link href="/comparison" className="font-semibold text-blue-600 hover:underline">
+              Compare logistics platforms
             </Link>
           </div>
         </div>
