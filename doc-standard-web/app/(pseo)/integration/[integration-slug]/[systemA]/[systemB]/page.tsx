@@ -34,7 +34,7 @@ interface IntegrationEntry {
 
 interface PageProps {
   params: {
-    city: string
+    "integration-slug": string
     systemA: string
     systemB: string
   }
@@ -97,10 +97,13 @@ const formatSystemName = (name: string): string => {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const cityData = getCityBySlug(params.city)
-  const systems = parseSystemSlug(`${params.systemA}-${params.systemB}`)
+  const cityData = getCityBySlug(params["integration-slug"])
+  const systems = {
+    systemA: formatSystemName(params.systemA.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())),
+    systemB: formatSystemName(params.systemB.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase())),
+  }
   
-  if (!cityData || !systems) {
+  if (!cityData) {
     return { title: "Not Found" }
   }
   
@@ -133,7 +136,7 @@ export async function generateStaticParams() {
         const systemB = toMatch[2].toLowerCase()
         
         params.push({
-          city: city.slug,
+          "integration-slug": city.slug,
           systemA: systemA,
           systemB: systemB
         })
@@ -146,7 +149,7 @@ export async function generateStaticParams() {
 }
 
 export default async function CityIntegrationPage({ params }: PageProps) {
-  const cityData = getCityBySlug(params.city)
+  const cityData = getCityBySlug(params["integration-slug"])
   const integrations = await loadIntegrationDetails()
   
   if (!cityData) {
@@ -322,7 +325,7 @@ export default async function CityIntegrationPage({ params }: PageProps) {
             </p>
           </div>
           <div 
-            className="bg-slate-900 rounded-2xl overflow-hidden"
+            className="bg-slate-900 rounded-2xl overflow-auto text-slate-100 [&_table]:w-full [&_table]:min-w-[920px] [&_table]:border-collapse [&_thead]:bg-slate-950 [&_th]:px-4 [&_th]:py-3 [&_th]:text-left [&_th]:text-xs [&_th]:font-semibold [&_th]:uppercase [&_th]:tracking-wide [&_th]:text-slate-300 [&_th]:border-b [&_th]:border-slate-800 [&_td]:px-4 [&_td]:py-3 [&_td]:text-sm [&_td]:text-slate-100 [&_td]:align-top [&_td]:border-b [&_td]:border-slate-800"
             dangerouslySetInnerHTML={{ __html: technicalData }}
           />
           <div className="mt-8 grid md:grid-cols-3 gap-6">

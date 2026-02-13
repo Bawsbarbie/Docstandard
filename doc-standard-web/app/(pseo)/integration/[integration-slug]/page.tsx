@@ -203,7 +203,7 @@ const deriveSystemsFromIntentName = (name: string): { systemA: string; systemB: 
 
   const words = name.split(/\s+/).filter(Boolean)
   const systemA = normalizeSystemName(words[0] || name) || name
-  return { systemA, systemB: "Core Systems" }
+  return { systemA, systemB: "Destination System" }
 }
 
 const deriveSystemsFromSlug = (slug: string): { systemA: string; systemB: string } => {
@@ -219,7 +219,7 @@ const deriveSystemsFromSlug = (slug: string): { systemA: string; systemB: string
     }
   }
   const fallback = normalizeSystemName(cleaned)
-  return { systemA: fallback || slug, systemB: "Core Systems" }
+  return { systemA: fallback || slug, systemB: "Destination System" }
 }
 
 interface PageProps {
