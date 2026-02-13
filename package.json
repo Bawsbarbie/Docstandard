@@ -13,6 +13,7 @@
     "express": "^5.2.1",
     "googleapis": "^171.2.0",
     "node-cron": "^4.2.1",
+    "playwright": "^1.58.2",
     "winston": "^3.19.0"
   }
 }

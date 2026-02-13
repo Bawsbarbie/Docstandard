@@ -1,0 +1,786 @@
+[
+  {
+    "name": "Based Penguin",
+    "symbol": "PENGUIN",
+    "dexUrl": "https://dexscreener.com/base/0xe3e2d0b36c38aaeddd9cad65eb806df028d60b37",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/PENGUIN_Portal",
+    "website": "https:\\u002F\\u002Fbasedpenguin.xyz\\u002F"
+  },
+  {
+    "name": "based fric",
+    "symbol": "FRIC",
+    "dexUrl": "https://dexscreener.com/base/0x896378de87ef0c4669018f30ac177e729b48ed3b",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/based_fric",
+    "website": "https:\\u002F\\u002Fbasedfric.xyz\\u002F"
+  },
+  {
+    "name": "dexcheckai",
+    "symbol": "dexcheckai",
+    "dexUrl": "https://dexscreener.com/base/0xde69dd766756c4232253ab762efb4e32a9e43441ce026b177ae9552cadcd175f",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fzora.co\\u002F@dexcheckai"
+  },
+  {
+    "name": "vwa",
+    "symbol": "vwa",
+    "dexUrl": "https://dexscreener.com/base/0x402c4ed8ffab0c1d89ceaaaad5024dce92ff8b8d4f3a162ca3091984dc1390f3",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fshroomy.io"
+  },
+  {
+    "name": "Ember",
+    "symbol": "EMBER",
+    "dexUrl": "https://dexscreener.com/base/0x52677e9edc23e20f6fb489a7a934abb9e3c0a3213883138150a5c9eea9a716ef",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fember.engineer"
+  },
+  {
+    "name": "Degenerate SQuiD by Virtuals",
+    "symbol": "SQDGN",
+    "dexUrl": "https://dexscreener.com/base/0xac534fc720fec7cd6b008765cd255074e0742152",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/SQDGNOfficial",
+    "website": "https:\\u002F\\u002Fshroomy.io"
+  },
+  {
+    "name": "Clonk",
+    "symbol": "CLONK",
+    "dexUrl": "https://dexscreener.com/base/0x0defb96917fd631ccf5233ec04e8093bdc825da46ea0871ac9c966c8b501b1c1",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fvibed.inc"
+  },
+  {
+    "name": "Clankermon",
+    "symbol": "Clankermon",
+    "dexUrl": "https://dexscreener.com/base/0x35fb4274299022a35ac273cb1a027165d4942dee",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/clankermon",
+    "website": "https:\\u002F\\u002Fclankermon.com\\u002F"
+  },
+  {
+    "name": "I Emmet",
+    "symbol": "Emmet",
+    "dexUrl": "https://dexscreener.com/base/0x00361bc437adb13aa1031d86160611189ad96d8c2a8e120838ba9e3788ff6265",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fshroomy.io"
+  },
+  {
+    "name": "Alpha",
+    "symbol": "ALPHA",
+    "dexUrl": "https://dexscreener.com/base/0x7dc9a1e26b0938b00b2e9c809bd2c0972436fdd5",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fwww.netprotocol.app\\u002F"
+  },
+  {
+    "name": "Cody",
+    "symbol": "CODY",
+    "dexUrl": "https://dexscreener.com/base/0xd93f984c201e72c04035d8ca02f54d9dfef23689471d6593fef1697a6a24a0a9",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fcodygame.com"
+  },
+  {
+    "name": "WachXBT by Virtuals",
+    "symbol": "WACH",
+    "dexUrl": "https://dexscreener.com/base/0xeaded6365e815609c53c1dab5c035bc783b51f85",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/Wach_AI",
+    "website": "https:\\u002F\\u002Fwach.ai\\u002F"
+  },
+  {
+    "name": "OpenxAI",
+    "symbol": "OPENX",
+    "dexUrl": "https://dexscreener.com/base/0x7ad1db1b8a8ce3040bc1807d7af6a8bc88584600",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/OpenxAINetwork",
+    "website": "https:\\u002F\\u002Fwww.openxai.org"
+  },
+  {
+    "name": "minidev",
+    "symbol": "MINI",
+    "dexUrl": "https://dexscreener.com/base/0xfed529a05983c16caaa2337cd9304997f76fba3e525a4af38c77deb30ac9574d",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fminidev.fun\\u002F"
+  },
+  {
+    "name": "RIPS",
+    "symbol": "RIPS",
+    "dexUrl": "https://dexscreener.com/base/0x8f5f45b08cd1d5406729ccfe13fc09f27ea441ff",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Frips.app"
+  },
+  {
+    "name": "thenickshirley",
+    "symbol": "thenickshirley",
+    "dexUrl": "https://dexscreener.com/base/0x2ad29751705d81aeb0aa31987d17fe76b0c88d3c038c0a198f3c7bf8c1f2b750",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fzora.co\\u002F@thenickshirley"
+  },
+  {
+    "name": "Reflect",
+    "symbol": "RFL",
+    "dexUrl": "https://dexscreener.com/base/0x37785d5be19d0d9559d4634a5385c72c419b25da",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/reflect_rfl",
+    "website": "https:\\u002F\\u002Fwww.reflect.now"
+  },
+  {
+    "name": "Byte",
+    "symbol": "BYTE",
+    "dexUrl": "https://dexscreener.com/base/0x76569e1d4fc83917ef40cd3b2053b2b8620644b3",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/ByteGroksDog",
+    "website": "https:\\u002F\\u002Fbytegroksdog.xyz\\u002F"
+  },
+  {
+    "name": "Brainpro",
+    "symbol": "BRAINPRO",
+    "dexUrl": "https://dexscreener.com/base/0x512e628e823be33d5a01c48d0b6a369dd1eda4c1d3f076e3ad48655c3f1fe189",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fshroomy.io"
+  },
+  {
+    "name": "FEY",
+    "symbol": "FEY",
+    "dexUrl": "https://dexscreener.com/base/0xe155c517c53f078f4b443c99436e42c1b80fd2fb1b3508f431c46b8365e4f3f0",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Ffey.money"
+  },
+  {
+    "name": "Donut",
+    "symbol": "DONUT",
+    "dexUrl": "https://dexscreener.com/base/0xd1dbb2e56533c55c3a637d13c53aeef65c5d5703",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fwww.glazecorp.io\\u002F"
+  },
+  {
+    "name": "oracle",
+    "symbol": "oracle",
+    "dexUrl": "https://dexscreener.com/base/0x72b2d3678cfc7aabea3703faca0abda2fa35a25651501f961ff8b396a34f5c61",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fnoice.so\\u002Foracle"
+  },
+  {
+    "name": "cliza",
+    "symbol": "CLIZA",
+    "dexUrl": "https://dexscreener.com/base/0x76c0106bba123e9b32770b2b34b6d13bf4cfa933",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/cliza_ai",
+    "website": "https:\\u002F\\u002Fcliza.ai"
+  },
+  {
+    "name": "realgarrytan",
+    "symbol": "realgarrytan",
+    "dexUrl": "https://dexscreener.com/base/0x5f44670653d9be4c7a323e92e5eb9d96fd10ed460737330f4e67a98478cb19a4",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fshroomy.io"
+  },
+  {
+    "name": "machines-cash",
+    "symbol": "MACHINES",
+    "dexUrl": "https://dexscreener.com/base/0x15951b35d7a8ea6b6ef5718eab2fcdd3ad072451",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/machinescashofficial",
+    "website": "https:\\u002F\\u002Fmachines.cash"
+  },
+  {
+    "name": "PRXVT",
+    "symbol": "PRXVT",
+    "dexUrl": "https://dexscreener.com/base/0xf19135499ccc96622bc08dbd080aea66e9a08a44",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/PRXVTCommunity",
+    "website": "https:\\u002F\\u002Fwww.prxvt.com\\u002F"
+  },
+  {
+    "name": "BEATS on BASE",
+    "symbol": "BEATS",
+    "dexUrl": "https://dexscreener.com/base/0x870f9783501f79f66eecb19fa97f4babf630b2a3",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fbeatsonbase.ai\\u002F"
+  },
+  {
+    "name": "Locked Money",
+    "symbol": "LMY",
+    "dexUrl": "https://dexscreener.com/base/0x22432b767cce6e4a45b7ff6f79e1b677d9291136",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/locked_money",
+    "website": "https:\\u002F\\u002Flocked.money"
+  },
+  {
+    "name": "FUCK",
+    "symbol": "FUCK",
+    "dexUrl": "https://dexscreener.com/base/0xb2b4f25b6ecb87c0e17be2a7967309ad665a256c562c09fc259d49055fc8613e",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/FuckOnBase",
+    "website": "http:\\u002F\\u002Ffuckonbase.xyz\\u002F"
+  },
+  {
+    "name": "Artificial Liquid Intelligence Token",
+    "symbol": "ALI",
+    "dexUrl": "https://dexscreener.com/base/0x24bf2ee2e09477082d1ddf2f0603baa460b3f5f3",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/alethea_ai",
+    "website": "https:\\u002F\\u002Fwww.aiprotocol.info\\u002F"
+  },
+  {
+    "name": "Aurra by Virtuals",
+    "symbol": "AURA",
+    "dexUrl": "https://dexscreener.com/base/0x49b346e9b19320e91cf67cd48b9abc3300cab138",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/AurraCommunity",
+    "website": "https:\\u002F\\u002Faurracloud.com\\u002F"
+  },
+  {
+    "name": "AVA",
+    "symbol": "AVA",
+    "dexUrl": "https://dexscreener.com/base/0xeb0669d2622b840eff37e155eddd2ab3260c7940",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/AVAHoloPortal",
+    "website": "https:\\u002F\\u002Fholoworld.com"
+  },
+  {
+    "name": "SessionX",
+    "symbol": "$SXS",
+    "dexUrl": "https://dexscreener.com/base/0xffe6c67ae9e214630467c6299b1be62324ae490ba2546098d50ebdaa4ddf68a3",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fsessionx.net\\u002F"
+  },
+  {
+    "name": "JOOCE Memecoin Index",
+    "symbol": "JMX",
+    "dexUrl": "https://dexscreener.com/base/0x088a81ad942008b480970b71687e736871c7f56e",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": null,
+    "website": "https:\\u002F\\u002Fjooce.xyz"
+  },
+  {
+    "name": "QuantumCoin",
+    "symbol": "QE",
+    "dexUrl": "https://dexscreener.com/base/0xd6ba4bdd2ebdde6b9beab0085f42f08bf69a80e515e399cf93716505c738169b",
+    "twitter": "https://twitter.com/dexscreener",
+    "telegram": "https://t.me/qpc123",
+    "website": "https:\\u002F\\u002Fqe.finance"
+  },
+  {
+    "name": "0xclanker",
+    "symbol": "0xclanker",
+    "dexUrl": "https://dexscreener.com/base/0xca919197f05c9a7ec2f290447a35cc8da7681ab92253509b89e378a021954225",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Redacted Coin",
+    "symbol": "$RDAC",
+    "dexUrl": "https://dexscreener.com/base/0x6b385c432844f47f8226dd3cfb3899242015ef37",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "SOLVR",
+    "symbol": "SOLVR",
+    "dexUrl": "https://dexscreener.com/base/0x88865c70e6b5934200c0ddf63f131f2f044dea514976133d007fd93aae1891ba",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Plazm",
+    "symbol": "PLAZM",
+    "dexUrl": "https://dexscreener.com/base/0xd926c7b8735c517b59e83ce405cfc1e78dea9afa",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Pepe",
+    "symbol": "PEPE",
+    "dexUrl": "https://dexscreener.com/base/0x76fc8dbf2022ee75612cb74ec80caf6b3ccffb23",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Clawdia",
+    "symbol": "CLAWDIA",
+    "dexUrl": "https://dexscreener.com/base/0x9df678cf34e197065c2bffcf11753603de8fc4efbafd1d892e5b671a73380c72",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "MoonDog AI",
+    "symbol": "MDOGAI",
+    "dexUrl": "https://dexscreener.com/base/0xeeaf57fdc362f822c5265cda31526fb5b67fcb93",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Warplet",
+    "symbol": "WARP",
+    "dexUrl": "https://dexscreener.com/base/0x53932cbd6cddbb907ce1bb108496c7bd8aaa5dce",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Checkr",
+    "symbol": "$checkr",
+    "dexUrl": "https://dexscreener.com/base/0x026dabaf04e5be6ed260d6415340ac596d8cb8e5",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Rabbi Schlomo by Virtuals",
+    "symbol": "SHEKEL",
+    "dexUrl": "https://dexscreener.com/base/0xded72b40970af70720adbc5127092f3152392273",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Hive Intelligence",
+    "symbol": "HINT",
+    "dexUrl": "https://dexscreener.com/base/0x137d9f2c705f8b9c54b5c9b08b34a5452f88f35c",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "LOUDER",
+    "symbol": "LOUDER",
+    "dexUrl": "https://dexscreener.com/base/0xd33d771cceb6690b79e1c461ff6cb7b60c25f99e",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "The Upsider by Virtuals",
+    "symbol": "$UP",
+    "dexUrl": "https://dexscreener.com/base/0xb1956bfc47665cac7f186595b06b971c03a74aa2",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "UPONLY",
+    "symbol": "UPONLY",
+    "dexUrl": "https://dexscreener.com/base/0x911a2c812da0b9b79cf6e3a00ce6fd39cbd13ccb",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Zoof Wallet by Virtuals",
+    "symbol": "ZOOF",
+    "dexUrl": "https://dexscreener.com/base/0x64d93c1ebb10aad6ec440bbdb8fb08dab1b54361",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "TYSM",
+    "symbol": "TYSM",
+    "dexUrl": "https://dexscreener.com/base/0x09a43d3d8bee146aa3bdb9d661b5a3682197cfd9",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "WhaleIntel by Virtuals",
+    "symbol": "WINT",
+    "dexUrl": "https://dexscreener.com/base/0xa563eaab67a3178acd1d47a34f38370e4c4911c4",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "MUSIC by Virtuals",
+    "symbol": "MUSIC",
+    "dexUrl": "https://dexscreener.com/base/0xcef84d17513ede0ab951f7be9829e638a20bfba4",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "BYTE by Virtuals",
+    "symbol": "BYTE",
+    "dexUrl": "https://dexscreener.com/base/0xbc2f889b48301dea827c2e77ab78f8f1be8a77fb",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "The Next 100x Memecoin on Base",
+    "symbol": "TN100x",
+    "dexUrl": "https://dexscreener.com/base/0x8f5f1d63599362115e7f9fe71bfd5ab883d82c82",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "SKYCASTLE",
+    "symbol": "SKY",
+    "dexUrl": "https://dexscreener.com/base/0x7c0c3992bfc5897e9c60e1d140a18aee402c077fec9d82e00fabfe98b9b4dabd",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Replicat-One by Virtuals",
+    "symbol": "RCAT",
+    "dexUrl": "https://dexscreener.com/base/0x98f3957f0d077d0fdc02ca694ba32aea38151f47",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Pawsome",
+    "symbol": "PAWS",
+    "dexUrl": "https://dexscreener.com/base/0x1259b50375c51100d0e53a86abc168ca06662045",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "catbus",
+    "symbol": "catbus",
+    "dexUrl": "https://dexscreener.com/base/0x727ffe40fbc89308a2834d378d0a8e467ef722a9",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Arbus by Virtuals",
+    "symbol": "ARBUS",
+    "dexUrl": "https://dexscreener.com/base/0x0de3ce0c23ceb3108cab1472153fa5e2eb674f46",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Capminal by Virtuals",
+    "symbol": "CAP",
+    "dexUrl": "https://dexscreener.com/base/0xc19fb7af58b67a072ce23362c2fb1d61ebe6d4ca",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "BasisOS by Virtuals",
+    "symbol": "BIOS",
+    "dexUrl": "https://dexscreener.com/base/0xc98223367ddcd80ca3f7368362fa3cec20b3264d",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "BLACK HOLE",
+    "symbol": "BLKH",
+    "dexUrl": "https://dexscreener.com/base/0x3ad1521c7742301e011d2dd6ba6f1758c55de090",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Bitcoin On Virtuals",
+    "symbol": "BTCV",
+    "dexUrl": "https://dexscreener.com/base/0x8086595464a632db2f025a242c2a9922360059db",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Director Lucien by Virtuals",
+    "symbol": "LUCIEN",
+    "dexUrl": "https://dexscreener.com/base/0xc237a591e4142d93771f0020a147f73952d50737",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Gekko AI by Virtuals",
+    "symbol": "GEKKO",
+    "dexUrl": "https://dexscreener.com/base/0xf9e91661c101196146cb2bf62f803d8ea6880a2e",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Hyperbet",
+    "symbol": "HBET",
+    "dexUrl": "https://dexscreener.com/base/0xd59b1bf151f36ec881fc867ee22e05765c2c5e2d",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Eli5a",
+    "symbol": "ELI5A",
+    "dexUrl": "https://dexscreener.com/base/0xaa6b86fd7309a08b6fd93bf6f3a0ee8b39eebffd",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Roba",
+    "symbol": "ROBA",
+    "dexUrl": "https://dexscreener.com/base/0x2f816a37b65f99f63e5a04189e24d0dcb256fbb6",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Alpha Base Index",
+    "symbol": "ABX",
+    "dexUrl": "https://dexscreener.com/base/0xe207fab5839ca5bcc0d930761755cc7d82c1f19c",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Streme",
+    "symbol": "STREME",
+    "dexUrl": "https://dexscreener.com/base/0x9187c24a3a81618f07a9722b935617458f532737",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "luminous",
+    "symbol": "LUM",
+    "dexUrl": "https://dexscreener.com/base/0x717358a47ac99f3cd233e723be331756b3951164",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "blai",
+    "symbol": "BLAI",
+    "dexUrl": "https://dexscreener.com/base/0xb437dad576e4fb64064491c031703611af37a36b",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "BETRMINT",
+    "symbol": "BETR",
+    "dexUrl": "https://dexscreener.com/base/0x18156ace9940645ebf3602e2b320a77131a70ad1",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Loky by Virtuals",
+    "symbol": "LOKY",
+    "dexUrl": "https://dexscreener.com/base/0xcd6efb9c75c79449f5a0d689c5528154d162762e",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Meridian",
+    "symbol": "MRDN",
+    "dexUrl": "https://dexscreener.com/base/0xcecf4d16114e601276ba7e8c39a309fbfc605f0e",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Nobi Official",
+    "symbol": "NOBI",
+    "dexUrl": "https://dexscreener.com/base/0x8fc08daeaecd4859b42c00090165fd9bf2a4bbf186a00b7446941fdf572455e9",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Fyni AI by Virtuals",
+    "symbol": "FYNI",
+    "dexUrl": "https://dexscreener.com/base/0x7ea0ffd8b69a8e824f632d0a3ddf78a3d216271c",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Provenance Fact-check",
+    "symbol": "PROV",
+    "dexUrl": "https://dexscreener.com/base/0x7ca022d200d10686db3bb6754ee371e466f34211",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "deployer",
+    "symbol": "deployer",
+    "dexUrl": "https://dexscreener.com/base/0x87d7af8b040afc1aca217f876e23251d5705f3618dc2aaec9d522dd0688ebda3",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Oracle of Preferences ZK by Virtuals",
+    "symbol": "OOPZ",
+    "dexUrl": "https://dexscreener.com/base/0x4bde3ca2603ba4d3345f92ee70fea5ba6dab6a67",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Backroom by Virtuals",
+    "symbol": "ROOM",
+    "dexUrl": "https://dexscreener.com/base/0xb4c4e80abe1c807b8f30ac72c9420dd6acece8d5",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "AInalyst by Virtuals",
+    "symbol": "AIN",
+    "dexUrl": "https://dexscreener.com/base/0x294799c95eab673d44c37e96ce350ff9e66e6a70",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "DORA AI by Virtuals",
+    "symbol": "DORA",
+    "dexUrl": "https://dexscreener.com/base/0x36545f9123a356faa3e0f3728f1e0c416814580a",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Flipr.bet",
+    "symbol": "FLIPR",
+    "dexUrl": "https://dexscreener.com/base/0xfba9457fc3665339847d962c365d2cb6ad743959",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "higher",
+    "symbol": "HIGHER",
+    "dexUrl": "https://dexscreener.com/base/0x87cadde19468283af8d610474ecbd19ed285f698",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Fungi",
+    "symbol": "FUNGI",
+    "dexUrl": "https://dexscreener.com/base/0x8ce9b689018fc94f44540b62ba6e10dc8b346448",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "XRP Legion ",
+    "symbol": "XRPL",
+    "dexUrl": "https://dexscreener.com/base/0x20b791bbf6f4187b2a086481bbabe2b507c7549c",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Polytrader by Virtuals",
+    "symbol": "POLY",
+    "dexUrl": "https://dexscreener.com/base/0xde40586745a4e21efc0e8e0073cdd431ae88876a",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "MetaInside by Virtuals",
+    "symbol": "MIN",
+    "dexUrl": "https://dexscreener.com/base/0x473e8c79fd73211229be12e2e3c3f43d6e2662ff",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Chuck",
+    "symbol": "CHUCK",
+    "dexUrl": "https://dexscreener.com/base/0xa878a7944062c3984b214a6f7bc3970f4a6a5257",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Cybercentry by Virtuals",
+    "symbol": "CENTRY",
+    "dexUrl": "https://dexscreener.com/base/0xbccfb65960f9648f4dad7be579590050dfee385f",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Maya world by Virtuals",
+    "symbol": "MAYA",
+    "dexUrl": "https://dexscreener.com/base/0x01d3169c611ad081607cc3a4a168e1e4a6a3497e",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Cypher Tempre by Virtuals",
+    "symbol": "CPHY",
+    "dexUrl": "https://dexscreener.com/base/0xbba541973fb01d4525ddbdd6162bc203425cffc6",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Operating System",
+    "symbol": "OPSYS",
+    "dexUrl": "https://dexscreener.com/base/0x41b4439d518953b98ccce8fa97942a43feffa90b",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "Bonk",
+    "symbol": "BONK",
+    "dexUrl": "https://dexscreener.com/base/0x176567c44342edda7aae629f7cecab246f22f69a",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "CV3 by Virtuals",
+    "symbol": "CV3AI",
+    "dexUrl": "https://dexscreener.com/base/0x7741621582feef03fc0caf5633c97f3b8c614265",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  },
+  {
+    "name": "RUNNER",
+    "symbol": "RUNNER",
+    "dexUrl": "https://dexscreener.com/base/0x5cc4a43f2681a03d9187f3ad6934c748a86d6119",
+    "twitter": null,
+    "telegram": null,
+    "website": null
+  }
+]

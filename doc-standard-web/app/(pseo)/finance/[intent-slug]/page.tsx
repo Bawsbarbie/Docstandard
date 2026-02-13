@@ -1,11 +1,10 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import BasePage, {
   generateMetadata as baseGenerateMetadata,
 } from "../../[vertical]/[intent-slug]/page"
 import { getIntentsByKind } from "@/lib/pseo/intents"
 import { getCityBySlug } from "@/lib/pseo/city-data"
-import CityPage from "../[city]/page"
+import CityPage from "../city-page"
 
 const VERTICAL = "finance"
 
