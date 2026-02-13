@@ -34,7 +34,7 @@ interface IntegrationEntry {
 
 interface PageProps {
   params: {
-    city: string
+    "integration-slug": string
     systemA: string
     systemB: string
   }
@@ -97,7 +97,7 @@ const formatSystemName = (name: string): string => {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const cityData = getCityBySlug(params.city)
+  const cityData = getCityBySlug(params["integration-slug"])
   const systems = parseSystemSlug(`${params.systemA}-${params.systemB}`)
   
   if (!cityData || !systems) {
@@ -119,7 +119,7 @@ export async function generateStaticParams() {
     loadIntegrationDetails()
   ])
   
-  const params: Array<{ city: string; systemA: string; systemB: string }> = []
+  const params: Array<{ "integration-slug": string; systemA: string; systemB: string }> = []
   
   for (const city of cities) {
     for (const integration of integrations) {
@@ -133,7 +133,7 @@ export async function generateStaticParams() {
         const systemB = toMatch[2].toLowerCase()
         
         params.push({
-          city: city.slug,
+          "integration-slug": city.slug,
           systemA: systemA,
           systemB: systemB
         })
@@ -146,7 +146,7 @@ export async function generateStaticParams() {
 }
 
 export default async function CityIntegrationPage({ params }: PageProps) {
-  const cityData = getCityBySlug(params.city)
+  const cityData = getCityBySlug(params["integration-slug"])
   const integrations = await loadIntegrationDetails()
   
   if (!cityData) {

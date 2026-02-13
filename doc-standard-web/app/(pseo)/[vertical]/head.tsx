@@ -30,6 +30,6 @@ const CITY_SYSTEM_SLUG_REGEX = new RegExp(
 
 export default function Head({ params }: HeadProps) {
   // Noindex removed - city-system pages now redirect to new V2 URLs
-  // New URLs: /integration/[city]/[systemA]/[systemB]/
+  // New URLs: /integration/[integration-slug]/[systemA]/[systemB]/
   return null
 }
