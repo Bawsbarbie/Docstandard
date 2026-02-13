@@ -15,6 +15,7 @@ export const cities: CityData[] = [
   // Europe
   { slug: "antwerp", name: "Antwerp", country: "Belgium", region: "Europe", logisticsHub: true, customsPort: true, majorPorts: ["Port of Antwerp"], priority: 95 },
   { slug: "hamburg", name: "Hamburg", country: "Germany", region: "Europe", logisticsHub: true, customsPort: true, majorPorts: ["Port of Hamburg"], airports: ["Hamburg Airport"], priority: 95 },
+  { slug: "london", name: "London", country: "United Kingdom", region: "Europe", logisticsHub: true, customsPort: true, majorPorts: ["Port of London"], airports: ["Heathrow"], priority: 94 },
   { slug: "rotterdam", name: "Rotterdam", country: "Netherlands", region: "Europe", logisticsHub: true, customsPort: true, majorPorts: ["Port of Rotterdam"], priority: 95 },
   
   // US - East Coast
