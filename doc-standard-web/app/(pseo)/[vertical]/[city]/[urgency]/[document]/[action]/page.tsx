@@ -187,7 +187,7 @@ export default async function UrgencyPage({ params }: PageProps) {
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-white mb-2">24/7</div>
-              <p className="text-red-200">{RcityName} Support</p>
+              <p className="text-red-200">{cityName} Support</p>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-white mb-2">100%</div>
@@ -355,6 +355,321 @@ export default async function UrgencyPage({ params }: PageProps) {
                   Processing schedules aligned to {cityName} business hours. Rush orders 
                   accepted 24/7 with local support.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PAIN SECTION - 3 Column Icons */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              The {document.singular} Processing Challenge
+            </h2>
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              {cityName} operations face critical bottlenecks that {urgency.label.toLowerCase()} processing eliminates
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
+              <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <FileText className="w-8 h-8 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Manual Data Chaos</h3>
+              <p className="text-slate-600">
+                Every {document.singular.toLowerCase()} requires manual extraction, reformatting, and validation. 
+                Errors compound with volume, creating {cityName} processing backlogs.
+              </p>
+            </div>
+            
+            <div className="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
+              <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-8 h-8 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Deadline Pressure</h3>
+              <p className="text-slate-600">
+                {cityName} port cutoffs and carrier deadlines don't wait. Manual processing 
+                creates last-minute rushes and missed vessels.
+              </p>
+            </div>
+            
+            <div className="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
+              <div className="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <BarChart3 className="w-8 h-8 text-red-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Cost Escalation</h3>
+              <p className="text-slate-600">
+                Every hour of delay in {cityName} multiplies costs — demurrage, detention, 
+                expedited freight, and customer penalties.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TECHNICAL GUIDE - Master Mapping Blueprint */}
+      <section className="py-20 px-6 bg-slate-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Master Field Mapping Blueprint
+            </h2>
+            <p className="text-slate-600 text-lg">
+              How DocStandard extracts and validates {document.singular.toLowerCase()} fields for {cityName} {urgency.label.toLowerCase()} processing
+            </p>
+          </div>
+          
+          <div className="bg-slate-900 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-4 bg-slate-950 p-4 text-sm font-semibold text-slate-400 border-b border-slate-800">
+              <div>Source Field</div>
+              <div>Document Location</div>
+              <div>Validation Rule</div>
+              <div>Output Format</div>
+            </div>
+            {[
+              ["Document Number", "Header/Top-right", "Unique alphanumeric", "String, validated"],
+              ["Date Issued", "Date field", "Valid date, not future", "ISO date"],
+              ["Reference ID", "Reference block", "Cross-reference check", "Linked record ID"],
+              ["Party Name", "Shipper/Consignee", "Non-empty, max 100 chars", "Normalized string"],
+              ["Location", "Origin/Destination", "Valid UN/LOCODE", "Port/Airport code"],
+              ["Line Items", "Detail section", "Array of valid items", "Structured array"],
+              ["Quantities", "Quantity fields", "Numeric, positive", "Decimal(10,2)"],
+              ["Amounts", "Cost/Value fields", "Numeric, currency", "Decimal + currency"],
+              ["Tax/Duty", "Tax section", "Valid calculation", "Validated amount"],
+              ["Signatures", "Signature block", "Required if applicable", "Boolean + name"]
+            ].map((row, i) => (
+              <div key={i} className="grid grid-cols-4 p-4 text-sm border-b border-slate-800 hover:bg-slate-800/50">
+                <div className="text-red-400 font-medium">{row[0]}</div>
+                <div className="text-slate-300">{row[1]}</div>
+                <div className="text-slate-400">{row[2]}</div>
+                <div className="text-slate-300">{row[3]}</div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-8 grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h4 className="font-semibold text-slate-900 mb-2">Multi-Format Support</h4>
+              <p className="text-sm text-slate-600">
+                Handles PDF, scanned images, photos, and digital exports. OCR extracts from any quality.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h4 className="font-semibold text-slate-900 mb-2">Data Normalization</h4>
+              <p className="text-sm text-slate-600">
+                Standardizes dates, currencies, addresses, and commodity descriptions across all sources.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h4 className="font-semibold text-slate-900 mb-2">Exception Handling</h4>
+              <p className="text-sm text-slate-600">
+                Flagged documents route to rush review queue with context for {urgency.timeframe} resolution.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ROI SECTION - 4 Cards */}
+      <section className="py-20 px-6 bg-slate-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              {urgency.label} Processing Impact for {cityName}
+            </h2>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+              Real savings when deadlines matter
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+              <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                <Clock className="w-6 h-6 text-red-400" />
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">4-6 hrs</div>
+              <p className="text-slate-400 text-sm mb-2">Standard processing</p>
+              <div className="text-red-400 text-sm">Without rush</div>
+            </div>
+            
+            <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+              <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+                <Zap className="w-6 h-6 text-green-400" />
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">{urgency.timeframe}</div>
+              <p className="text-slate-400 text-sm mb-2">With {urgency.label}</p>
+              <div className="text-green-400 text-sm">Guaranteed</div>
+            </div>
+            
+            <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+              <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                <TrendingDown className="w-6 h-6 text-red-400" />
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">$5K+</div>
+              <p className="text-slate-400 text-sm mb-2">Demurrage avoided</p>
+              <div className="text-red-400 text-sm">Per shipment</div>
+            </div>
+            
+            <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+              <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+                <Shield className="w-6 h-6 text-purple-400" />
+              </div>
+              <div className="text-3xl font-bold text-white mb-2">100%</div>
+              <p className="text-slate-400 text-sm mb-2">Deadline met</p>
+              <div className="text-purple-400 text-sm">Or refund</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BENEFITS GRID - 3 Cards */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Why {cityName} Teams Choose {urgency.label} Processing
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100">
+              <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mb-6">
+                <Timer className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{urgency.timeframe} Guarantee</h3>
+              <p className="text-slate-600">
+                Fixed turnaround time with deadline guarantee. If we miss it, you don't pay. 
+                Designed for {cityName} operations that can't wait.
+              </p>
+            </div>
+            
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100">
+              <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mb-6">
+                <Shield className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Accuracy Under Pressure</h3>
+              <p className="text-slate-600">
+                99.5% accuracy even at rush speed. Dual verification on all {document.plural.toLowerCase()} 
+                ensures quality doesn't suffer for speed.
+              </p>
+            </div>
+            
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100">
+              <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mb-6">
+                <Phone className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">24/7 {cityName} Support</h3>
+              <p className="text-slate-600">
+                Direct line to processing team. Real humans available around the clock 
+                for urgent questions and status updates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ SECTION - 4+ Questions */}
+      <section className="py-20 px-6 bg-slate-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Common Questions
+            </h2>
+          </div>
+          
+          <div className="space-y-4">
+            {[
+              {
+                q: `How does ${urgency.label.toLowerCase()} ${document.singular.toLowerCase()} ${action.label.toLowerCase()} work in ${cityName}?`,
+                a: `We prioritize your ${document.plural.toLowerCase()} in our processing queue the moment they're received. For ${cityName} operations, this means ${urgency.timeframe.toLowerCase()} turnaround from upload to delivery, with real-time status updates throughout.`
+              },
+              {
+                q: `What if my ${document.singular.toLowerCase()} is complex or low quality?`,
+                a: `Even damaged scans or handwritten sections are handled. If OCR can't extract data automatically, our team manually processes it within the same ${urgency.timeframe.toLowerCase()} window. No extra charge for complexity.`
+              },
+              {
+                q: `Can you meet ${cityName} port and carrier cutoff times?`,
+                a: `Yes. We track major ${cityName} port schedules and carrier deadlines. Submit your ${document.plural.toLowerCase()} with cutoff time noted, and we'll prioritize to ensure you make it.`
+              },
+              {
+                q: `What output formats do you deliver?`,
+                a: `Excel, CSV, JSON, or direct API integration. Data is structured and validated according to your target system requirements — ready for immediate use.`
+              },
+              {
+                q: `Is there a deadline guarantee?`,
+                a: `Absolutely. If we don't deliver within ${urgency.timeframe.toLowerCase()}, the processing is free. That's our commitment to ${cityName} operations that depend on speed.`
+              }
+            ].map((faq, i) => (
+              <div key={i} className="bg-white p-6 rounded-xl border border-slate-200">
+                <h3 className="font-bold text-slate-900 mb-3">{faq.q}</h3>
+                <p className="text-slate-600">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS - 3 Quotes */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              What Operations Teams Say
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-700 mb-6">
+                "We had a vessel departing in 6 hours and our BOLs were a mess. DocStandard had them processed in 2 hours. Saved us $8,000 in demurrage."
+              </p>
+              <div>
+                <div className="font-semibold text-slate-900">Operations Manager</div>
+                <div className="text-sm text-slate-500">Freight Forwarder, Europe</div>
+              </div>
+            </div>
+            
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-700 mb-6">
+                "The 4-hour guarantee is real. We've used rush processing 20+ times and they've never missed a deadline. Accuracy is always spot-on."
+              </p>
+              <div>
+                <div className="font-semibold text-slate-900">Logistics Director</div>
+                <div className="text-sm text-slate-500">Import/Export Company, Asia</div>
+              </div>
+            </div>
+            
+            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="text-slate-700 mb-6">
+                "During peak season, we process 200+ rush documents weekly. DocStandard scales with us without quality drop. They're our safety net."
+              </p>
+              <div>
+                <div className="font-semibold text-slate-900">Supply Chain VP</div>
+                <div className="text-sm text-slate-500">3PL Provider, North America</div>
               </div>
             </div>
           </div>
