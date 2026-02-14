@@ -39,6 +39,11 @@ interface PageProps {
   }
 }
 
+// Keep all URLs available while reducing build-time explosion.
+// Priority pages are prebuilt; long-tail pages are rendered on-demand and cached.
+export const dynamicParams = true
+export const revalidate = 86400
+
 // Urgency modifiers and their display names
 const urgencyConfig: Record<string, { label: string; timeframe: string; badge: string }> = {
   urgent: { label: "Urgent", timeframe: "2-4 hours", badge: "⚡" },
@@ -106,13 +111,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export async function generateStaticParams() {
   const { cities } = await import("@/lib/pseo/city-data")
   const verticals = Object.keys(verticalConfig)
-  const urgencies = Object.keys(urgencyConfig)
-  const documents = Object.keys(documentConfig)
-  const actions = Object.keys(actionConfig)
+  const priorityCitySlugs = new Set([
+    "antwerp",
+    "hamburg",
+    "rotterdam",
+    "singapore",
+    "chicago",
+  ])
+  const urgencies = ["urgent", "same-day", "emergency"]
+  const documents = ["bill-of-lading", "customs-declaration", "invoice"]
+  const actions = ["processing", "preparation"]
+  const priorityCities = cities.filter((city) => priorityCitySlugs.has(city.slug))
   
-  const params = []
+  const params: Array<{
+    vertical: string
+    "intent-slug": string
+    urgency: string
+    document: string
+    action: string
+  }> = []
   
-  for (const city of cities) {
+  for (const city of priorityCities) {
     for (const vertical of verticals) {
       for (const urgency of urgencies) {
         for (const document of documents) {
@@ -130,7 +149,7 @@ export async function generateStaticParams() {
     }
   }
   
-  console.log(`Generated ${params.length} urgency page params`)
+  console.log(`Generated ${params.length} priority urgency page params`)
   return params
 }
 
