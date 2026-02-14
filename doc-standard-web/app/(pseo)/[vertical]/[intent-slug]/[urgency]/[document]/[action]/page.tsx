@@ -21,7 +21,7 @@ import {
 interface PageProps {
   params: {
     vertical: string
-    city: string
+    "intent-slug": string
     urgency: string
     document: string
     action: string
@@ -76,7 +76,7 @@ const verticalConfig: Record<string, { label: string; color: string }> = {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const cityData = getCityBySlug(params.city)
+  const cityData = getCityBySlug(params["intent-slug"])
   const urgency = urgencyConfig[params.urgency]
   const document = documentConfig[params.document]
   const action = actionConfig[params.action]
@@ -108,7 +108,7 @@ export async function generateStaticParams() {
           for (const action of actions) {
             params.push({
               vertical,
-              city: city.slug,
+              "intent-slug": city.slug,
               urgency,
               document,
               action
@@ -124,7 +124,7 @@ export async function generateStaticParams() {
 }
 
 export default async function UrgencyPage({ params }: PageProps) {
-  const cityData = getCityBySlug(params.city)
+  const cityData = getCityBySlug(params["intent-slug"])
   const urgency = urgencyConfig[params.urgency]
   const document = documentConfig[params.document]
   const action = actionConfig[params.action]
