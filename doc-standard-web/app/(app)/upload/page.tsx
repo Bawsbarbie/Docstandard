@@ -1,18 +1,8 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { FileUploader } from "@/components/upload/FileUploader"
 
 export default function UploadPage() {
-  const router = useRouter()
-
-  const handleUploadComplete = (batchId: string) => {
-    // Redirect to checkout after successful upload
-    setTimeout(() => {
-      router.push(`/checkout/${batchId}`)
-    }, 2000)
-  }
-
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
@@ -36,11 +26,7 @@ export default function UploadPage() {
           </div>
         </div>
 
-        <FileUploader
-          onUploadComplete={handleUploadComplete}
-          maxFiles={50}
-          maxSizeMB={50}
-        />
+        <FileUploader maxFiles={50} maxSizeMB={50} />
 
         <div className="mt-8 p-6 rounded-lg border bg-card">
           <h2 className="font-semibold mb-3">What happens next?</h2>

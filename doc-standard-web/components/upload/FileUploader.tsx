@@ -9,6 +9,7 @@ import { useCallback, useMemo, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import { PDFDocument } from "pdf-lib"
 import { createBatch, getSignedUploadUrl, createUpload, completeBatchUpload } from "@/lib/actions/upload"
+import { createCheckoutSession } from "@/lib/actions/stripe"
 
 interface UploadFile {
   file: File
@@ -254,11 +255,24 @@ export function FileUploader({
 
       // Complete the upload
       if (successCount > 0) {
-        await completeBatchUpload(batch.id)
+        const completeResult = await completeBatchUpload(batch.id)
+        if (!completeResult.success) {
+          throw new Error(completeResult.error || "Failed to finalize upload")
+        }
+
+        // Create Stripe checkout session and redirect user to payment.
+        const { url, error } = await createCheckoutSession(batch.id)
+        if (url) {
+          window.location.href = url
+          return
+        }
 
         if (onUploadComplete) {
           onUploadComplete(batch.id)
+          return
         }
+
+        throw new Error(error || "Failed to create checkout session")
       } else {
         throw new Error("No files uploaded successfully")
       }

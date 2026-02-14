@@ -1,3 +1,14 @@
+/**
+ * URGENCY PAGE TEMPLATE
+ *
+ * Hero Section Requirements (ALL pages must have these 3 elements):
+ * 1. TEXT: Headline, description, urgency badge
+ * 2. VISUAL: Image, SVG, or icon composition (NEVER skip)
+ * 3. BUTTON: Primary CTA + secondary action
+ *
+ * This ensures design consistency across all pSEO pages.
+ */
+
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
@@ -14,7 +25,7 @@ import {
   BarChart3,
   Timer,
   Truck,
-  Phone,
+  MessageCircle,
   Mail
 } from "lucide-react"
 
@@ -139,59 +150,84 @@ export default async function UrgencyPage({ params }: PageProps) {
   
   return (
     <div className="bg-white text-slate-900">
-      {/* URGENCY HERO - Red/Danger Theme */}
-      <section className="relative overflow-hidden py-20 px-6 bg-red-950">
+      {/* URGENCY HERO - Template Standard: Text + Visual + Button */}
+      <section className="relative overflow-hidden py-20 px-6 bg-slate-50">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-red-900/60 via-red-950 to-slate-950" />
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/20 rounded-full blur-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-white to-slate-50" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-red-500/5 rounded-full blur-2xl" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-red-500/20 text-red-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <AlertTriangle className="w-4 h-4" />
-            {urgency.badge} {urgency.label} Service — {urgency.timeframe} Turnaround
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            {displayTitle} in {cityName}
-          </h1>
-          
-          <p className="text-xl text-red-100 max-w-3xl mb-8 leading-relaxed">
-            When time is critical, {cityName} operations trust DocStandard for {urgency.timeframe.toLowerCase()} 
-            {document.singular.toLowerCase()} {action.label.toLowerCase()}. Don't miss deadlines — get your documents 
-            processed accurately and fast.
-          </p>
-          
-          <div className="flex flex-wrap gap-4">
-            <Link href="/login" className="inline-flex items-center gap-2 bg-red-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-red-700 transition shadow-lg shadow-red-900/50">
-              {action.cta} <ArrowRight className="w-5 h-5" />
-            </Link>
-            <a href="tel:+18001234567" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">
-              <Phone className="w-5 h-5" /> Call for Rush Orders
-            </a>
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-red-500/10 text-red-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <AlertTriangle className="w-4 h-4" />
+                {urgency.badge} {urgency.label} Service — {urgency.timeframe} Turnaround
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                {displayTitle} in {cityName}
+              </h1>
+
+              <p className="text-lg text-slate-600 max-w-xl mb-8 leading-relaxed">
+                When time is critical, {cityName} operations trust DocStandard for{" "}
+                {urgency.timeframe.toLowerCase()} {document.singular.toLowerCase()}{" "}
+                {action.label.toLowerCase()}. Don&apos;t miss deadlines, get your documents processed accurately and fast.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Link href="/login" className="inline-flex items-center gap-2 bg-slate-900 text-white px-8 py-4 rounded-xl font-semibold hover:bg-slate-800 transition">
+                  {action.cta} <ArrowRight className="w-5 h-5" />
+                </Link>
+                <button className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-300 px-8 py-4 rounded-xl font-semibold hover:bg-slate-50 transition cursor-pointer">
+                  <MessageCircle className="w-5 h-5" /> Chat with us
+                </button>
+              </div>
+            </div>
+
+            <div className="hidden lg:flex justify-center items-center">
+              <div className="relative">
+                <div className="w-72 h-72 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center">
+                  <FileText className="w-36 h-36 text-slate-700" strokeWidth={1} />
+                </div>
+
+                <div className="absolute -top-2 -right-2 w-20 h-20 bg-red-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/30">
+                  <Clock className="w-10 h-10 text-white" />
+                </div>
+
+                <div className="absolute -bottom-2 -left-2 w-16 h-16 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+
+                <div className="absolute top-1/2 -right-4 w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center shadow-lg">
+                  <ArrowRight className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* URGENCY STATS */}
-      <section className="bg-red-900 py-12 px-6">
+      <section className="bg-white border-y border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold text-white mb-2">{urgency.timeframe}</div>
-              <p className="text-red-200">Guaranteed Turnaround</p>
+              <div className="text-4xl font-bold text-slate-900 mb-2">{urgency.timeframe}</div>
+              <p className="text-slate-600">Guaranteed Turnaround</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-white mb-2">99.5%</div>
-              <p className="text-red-200">Accuracy Rate</p>
+              <div className="text-4xl font-bold text-slate-900 mb-2">99.5%</div>
+              <p className="text-slate-600">Accuracy Rate</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-white mb-2">24/7</div>
-              <p className="text-red-200">{cityName} Support</p>
+              <div className="text-4xl font-bold text-slate-900 mb-2">24/7</div>
+              <p className="text-slate-600">{cityName} Support</p>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-white mb-2">100%</div>
-              <p className="text-red-200">Deadline Guarantee</p>
+              <div className="text-4xl font-bold text-slate-900 mb-2">100%</div>
+              <p className="text-slate-600">Deadline Guarantee</p>
             </div>
           </div>
         </div>
@@ -391,7 +427,7 @@ export default async function UrgencyPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Deadline Pressure</h3>
               <p className="text-slate-600">
-                {cityName} port cutoffs and carrier deadlines don't wait. Manual processing 
+                {cityName} port cutoffs and carrier deadlines don&apos;t wait. Manual processing 
                 creates last-minute rushes and missed vessels.
               </p>
             </div>
@@ -541,8 +577,8 @@ export default async function UrgencyPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">{urgency.timeframe} Guarantee</h3>
               <p className="text-slate-600">
-                Fixed turnaround time with deadline guarantee. If we miss it, you don't pay. 
-                Designed for {cityName} operations that can't wait.
+                Fixed turnaround time with deadline guarantee. If we miss it, you don&apos;t pay. 
+                Designed for {cityName} operations that can&apos;t wait.
               </p>
             </div>
             
@@ -553,13 +589,13 @@ export default async function UrgencyPage({ params }: PageProps) {
               <h3 className="text-xl font-bold text-slate-900 mb-3">Accuracy Under Pressure</h3>
               <p className="text-slate-600">
                 99.5% accuracy even at rush speed. Dual verification on all {document.plural.toLowerCase()} 
-                ensures quality doesn't suffer for speed.
+                ensures quality doesn&apos;t suffer for speed.
               </p>
             </div>
             
             <div className="p-8 rounded-2xl bg-gradient-to-br from-red-50 to-white border border-red-100">
               <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mb-6">
-                <Phone className="w-7 h-7 text-white" />
+                <MessageCircle className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">24/7 {cityName} Support</h3>
               <p className="text-slate-600">
@@ -631,7 +667,7 @@ export default async function UrgencyPage({ params }: PageProps) {
                 ))}
               </div>
               <p className="text-slate-700 mb-6">
-                "We had a vessel departing in 6 hours and our BOLs were a mess. DocStandard had them processed in 2 hours. Saved us $8,000 in demurrage."
+                &quot;We had a vessel departing in 6 hours and our BOLs were a mess. DocStandard had them processed in 2 hours. Saved us $8,000 in demurrage.&quot;
               </p>
               <div>
                 <div className="font-semibold text-slate-900">Operations Manager</div>
@@ -648,7 +684,7 @@ export default async function UrgencyPage({ params }: PageProps) {
                 ))}
               </div>
               <p className="text-slate-700 mb-6">
-                "The 4-hour guarantee is real. We've used rush processing 20+ times and they've never missed a deadline. Accuracy is always spot-on."
+                &quot;The 4-hour guarantee is real. We&apos;ve used rush processing 20+ times and they&apos;ve never missed a deadline. Accuracy is always spot-on.&quot;
               </p>
               <div>
                 <div className="font-semibold text-slate-900">Logistics Director</div>
@@ -665,7 +701,7 @@ export default async function UrgencyPage({ params }: PageProps) {
                 ))}
               </div>
               <p className="text-slate-700 mb-6">
-                "During peak season, we process 200+ rush documents weekly. DocStandard scales with us without quality drop. They're our safety net."
+                &quot;During peak season, we process 200+ rush documents weekly. DocStandard scales with us without quality drop. They&apos;re our safety net.&quot;
               </p>
               <div>
                 <div className="font-semibold text-slate-900">Supply Chain VP</div>
@@ -677,22 +713,22 @@ export default async function UrgencyPage({ params }: PageProps) {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 bg-red-600">
+      <section className="py-20 px-6 bg-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Don't Miss Your Deadline
+            Don&apos;t Miss Your Deadline
           </h2>
           
-          <p className="text-red-100 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-200 text-lg mb-8 max-w-2xl mx-auto">
             Get your {document.plural.toLowerCase()} processed in {urgency.timeframe.toLowerCase()}. 
             {cityName} operations trust DocStandard when time is critical.
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/login" className="inline-flex items-center gap-2 bg-white text-red-600 px-8 py-4 rounded-xl font-semibold hover:bg-slate-100 transition">
+            <Link href="/login" className="inline-flex items-center gap-2 bg-white text-slate-900 px-8 py-4 rounded-xl font-semibold hover:bg-slate-100 transition">
               {action.cta} <ArrowRight className="w-5 h-5" />
             </Link>
-            <a href="mailto:rush@docstandard.co" className="inline-flex items-center gap-2 bg-red-700 text-white border border-red-500 px-8 py-4 rounded-xl font-semibold hover:bg-red-800 transition">
+            <a href="mailto:rush@docstandard.co" className="inline-flex items-center gap-2 bg-slate-800 text-white border border-slate-700 px-8 py-4 rounded-xl font-semibold hover:bg-slate-700 transition">
               <Mail className="w-5 h-5" /> Email Rush Request
             </a>
           </div>

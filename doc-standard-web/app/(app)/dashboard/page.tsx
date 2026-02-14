@@ -2,6 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { createCheckoutSession } from "@/lib/actions/stripe"
+import { getBatchDownloads } from "@/lib/actions/download"
+import { updateProfile } from "@/lib/actions/profile"
 import { Manrope, Sora } from "next/font/google"
 
 const manrope = Manrope({
@@ -59,6 +62,7 @@ const PAGE_TITLES = {
 type PageId = keyof typeof PAGE_TITLES
 
 type StatusMeta = { label: string; className: string }
+type PaymentNotice = { type: "success" | "cancelled"; batchId: string | null }
 
 const statusMeta = (status: Batch["status"]): StatusMeta => {
   if (status === "delivered") {
@@ -101,6 +105,16 @@ export default function DashboardPage() {
   const [profileForm, setProfileForm] = useState({ fullName: "", email: "", company: "" })
   const [batches, setBatches] = useState<Batch[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [paymentNotice, setPaymentNotice] = useState<PaymentNotice | null>(null)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [retryingBatchId, setRetryingBatchId] = useState<string | null>(null)
+  const [downloadError, setDownloadError] = useState<string | null>(null)
+  const [downloadingBatchId, setDownloadingBatchId] = useState<string | null>(null)
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [profileSaveMessage, setProfileSaveMessage] = useState<{
+    type: "success" | "error"
+    text: string
+  } | null>(null)
 
   useEffect(() => {
     const run = async () => {
@@ -111,6 +125,11 @@ export default function DashboardPage() {
         setIsLoading(false)
         return
       }
+
+      setProfileForm((prev) => ({
+        ...prev,
+        email: user.email ?? "",
+      }))
 
       const [{ data: profileData }, { data: batchesData }] = await Promise.all([
         supabase.from("profiles").select("full_name, company, tier").eq("id", user.id).maybeSingle(),
@@ -132,6 +151,26 @@ export default function DashboardPage() {
     }
 
     run()
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const params = new URLSearchParams(window.location.search)
+    const payment = params.get("payment")
+    const batchId = params.get("batch_id")
+
+    if (payment !== "success" && payment !== "cancelled") {
+      return
+    }
+
+    setPaymentNotice({ type: payment, batchId })
+    setActivePage("batches")
+
+    const url = new URL(window.location.href)
+    url.searchParams.delete("payment")
+    url.searchParams.delete("batch_id")
+    window.history.replaceState({}, "", url.toString())
   }, [])
 
   useEffect(() => {
@@ -224,6 +263,78 @@ export default function DashboardPage() {
     const supabase = createClient()
     await supabase.auth.signOut()
     window.location.href = "/"
+  }
+
+  const handleRetryPayment = async (batchId: string) => {
+    setPaymentError(null)
+    setRetryingBatchId(batchId)
+    const { url, error } = await createCheckoutSession(batchId)
+
+    if (url) {
+      window.location.href = url
+      return
+    }
+
+    setPaymentError(error || "Could not open Stripe Checkout. Please try again.")
+    setPaymentNotice({ type: "cancelled", batchId })
+    if (error) {
+      console.error("Failed to create checkout session:", error)
+    }
+    setRetryingBatchId(null)
+  }
+
+  const handleDownload = async (batchId: string) => {
+    setDownloadError(null)
+    setDownloadingBatchId(batchId)
+
+    const { files, error } = await getBatchDownloads(batchId)
+
+    if (files.length > 0) {
+      for (const file of files) {
+        const link = document.createElement("a")
+        link.href = file.url
+        link.download = file.filename
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+      setDownloadingBatchId(null)
+      return
+    }
+
+    setDownloadError(error || "Download failed")
+    setDownloadingBatchId(null)
+  }
+
+  const handleSaveProfile = async () => {
+    setIsSavingProfile(true)
+    setProfileSaveMessage(null)
+
+    const { success, error } = await updateProfile({
+      full_name: profileForm.fullName.trim(),
+      company: profileForm.company.trim(),
+    })
+
+    if (success) {
+      setProfileSaveMessage({ type: "success", text: "Profile saved successfully." })
+      setProfile((prev) =>
+        prev
+          ? {
+              ...prev,
+              full_name: profileForm.fullName.trim(),
+              company: profileForm.company.trim(),
+            }
+          : prev
+      )
+    } else {
+      setProfileSaveMessage({ type: "error", text: error || "Failed to save profile." })
+    }
+
+    setIsSavingProfile(false)
+
+    setTimeout(() => {
+      setProfileSaveMessage(null)
+    }, 3000)
   }
 
   const profileInitials = profile?.full_name
@@ -574,6 +685,52 @@ export default function DashboardPage() {
           </header>
 
           <div className="flex-1 overflow-auto p-8" id="main-scroll">
+            {downloadError && (
+              <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 flex items-center justify-between gap-4 text-red-900">
+                <p className="text-sm font-medium">{downloadError}</p>
+                <button
+                  type="button"
+                  onClick={() => setDownloadError(null)}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-200 hover:bg-white/40"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+            {paymentError && (
+              <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 flex items-center justify-between gap-4 text-red-900">
+                <p className="text-sm font-medium">{paymentError}</p>
+                <button
+                  type="button"
+                  onClick={() => setPaymentError(null)}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-200 hover:bg-white/40"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+            {paymentNotice && (
+              <div
+                className={`mb-6 rounded-2xl border px-4 py-3 flex items-center justify-between gap-4 ${
+                  paymentNotice.type === "success"
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                    : "bg-amber-50 border-amber-200 text-amber-900"
+                }`}
+              >
+                <p className="text-sm font-medium">
+                  {paymentNotice.type === "success"
+                    ? `Payment received${paymentNotice.batchId ? ` for batch ${paymentNotice.batchId.slice(0, 8)}` : ""}. Your batch is now queued for processing.`
+                    : `Payment cancelled${paymentNotice.batchId ? ` for batch ${paymentNotice.batchId.slice(0, 8)}` : ""}. You can retry checkout from your batch list.`}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setPaymentNotice(null)}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-current/20 hover:bg-white/40"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
             {activePage === "dashboard" && (
               <div id="dashboard-page" className="page-content page-transition max-w-7xl mx-auto">
                 <div className="flex flex-wrap justify-between items-end gap-4 mb-8">
@@ -773,8 +930,26 @@ export default function DashboardPage() {
                               </td>
                               <td className="px-6 py-4 text-right">
                                 {batch.status === "delivered" && hasOutput ? (
-                                  <button className="text-[#2563eb] hover:text-[#1d4ed8] text-sm font-semibold">
-                                    Download
+                                  <div className="inline-flex flex-col items-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDownload(batch.id)}
+                                      disabled={downloadingBatchId === batch.id}
+                                      title="Downloads all output files for this batch"
+                                      className="text-[#2563eb] hover:text-[#1d4ed8] text-sm font-semibold disabled:opacity-50"
+                                    >
+                                      {downloadingBatchId === batch.id ? "Loading..." : "Download"}
+                                    </button>
+                                    <span className="text-[10px] text-slate-400">All files</span>
+                                  </div>
+                                ) : batch.status === "uploaded" || batch.status === "created" ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRetryPayment(batch.id)}
+                                    disabled={retryingBatchId === batch.id}
+                                    className="text-[#2563eb] hover:text-[#1d4ed8] text-sm font-semibold disabled:opacity-50"
+                                  >
+                                    {retryingBatchId === batch.id ? "Opening..." : "Retry Payment"}
                                   </button>
                                 ) : (
                                   <span className="text-slate-300">—</span>
@@ -1151,7 +1326,7 @@ export default function DashboardPage() {
                           <th className="px-6 py-4">Credits Used</th>
                           <th className="px-6 py-4">Status</th>
                           <th className="px-6 py-4">Delivery</th>
-                          <th className="px-6 py-4 text-right">Download</th>
+                          <th className="px-6 py-4 text-right">Action</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
@@ -1196,8 +1371,26 @@ export default function DashboardPage() {
                               </td>
                               <td className="px-6 py-4 text-right">
                                 {batch.status === "delivered" && hasOutput ? (
-                                  <button className="text-[#2563eb] hover:text-[#1d4ed8] font-semibold text-sm">
-                                    Download
+                                  <div className="inline-flex flex-col items-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDownload(batch.id)}
+                                      disabled={downloadingBatchId === batch.id}
+                                      title="Downloads all output files for this batch"
+                                      className="text-[#2563eb] hover:text-[#1d4ed8] font-semibold text-sm disabled:opacity-50"
+                                    >
+                                      {downloadingBatchId === batch.id ? "Loading..." : "Download"}
+                                    </button>
+                                    <span className="text-[10px] text-slate-400">All files</span>
+                                  </div>
+                                ) : batch.status === "uploaded" || batch.status === "created" ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRetryPayment(batch.id)}
+                                    disabled={retryingBatchId === batch.id}
+                                    className="text-[#2563eb] hover:text-[#1d4ed8] font-semibold text-sm disabled:opacity-50"
+                                  >
+                                    {retryingBatchId === batch.id ? "Opening..." : "Retry Payment"}
                                   </button>
                                 ) : (
                                   <span className="text-slate-300">—</span>
@@ -1308,9 +1501,10 @@ export default function DashboardPage() {
                       <input
                         type="email"
                         value={profileForm.email}
-                        onChange={(event) => setProfileForm((prev) => ({ ...prev, email: event.target.value }))}
-                        className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] outline-none"
+                        disabled
+                        className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed"
                       />
+                      <p className="text-xs text-slate-500 mt-1">Email changes are not enabled yet.</p>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Company</label>
@@ -1322,12 +1516,23 @@ export default function DashboardPage() {
                       />
                     </div>
                   </div>
-                  <div className="mt-6 flex justify-end">
+                  <div className="mt-6 flex justify-end items-center gap-4">
+                    {profileSaveMessage && (
+                      <span
+                        className={`text-sm ${
+                          profileSaveMessage.type === "success" ? "text-emerald-600" : "text-red-600"
+                        }`}
+                      >
+                        {profileSaveMessage.text}
+                      </span>
+                    )}
                     <button
                       type="button"
-                      className="bg-[#2563eb] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1d4ed8]"
+                      onClick={handleSaveProfile}
+                      disabled={isSavingProfile}
+                      className="bg-[#2563eb] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#1d4ed8] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Save Changes
+                      {isSavingProfile ? "Saving..." : "Save Changes"}
                     </button>
                   </div>
                 </div>
@@ -1446,7 +1651,8 @@ export default function DashboardPage() {
 
             <div className="p-8">
               <p className="text-slate-600 mb-6">
-                Tell us about your volume needs. We'll provide a custom proposal within 24 hours.
+                Tell us about your volume needs. We&apos;ll provide a custom proposal within 24
+                hours.
               </p>
 
               <form
@@ -1463,18 +1669,21 @@ export default function DashboardPage() {
                     type="text"
                     className="px-4 py-2 border border-slate-300 rounded-lg w-full"
                     placeholder="Company Name"
+                    defaultValue={profileForm.company}
                     required
                   />
                   <input
                     type="text"
                     className="px-4 py-2 border border-slate-300 rounded-lg w-full"
                     placeholder="Contact Name"
+                    defaultValue={profileForm.fullName}
                     required
                   />
                   <input
                     type="email"
                     className="px-4 py-2 border border-slate-300 rounded-lg w-full"
                     placeholder="Email Address"
+                    defaultValue={profileForm.email}
                     required
                   />
                   <input

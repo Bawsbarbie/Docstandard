@@ -61,6 +61,10 @@ export async function createCheckoutSession(
       .eq("batch_id", batchId)
 
     const fileCount = files?.length || 0
+    const appUrl =
+      process.env.NEXT_PUBLIC_URL ||
+      process.env.NEXT_PUBLIC_APP_URL ||
+      "http://localhost:3000"
 
     // Create Stripe Checkout Session
     const session = await getStripe().checkout.sessions.create({
@@ -81,8 +85,8 @@ export async function createCheckoutSession(
           quantity: 1,
         },
       ],
-      success_url: STRIPE_CONFIG.success_url,
-      cancel_url: STRIPE_CONFIG.cancel_url,
+      success_url: `${appUrl}/dashboard?payment=success&batch_id=${batchId}`,
+      cancel_url: `${appUrl}/dashboard?payment=cancelled&batch_id=${batchId}`,
       metadata: {
         batch_id: batchId,
         user_id: user.id,
