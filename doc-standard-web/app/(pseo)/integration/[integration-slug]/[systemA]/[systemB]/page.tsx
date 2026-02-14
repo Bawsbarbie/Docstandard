@@ -256,7 +256,7 @@ export default async function CityIntegrationPage({ params }: PageProps) {
             Automate field mapping, validation, and synchronization to accelerate your {cityName} logistics workflows.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-900/50">
+            <Link href="/login" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-900/50">
               Start Integration <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">
@@ -712,7 +712,7 @@ export default async function CityIntegrationPage({ params }: PageProps) {
             {systemA} to {systemB} batch processed within 24 hours.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-900/50">
+            <Link href="/login" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-900/50">
               Start Integration <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">
