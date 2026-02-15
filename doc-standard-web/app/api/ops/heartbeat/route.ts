@@ -164,7 +164,7 @@ async function createProposal(trigger: any) {
   }
 }
 
-// Auto-approve low-risk proposals
+// Auto-approve low-risk proposals (Dex only - Nova always requires approval)
 async function autoApproveProposals() {
   let approved = 0;
   
@@ -178,14 +178,41 @@ async function autoApproveProposals() {
       .limit(5);
     
     for (const proposal of (proposals || [])) {
-      // Only auto-approve research and analyze steps
+      // NEVER auto-approve Nova's proposals - always require manual review
+      if (proposal.agent_id === 'nova') {
+        // Notify that Nova is waiting for approval (only once per proposal)
+        const { data: existingEvent } = await supabase
+          .from('ops_agent_events')
+          .select('id')
+          .eq('kind', 'approval_needed')
+          .ilike('title', `%${proposal.title}%`)
+          .limit(1);
+        
+        if (!existingEvent || existingEvent.length === 0) {
+          await supabase.from('ops_agent_events').insert({
+            agent_id: 'nova',
+            kind: 'approval_needed',
+            title: `Nova requests approval: ${proposal.title}`,
+            summary: `Nova proposed: "${proposal.title}". Review in ops_proposals table.`,
+            tags: ['approval_needed', 'nova', proposal.project]
+          });
+          
+          console.log('Nova proposal pending approval:', proposal.title);
+        }
+        continue; // Skip to next proposal - Nova's stay pending
+      }
+      
+      // Only auto-approve Dex's research proposals
+      if (proposal.agent_id !== 'dex') continue;
+      
+      // Only auto-approve research steps
       const isLowRisk = proposal.proposed_steps?.every((s: any) => 
-        ['research', 'analyze'].includes(s.kind)
+        s.kind === 'research'
       );
       
       if (!isLowRisk) continue;
       
-      // Create mission
+      // Create mission for Dex's research
       const { data: mission } = await supabase.from('ops_missions').insert({
         title: proposal.title,
         project: proposal.project,
