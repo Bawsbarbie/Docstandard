@@ -1,6 +1,7 @@
 import type { PageModel } from "@/lib/pseo/content-factory"
 import Link from "next/link"
 import { MapPin, ArrowRight } from "lucide-react"
+import { cities as supportedCities } from "@/lib/pseo/city-data"
 import { getDynamicROI } from "@/lib/pseo/roi-helper"
 import { IntroBlock } from "./IntroBlock"
 import { RiskSection } from "./RiskSection"
@@ -115,6 +116,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
 
   // Get dynamic ROI data from technical guides
   const roiData = getDynamicROI(pageModel)
+  const supportedCitySlugs = new Set(supportedCities.map((cityEntry) => cityEntry.slug))
 
   // Helper: Get related cities with working URLs (/{vertical}/{city-slug})
   const getRelatedCityLinks = (
@@ -170,6 +172,7 @@ export function PseoPageTemplate({ pageModel }: PseoPageTemplateProps) {
     }
 
     return (cityClusters[currentCitySlug.toLowerCase()] || [])
+      .filter((cityLink) => supportedCitySlugs.has(cityLink.slug))
       .slice(0, maxResults)
       .map((cityLink) => ({
         name: cityLink.name,
