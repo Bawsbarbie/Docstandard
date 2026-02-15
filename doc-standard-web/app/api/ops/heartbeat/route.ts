@@ -16,40 +16,43 @@ export async function GET(req: NextRequest) {
   const results = {
     timestamp: new Date().toISOString(),
     triggers: 0,
-    reactions: 0,
+    proposals: 0,
     recovered: 0,
-    learnings: 0
+    events: 0
   };
 
   try {
-    // 1. Evaluate triggers (check conditions, create proposals)
-    const { data: triggers } = await supabase
-      .from('ops_trigger_rules')
-      .select('*')
-      .eq('enabled', true);
+    // 1. Evaluate proactive triggers
+    const proactiveTriggers = await evaluateProactiveTriggers();
+    results.triggers += proactiveTriggers.length;
     
-    for (const rule of triggers || []) {
-      const shouldFire = await evaluateTrigger(rule);
-      if (shouldFire) {
-        await createProposalFromTrigger(rule);
-        results.triggers++;
-      }
+    // 2. Create proposals from triggered actions
+    for (const trigger of proactiveTriggers) {
+      const created = await createProposal(trigger);
+      if (created) results.proposals++;
     }
 
-    // 2. Process reaction queue (agent interactions)
-    // TODO: Implement based on conversation matrix
+    // 3. Auto-approve low-risk proposals
+    const approved = await autoApproveProposals();
+    results.proposals += approved;
 
-    // 3. Recover stuck tasks (30+ min running)
+    // 4. Recover stuck tasks (30+ min running)
     const { data: stuck } = await supabase
       .from('ops_mission_steps')
-      .update({ status: 'failed' })
+      .update({ status: 'failed', payload: { error: 'Recovered: timed out after 30 min' } })
       .eq('status', 'running')
       .lt('created_at', new Date(Date.now() - 30 * 60 * 1000).toISOString())
       .select('id');
     results.recovered = stuck?.length || 0;
 
-    // 4. Learn from outcomes (write memories from results)
-    // TODO: Implement outcome learning
+    // 5. Log heartbeat event
+    await supabase.from('ops_agent_events').insert({
+      agent_id: 'system',
+      kind: 'heartbeat',
+      title: 'System Heartbeat',
+      summary: `Triggers: ${results.triggers}, Proposals: ${results.proposals}, Recovered: ${results.recovered}`,
+      tags: ['system', 'heartbeat']
+    });
 
     return NextResponse.json({ success: true, results });
   } catch (err) {
@@ -58,33 +61,162 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function evaluateTrigger(rule: any): Promise<boolean> {
-  // Check cooldown
-  if (rule.last_fired_at) {
-    const minutesSince = (Date.now() - new Date(rule.last_fired_at).getTime()) / 60000;
-    if (minutesSince < rule.cooldown_minutes) return false;
+// Evaluate proactive triggers
+async function evaluateProactiveTriggers() {
+  const triggered = [];
+  
+  // Check 1: Proactive research (Dex) - every 4 hours, 70% chance
+  const { data: recentResearch } = await supabase
+    .from('ops_agent_events')
+    .select('created_at')
+    .eq('agent_id', 'dex')
+    .eq('kind', 'research_completed')
+    .order('created_at', { ascending: false })
+    .limit(1);
+  
+  let shouldResearch = true;
+  if (recentResearch?.length) {
+    const hoursSince = (Date.now() - new Date(recentResearch[0].created_at).getTime()) / (1000 * 60 * 60);
+    if (hoursSince < 4) shouldResearch = false;
   }
   
-  // TODO: Implement condition checking based on rule.trigger_event
-  // For now, proactive triggers with probability
-  if (rule.trigger_event.startsWith('proactive_')) {
-    return Math.random() < 0.3; // 30% chance
+  if (shouldResearch && Math.random() < 0.7) {
+    const topics = [
+      'CargoWise integration SEO',
+      'Logistics TMS comparison keywords',
+      'Customs declaration automation',
+      'Freight forwarding content gaps',
+      'EDI API integration trends'
+    ];
+    triggered.push({
+      agent_id: 'dex',
+      title: `Research: ${topics[Math.floor(Math.random() * topics.length)]}`,
+      steps: [{ kind: 'research', payload: { research_type: 'serp' } }],
+      project: 'docstandard'
+    });
   }
   
-  return false;
+  // Check 2: Health check (Nova) - every 6 hours, 60% chance
+  const { data: recentHealth } = await supabase
+    .from('ops_agent_events')
+    .select('created_at')
+    .eq('agent_id', 'nova')
+    .eq('kind', 'health_check')
+    .order('created_at', { ascending: false })
+    .limit(1);
+  
+  let shouldHealthCheck = true;
+  if (recentHealth?.length) {
+    const hoursSince = (Date.now() - new Date(recentHealth[0].created_at).getTime()) / (1000 * 60 * 60);
+    if (hoursSince < 6) shouldHealthCheck = false;
+  }
+  
+  if (shouldHealthCheck && Math.random() < 0.6) {
+    triggered.push({
+      agent_id: 'nova',
+      title: 'System Health Review',
+      steps: [{ kind: 'analyze', payload: { analysis_type: 'health_check' } }],
+      project: 'docstandard'
+    });
+  }
+  
+  return triggered;
 }
 
-async function createProposalFromTrigger(rule: any) {
-  await supabase.from('ops_proposals').insert({
-    agent_id: rule.action_config.target_agent,
-    project: rule.project,
-    title: `Triggered: ${rule.name}`,
-    proposed_steps: rule.action_config.proposed_steps || [],
-    status: 'pending'
-  });
+// Create proposal from trigger
+async function createProposal(trigger: any) {
+  try {
+    // Check daily quota
+    const { data: quota } = await supabase
+      .from('ops_policy')
+      .select('value')
+      .eq('key', 'daily_quota')
+      .single();
+    
+    const today = new Date().toISOString().split('T')[0];
+    const { count } = await supabase
+      .from('ops_proposals')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', today);
+    
+    if (count && count >= (quota?.value?.limit || 10)) {
+      console.log('Daily quota reached, skipping proposal');
+      return false;
+    }
+    
+    // Create proposal
+    const { data: proposal } = await supabase.from('ops_proposals').insert({
+      agent_id: trigger.agent_id,
+      project: trigger.project,
+      title: trigger.title,
+      proposed_steps: trigger.steps.map((s: any) => ({
+        ...s,
+        payload: { ...s.payload, topic: trigger.title, agent_id: trigger.agent_id }
+      })),
+      status: 'pending'
+    }).select();
+    
+    console.log('Created proposal:', proposal?.[0]?.id);
+    return true;
+  } catch (err) {
+    console.error('Failed to create proposal:', err);
+    return false;
+  }
+}
+
+// Auto-approve low-risk proposals
+async function autoApproveProposals() {
+  let approved = 0;
   
-  await supabase
-    .from('ops_trigger_rules')
-    .update({ fire_count: rule.fire_count + 1, last_fired_at: new Date().toISOString() })
-    .eq('id', rule.id);
+  try {
+    // Get pending proposals
+    const { data: proposals } = await supabase
+      .from('ops_proposals')
+      .select('*')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: true })
+      .limit(5);
+    
+    for (const proposal of (proposals || [])) {
+      // Only auto-approve research and analyze steps
+      const isLowRisk = proposal.proposed_steps?.every((s: any) => 
+        ['research', 'analyze'].includes(s.kind)
+      );
+      
+      if (!isLowRisk) continue;
+      
+      // Create mission
+      const { data: mission } = await supabase.from('ops_missions').insert({
+        title: proposal.title,
+        project: proposal.project,
+        status: 'approved',
+        created_by: proposal.id
+      }).select();
+      
+      if (mission?.[0]) {
+        // Create steps
+        for (const step of proposal.proposed_steps) {
+          await supabase.from('ops_mission_steps').insert({
+            mission_id: mission[0].id,
+            project: proposal.project,
+            kind: step.kind,
+            status: 'queued',
+            payload: step.payload
+          });
+        }
+        
+        // Mark proposal as accepted
+        await supabase
+          .from('ops_proposals')
+          .update({ status: 'accepted' })
+          .eq('id', proposal.id);
+        
+        approved++;
+      }
+    }
+  } catch (err) {
+    console.error('Auto-approve error:', err);
+  }
+  
+  return approved;
 }
