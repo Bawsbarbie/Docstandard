@@ -32,7 +32,17 @@ export async function GET(req: NextRequest) {
       if (created) results.proposals++;
     }
 
-    // 3. Auto-approve low-risk proposals
+    // 3. Process reaction matrix (agent-to-agent responses)
+    const recentEvents = await getRecentEvents(10);
+    for (const event of recentEvents) {
+      const reactions = await processReactions(event);
+      if (reactions.length > 0) {
+        const created = await createProposalsFromReactions(reactions);
+        results.proposals += created.length;
+      }
+    }
+
+    // 4. Auto-approve low-risk proposals
     const approved = await autoApproveProposals();
     results.proposals += approved;
 
@@ -164,7 +174,100 @@ async function createProposal(trigger: any) {
   }
 }
 
-// Auto-approve low-risk proposals (Dex only - Nova always requires approval)
+// Get recent events for reaction processing
+async function getRecentEvents(limit: number) {
+  const { data } = await supabase
+    .from('ops_agent_events')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+  return data || [];
+}
+
+// Process reaction matrix
+async function processReactions(event: any) {
+  const reactions = [];
+  
+  // Rule 1: When Dex completes research, Nova QA reviews it (30% chance or low confidence)
+  if (event.agent_id === 'dex' && event.kind === 'research_completed') {
+    // Simple probability-based reaction for now
+    if (Math.random() < 0.3) {
+      reactions.push({
+        target_agent: 'nova',
+        action: 'qa_review',
+        reason: 'research_completed',
+        payload: {
+          trigger_event_id: event.id,
+          topic: event.title.replace('Research: ', ''),
+          source_research: event.summary
+        }
+      });
+    }
+  }
+  
+  return reactions;
+}
+
+// Create proposals from reactions
+async function createProposalsFromReactions(reactions: any[]) {
+  const created = [];
+  
+  for (const reaction of reactions) {
+    try {
+      // Check cooldown
+      const { data: recent } = await supabase
+        .from('ops_proposals')
+        .select('created_at')
+        .eq('agent_id', reaction.target_agent)
+        .order('created_at', { ascending: false })
+        .limit(1);
+      
+      if (recent?.length) {
+        const minutesSince = (Date.now() - new Date(recent[0].created_at).getTime()) / (1000 * 60);
+        if (minutesSince < 30) continue;
+      }
+      
+      const title = `QA Review: ${reaction.payload.topic}`;
+      
+      const { data: proposal } = await supabase.from('ops_proposals').insert({
+        agent_id: reaction.target_agent,
+        project: 'docstandard',
+        title,
+        proposed_steps: [{
+          kind: 'analyze',
+          payload: {
+            analysis_type: 'qa_review',
+            source_research: reaction.payload.source_research,
+            triggered_by: 'reaction_matrix'
+          }
+        }],
+        status: 'pending',
+        metadata: {
+          triggered_by: 'dex',
+          trigger_reason: reaction.reason,
+          reaction_matrix: true
+        }
+      }).select();
+      
+      if (proposal?.[0]) {
+        created.push(proposal[0]);
+        
+        // Log the reaction event
+        await supabase.from('ops_agent_events').insert({
+          agent_id: 'system',
+          kind: 'reaction_triggered',
+          title: `Reaction: Nova will QA "${reaction.payload.topic}"`,
+          summary: `Dex completed research, Nova auto-scheduled QA review`,
+          tags: ['reaction', 'dex', 'nova', 'qa']
+        });
+      }
+    } catch (err) {
+      console.error('Reaction error:', err);
+    }
+  }
+  
+  return created;
+}
 async function autoApproveProposals() {
   let approved = 0;
   
