@@ -63,6 +63,20 @@ const nextConfig = {
         destination: "/integration/:city/:systemA/:systemB",
         permanent: true,
       },
+      // Redirect legacy vertical/city canonical-like URLs to working vertical city pages
+      {
+        source:
+          "/:country/:state/:city/:vertical(shipping|customs|compliance|finance|logistics|invoice)",
+        destination: "/:vertical/:city",
+        permanent: true,
+      },
+      // Redirect malformed region-prefixed vertical/city URLs (e.g. /europe/nl/rotterdam/logistics)
+      {
+        source:
+          "/:region/:country/:city/:vertical(shipping|customs|compliance|finance|logistics|invoice)",
+        destination: "/:vertical/:city",
+        permanent: true,
+      },
     ]
   },
   images: {
