@@ -318,10 +318,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${entry.systemA} to ${entry.systemB} Integration | DocStandard`
   const description = entry.solution
+  const canonicalUrl = `https://docstandard.co/integration/${params["integration-slug"]}`
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,

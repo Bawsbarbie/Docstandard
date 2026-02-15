@@ -16,16 +16,26 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const cityData = getCityBySlug(params["intent-slug"])
+  const canonicalUrl = `https://docstandard.co/${VERTICAL}/${params["intent-slug"]}`
   if (cityData) {
     return {
       title: `Invoice Processing in ${cityData.name} | DocStandard`,
       description: `Automate commercial invoice extraction and processing in ${cityData.name}. Convert invoice PDFs into structured data for ERP and accounting systems.`,
+      alternates: {
+        canonical: canonicalUrl,
+      },
     }
   }
 
-  return baseGenerateMetadata({
+  const metadata = await baseGenerateMetadata({
     params: { vertical: VERTICAL, "intent-slug": params["intent-slug"] },
   })
+  return {
+    ...metadata,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  }
 }
 
 export async function generateStaticParams() {

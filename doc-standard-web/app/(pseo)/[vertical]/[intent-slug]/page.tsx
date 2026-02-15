@@ -61,10 +61,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${intent.name} | DocStandard`
   const description = intent.description || `Professional ${intent.name.toLowerCase()} services.`
+  const canonicalUrl = `https://docstandard.co/${resolvedVertical}/${params["intent-slug"]}`
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,

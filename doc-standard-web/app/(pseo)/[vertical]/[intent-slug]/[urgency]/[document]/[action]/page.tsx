@@ -173,10 +173,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!cityData || !urgency || !document || !action || !vertical) {
     return { title: "Not Found" }
   }
+
+  const canonicalUrl = `https://docstandard.co/${params.vertical}/${params["intent-slug"]}/${params.urgency}/${params.document}/${params.action}`
   
   return {
     title: `${urgency.label} ${document.singular} ${action.label} in ${cityData.name} | DocStandard`,
     description: `${urgency.timeframe} ${document.singular.toLowerCase()} ${action.label.toLowerCase()} in ${cityData.name}. Fast, accurate document processing when you need it most.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
   }
 }
 

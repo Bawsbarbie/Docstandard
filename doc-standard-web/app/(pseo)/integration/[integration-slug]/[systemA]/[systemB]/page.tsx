@@ -128,10 +128,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   const { name: cityName } = cityData
   const { systemA, systemB } = systems
+  const canonicalUrl = `https://docstandard.co/integration/${params["integration-slug"]}/${params.systemA}/${params.systemB}`
   
   return {
     title: `${formatSystemName(systemA)} to ${formatSystemName(systemB)} Integration in ${cityName} | DocStandard`,
     description: `Streamline ${formatSystemName(systemA)} to ${formatSystemName(systemB)} data integration in ${cityName}. Automate field mapping, validation, and synchronization for your logistics operations.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
   }
 }
 

@@ -86,10 +86,14 @@ export const getVerticalLabel = (vertical: string) => {
 export async function generateMetadataForVertical(vertical: string): Promise<Metadata> {
   const resolved = resolveVertical(vertical)
   const label = getVerticalLabel(resolved)
+  const canonicalUrl = `https://docstandard.co/${resolved}`
 
   return {
     title: `${label} Services Hub | DocStandard`,
     description: `Browse all ${label.toLowerCase()} processing intents and document services from DocStandard.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
   }
 }
 

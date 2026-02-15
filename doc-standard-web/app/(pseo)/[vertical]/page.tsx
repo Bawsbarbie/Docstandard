@@ -37,6 +37,7 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const canonicalUrl = `https://docstandard.co/${params.vertical}`
   const cityData = getCityBySlug(params.vertical.toLowerCase())
   if (cityData) {
     return {
@@ -56,16 +57,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (CITY_SYSTEM_SLUG_REGEX.test(params.vertical)) {
       return {
         title,
+        alternates: {
+          canonical: canonicalUrl,
+        },
         robots: {
           index: false,
           follow: false,
         },
       }
     }
-    return { title }
+    return {
+      title,
+      alternates: {
+        canonical: canonicalUrl,
+      },
+    }
   }
   if (blogSlugSet.has(params.vertical)) {
-    return { title: "Redirecting..." }
+    return {
+      title: "Redirecting...",
+      alternates: {
+        canonical: canonicalUrl,
+      },
+    }
   }
   return generateMetadataForVertical(params.vertical)
 }
