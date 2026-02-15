@@ -311,30 +311,6 @@ export default async function UrgencyPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* URGENCY STATS */}
-      <section className="bg-white border-y border-slate-200 py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-slate-900 mb-2">{urgency.timeframe}</div>
-              <p className="text-slate-600">Guaranteed Turnaround</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-slate-900 mb-2">99.5%</div>
-              <p className="text-slate-600">Accuracy Rate</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-slate-900 mb-2">24/7</div>
-              <p className="text-slate-600">{cityName} Support</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-slate-900 mb-2">100%</div>
-              <p className="text-slate-600">Deadline Guarantee</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* COST OF DELAY */}
       <section className="py-20 px-6 bg-slate-950">
         <div className="max-w-6xl mx-auto">
