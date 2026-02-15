@@ -91,6 +91,78 @@ const verticalConfig: Record<string, { label: string; color: string }> = {
   shipping: { label: "Shipping", color: "blue" }
 }
 
+const getRelatedDocuments = (currentDoc: string, maxResults: number = 2) => {
+  const allDocs = [
+    { slug: "bill-of-lading", label: "Bill of Lading" },
+    { slug: "customs-declaration", label: "Customs Declaration" },
+    { slug: "invoice", label: "Invoice" },
+    { slug: "packing-list", label: "Packing List" },
+    { slug: "certificate-of-origin", label: "Certificate of Origin" },
+    { slug: "freight-document", label: "Freight Document" },
+    { slug: "shipping-label", label: "Shipping Label" },
+    { slug: "delivery-receipt", label: "Delivery Receipt" },
+    { slug: "commercial-invoice", label: "Commercial Invoice" },
+  ]
+
+  return allDocs.filter((doc) => doc.slug !== currentDoc).slice(0, maxResults)
+}
+
+const getRelatedUrgencies = (currentUrgency: string, maxResults: number = 2) => {
+  const allUrgencies = [
+    { slug: "urgent", label: "Urgent" },
+    { slug: "same-day", label: "Same-Day" },
+    { slug: "emergency", label: "Emergency" },
+    { slug: "rush", label: "Rush" },
+    { slug: "priority", label: "Priority" },
+  ]
+
+  return allUrgencies.filter((urgency) => urgency.slug !== currentUrgency).slice(0, maxResults)
+}
+
+const getRelatedVerticals = (currentVertical: string, maxResults: number = 2) => {
+  const allVerticals = [
+    { slug: "shipping", label: "Shipping" },
+    { slug: "customs", label: "Customs" },
+    { slug: "compliance", label: "Compliance" },
+    { slug: "finance", label: "Finance" },
+    { slug: "logistics", label: "Logistics" },
+    { slug: "invoice", label: "Invoice" },
+  ]
+
+  return allVerticals.filter((vertical) => vertical.slug !== currentVertical).slice(0, maxResults)
+}
+
+const getRelatedIntegrations = (currentVertical: string, maxResults: number = 2) => {
+  const integrationMap: Record<string, Array<{ slug: string; label: string }>> = {
+    shipping: [
+      { slug: "cargowise-to-netsuite-data-bridge", label: "CargoWise -> NetSuite" },
+      { slug: "magaya-to-quickbooks-bridge", label: "Magaya -> QuickBooks" },
+    ],
+    customs: [
+      { slug: "descartes-to-netsuite-customs-bridge", label: "Descartes -> NetSuite" },
+      { slug: "sap-tm-to-oracle-otm-bridge", label: "SAP TM -> Oracle OTM" },
+    ],
+    compliance: [
+      { slug: "cargowise-to-sap-s4hana-bridge", label: "CargoWise -> SAP S/4HANA" },
+      { slug: "edi-document-normalization-services", label: "EDI Normalization" },
+    ],
+    finance: [
+      { slug: "magaya-to-quickbooks-bridge", label: "Magaya -> QuickBooks" },
+      { slug: "flexport-to-netsuite-bridge", label: "Flexport -> NetSuite" },
+    ],
+    logistics: [
+      { slug: "cargowise-to-netsuite-data-bridge", label: "CargoWise -> NetSuite" },
+      { slug: "motive-to-sap-ifta-normalization", label: "Motive -> SAP" },
+    ],
+    invoice: [
+      { slug: "magaya-to-quickbooks-bridge", label: "Magaya -> QuickBooks" },
+      { slug: "cargowise-to-netsuite-data-bridge", label: "CargoWise -> NetSuite" },
+    ],
+  }
+
+  return (integrationMap[currentVertical] || integrationMap.logistics || []).slice(0, maxResults)
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const cityData = getCityBySlug(params["intent-slug"])
   const urgency = urgencyConfig[params.urgency]
@@ -166,6 +238,17 @@ export default async function UrgencyPage({ params }: PageProps) {
   
   const { name: cityName, country, majorPorts = [], airports = [] } = cityData
   const displayTitle = `${urgency.label} ${document.singular} ${action.label}`
+  const relatedDocuments = getRelatedDocuments(params.document, 2)
+  const relatedUrgencies = getRelatedUrgencies(params.urgency, 2)
+  const relatedVerticals = getRelatedVerticals(params.vertical, 2)
+  const relatedIntegrations = getRelatedIntegrations(params.vertical, 2)
+
+  // Keep interlinking focused: 6 links max total.
+  const linkBudget = 6
+  const docsToShow = relatedDocuments.slice(0, Math.min(2, linkBudget))
+  const urgenciesToShow = relatedUrgencies.slice(0, Math.min(2, Math.max(0, linkBudget - docsToShow.length)))
+  const verticalsToShow = relatedVerticals.slice(0, Math.min(1, Math.max(0, linkBudget - docsToShow.length - urgenciesToShow.length)))
+  const integrationsToShow = relatedIntegrations.slice(0, Math.min(1, Math.max(0, linkBudget - docsToShow.length - urgenciesToShow.length - verticalsToShow.length)))
   
   return (
     <div className="bg-white text-slate-900">
@@ -728,6 +811,96 @@ export default async function UrgencyPage({ params }: PageProps) {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* RELATED SERVICES - Internal Linking */}
+      <section className="py-16 px-6 bg-slate-50 border-y border-slate-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">
+            Related {cityName} Services
+          </h2>
+          <p className="text-slate-600 mb-8">
+            Explore other document processing options in {cityName}.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h3 className="font-semibold text-slate-900 mb-3">
+                Other Documents in {cityName}
+              </h3>
+              <ul className="space-y-2">
+                {docsToShow.map((doc) => (
+                  <li key={doc.slug}>
+                    <Link
+                      href={`/${params.vertical}/${params["intent-slug"]}/${params.urgency}/${doc.slug}/${params.action}`}
+                      className="text-[#2563eb] hover:underline text-sm"
+                    >
+                      {doc.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h3 className="font-semibold text-slate-900 mb-3">
+                Other {document.singular} Timelines
+              </h3>
+              <ul className="space-y-2">
+                {urgenciesToShow.map((urgencyLink) => (
+                  <li key={urgencyLink.slug}>
+                    <Link
+                      href={`/${params.vertical}/${params["intent-slug"]}/${urgencyLink.slug}/${params.document}/${params.action}`}
+                      className="text-[#2563eb] hover:underline text-sm"
+                    >
+                      {urgencyLink.label} {document.singular}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-xl border border-slate-200">
+              <h3 className="font-semibold text-slate-900 mb-3">
+                Other {cityName} Operations
+              </h3>
+              <ul className="space-y-2">
+                {verticalsToShow.map((verticalLink) => (
+                  <li key={verticalLink.slug}>
+                    <Link
+                      href={`/${verticalLink.slug}/${params["intent-slug"]}/${params.urgency}/${params.document}/${params.action}`}
+                      className="text-[#2563eb] hover:underline text-sm"
+                    >
+                      {verticalLink.label} in {cityName}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {integrationsToShow.length > 0 ? (
+            <div className="mt-8 p-6 bg-white rounded-xl border border-slate-200">
+              <h3 className="font-semibold text-slate-900 mb-3">
+                {cityName} System Integrations
+              </h3>
+              <p className="text-slate-600 text-sm mb-4">
+                Connect your {document.plural.toLowerCase()} directly to your TMS or ERP.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {integrationsToShow.map((integration) => (
+                  <Link
+                    key={integration.slug}
+                    href={`/integration/${integration.slug}`}
+                    className="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200 transition"
+                  >
+                    {integration.label} ->
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 

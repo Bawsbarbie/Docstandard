@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import Link from "next/link"
 import { BenefitsGrid } from "@/components/pseo/BenefitsGrid"
 import { Hero } from "@/components/pseo/dynamic/hero"
 import { PainSection } from "@/components/pseo/PainSection"
@@ -55,6 +56,89 @@ const loadIntegrationDetails = async (): Promise<IntegrationEntry[]> => {
   } catch {
     return []
   }
+}
+
+// Helper: get related integrations by matching system families
+const getRelatedIntegrations = (
+  currentSystemA: string,
+  currentSystemB: string,
+  currentSlug: string
+): Array<{ slug: string; systemA: string; systemB: string; description: string }> => {
+  const integrationMap: Record<
+    string,
+    Array<{ slug: string; systemA: string; systemB: string; description: string }>
+  > = {
+    cargowise: [
+      { slug: "cargowise-to-netsuite-data-bridge", systemA: "CargoWise", systemB: "NetSuite", description: "Seamless freight data sync to your ERP." },
+      { slug: "cargowise-to-sap-s4hana-bridge", systemA: "CargoWise", systemB: "SAP S/4HANA", description: "Enterprise-grade logistics integration." },
+      { slug: "cargowise-to-quickbooks-bridge", systemA: "CargoWise", systemB: "QuickBooks", description: "SMB-friendly accounting sync." },
+    ],
+    magaya: [
+      { slug: "magaya-to-oracle-integration", systemA: "Magaya", systemB: "Oracle", description: "Connect freight operations to enterprise systems." },
+      { slug: "magaya-to-dynamics365-normalization", systemA: "Magaya", systemB: "Dynamics 365", description: "Microsoft ecosystem integration." },
+      { slug: "magaya-to-quickbooks-bridge", systemA: "Magaya", systemB: "QuickBooks", description: "Streamlined accounting for freight." },
+    ],
+    sap: [
+      { slug: "sap-tm-to-oracle-otm-bridge", systemA: "SAP TM", systemB: "Oracle OTM", description: "Enterprise TMS interoperability." },
+      { slug: "sap-s4hana-to-cargowise-bridge", systemA: "SAP S/4HANA", systemB: "CargoWise", description: "Connect SAP to freight operations." },
+      { slug: "clean-logistics-data-for-sap-s4hana", systemA: "Logistics Data", systemB: "SAP S/4HANA", description: "Clean data ingestion for SAP." },
+    ],
+    oracle: [
+      { slug: "oracle-to-sap-tm-integration", systemA: "Oracle", systemB: "SAP TM", description: "Cross-platform TMS connectivity." },
+      { slug: "oracle-to-magaya-bridge", systemA: "Oracle", systemB: "Magaya", description: "Enterprise to freight forwarder sync." },
+      { slug: "descartes-to-oracle-integration", systemA: "Descartes", systemB: "Oracle", description: "Global logistics visibility." },
+    ],
+    descartes: [
+      { slug: "descartes-to-mercurygate-normalization", systemA: "Descartes", systemB: "MercuryGate", description: "TMS platform interoperability." },
+      { slug: "descartes-to-netsuite-customs-bridge", systemA: "Descartes", systemB: "NetSuite", description: "Customs data to ERP workflow." },
+      { slug: "descartes-to-oracle-integration", systemA: "Descartes", systemB: "Oracle", description: "Global trade compliance integration." },
+    ],
+    mercurygate: [
+      { slug: "mercurygate-to-descartes-integration", systemA: "MercuryGate", systemB: "Descartes", description: "Enhanced visibility and compliance." },
+      { slug: "mercurygate-to-sap-tm-bridge", systemA: "MercuryGate", systemB: "SAP TM", description: "Multi-TMS enterprise setup." },
+      { slug: "in-house-team-vs-outsourced-processing", systemA: "Manual", systemB: "DocStandard", description: "Compare processing approaches." },
+    ],
+    motive: [
+      { slug: "motive-to-sap-ifta-normalization", systemA: "Motive", systemB: "SAP", description: "Fleet data to ERP normalization." },
+      { slug: "motive-to-microsoft-fleet-sync", systemA: "Motive", systemB: "Microsoft", description: "Fleet intelligence integration." },
+      { slug: "motive-to-netsuite-expense-bridge", systemA: "Motive", systemB: "NetSuite", description: "Vehicle expense automation." },
+    ],
+    flexport: [
+      { slug: "flexport-to-netsuite-bridge", systemA: "Flexport", systemB: "NetSuite", description: "Modern freight to ERP sync." },
+      { slug: "flexport-vs-freightos-comparison", systemA: "Flexport", systemB: "Freightos", description: "Platform comparison guide." },
+      { slug: "edi-vs-api-integration", systemA: "EDI", systemB: "API", description: "Integration method comparison." },
+    ],
+    netsuite: [
+      { slug: "cargowise-to-netsuite-data-bridge", systemA: "CargoWise", systemB: "NetSuite", description: "Connect operations and accounting workflows." },
+      { slug: "descartes-to-netsuite-customs-bridge", systemA: "Descartes", systemB: "NetSuite", description: "Customs + ERP process alignment." },
+      { slug: "motive-to-netsuite-expense-bridge", systemA: "Motive", systemB: "NetSuite", description: "Automated fleet expense posting." },
+    ],
+    quickbooks: [
+      { slug: "cargowise-to-quickbooks-bridge", systemA: "CargoWise", systemB: "QuickBooks", description: "Freight ops to accounting sync." },
+      { slug: "magaya-to-quickbooks-bridge", systemA: "Magaya", systemB: "QuickBooks", description: "Faster bookkeeping for forwarders." },
+      { slug: "manual-processing-vs-automated-extraction", systemA: "Manual Processing", systemB: "Automation", description: "Compare manual vs automated pipelines." },
+    ],
+  }
+
+  const toKey = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/\([^)]*\)/g, "")
+      .replace(/[^a-z0-9]/g, "")
+
+  const aKey = toKey(currentSystemA)
+  const bKey = toKey(currentSystemB)
+
+  const related = [
+    ...(integrationMap[aKey] || []),
+    ...(integrationMap[bKey] || []),
+  ]
+
+  const unique = related
+    .filter((item) => item.slug !== currentSlug)
+    .filter((item, idx, arr) => idx === arr.findIndex((candidate) => candidate.slug === item.slug))
+
+  return unique.slice(0, 3)
 }
 
 const getIntegrationBySlug = async (slug: string): Promise<IntegrationEntry | null> => {
@@ -344,6 +428,52 @@ export default async function IntegrationPage({ params }: PageProps) {
 
       <FAQSection faqs={defaultFaqs} />
       <TestimonialsSection testimonials={defaultTestimonials} kind="general" />
+
+      {/* RELATED INTEGRATIONS - Internal Linking */}
+      <section className="py-16 px-6 bg-slate-50 border-t border-slate-200">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Related Integrations</h2>
+          <p className="text-slate-600 mb-8">
+            Explore other system connections for your logistics stack.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {getRelatedIntegrations(systemA, systemB, params["integration-slug"]).map((integration) => (
+              <Link
+                key={integration.slug}
+                href={`/integration/${integration.slug}`}
+                className="p-6 bg-white rounded-xl border border-slate-200 hover:border-[#2563eb] hover:shadow-md transition"
+              >
+                <h3 className="font-semibold text-slate-900">
+                  {integration.systemA} to {integration.systemB}
+                </h3>
+                <p className="text-sm text-slate-600 mt-2 line-clamp-2">
+                  {integration.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-8 p-6 bg-white rounded-xl border border-slate-200">
+            <h3 className="font-semibold text-slate-900 mb-3">Browse by Service</h3>
+            <div className="flex flex-wrap gap-3">
+              {[
+                { slug: "shipping", label: "Shipping" },
+                { slug: "customs", label: "Customs" },
+                { slug: "logistics", label: "Logistics" },
+              ].map((vertical) => (
+                <Link
+                  key={vertical.slug}
+                  href={`/${vertical.slug}`}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200 transition"
+                >
+                  {vertical.label} Services →
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
     </main>
   )
