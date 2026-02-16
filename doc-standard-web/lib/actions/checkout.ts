@@ -115,7 +115,10 @@ export async function createCheckoutSession(
     return { data: { url: session.url }, error: null }
   } catch (error) {
     console.error("Exception creating checkout session:", error)
-    return { data: null, error: "Failed to create checkout session" }
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "Failed to create checkout session",
+    }
   }
 }
 
