@@ -94,6 +94,7 @@ export default function DashboardPage() {
   const [isQuotaModalOpen, setIsQuotaModalOpen] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const uploadFormRef = useRef<HTMLDivElement | null>(null)
 
   const [selectedTier, setSelectedTier] = useState<"standard" | "expedited" | "compliance">(
     "standard"
@@ -225,21 +226,11 @@ export default function DashboardPage() {
 
   const recentBatches = batches.slice(0, 3)
 
-  const activeBatch = activeBatches[0]
-
-  const activeOrderPagesUsed =
-    activeBatch?.uploads?.reduce(
-      (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 0),
-      0
-    ) ?? 0
-
-  const remainingPages = Math.max(LIMIT_PAGES - activeOrderPagesUsed, 0)
-  const remainingFiles = Math.max(LIMIT_FILES - (activeBatch?.uploads?.length ?? 0), 0)
-  const hasActiveBatch = Boolean(activeBatch)
-  const availableCredits = hasActiveBatch ? remainingPages : null
-  const usagePercent = hasActiveBatch
-    ? Math.min((activeOrderPagesUsed / LIMIT_PAGES) * 100, 100)
-    : 0
+  const remainingPages = Math.max(LIMIT_PAGES - pagesThisMonth, 0)
+  const remainingFiles = Math.max(LIMIT_FILES - filesThisMonth, 0)
+  const availableCredits = remainingPages
+  const usagePercent = Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100)
+  const hasRemainingCredits = remainingPages > 0 && remainingFiles > 0
 
   const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFiles = Array.from(event.target.files ?? [])
@@ -249,14 +240,24 @@ export default function DashboardPage() {
     setShowOverQuota(overFiles || overPages)
   }
 
-  const handleSelectPlan = (plan: "economy" | "standard" | "rush") => {
+  const openUploadForm = () => {
     setShowUploadForm(true)
+    setActivePage("upload")
+  }
+
+  const handleSelectPlan = (plan: "economy" | "standard" | "rush") => {
+    openUploadForm()
     if (plan === "rush") {
       setSelectedTier("expedited")
     } else {
       setSelectedTier("standard")
     }
   }
+
+  useEffect(() => {
+    if (activePage !== "upload" || !showUploadForm) return
+    uploadFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }, [activePage, showUploadForm])
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -766,16 +767,14 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-baseline gap-2">
                       <span className="text-3xl font-semibold text-slate-900">
-                        {availableCredits !== null ? availableCredits.toLocaleString() : "—"}
+                        {availableCredits.toLocaleString()}
                       </span>
                       <span className="text-sm text-slate-500">pages</span>
                     </div>
                     <div className="mt-4">
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-slate-500">Usage</span>
-                        <span className="text-slate-700 font-medium">
-                          {hasActiveBatch ? `${Math.round(usagePercent)}%` : "—"}
-                        </span>
+                        <span className="text-slate-700 font-medium">{`${Math.round(usagePercent)}%`}</span>
                       </div>
                       <div className="w-full bg-slate-100 rounded-full h-2">
                         <div
@@ -966,9 +965,23 @@ export default function DashboardPage() {
 
             {activePage === "upload" && (
               <div id="upload-page" className="page-content page-transition max-w-7xl mx-auto">
-                <div className="text-center mb-10">
-                  <h2 className="text-3xl font-bold text-slate-900">Select Processing Tier</h2>
-                  <p className="text-slate-500 mt-2">Choose the turnaround time that fits your needs.</p>
+                <div className="mb-10 flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-3xl font-bold text-slate-900">Select Processing Tier</h2>
+                    <p className="text-slate-500 mt-2">Choose the turnaround time that fits your needs.</p>
+                  </div>
+                  {hasRemainingCredits && (
+                    <button
+                      type="button"
+                      onClick={openUploadForm}
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)] hover:bg-[#1d4ed8]"
+                    >
+                      Upload Next Batch
+                      <span className="text-[11px] font-medium text-[#dbeafe]">
+                        ({remainingPages.toLocaleString()} pages left)
+                      </span>
+                    </button>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -1145,10 +1158,27 @@ export default function DashboardPage() {
                 </div>
 
                 {showUploadForm && (
-                  <div id="upload-form" className="panel p-8 max-w-3xl mx-auto animate-fade-in">
-                    <h3 className="text-xl font-bold text-slate-900 mb-6 border-b border-slate-100 pb-4">
-                      Batch Details
-                    </h3>
+                  <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+                    <div
+                      id="upload-form"
+                      ref={uploadFormRef}
+                      className="panel w-full max-w-3xl max-h-[90vh] overflow-y-auto p-8 animate-fade-in"
+                    >
+                      <div className="mb-6 flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+                        <div>
+                          <h3 className="text-xl font-bold text-slate-900">Batch Details</h3>
+                          <p className="text-sm text-slate-500 mt-1">
+                            Tier selected: {titleCase(selectedTier)}.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowUploadForm(false)}
+                          className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                        >
+                          Close
+                        </button>
+                      </div>
                     <form className="space-y-6" onSubmit={(event) => event.preventDefault()}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -1219,7 +1249,8 @@ export default function DashboardPage() {
                               <div className="ml-3">
                                 <h3 className="text-sm font-medium text-red-800">Volume Limit Exceeded</h3>
                                 <p className="text-sm text-red-700 mt-1">
-                                  Batch limit is {remainingFiles.toLocaleString()} files. {" "}
+                                  Batch limit is {remainingPages.toLocaleString()} pages OR{" "}
+                                  {remainingFiles.toLocaleString()} files.{" "}
                                   <button
                                     type="button"
                                     onClick={() => setIsQuotaModalOpen(true)}
@@ -1305,14 +1336,32 @@ export default function DashboardPage() {
                       </div>
                     </form>
                   </div>
+                  </div>
                 )}
               </div>
             )}
 
             {activePage === "batches" && (
               <div id="batches-page" className="page-content page-transition max-w-7xl mx-auto">
-                <div className="mb-8">
+                <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
                   <h2 className="text-2xl font-bold text-slate-900">Batch History</h2>
+                  {hasRemainingCredits ? (
+                    <button
+                      type="button"
+                      onClick={openUploadForm}
+                      className="inline-flex items-center gap-2 rounded-lg bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
+                    >
+                      Upload Next Batch
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setActivePage("upload")}
+                      className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      Purchase More Credits
+                    </button>
+                  )}
                 </div>
 
                 <div className="panel overflow-hidden mb-8">
@@ -1442,7 +1491,7 @@ export default function DashboardPage() {
                   <div className="panel-dark text-white rounded-xl p-6 shadow-md">
                     <div className="text-slate-300 text-sm font-medium mb-1">Current Balance</div>
                     <div className="text-4xl font-bold mb-2">
-                      {availableCredits !== null ? availableCredits.toLocaleString() : "—"}
+                      {availableCredits.toLocaleString()}
                     </div>
                     <div className="text-slate-400 text-sm">pages remaining</div>
                   </div>
