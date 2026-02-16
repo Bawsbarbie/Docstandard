@@ -64,6 +64,7 @@ export async function createCheckoutSession(
     const appUrl =
       process.env.NEXT_PUBLIC_URL ||
       process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXT_PUBLIC_SITE_URL ||
       "http://localhost:3000"
 
     // Create Stripe Checkout Session
