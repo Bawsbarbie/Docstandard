@@ -128,6 +128,7 @@ export default function DashboardPage() {
   const [isEstimatingPages, setIsEstimatingPages] = useState(false)
   const [isDraggingFiles, setIsDraggingFiles] = useState(false)
   const [isSubmittingBatch, setIsSubmittingBatch] = useState(false)
+  const [isRedirectingToStripe, setIsRedirectingToStripe] = useState(false)
   const [batchSubmitError, setBatchSubmitError] = useState<string | null>(null)
   const [batchForm, setBatchForm] = useState({
     name: "",
@@ -442,6 +443,7 @@ export default function DashboardPage() {
     }
 
     setIsSubmittingBatch(true)
+    setIsRedirectingToStripe(false)
 
     try {
       const notesPayload: BatchNotesPayload = {
@@ -502,6 +504,7 @@ export default function DashboardPage() {
         throw new Error(completeResult.error || "Failed to finalize upload.")
       }
 
+      setIsRedirectingToStripe(true)
       const { url, error } = await createCheckoutSession(batch.id)
       if (url) {
         window.location.href = url
@@ -509,6 +512,7 @@ export default function DashboardPage() {
       }
       throw new Error(error || "Failed to open checkout.")
     } catch (error) {
+      setIsRedirectingToStripe(false)
       setBatchSubmitError(error instanceof Error ? error.message : "Failed to submit batch.")
       batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       setIsSubmittingBatch(false)
@@ -1646,7 +1650,11 @@ export default function DashboardPage() {
                           disabled={isSubmittingBatch}
                           className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#2563eb] hover:bg-[#1d4ed8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b82f6] transition-colors"
                         >
-                          {isSubmittingBatch ? "Submitting..." : "Submit Processing Batch"}
+                          {isSubmittingBatch
+                            ? isRedirectingToStripe
+                              ? "Redirecting to secure checkout..."
+                              : "Submitting..."
+                            : "Submit Processing Batch"}
                         </button>
                       </div>
                     </form>
@@ -2112,6 +2120,18 @@ export default function DashboardPage() {
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {isSubmittingBatch && isRedirectingToStripe && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/45 backdrop-blur-sm">
+          <div className="panel w-[min(460px,92vw)] p-6 text-center">
+            <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#2563eb]" />
+            <h3 className="text-lg font-semibold text-slate-900">Redirecting to Stripe Checkout</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Opening your secure payment page. This can take a few seconds.
+            </p>
           </div>
         </div>
       )}

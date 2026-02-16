@@ -102,6 +102,13 @@ export async function createCheckoutSession(
       mode: "payment",
       customer_email: user.email,
       client_reference_id: batchId,
+      branding_settings: {
+        background_color: "#f6f3ed",
+        button_color: "#2563eb",
+        border_style: "rounded",
+        display_name: "DocStandard",
+        font_family: "inter",
+      },
       line_items: [
         {
           price_data: {
