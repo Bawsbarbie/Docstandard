@@ -123,6 +123,7 @@ export default function DashboardPage() {
   )
   const [useExistingCreditsForUpload, setUseExistingCreditsForUpload] = useState(false)
   const [files, setFiles] = useState<File[]>([])
+  const [pageEstimatesByFile, setPageEstimatesByFile] = useState<Record<string, number>>({})
   const [selectedPageEstimate, setSelectedPageEstimate] = useState(0)
   const [isEstimatingPages, setIsEstimatingPages] = useState(false)
   const [isDraggingFiles, setIsDraggingFiles] = useState(false)
@@ -291,6 +292,8 @@ export default function DashboardPage() {
     }
   }
 
+  const getFileEstimateKey = (file: File) => `${file.name}:${file.size}:${file.lastModified}`
+
   const applySelectedFiles = async (nextFiles: File[]) => {
     const currentRunId = ++pageEstimateRunRef.current
     setFiles(nextFiles)
@@ -301,6 +304,11 @@ export default function DashboardPage() {
     if (currentRunId !== pageEstimateRunRef.current) return
 
     const totalPages = pageCounts.reduce((sum, pageCount) => sum + pageCount, 0)
+    const estimateMap: Record<string, number> = {}
+    nextFiles.forEach((file, index) => {
+      estimateMap[getFileEstimateKey(file)] = pageCounts[index] ?? 1
+    })
+    setPageEstimatesByFile(estimateMap)
     setSelectedPageEstimate(totalPages)
 
     const overFiles = nextFiles.length > uploadLimitFiles
@@ -336,6 +344,7 @@ export default function DashboardPage() {
     setUseExistingCreditsForUpload(useExistingCredits)
     setShowUploadForm(true)
     setFiles([])
+    setPageEstimatesByFile({})
     setSelectedPageEstimate(0)
     setIsEstimatingPages(false)
     setIsSubmittingBatch(false)
@@ -453,7 +462,7 @@ export default function DashboardPage() {
         throw new Error(batchError || "Failed to create batch.")
       }
 
-      for (const file of files) {
+      await Promise.all(files.map(async (file) => {
         const { data: urlData, error: urlError } = await getSignedUploadUrl(batch.id, file.name, file.type)
         if (urlError || !urlData) {
           throw new Error(urlError || "Failed to get upload URL.")
@@ -472,7 +481,7 @@ export default function DashboardPage() {
           throw new Error(`Upload failed for ${file.name}.`)
         }
 
-        const pageCount = await estimatePagesForFile(file)
+        const pageCount = pageEstimatesByFile[getFileEstimateKey(file)] ?? 1
         const { error: recordError } = await createUpload({
           batch_id: batch.id,
           original_name: file.name,
@@ -486,7 +495,7 @@ export default function DashboardPage() {
         if (recordError) {
           throw new Error(recordError)
         }
-      }
+      }))
 
       const completeResult = await completeBatchUpload(batch.id)
       if (!completeResult.success) {
