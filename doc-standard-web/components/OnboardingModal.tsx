@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
+import { BarChart3, BadgeCheck, Clock3, ShieldCheck, Upload, UserCheck } from "lucide-react"
 
 interface OnboardingModalProps {
   onComplete: (data: {
@@ -285,39 +286,48 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
                 <div className="grid gap-4 md:grid-cols-3">
                   {[
                     {
-                      title: "📤 Upload",
+                      title: "Upload",
                       body: "Send us your messy files (PDFs, scans, photos)",
+                      Icon: Upload,
                     },
                     {
-                      title: "👤 Expert Processing",
+                      title: "Expert Processing",
                       body: "Our team extracts, cleans, and structures every field by hand",
+                      Icon: UserCheck,
                     },
                     {
-                      title: "📊 Receive Clean Data",
+                      title: "Receive Clean Data",
                       body: "Get perfectly formatted files ready for your systems",
+                      Icon: BarChart3,
                     },
-                  ].map((card) => (
+                  ].map(({ title, body, Icon }) => (
                     <div
-                      key={card.title}
+                      key={title}
                       className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
                     >
-                      <h3 className="text-base font-semibold">{card.title}</h3>
-                      <p className="text-sm text-slate-600 mt-2">{card.body}</p>
+                      <div className="flex items-center gap-2.5">
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-blue-100 bg-blue-50">
+                          <Icon className="h-4 w-4 text-blue-600" aria-hidden="true" />
+                        </span>
+                        <h3 className="text-base font-semibold">{title}</h3>
+                      </div>
+                      <p className="text-sm text-slate-600 mt-3">{body}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="grid gap-3 text-sm text-slate-700">
                   {[
-                    "⏱️ 24-48 hour turnaround (Standard tier)",
-                    "🧑‍💼 Human-verified accuracy",
-                    "🔒 Bank-level security",
-                  ].map((badge) => (
+                    { label: "24-48 hour turnaround (Standard tier)", Icon: Clock3 },
+                    { label: "Human-verified accuracy", Icon: BadgeCheck },
+                    { label: "Bank-level security", Icon: ShieldCheck },
+                  ].map(({ label, Icon }) => (
                     <div
-                      key={badge}
-                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+                      key={label}
+                      className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
                     >
-                      {badge}
+                      <Icon className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                      <span>{label}</span>
                     </div>
                   ))}
                 </div>
