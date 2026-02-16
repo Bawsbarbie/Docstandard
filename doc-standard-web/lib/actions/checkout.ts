@@ -8,6 +8,40 @@
 import { createClient } from "@/lib/supabase/server"
 import { getStripe, STRIPE_CONFIG } from "@/lib/stripe"
 import type { Batch } from "@/lib/types/database"
+import { headers } from "next/headers"
+
+function normalizeBaseUrl(value: string): string {
+  return value.trim().replace(/\/+$/, "")
+}
+
+function isLocalhostUrl(value: string): boolean {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(value.trim())
+}
+
+async function resolveAppUrl(): Promise<string> {
+  const h = await headers()
+  const forwardedHost = h.get("x-forwarded-host")
+  const host = forwardedHost || h.get("host")
+  const forwardedProto = h.get("x-forwarded-proto")
+  const proto = forwardedProto || (host?.includes("localhost") ? "http" : "https")
+
+  if (host) {
+    return normalizeBaseUrl(`${proto}://${host}`)
+  }
+
+  const envCandidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.NEXT_PUBLIC_APP_URL,
+    process.env.NEXT_PUBLIC_URL,
+  ]
+    .filter((value): value is string => Boolean(value?.trim()))
+    .map((value) => normalizeBaseUrl(value))
+
+  const nonLocalCandidate = envCandidates.find((value) => !isLocalhostUrl(value))
+  if (nonLocalCandidate) return nonLocalCandidate
+
+  return envCandidates[0] || "http://localhost:3000"
+}
 
 /**
  * Create a Stripe Checkout Session for a batch
@@ -61,11 +95,7 @@ export async function createCheckoutSession(
       .eq("batch_id", batchId)
 
     const fileCount = files?.length || 0
-    const appUrl =
-      process.env.NEXT_PUBLIC_URL ||
-      process.env.NEXT_PUBLIC_APP_URL ||
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      "http://localhost:3000"
+    const appUrl = await resolveAppUrl()
 
     // Create Stripe Checkout Session
     const session = await getStripe().checkout.sessions.create({
