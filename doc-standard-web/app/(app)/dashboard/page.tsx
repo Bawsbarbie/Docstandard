@@ -100,7 +100,9 @@ export default function DashboardPage() {
   const [selectedTier, setSelectedTier] = useState<"standard" | "expedited" | "compliance">(
     "standard"
   )
+  const [useExistingCreditsForUpload, setUseExistingCreditsForUpload] = useState(false)
   const [files, setFiles] = useState<File[]>([])
+  const [isDraggingFiles, setIsDraggingFiles] = useState(false)
   const [showOverQuota, setShowOverQuota] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [profileForm, setProfileForm] = useState({ fullName: "", email: "", company: "" })
@@ -240,22 +242,50 @@ export default function DashboardPage() {
   const availableCredits = remainingPages
   const usagePercent = hasPaidBatch ? Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100) : 0
   const hasRemainingCredits = remainingPages > 0 && remainingFiles > 0
+  const uploadLimitPages = useExistingCreditsForUpload ? remainingPages : LIMIT_PAGES
+  const uploadLimitFiles = useExistingCreditsForUpload ? remainingFiles : LIMIT_FILES
 
-  const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const nextFiles = Array.from(event.target.files ?? [])
+  const applySelectedFiles = (nextFiles: File[]) => {
     setFiles(nextFiles)
-    const overFiles = nextFiles.length > remainingFiles
-    const overPages = nextFiles.length > remainingPages
+    const overFiles = nextFiles.length > uploadLimitFiles
+    const overPages = nextFiles.length > uploadLimitPages
     setShowOverQuota(overFiles || overPages)
   }
 
-  const openUploadForm = () => {
+  const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextFiles = Array.from(event.target.files ?? [])
+    applySelectedFiles(nextFiles)
+  }
+
+  const handleDropFiles = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    setIsDraggingFiles(false)
+    const nextFiles = Array.from(event.dataTransfer.files ?? [])
+    applySelectedFiles(nextFiles)
+  }
+
+  const handleDragOverFiles = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+    setIsDraggingFiles(true)
+  }
+
+  const handleDragLeaveFiles = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+      setIsDraggingFiles(false)
+    }
+  }
+
+  const openUploadForm = (useExistingCredits: boolean) => {
+    setUseExistingCreditsForUpload(useExistingCredits)
     setShowUploadForm(true)
+    setFiles([])
+    setShowOverQuota(false)
+    setIsDraggingFiles(false)
     setActivePage("upload")
   }
 
   const handleSelectPlan = (plan: "economy" | "standard" | "rush") => {
-    openUploadForm()
+    openUploadForm(false)
     if (plan === "rush") {
       setSelectedTier("expedited")
     } else {
@@ -357,6 +387,8 @@ export default function DashboardPage() {
 
   const uploadAreaState = showOverQuota
     ? "border-red-300 bg-red-50"
+    : isDraggingFiles
+      ? "border-[#3b82f6] bg-[#dbeafe]"
     : files.length > 0
       ? "border-[#3b82f6] bg-[#eff6ff]"
       : "border-slate-300 bg-white/70"
@@ -982,7 +1014,7 @@ export default function DashboardPage() {
                   {hasRemainingCredits && (
                     <button
                       type="button"
-                      onClick={openUploadForm}
+                      onClick={() => openUploadForm(true)}
                       className="inline-flex items-center gap-2 rounded-xl bg-[#2563eb] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(37,99,235,0.25)] hover:bg-[#1d4ed8]"
                     >
                       Upload Next Batch
@@ -1291,8 +1323,8 @@ export default function DashboardPage() {
                               <div className="ml-3">
                                 <h3 className="text-sm font-medium text-red-800">Volume Limit Exceeded</h3>
                                 <p className="text-sm text-red-700 mt-1">
-                                  Batch limit is {remainingPages.toLocaleString()} pages OR{" "}
-                                  {remainingFiles.toLocaleString()} files.{" "}
+                                  Batch limit is {uploadLimitPages.toLocaleString()} pages OR{" "}
+                                  {uploadLimitFiles.toLocaleString()} files.{" "}
                                   <button
                                     type="button"
                                     onClick={() => setIsQuotaModalOpen(true)}
@@ -1317,8 +1349,8 @@ export default function DashboardPage() {
                             ></path>
                           </svg>
                           <div className="text-sm text-blue-800">
-                            <strong>Limit:</strong> {remainingPages.toLocaleString()} pages OR{" "}
-                            {remainingFiles.toLocaleString()} files per batch. Need more?{" "}
+                            <strong>Limit:</strong> {uploadLimitPages.toLocaleString()} pages OR{" "}
+                            {uploadLimitFiles.toLocaleString()} files per batch. Need more?{" "}
                             <button
                               type="button"
                               onClick={() => setIsQuotaModalOpen(true)}
@@ -1333,6 +1365,9 @@ export default function DashboardPage() {
                         <div
                           className={`upload-area group mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-xl hover:border-[#3b82f6] hover:bg-[#eff6ff] transition-all cursor-pointer ${uploadAreaState}`}
                           onClick={() => fileInputRef.current?.click()}
+                          onDrop={handleDropFiles}
+                          onDragOver={handleDragOverFiles}
+                          onDragLeave={handleDragLeaveFiles}
                           role="button"
                           tabIndex={0}
                         >
@@ -1390,7 +1425,7 @@ export default function DashboardPage() {
                   {hasRemainingCredits ? (
                     <button
                       type="button"
-                      onClick={openUploadForm}
+                      onClick={() => openUploadForm(true)}
                       className="inline-flex items-center gap-2 rounded-lg bg-[#2563eb] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1d4ed8]"
                     >
                       Upload Next Batch
