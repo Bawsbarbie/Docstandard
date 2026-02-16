@@ -10,7 +10,6 @@ interface OnboardingModalProps {
     phone?: string
     tier: "standard" | "expedited" | "compliance"
   }) => void
-  onSkip: () => void
   isOpen: boolean
   onClose: () => void
 }
@@ -24,7 +23,7 @@ const DOC_TYPES = ["Invoices", "Contracts", "Receipts", "Forms", "Other"] as con
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: OnboardingModalProps) {
+export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModalProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [isFading, setIsFading] = useState(false)
   const [hasCompleted, setHasCompleted] = useState(false)
@@ -180,18 +179,18 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
   if (!isOpen || hasCompleted) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-8">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-white/10 bg-black text-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 py-8">
+      <div className="relative w-full max-w-3xl rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 rounded-full border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.2em] text-white/70 transition hover:border-blue-500 hover:text-white"
+          className="absolute right-5 top-5 rounded-full border border-slate-300 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-500 transition hover:border-blue-500 hover:text-slate-900"
           aria-label="Close modal"
         >
           Close
         </button>
 
         <div className="p-6 sm:p-10">
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-white/40">
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-slate-400">
             <span>Onboarding</span>
             <span>Step {step} of 3</span>
           </div>
@@ -205,7 +204,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
               <div className="space-y-6">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold">Tell us about you</h2>
-                  <p className="text-sm text-white/60 mt-2">
+                  <p className="text-sm text-slate-500 mt-2">
                     We use this to personalize your workflow and routing.
                   </p>
                 </div>
@@ -216,11 +215,11 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     <input
                       value={profile.name}
                       onChange={(event) => updateProfile("name", event.target.value)}
-                      className="rounded-xl border border-white/15 bg-black px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-blue-500 focus:outline-none"
                       placeholder="Jane Smith"
                     />
                     {profileErrors.name && (
-                      <span className="text-xs text-red-400">{profileErrors.name}</span>
+                      <span className="text-xs text-red-600">{profileErrors.name}</span>
                     )}
                   </label>
 
@@ -229,12 +228,12 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     <input
                       value={profile.email}
                       onChange={(event) => updateProfile("email", event.target.value)}
-                      className="rounded-xl border border-white/15 bg-black px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-blue-500 focus:outline-none"
                       placeholder="jane@company.com"
                       type="email"
                     />
                     {profileErrors.email && (
-                      <span className="text-xs text-red-400">{profileErrors.email}</span>
+                      <span className="text-xs text-red-600">{profileErrors.email}</span>
                     )}
                   </label>
 
@@ -243,11 +242,11 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     <input
                       value={profile.company}
                       onChange={(event) => updateProfile("company", event.target.value)}
-                      className="rounded-xl border border-white/15 bg-black px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-blue-500 focus:outline-none"
                       placeholder="Company, Inc."
                     />
                     {profileErrors.company && (
-                      <span className="text-xs text-red-400">{profileErrors.company}</span>
+                      <span className="text-xs text-red-600">{profileErrors.company}</span>
                     )}
                   </label>
 
@@ -256,29 +255,19 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     <input
                       value={profile.phone}
                       onChange={(event) => updateProfile("phone", event.target.value)}
-                      className="rounded-xl border border-white/15 bg-black px-4 py-3 text-white focus:border-blue-500 focus:outline-none"
+                      className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-blue-500 focus:outline-none"
                       placeholder="+1 (555) 555-5555"
                     />
                   </label>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex">
                   <button
                     onClick={handleContinue}
                     className="inline-flex items-center justify-center rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={!profile.name.trim() || !profile.email.trim() || !profile.company.trim()}
                   >
                     Continue →
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onSkip()
-                      onClose()
-                    }}
-                    className="text-xs uppercase tracking-[0.35em] text-white/50 transition hover:text-white"
-                  >
-                    Already have an account? Sign In
                   </button>
                 </div>
               </div>
@@ -288,7 +277,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
               <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold">How it works</h2>
-                  <p className="text-sm text-white/60 mt-2">
+                  <p className="text-sm text-slate-500 mt-2">
                     Every batch is handled by human experts, start to finish.
                   </p>
                 </div>
@@ -310,15 +299,15 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                   ].map((card) => (
                     <div
                       key={card.title}
-                      className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                      className="rounded-2xl border border-slate-200 bg-slate-50 p-5"
                     >
                       <h3 className="text-base font-semibold">{card.title}</h3>
-                      <p className="text-sm text-white/60 mt-2">{card.body}</p>
+                      <p className="text-sm text-slate-600 mt-2">{card.body}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="grid gap-3 text-sm text-white/70">
+                <div className="grid gap-3 text-sm text-slate-700">
                   {[
                     "⏱️ 24-48 hour turnaround (Standard tier)",
                     "🧑‍💼 Human-verified accuracy",
@@ -326,7 +315,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                   ].map((badge) => (
                     <div
                       key={badge}
-                      className="rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
                     >
                       {badge}
                     </div>
@@ -337,7 +326,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                   <button
                     type="button"
                     onClick={() => transitionTo(1)}
-                    className="text-xs uppercase tracking-[0.35em] text-white/50 transition hover:text-white"
+                    className="text-xs uppercase tracking-[0.35em] text-slate-500 transition hover:text-slate-900"
                   >
                     Back
                   </button>
@@ -355,7 +344,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
               <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold">Upload and select a tier</h2>
-                  <p className="text-sm text-white/60 mt-2">
+                  <p className="text-sm text-slate-500 mt-2">
                     We will confirm scope and move your batch into processing.
                   </p>
                 </div>
@@ -364,11 +353,11 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                   <div
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
-                    className="cursor-pointer rounded-2xl border border-dashed border-white/20 bg-white/5 p-6 text-center"
+                    className="cursor-pointer rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center"
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <p className="text-sm font-semibold">Drag & drop files here</p>
-                    <p className="text-xs text-white/50 mt-1">or click to browse</p>
+                    <p className="text-xs text-slate-500 mt-1">or click to browse</p>
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -378,11 +367,11 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     />
                   </div>
 
-                  <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
                     {fileSummary.count > 0 ? (
                       <>
                         <p>{fileSummary.count} files selected</p>
-                        <p className="text-xs text-white/50">
+                        <p className="text-xs text-slate-500">
                           Total pages: {fileSummary.totalPages}
                         </p>
                       </>
@@ -394,12 +383,12 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
 
                 <div className="space-y-3">
                   <h3 className="text-sm font-semibold">Document Type</h3>
-                  <p className="text-xs text-white/50">Select all that apply</p>
+                  <p className="text-xs text-slate-500">Select all that apply</p>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {DOC_TYPES.map((label) => (
                       <label
                         key={label}
-                        className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm"
+                        className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
                       >
                         <input
                           type="checkbox"
@@ -437,7 +426,7 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                     ].map((option) => (
                       <label
                         key={option.value}
-                        className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm"
+                        className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
                       >
                         <input
                           type="radio"
@@ -453,16 +442,16 @@ export function OnboardingModal({ onComplete, onSkip, isOpen, onClose }: Onboard
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm">
-                  <span className="text-white/60">Your documents will be ready by: </span>
-                  <span className="text-white">{deliveryEstimate}</span>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+                  <span className="text-slate-500">Your documents will be ready by: </span>
+                  <span className="text-slate-900">{deliveryEstimate}</span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <button
                     type="button"
                     onClick={() => transitionTo(2)}
-                    className="text-xs uppercase tracking-[0.35em] text-white/50 transition hover:text-white"
+                    className="text-xs uppercase tracking-[0.35em] text-slate-500 transition hover:text-slate-900"
                   >
                     Back
                   </button>

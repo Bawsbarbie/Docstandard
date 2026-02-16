@@ -11,6 +11,7 @@
     "optimize:images": "node scripts/optimize-images.mjs",
     "start": "node .next/standalone/server.js",
     "lint": "next lint",
+    "test:onboarding": "node scripts/assert-onboarding-single-ui.js",
     "backfill:pages": "tsx scripts/backfill-page-counts.ts",
     "migrate:bucket": "tsx scripts/migrate-bucket-order-to-batch.ts",
     "delete:old-bucket": "tsx scripts/delete-order-files-bucket.ts"

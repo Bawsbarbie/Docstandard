@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { OnboardingModal } from "@/components/OnboardingModal"
 
@@ -10,7 +9,6 @@ const COMPLETE_KEY = "onboarding_complete"
 export function OnboardingGate() {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     let isMounted = true
@@ -73,10 +71,6 @@ export function OnboardingGate() {
     <OnboardingModal
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      onSkip={() => {
-        setIsOpen(false)
-        router.push("/login")
-      }}
       onComplete={async (data) => {
         const supabase = createClient()
         const { data: userData } = await supabase.auth.getUser()
