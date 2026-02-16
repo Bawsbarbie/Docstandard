@@ -393,6 +393,11 @@ export default function DashboardPage() {
       ? "border-[#3b82f6] bg-[#eff6ff]"
       : "border-slate-300 bg-white/70"
 
+  const selectedFileCount = files.length
+  const estimatedSelectedPages = files.length
+  const remainingAfterSelectionPages = Math.max(uploadLimitPages - estimatedSelectedPages, 0)
+  const remainingAfterSelectionFiles = Math.max(uploadLimitFiles - selectedFileCount, 0)
+
   const uploadPrompt = files.length > 0
     ? showOverQuota
       ? `${files.length} files selected (Limit Exceeded)`
@@ -1359,6 +1364,15 @@ export default function DashboardPage() {
                               Enterprise options
                             </button>
                             .
+                            <div className="mt-2 text-xs text-blue-700 space-y-1">
+                              <p>
+                                Selected now: {selectedFileCount.toLocaleString()} files (~{estimatedSelectedPages.toLocaleString()} pages).
+                              </p>
+                              <p>
+                                Remaining after this upload: {remainingAfterSelectionPages.toLocaleString()} pages and{" "}
+                                {remainingAfterSelectionFiles.toLocaleString()} files.
+                              </p>
+                            </div>
                           </div>
                         </div>
 
