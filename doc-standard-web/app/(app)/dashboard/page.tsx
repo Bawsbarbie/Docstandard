@@ -994,9 +994,9 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                  <div className="panel p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="panel p-8 opacity-60 blur-[1px] pointer-events-none select-none">
                     <h3 className="text-xl font-bold text-slate-900">Economy</h3>
-                    <p className="text-slate-500 text-sm mb-6">— business days</p>
+                    <p className="text-slate-500 text-sm mb-6">Coming soon</p>
                     <div className="flex items-baseline mb-6">
                       <span className="text-4xl font-extrabold text-slate-900">$—</span>
                       <span className="text-slate-500 ml-2">/batch</span>
@@ -1038,10 +1038,10 @@ export default function DashboardPage() {
                     </ul>
                     <button
                       type="button"
-                      onClick={() => handleSelectPlan("economy")}
+                      disabled
                       className="w-full py-3 px-4 bg-white border-2 border-slate-200 text-slate-700 font-semibold rounded-xl hover:border-slate-400 hover:text-slate-900 transition-colors"
                     >
-                      Select Plan
+                      Unavailable
                     </button>
                   </div>
 
@@ -1050,9 +1050,9 @@ export default function DashboardPage() {
                       Most Popular
                     </div>
                     <h3 className="text-xl font-bold text-slate-900">Standard</h3>
-                    <p className="text-slate-500 text-sm mb-6">— hours turnaround</p>
+                    <p className="text-slate-500 text-sm mb-6">72 hours turnaround</p>
                     <div className="flex items-baseline mb-6">
-                      <span className="text-4xl font-extrabold text-slate-900">$—</span>
+                      <span className="text-4xl font-extrabold text-slate-900">$799</span>
                       <span className="text-slate-500 ml-2">/batch</span>
                     </div>
                     <ul className="space-y-4 mb-8 text-sm text-slate-600">
@@ -1065,7 +1065,7 @@ export default function DashboardPage() {
                             d="M5 13l4 4L19 7"
                           ></path>
                         </svg>
-                        — pages OR — files
+                        2,000 pages OR 1k files
                       </li>
                       <li className="flex items-center">
                         <svg className="w-5 h-5 text-[#2563eb] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1076,7 +1076,7 @@ export default function DashboardPage() {
                             d="M5 13l4 4L19 7"
                           ></path>
                         </svg>
-                        Enhanced quality check
+                        Premium quality check
                       </li>
                       <li className="flex items-center">
                         <svg className="w-5 h-5 text-[#2563eb] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1087,7 +1087,18 @@ export default function DashboardPage() {
                             d="M5 13l4 4L19 7"
                           ></path>
                         </svg>
-                        Multiple formats (XML/JSON)
+                        Multiple formats (XML/JSON/CSV/Excel)
+                      </li>
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-[#2563eb] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                        24/7 Support
                       </li>
                     </ul>
                     <button
@@ -1101,12 +1112,23 @@ export default function DashboardPage() {
 
                   <div className="panel p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                     <h3 className="text-xl font-bold text-slate-900">Rush</h3>
-                    <p className="text-slate-500 text-sm mb-6">— hours</p>
+                    <p className="text-slate-500 text-sm mb-6">12-24 hours</p>
                     <div className="flex items-baseline mb-6">
-                      <span className="text-4xl font-extrabold text-slate-900">$—</span>
+                      <span className="text-4xl font-extrabold text-slate-900">$1,099</span>
                       <span className="text-slate-500 ml-2">/batch</span>
                     </div>
                     <ul className="space-y-4 mb-8 text-sm text-slate-600">
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                        2,000 pages OR 1k files
+                      </li>
                       <li className="flex items-center">
                         <svg className="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path
@@ -1138,7 +1160,18 @@ export default function DashboardPage() {
                             d="M5 13l4 4L19 7"
                           ></path>
                         </svg>
-                        Phone Support
+                        Multiple formats (XML/JSON/CSV/Excel)
+                      </li>
+                      <li className="flex items-center">
+                        <svg className="w-5 h-5 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          ></path>
+                        </svg>
+                        24/7 Support
                       </li>
                     </ul>
                     <button
