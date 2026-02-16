@@ -102,6 +102,8 @@ export default function DashboardPage() {
   )
   const [useExistingCreditsForUpload, setUseExistingCreditsForUpload] = useState(false)
   const [files, setFiles] = useState<File[]>([])
+  const [selectedPageEstimate, setSelectedPageEstimate] = useState(0)
+  const [isEstimatingPages, setIsEstimatingPages] = useState(false)
   const [isDraggingFiles, setIsDraggingFiles] = useState(false)
   const [showOverQuota, setShowOverQuota] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -118,6 +120,7 @@ export default function DashboardPage() {
     type: "success" | "error"
     text: string
   } | null>(null)
+  const pageEstimateRunRef = useRef(0)
 
   useEffect(() => {
     const run = async () => {
@@ -245,23 +248,48 @@ export default function DashboardPage() {
   const uploadLimitPages = useExistingCreditsForUpload ? remainingPages : LIMIT_PAGES
   const uploadLimitFiles = useExistingCreditsForUpload ? remainingFiles : LIMIT_FILES
 
-  const applySelectedFiles = (nextFiles: File[]) => {
+  const estimatePagesForFile = async (file: File): Promise<number> => {
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+    if (!isPdf) return 1
+
+    try {
+      const fileBuffer = await file.arrayBuffer()
+      const { PDFDocument } = await import("pdf-lib")
+      const pdf = await PDFDocument.load(fileBuffer, { ignoreEncryption: true })
+      return Math.max(pdf.getPageCount(), 1)
+    } catch {
+      return 1
+    }
+  }
+
+  const applySelectedFiles = async (nextFiles: File[]) => {
+    const currentRunId = ++pageEstimateRunRef.current
     setFiles(nextFiles)
+    setIsEstimatingPages(true)
+
+    const pageCounts = await Promise.all(nextFiles.map((file) => estimatePagesForFile(file)))
+
+    if (currentRunId !== pageEstimateRunRef.current) return
+
+    const totalPages = pageCounts.reduce((sum, pageCount) => sum + pageCount, 0)
+    setSelectedPageEstimate(totalPages)
+
     const overFiles = nextFiles.length > uploadLimitFiles
-    const overPages = nextFiles.length > uploadLimitPages
+    const overPages = totalPages > uploadLimitPages
     setShowOverQuota(overFiles || overPages)
+    setIsEstimatingPages(false)
   }
 
   const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFiles = Array.from(event.target.files ?? [])
-    applySelectedFiles(nextFiles)
+    void applySelectedFiles(nextFiles)
   }
 
   const handleDropFiles = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     setIsDraggingFiles(false)
     const nextFiles = Array.from(event.dataTransfer.files ?? [])
-    applySelectedFiles(nextFiles)
+    void applySelectedFiles(nextFiles)
   }
 
   const handleDragOverFiles = (event: React.DragEvent<HTMLDivElement>) => {
@@ -279,6 +307,8 @@ export default function DashboardPage() {
     setUseExistingCreditsForUpload(useExistingCredits)
     setShowUploadForm(true)
     setFiles([])
+    setSelectedPageEstimate(0)
+    setIsEstimatingPages(false)
     setShowOverQuota(false)
     setIsDraggingFiles(false)
     setActivePage("upload")
@@ -394,8 +424,7 @@ export default function DashboardPage() {
       : "border-slate-300 bg-white/70"
 
   const selectedFileCount = files.length
-  const estimatedSelectedPages = files.length
-  const remainingAfterSelectionPages = Math.max(uploadLimitPages - estimatedSelectedPages, 0)
+  const remainingAfterSelectionPages = Math.max(uploadLimitPages - selectedPageEstimate, 0)
   const remainingAfterSelectionFiles = Math.max(uploadLimitFiles - selectedFileCount, 0)
 
   const uploadPrompt = files.length > 0
@@ -1366,7 +1395,9 @@ export default function DashboardPage() {
                             .
                             <div className="mt-2 text-xs text-blue-700 space-y-1">
                               <p>
-                                Selected now: {selectedFileCount.toLocaleString()} files (~{estimatedSelectedPages.toLocaleString()} pages).
+                                {isEstimatingPages
+                                  ? "Calculating page count..."
+                                  : `Selected now: ${selectedFileCount.toLocaleString()} files (${selectedPageEstimate.toLocaleString()} pages).`}
                               </p>
                               <p>
                                 Remaining after this upload: {remainingAfterSelectionPages.toLocaleString()} pages and{" "}
