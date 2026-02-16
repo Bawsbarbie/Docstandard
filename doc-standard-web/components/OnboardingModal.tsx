@@ -20,9 +20,11 @@ type TierOption = "standard" | "expedited" | "compliance"
 const PROGRESS_KEY = "onboarding_progress"
 const COMPLETE_KEY = "onboarding_complete"
 
-const DOC_TYPES = ["Invoices", "Contracts", "Receipts", "Forms", "Other"] as const
+const DOC_TYPES = ["Invoices", "Contracts", "Receipts", "Forms", "Mixed / Multiple", "Other"] as const
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const BATCH_PAGE_LIMIT = 2000
+const BATCH_FILE_LIMIT = 1000
 
 export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModalProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
@@ -37,10 +39,10 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
   })
   const [profileErrors, setProfileErrors] = useState<{ [key: string]: string }>({})
 
-  const [docTypes, setDocTypes] = useState<Record<string, boolean>>({})
+  const [documentType, setDocumentType] = useState("")
+  const [purposeUseCase, setPurposeUseCase] = useState("")
   const [tier, setTier] = useState<TierOption>("standard")
 
-  const [files, setFiles] = useState<File[]>([])
   const [fileSummary, setFileSummary] = useState({
     count: 0,
     totalPages: 0,
@@ -66,7 +68,8 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
       const parsed = JSON.parse(raw)
       if (parsed?.step) setStep(parsed.step)
       if (parsed?.profile) setProfile((prev) => ({ ...prev, ...parsed.profile }))
-      if (parsed?.docTypes) setDocTypes(parsed.docTypes)
+      if (parsed?.documentType) setDocumentType(parsed.documentType)
+      if (parsed?.purposeUseCase) setPurposeUseCase(parsed.purposeUseCase)
       if (parsed?.tier) setTier(parsed.tier)
       if (parsed?.fileSummary) setFileSummary(parsed.fileSummary)
     } catch {
@@ -81,12 +84,13 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
     const payload = JSON.stringify({
       step,
       profile,
-      docTypes,
+      documentType,
+      purposeUseCase,
       tier,
       fileSummary,
     })
     localStorage.setItem(PROGRESS_KEY, payload)
-  }, [step, profile, docTypes, tier, fileSummary, isOpen, hasCompleted])
+  }, [step, profile, documentType, purposeUseCase, tier, fileSummary, isOpen, hasCompleted])
 
   const deliveryEstimate = useMemo(() => {
     const now = new Date()
@@ -154,7 +158,6 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
       const anyFile = file as File & { pageCount?: number }
       return acc + (anyFile.pageCount ?? 1)
     }, 0)
-    setFiles(nextFiles)
     setFileSummary({
       count: nextFiles.length,
       totalPages,
@@ -176,6 +179,12 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
   }
+
+  const remainingPages = Math.max(BATCH_PAGE_LIMIT - fileSummary.totalPages, 0)
+  const remainingFiles = Math.max(BATCH_FILE_LIMIT - fileSummary.count, 0)
+  const overPageLimit = fileSummary.totalPages > BATCH_PAGE_LIMIT
+  const overFileLimit = fileSummary.count > BATCH_FILE_LIMIT
+  const isOverLimit = overPageLimit || overFileLimit
 
   if (!isOpen || hasCompleted) return null
 
@@ -360,6 +369,13 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
                 </div>
 
                 <div className="grid gap-4">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold">Upload Files</h3>
+                    <p className="text-xs text-slate-500">
+                      Limit: 2,000 pages OR 1,000 files per batch. Need more? Enterprise options.
+                    </p>
+                  </div>
+
                   <div
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
@@ -377,44 +393,64 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
                     />
                   </div>
 
-                  <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                  <div
+                    className={`rounded-xl border px-4 py-3 text-sm ${
+                      isOverLimit
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-slate-200 bg-slate-50 text-slate-700"
+                    }`}
+                  >
                     {fileSummary.count > 0 ? (
                       <>
                         <p>{fileSummary.count} files selected</p>
-                        <p className="text-xs text-slate-500">
+                        <p className={`text-xs ${isOverLimit ? "text-red-600" : "text-slate-500"}`}>
                           Total pages: {fileSummary.totalPages}
                         </p>
                       </>
                     ) : (
                       <p>No files selected yet.</p>
                     )}
+                    <p className={`text-xs mt-1 ${isOverLimit ? "text-red-600" : "text-slate-500"}`}>
+                      Remaining this batch: {remainingPages.toLocaleString()} pages and{" "}
+                      {remainingFiles.toLocaleString()} files
+                    </p>
+                    {isOverLimit && (
+                      <p className="text-xs text-red-600 mt-1">
+                        Current selection exceeds the per-batch limit. Remove some files or request
+                        enterprise options.
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <h3 className="text-sm font-semibold">Document Type</h3>
-                  <p className="text-xs text-slate-500">Select all that apply</p>
-                  <div className="grid gap-2 sm:grid-cols-2">
+                  <select
+                    value={documentType}
+                    onChange={(event) => setDocumentType(event.target.value)}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Select a document type...</option>
                     {DOC_TYPES.map((label) => (
-                      <label
-                        key={label}
-                        className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={Boolean(docTypes[label])}
-                          onChange={(event) =>
-                            setDocTypes((prev) => ({
-                              ...prev,
-                              [label]: event.target.checked,
-                            }))
-                          }
-                          className="h-4 w-4 accent-blue-500"
-                        />
+                      <option key={label} value={label}>
                         {label}
-                      </label>
+                      </option>
                     ))}
-                  </div>
+                  </select>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-sm font-semibold">Purpose / Use Case</h3>
+                  <p className="text-xs text-slate-500">
+                    Tell us what you need this for and which output format you prefer.
+                  </p>
+                  <textarea
+                    value={purposeUseCase}
+                    onChange={(event) => setPurposeUseCase(event.target.value)}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
+                    rows={4}
+                    placeholder="Example: Need customs invoices normalized for SAP upload. Preferred output: CSV + JSON."
+                  />
                 </div>
 
                 <div className="space-y-3">

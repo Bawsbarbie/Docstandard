@@ -26,6 +26,7 @@ export async function updateProfile(
       {
         id: user.id,
         full_name: input.full_name ?? null,
+        email: user.email ?? null,
         company: input.company ?? null,
         updated_at: new Date().toISOString(),
       },
@@ -45,4 +46,3 @@ export async function updateProfile(
     return { success: false, error: "Failed to update profile" }
   }
 }
-

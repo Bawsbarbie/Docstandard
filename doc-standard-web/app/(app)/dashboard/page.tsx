@@ -24,6 +24,7 @@ const LIMIT_FILES = 1000
 
 type Profile = {
   full_name: string | null
+  email: string | null
   company: string | null
   tier: "standard" | "expedited" | "compliance" | null
 }
@@ -130,7 +131,7 @@ export default function DashboardPage() {
       }))
 
       const [{ data: profileData }, { data: batchesData }] = await Promise.all([
-        supabase.from("profiles").select("full_name, company, tier").eq("id", user.id).maybeSingle(),
+        supabase.from("profiles").select("full_name, email, company, tier").eq("id", user.id).maybeSingle(),
         supabase
           .from("batches")
           .select("id, status, created_at, delivered_at, uploads(id, role, created_at, page_count)")
@@ -172,11 +173,11 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    setProfileForm({
+    setProfileForm((prev) => ({
       fullName: profile?.full_name ?? "",
-      email: "",
+      email: profile?.email ?? prev.email,
       company: profile?.company ?? "",
-    })
+    }))
   }, [profile])
 
   const totalDocuments = useMemo(() => {
