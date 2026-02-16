@@ -6,6 +6,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server"
+import { createAdminClient } from "@/lib/supabase/admin"
 import type {
   Batch,
   Upload,
@@ -103,10 +104,21 @@ export async function getSignedUploadUrl(
     const uniqueId = crypto.randomUUID()
     const path = `batches/${batchId}/inputs/${uniqueId}.${fileExt}`
 
-    // Generate signed URL (valid for 1 hour)
-    const { data: urlData, error: urlError } = await supabase.storage
-      .from("batch-files")
-      .createSignedUploadUrl(path)
+    // Generate signed URL (valid for 1 hour). Prefer admin client so storage RLS
+    // does not block authenticated users who already passed ownership checks.
+    let urlData: { signedUrl: string } | null = null
+    let urlError: { message: string } | null = null
+
+    try {
+      const admin = createAdminClient()
+      const adminResult = await admin.storage.from("batch-files").createSignedUploadUrl(path)
+      urlData = adminResult.data
+      urlError = adminResult.error
+    } catch {
+      const userResult = await supabase.storage.from("batch-files").createSignedUploadUrl(path)
+      urlData = userResult.data
+      urlError = userResult.error
+    }
 
     if (urlError) {
       console.error("Error creating signed URL:", urlError)
