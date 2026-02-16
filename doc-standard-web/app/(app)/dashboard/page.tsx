@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client"
 import { createCheckoutSession } from "@/lib/actions/stripe"
 import { getBatchDownloads } from "@/lib/actions/download"
 import { updateProfile } from "@/lib/actions/profile"
+import { createBatch, createUpload, completeBatchUpload, getSignedUploadUrl } from "@/lib/actions/upload"
 import { Manrope, Sora } from "next/font/google"
 
 const manrope = Manrope({
@@ -49,6 +50,7 @@ type Batch = {
   created_at: string
   paid_at?: string | null
   delivered_at?: string | null
+  notes?: string | null
   uploads?: Upload[]
 }
 
@@ -89,6 +91,24 @@ const titleCase = (value?: string | null) => {
   return value.charAt(0).toUpperCase() + value.slice(1)
 }
 
+type BatchNotesPayload = {
+  batchName?: string
+  purposeUseCase?: string
+  preferredOutput?: string
+  documentType?: string
+}
+
+const parseBatchNotes = (notes?: string | null): BatchNotesPayload | null => {
+  if (!notes) return null
+  try {
+    const parsed = JSON.parse(notes) as BatchNotesPayload
+    if (typeof parsed !== "object" || parsed === null) return null
+    return parsed
+  } catch {
+    return null
+  }
+}
+
 export default function DashboardPage() {
   const [activePage, setActivePage] = useState<PageId>("dashboard")
   const [showUploadForm, setShowUploadForm] = useState(false)
@@ -96,6 +116,7 @@ export default function DashboardPage() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const uploadFormRef = useRef<HTMLDivElement | null>(null)
+  const batchErrorRef = useRef<HTMLDivElement | null>(null)
 
   const [selectedTier, setSelectedTier] = useState<"standard" | "expedited" | "compliance">(
     "standard"
@@ -105,6 +126,14 @@ export default function DashboardPage() {
   const [selectedPageEstimate, setSelectedPageEstimate] = useState(0)
   const [isEstimatingPages, setIsEstimatingPages] = useState(false)
   const [isDraggingFiles, setIsDraggingFiles] = useState(false)
+  const [isSubmittingBatch, setIsSubmittingBatch] = useState(false)
+  const [batchSubmitError, setBatchSubmitError] = useState<string | null>(null)
+  const [batchForm, setBatchForm] = useState({
+    name: "",
+    documentType: "",
+    preferredOutput: "",
+    purposeUseCase: "",
+  })
   const [showOverQuota, setShowOverQuota] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [profileForm, setProfileForm] = useState({ fullName: "", email: "", company: "" })
@@ -141,7 +170,7 @@ export default function DashboardPage() {
         supabase.from("profiles").select("full_name, email, company, tier").eq("id", user.id).maybeSingle(),
         supabase
           .from("batches")
-          .select("id, status, created_at, paid_at, delivered_at, uploads(id, role, created_at, page_count)")
+          .select("id, status, created_at, paid_at, delivered_at, notes, uploads(id, role, created_at, page_count)")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false }),
       ])
@@ -309,6 +338,14 @@ export default function DashboardPage() {
     setFiles([])
     setSelectedPageEstimate(0)
     setIsEstimatingPages(false)
+    setIsSubmittingBatch(false)
+    setBatchSubmitError(null)
+    setBatchForm({
+      name: "",
+      documentType: "",
+      preferredOutput: "",
+      purposeUseCase: "",
+    })
     setShowOverQuota(false)
     setIsDraggingFiles(false)
     setActivePage("upload")
@@ -373,6 +410,100 @@ export default function DashboardPage() {
 
     setDownloadError(error || "Download failed")
     setDownloadingBatchId(null)
+  }
+
+  const handleSubmitProcessingBatch = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setBatchSubmitError(null)
+
+    if (isEstimatingPages) {
+      setBatchSubmitError("Still calculating page counts. Please wait a second and try again.")
+      batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
+    }
+    if (showOverQuota) {
+      setBatchSubmitError("Upload exceeds current batch limits.")
+      batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
+    }
+    if (files.length === 0) {
+      setBatchSubmitError("Please upload at least one file before submitting.")
+      batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
+    }
+
+    setIsSubmittingBatch(true)
+
+    try {
+      const notesPayload: BatchNotesPayload = {
+        batchName: batchForm.name.trim() || undefined,
+        purposeUseCase: batchForm.purposeUseCase.trim() || undefined,
+        preferredOutput: batchForm.preferredOutput || undefined,
+        documentType: batchForm.documentType || undefined,
+      }
+
+      const { data: batch, error: batchError } = await createBatch({
+        tier: selectedTier,
+        notes: JSON.stringify(notesPayload),
+        total_pages: uploadLimitPages,
+        total_files: uploadLimitFiles,
+      })
+
+      if (batchError || !batch) {
+        throw new Error(batchError || "Failed to create batch.")
+      }
+
+      for (const file of files) {
+        const { data: urlData, error: urlError } = await getSignedUploadUrl(batch.id, file.name, file.type)
+        if (urlError || !urlData) {
+          throw new Error(urlError || "Failed to get upload URL.")
+        }
+
+        const uploadResponse = await fetch(urlData.url, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": file.type,
+            "x-upsert": "true",
+          },
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Upload failed for ${file.name}.`)
+        }
+
+        const pageCount = await estimatePagesForFile(file)
+        const { error: recordError } = await createUpload({
+          batch_id: batch.id,
+          original_name: file.name,
+          file_size_bytes: file.size,
+          mime_type: file.type,
+          page_count: pageCount,
+          storage_path: urlData.path,
+          document_types: batchForm.documentType ? [batchForm.documentType] : undefined,
+        })
+
+        if (recordError) {
+          throw new Error(recordError)
+        }
+      }
+
+      const completeResult = await completeBatchUpload(batch.id)
+      if (!completeResult.success) {
+        throw new Error(completeResult.error || "Failed to finalize upload.")
+      }
+
+      const { url, error } = await createCheckoutSession(batch.id)
+      if (url) {
+        window.location.href = url
+        return
+      }
+      throw new Error(error || "Failed to open checkout.")
+    } catch (error) {
+      setBatchSubmitError(error instanceof Error ? error.message : "Failed to submit batch.")
+      batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      setIsSubmittingBatch(false)
+    }
   }
 
   const handleSaveProfile = async () => {
@@ -978,12 +1109,20 @@ export default function DashboardPage() {
                             (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 0),
                             0
                           )
+                          const batchNotes = parseBatchNotes(batch.notes)
                           const meta = statusMeta(batch.status)
                           const hasOutput = batch.uploads?.some((file) => file.role === "output")
                           return (
                             <tr key={batch.id} className="hover:bg-slate-50 transition-colors">
-                              <td className="px-6 py-4 font-medium text-slate-900">
-                                {batch.id.slice(0, 8)}
+                              <td className="px-6 py-4">
+                                <div className="font-medium text-slate-900">
+                                  {batchNotes?.batchName || batch.id.slice(0, 8)}
+                                </div>
+                                {batchNotes?.purposeUseCase && (
+                                  <div className="max-w-[280px] truncate text-xs text-slate-500">
+                                    {batchNotes.purposeUseCase}
+                                  </div>
+                                )}
                               </td>
                               <td className="px-6 py-4 text-slate-500">
                                 {titleCase(profile?.tier ?? selectedTier)}
@@ -1287,7 +1426,7 @@ export default function DashboardPage() {
                           Close
                         </button>
                       </div>
-                    <form className="space-y-6" onSubmit={(event) => event.preventDefault()}>
+                    <form className="space-y-6" onSubmit={handleSubmitProcessingBatch}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           <label className="block text-sm font-semibold text-slate-700 mb-2">
@@ -1295,6 +1434,10 @@ export default function DashboardPage() {
                           </label>
                           <input
                             type="text"
+                            value={batchForm.name}
+                            onChange={(event) =>
+                              setBatchForm((prev) => ({ ...prev, name: event.target.value }))
+                            }
                             className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] outline-none transition-all"
                             placeholder="e.g., Q1 2025 Invoices"
                           />
@@ -1304,7 +1447,13 @@ export default function DashboardPage() {
                             Document Type
                           </label>
                           <div className="relative">
-                            <select className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] outline-none appearance-none bg-white">
+                            <select
+                              value={batchForm.documentType}
+                              onChange={(event) =>
+                                setBatchForm((prev) => ({ ...prev, documentType: event.target.value }))
+                              }
+                              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] outline-none appearance-none bg-white"
+                            >
                               <option>Select document type...</option>
                               <option>Financial Statements</option>
                               <option>Invoices</option>
@@ -1329,9 +1478,34 @@ export default function DashboardPage() {
 
                       <div>
                         <label className="block text-sm font-semibold text-slate-700 mb-2">
+                          Preferred Output Format
+                        </label>
+                        <select
+                          value={batchForm.preferredOutput}
+                          onChange={(event) =>
+                            setBatchForm((prev) => ({ ...prev, preferredOutput: event.target.value }))
+                          }
+                          className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] outline-none bg-white"
+                        >
+                          <option value="">Select preferred output...</option>
+                          <option value="CSV">CSV</option>
+                          <option value="Excel">Excel</option>
+                          <option value="XML">XML</option>
+                          <option value="JSON">JSON</option>
+                          <option value="CSV + JSON">CSV + JSON</option>
+                          <option value="Custom / Multiple">Custom / Multiple</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-2">
                           Purpose / Use Case
                         </label>
                         <textarea
+                          value={batchForm.purposeUseCase}
+                          onChange={(event) =>
+                            setBatchForm((prev) => ({ ...prev, purposeUseCase: event.target.value }))
+                          }
                           className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] outline-none h-24 resize-none"
                           placeholder="Describe the end goal for this data extraction..."
                         ></textarea>
@@ -1448,12 +1622,22 @@ export default function DashboardPage() {
                         </div>
                       </div>
 
+                      {batchSubmitError && (
+                        <div
+                          ref={batchErrorRef}
+                          className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                        >
+                          {batchSubmitError}
+                        </div>
+                      )}
+
                       <div className="pt-4">
                         <button
                           type="submit"
+                          disabled={isSubmittingBatch}
                           className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#2563eb] hover:bg-[#1d4ed8] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3b82f6] transition-colors"
                         >
-                          Submit Processing Batch
+                          {isSubmittingBatch ? "Submitting..." : "Submit Processing Batch"}
                         </button>
                       </div>
                     </form>
@@ -1513,15 +1697,23 @@ export default function DashboardPage() {
                             (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 0),
                             0
                           )
+                          const batchNotes = parseBatchNotes(batch.notes)
                           const meta = statusMeta(batch.status)
                           const hasOutput = batch.uploads?.some((file) => file.role === "output")
                           return (
                             <tr key={batch.id} className="hover:bg-slate-50 transition-colors">
                               <td className="px-6 py-4">
-                                <div className="text-sm font-medium text-slate-900">{batch.id.slice(0, 8)}</div>
+                                <div className="text-sm font-medium text-slate-900">
+                                  {batchNotes?.batchName || batch.id.slice(0, 8)}
+                                </div>
                                 <div className="text-xs text-slate-500">
                                   {titleCase(profile?.tier ?? selectedTier)}
                                 </div>
+                                {batchNotes?.preferredOutput && (
+                                  <div className="text-xs text-slate-500">
+                                    Output: {batchNotes.preferredOutput}
+                                  </div>
+                                )}
                               </td>
                               <td className="px-6 py-4 text-sm text-slate-500">
                                 {formatDate(batch.created_at)}
