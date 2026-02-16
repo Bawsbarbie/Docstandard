@@ -47,6 +47,7 @@ type Batch = {
     | "delivered"
     | "failed"
   created_at: string
+  paid_at?: string | null
   delivered_at?: string | null
   uploads?: Upload[]
 }
@@ -135,7 +136,7 @@ export default function DashboardPage() {
         supabase.from("profiles").select("full_name, email, company, tier").eq("id", user.id).maybeSingle(),
         supabase
           .from("batches")
-          .select("id, status, created_at, delivered_at, uploads(id, role, created_at, page_count)")
+          .select("id, status, created_at, paid_at, delivered_at, uploads(id, role, created_at, page_count)")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false }),
       ])
@@ -226,10 +227,18 @@ export default function DashboardPage() {
 
   const recentBatches = batches.slice(0, 3)
 
-  const remainingPages = Math.max(LIMIT_PAGES - pagesThisMonth, 0)
-  const remainingFiles = Math.max(LIMIT_FILES - filesThisMonth, 0)
+  const hasPaidBatch = batches.some(
+    (batch) =>
+      Boolean(batch.paid_at) ||
+      batch.status === "queued" ||
+      batch.status === "processing" ||
+      batch.status === "needs_review" ||
+      batch.status === "delivered"
+  )
+  const remainingPages = hasPaidBatch ? Math.max(LIMIT_PAGES - pagesThisMonth, 0) : 0
+  const remainingFiles = hasPaidBatch ? Math.max(LIMIT_FILES - filesThisMonth, 0) : 0
   const availableCredits = remainingPages
-  const usagePercent = Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100)
+  const usagePercent = hasPaidBatch ? Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100) : 0
   const hasRemainingCredits = remainingPages > 0 && remainingFiles > 0
 
   const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
