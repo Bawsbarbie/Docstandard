@@ -94,6 +94,11 @@ const formatDate = (value?: string | null) => {
   return new Date(value).toLocaleString()
 }
 
+const titleCase = (value?: string | null) => {
+  if (!value) return "—"
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
+
 const isCreditSettledBatch = (batch: Batch) =>
   Boolean(batch.paid_at) ||
   batch.status === "queued" ||
@@ -244,34 +249,6 @@ export default function DashboardPage() {
       if (!isCreditSettledBatch(batch)) return acc
       const inputs = batch.uploads?.filter((file) => file.role === "input") || []
       return acc + inputs.length
-    }, 0)
-  }, [batches])
-
-  const pagesThisMonth = useMemo(() => {
-    const now = new Date()
-    const start = new Date(now.getFullYear(), now.getMonth(), 1)
-    return batches.reduce((acc, batch) => {
-      if (!isCreditSettledBatch(batch)) return acc
-      const inputs = batch.uploads?.filter((file) => file.role === "input") || []
-      const monthInputs = inputs.filter((file) => new Date(file.created_at) >= start)
-      return (
-        acc +
-        monthInputs.reduce(
-          (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 0),
-          0
-        )
-      )
-    }, 0)
-  }, [batches])
-
-  const filesThisMonth = useMemo(() => {
-    const now = new Date()
-    const start = new Date(now.getFullYear(), now.getMonth(), 1)
-    return batches.reduce((acc, batch) => {
-      if (!isCreditSettledBatch(batch)) return acc
-      const inputs = batch.uploads?.filter((file) => file.role === "input") || []
-      const monthInputs = inputs.filter((file) => new Date(file.created_at) >= start)
-      return acc + monthInputs.length
     }, 0)
   }, [batches])
 
@@ -478,13 +455,23 @@ export default function DashboardPage() {
     event.preventDefault()
     setBatchSubmitError(null)
 
+    if (useExistingCreditsForUpload && !hasRemainingCredits) {
+      setBatchSubmitError("No credits left. Please top up by selecting a new processing tier.")
+      batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      return
+    }
+
     if (isEstimatingPages) {
       setBatchSubmitError("Still calculating page counts. Please wait a second and try again.")
       batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
     if (showOverQuota) {
-      setBatchSubmitError("Upload exceeds current batch limits.")
+      setBatchSubmitError(
+        useExistingCreditsForUpload
+          ? "This upload exceeds your remaining credits. Please top up to continue."
+          : "Upload exceeds current batch limits."
+      )
       batchErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
       return
     }
@@ -1143,7 +1130,9 @@ export default function DashboardPage() {
                           d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                         ></path>
                       </svg>
-                      {filesThisMonth ? `+${filesThisMonth} this month` : "—"}
+                      {filesUsedAgainstCredits
+                        ? `${filesUsedAgainstCredits.toLocaleString()} billed files`
+                        : "—"}
                     </div>
                   </div>
                 </div>
@@ -1271,6 +1260,11 @@ export default function DashboardPage() {
                         ({remainingPages.toLocaleString()} pages left)
                       </span>
                     </button>
+                  )}
+                  {!hasRemainingCredits && (
+                    <span className="inline-flex items-center rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800">
+                      Credits exhausted. Top up by selecting Standard or Rush.
+                    </span>
                   )}
                 </div>
 
