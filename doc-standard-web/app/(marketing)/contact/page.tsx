@@ -1,16 +1,5 @@
-import type { Metadata } from "next"
-import { Navbar } from "@/components/landing/Navbar"
-
-export const metadata: Metadata = {
-  title: "Contact | DocStandard",
-  description: "Talk to a human about your documents. Get a quote for your document processing needs.",
-  alternates: {
-    canonical: "https://docstandard.co/contact",
-  },
-}
-
-// Client component wrapper needed for useSearchParams
 "use client"
+import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
 import Link from "next/link"
 import { useState, useEffect, Suspense } from "react"
