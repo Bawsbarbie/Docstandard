@@ -5,7 +5,13 @@ import { createClient } from "@/lib/supabase/client"
 import { createCheckoutSession } from "@/lib/actions/stripe"
 import { getBatchDownloads } from "@/lib/actions/download"
 import { updateProfile } from "@/lib/actions/profile"
-import { createBatch, createUpload, completeBatchUpload, getSignedUploadUrl } from "@/lib/actions/upload"
+import {
+  createBatch,
+  createUpload,
+  completeBatchUpload,
+  getSignedUploadUrl,
+  queueBatchUsingCredits,
+} from "@/lib/actions/upload"
 import { Manrope, Sora } from "next/font/google"
 
 const manrope = Manrope({
@@ -50,6 +56,8 @@ type Batch = {
   created_at: string
   paid_at?: string | null
   delivered_at?: string | null
+  total_pages?: number | null
+  total_files?: number | null
   notes?: string | null
   uploads?: Upload[]
 }
@@ -66,7 +74,7 @@ const PAGE_TITLES = {
 type PageId = keyof typeof PAGE_TITLES
 
 type StatusMeta = { label: string; className: string }
-type PaymentNotice = { type: "success" | "cancelled"; batchId: string | null }
+type PaymentNotice = { type: "success" | "cancelled" | "credits"; batchId: string | null }
 
 const statusMeta = (status: Batch["status"]): StatusMeta => {
   if (status === "delivered") {
@@ -86,10 +94,12 @@ const formatDate = (value?: string | null) => {
   return new Date(value).toLocaleString()
 }
 
-const titleCase = (value?: string | null) => {
-  if (!value) return "—"
-  return value.charAt(0).toUpperCase() + value.slice(1)
-}
+const isCreditSettledBatch = (batch: Batch) =>
+  Boolean(batch.paid_at) ||
+  batch.status === "queued" ||
+  batch.status === "processing" ||
+  batch.status === "needs_review" ||
+  batch.status === "delivered"
 
 type BatchNotesPayload = {
   batchName?: string
@@ -172,7 +182,9 @@ export default function DashboardPage() {
         supabase.from("profiles").select("full_name, email, company, tier").eq("id", user.id).maybeSingle(),
         supabase
           .from("batches")
-          .select("id, status, created_at, paid_at, delivered_at, notes, uploads(id, role, created_at, page_count)")
+          .select(
+            "id, status, created_at, paid_at, delivered_at, total_pages, total_files, notes, uploads(id, role, created_at, page_count)"
+          )
           .eq("user_id", user.id)
           .order("created_at", { ascending: false }),
       ])
@@ -195,17 +207,26 @@ export default function DashboardPage() {
 
     const params = new URLSearchParams(window.location.search)
     const payment = params.get("payment")
+    const credits = params.get("credits")
     const batchId = params.get("batch_id")
 
-    if (payment !== "success" && payment !== "cancelled") {
+    const noticeType =
+      payment === "success" || payment === "cancelled"
+        ? payment
+        : credits === "applied"
+          ? "credits"
+          : null
+
+    if (!noticeType) {
       return
     }
 
-    setPaymentNotice({ type: payment, batchId })
+    setPaymentNotice({ type: noticeType, batchId })
     setActivePage("batches")
 
     const url = new URL(window.location.href)
     url.searchParams.delete("payment")
+    url.searchParams.delete("credits")
     url.searchParams.delete("batch_id")
     window.history.replaceState({}, "", url.toString())
   }, [])
@@ -220,6 +241,7 @@ export default function DashboardPage() {
 
   const totalDocuments = useMemo(() => {
     return batches.reduce((acc, batch) => {
+      if (!isCreditSettledBatch(batch)) return acc
       const inputs = batch.uploads?.filter((file) => file.role === "input") || []
       return acc + inputs.length
     }, 0)
@@ -229,6 +251,7 @@ export default function DashboardPage() {
     const now = new Date()
     const start = new Date(now.getFullYear(), now.getMonth(), 1)
     return batches.reduce((acc, batch) => {
+      if (!isCreditSettledBatch(batch)) return acc
       const inputs = batch.uploads?.filter((file) => file.role === "input") || []
       const monthInputs = inputs.filter((file) => new Date(file.created_at) >= start)
       return (
@@ -245,6 +268,7 @@ export default function DashboardPage() {
     const now = new Date()
     const start = new Date(now.getFullYear(), now.getMonth(), 1)
     return batches.reduce((acc, batch) => {
+      if (!isCreditSettledBatch(batch)) return acc
       const inputs = batch.uploads?.filter((file) => file.role === "input") || []
       const monthInputs = inputs.filter((file) => new Date(file.created_at) >= start)
       return acc + monthInputs.length
@@ -263,18 +287,46 @@ export default function DashboardPage() {
 
   const recentBatches = batches.slice(0, 3)
 
-  const hasPaidBatch = batches.some(
-    (batch) =>
-      Boolean(batch.paid_at) ||
-      batch.status === "queued" ||
-      batch.status === "processing" ||
-      batch.status === "needs_review" ||
-      batch.status === "delivered"
+  const creditSettledBatches = useMemo(
+    () => batches.filter((batch) => isCreditSettledBatch(batch)),
+    [batches]
   )
-  const remainingPages = hasPaidBatch ? Math.max(LIMIT_PAGES - pagesThisMonth, 0) : 0
-  const remainingFiles = hasPaidBatch ? Math.max(LIMIT_FILES - filesThisMonth, 0) : 0
+  const totalCreditsPages = useMemo(
+    () =>
+      creditSettledBatches.reduce((sum, batch) => sum + Math.max(batch.total_pages ?? 0, 0), 0),
+    [creditSettledBatches]
+  )
+  const totalCreditsFiles = useMemo(
+    () =>
+      creditSettledBatches.reduce((sum, batch) => sum + Math.max(batch.total_files ?? 0, 0), 0),
+    [creditSettledBatches]
+  )
+  const pagesUsedAgainstCredits = useMemo(
+    () =>
+      creditSettledBatches.reduce((sum, batch) => {
+        const inputs = batch.uploads?.filter((file) => file.role === "input") || []
+        return (
+          sum +
+          inputs.reduce(
+            (fileSum, file) => fileSum + (typeof file.page_count === "number" ? file.page_count : 1),
+            0
+          )
+        )
+      }, 0),
+    [creditSettledBatches]
+  )
+  const filesUsedAgainstCredits = useMemo(
+    () =>
+      creditSettledBatches.reduce((sum, batch) => {
+        const inputs = batch.uploads?.filter((file) => file.role === "input") || []
+        return sum + inputs.length
+      }, 0),
+    [creditSettledBatches]
+  )
+  const remainingPages = Math.max(totalCreditsPages - pagesUsedAgainstCredits, 0)
+  const remainingFiles = Math.max(totalCreditsFiles - filesUsedAgainstCredits, 0)
   const availableCredits = remainingPages
-  const usagePercent = hasPaidBatch ? Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100) : 0
+  const usagePercent = totalCreditsPages > 0 ? Math.min((pagesUsedAgainstCredits / totalCreditsPages) * 100, 100) : 0
   const hasRemainingCredits = remainingPages > 0 && remainingFiles > 0
   const uploadLimitPages = useExistingCreditsForUpload ? remainingPages : LIMIT_PAGES
   const uploadLimitFiles = useExistingCreditsForUpload ? remainingFiles : LIMIT_FILES
@@ -456,8 +508,8 @@ export default function DashboardPage() {
       const { data: batch, error: batchError } = await createBatch({
         tier: selectedTier,
         notes: JSON.stringify(notesPayload),
-        total_pages: uploadLimitPages,
-        total_files: uploadLimitFiles,
+        total_pages: useExistingCreditsForUpload ? 0 : LIMIT_PAGES,
+        total_files: useExistingCreditsForUpload ? 0 : LIMIT_FILES,
       })
 
       if (batchError || !batch) {
@@ -465,7 +517,7 @@ export default function DashboardPage() {
       }
 
       await Promise.all(files.map(async (file) => {
-        const { data: urlData, error: urlError } = await getSignedUploadUrl(batch.id, file.name, file.type)
+        const { data: urlData, error: urlError } = await getSignedUploadUrl(batch.id, file.name)
         if (urlError || !urlData) {
           throw new Error(urlError || "Failed to get upload URL.")
         }
@@ -502,6 +554,15 @@ export default function DashboardPage() {
       const completeResult = await completeBatchUpload(batch.id)
       if (!completeResult.success) {
         throw new Error(completeResult.error || "Failed to finalize upload.")
+      }
+
+      if (useExistingCreditsForUpload) {
+        const queuedResult = await queueBatchUsingCredits(batch.id)
+        if (!queuedResult.success) {
+          throw new Error(queuedResult.error || "Failed to queue batch using existing credits.")
+        }
+        window.location.href = `/dashboard?credits=applied&batch_id=${batch.id}`
+        return
       }
 
       setIsRedirectingToStripe(true)
@@ -931,7 +992,7 @@ export default function DashboardPage() {
             {paymentNotice && (
               <div
                 className={`mb-6 rounded-2xl border px-4 py-3 flex items-center justify-between gap-4 ${
-                  paymentNotice.type === "success"
+                  paymentNotice.type === "success" || paymentNotice.type === "credits"
                     ? "bg-emerald-50 border-emerald-200 text-emerald-900"
                     : "bg-amber-50 border-amber-200 text-amber-900"
                 }`}
@@ -939,7 +1000,9 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium">
                   {paymentNotice.type === "success"
                     ? `Payment received${paymentNotice.batchId ? ` for batch ${paymentNotice.batchId.slice(0, 8)}` : ""}. Your batch is now queued for processing.`
-                    : `Payment cancelled${paymentNotice.batchId ? ` for batch ${paymentNotice.batchId.slice(0, 8)}` : ""}. You can retry checkout from your batch list.`}
+                    : paymentNotice.type === "credits"
+                      ? `Batch submitted${paymentNotice.batchId ? ` (${paymentNotice.batchId.slice(0, 8)})` : ""} using existing credits.`
+                      : `Payment cancelled${paymentNotice.batchId ? ` for batch ${paymentNotice.batchId.slice(0, 8)}` : ""}. You can retry checkout from your batch list.`}
                 </p>
                 <button
                   type="button"
@@ -1787,19 +1850,23 @@ export default function DashboardPage() {
                   <h3 className="text-lg font-bold text-slate-900 mb-4">Credit Usage</h3>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-700 font-medium">
-                      {pagesThisMonth.toLocaleString()} pages used
+                      {pagesUsedAgainstCredits.toLocaleString()} pages used
                     </span>
-                    <span className="text-slate-500 text-sm">of {LIMIT_PAGES.toLocaleString()} available</span>
+                    <span className="text-slate-500 text-sm">
+                      of {totalCreditsPages.toLocaleString()} available
+                    </span>
                   </div>
                   <div className="w-full bg-slate-100 rounded-full h-3 mb-4">
                     <div
                       className="bg-[#2563eb] h-3 rounded-full"
-                      style={{ width: `${Math.min((pagesThisMonth / LIMIT_PAGES) * 100, 100)}%` }}
+                      style={{
+                        width: `${totalCreditsPages > 0 ? Math.min((pagesUsedAgainstCredits / totalCreditsPages) * 100, 100) : 0}%`,
+                      }}
                     ></div>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-lg text-sm text-slate-600">
-                    You have <strong className="text-[#2563eb]">{Math.max(LIMIT_PAGES - pagesThisMonth, 0).toLocaleString()}</strong> pages (or{" "}
-                    <strong className="text-[#2563eb]">{Math.max(LIMIT_FILES - filesThisMonth, 0).toLocaleString()}</strong> files) remaining in your current allocation.
+                    You have <strong className="text-[#2563eb]">{remainingPages.toLocaleString()}</strong> pages (or{" "}
+                    <strong className="text-[#2563eb]">{remainingFiles.toLocaleString()}</strong> files) remaining in your current allocation.
                   </div>
                 </div>
               </div>

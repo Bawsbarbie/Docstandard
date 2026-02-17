@@ -94,6 +94,11 @@ export async function createCheckoutSession(
       .select("id")
       .eq("batch_id", batchId)
 
+    if (filesError) {
+      console.error("Error getting file count:", filesError)
+      return { data: null, error: "Failed to load batch files" }
+    }
+
     const fileCount = files?.length || 0
     const appUrl = await resolveAppUrl()
 

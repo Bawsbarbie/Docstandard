@@ -129,8 +129,7 @@ export function FileUploader({
       // Get signed URL
       const { data: urlData, error: urlError } = await getSignedUploadUrl(
         currentBatchId,
-        uploadFile.file.name,
-        uploadFile.file.type
+        uploadFile.file.name
       )
 
       if (urlError || !urlData) {

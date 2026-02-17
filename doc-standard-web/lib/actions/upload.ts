@@ -68,8 +68,7 @@ export async function createBatch(
  */
 export async function getSignedUploadUrl(
   batchId: string,
-  fileName: string,
-  fileType: string
+  fileName: string
 ): Promise<{ data: { url: string; path: string } | null; error: string | null }> {
   try {
     const supabase = await createClient()
@@ -212,37 +211,6 @@ export async function createUpload(
 }
 
 /**
- * Upload file to Supabase Storage using signed URL
- * This is a server action that coordinates the upload
- */
-export async function uploadFileToStorage(
-  signedUrl: string,
-  file: File
-): Promise<{ success: boolean; error: string | null }> {
-  try {
-    const response = await fetch(signedUrl, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type,
-        "x-upsert": "true",
-      },
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error("Upload failed:", response.status, errorText)
-      return { success: false, error: `Upload failed: ${response.statusText}` }
-    }
-
-    return { success: true, error: null }
-  } catch (error) {
-    console.error("Exception uploading file:", error)
-    return { success: false, error: "Failed to upload file" }
-  }
-}
-
-/**
  * Complete batch upload (mark as uploaded)
  */
 export async function completeBatchUpload(
@@ -277,6 +245,128 @@ export async function completeBatchUpload(
   } catch (error) {
     console.error("Exception completing upload:", error)
     return { success: false, error: "Failed to complete batch upload" }
+  }
+}
+
+const isCreditSettledStatus = (status: string) =>
+  status === "queued" ||
+  status === "processing" ||
+  status === "needs_review" ||
+  status === "delivered"
+
+/**
+ * Finalize a newly uploaded batch using existing account credits (no Stripe checkout).
+ */
+export async function queueBatchUsingCredits(
+  batchId: string
+): Promise<{ success: boolean; error: string | null }> {
+  try {
+    const supabase = await createClient()
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return { success: false, error: "Not authenticated" }
+    }
+
+    const { data: targetBatch, error: targetBatchError } = await supabase
+      .from("batches")
+      .select("id, user_id, status, paid_at, uploads(role, page_count)")
+      .eq("id", batchId)
+      .single()
+
+    if (targetBatchError || !targetBatch) {
+      return { success: false, error: "Batch not found" }
+    }
+
+    if (targetBatch.user_id !== user.id) {
+      return { success: false, error: "Unauthorized" }
+    }
+
+    if (targetBatch.paid_at) {
+      return { success: true, error: null }
+    }
+
+    if (targetBatch.status !== "uploaded") {
+      return { success: false, error: "Batch must be uploaded before using credits." }
+    }
+
+    const targetInputs = (targetBatch.uploads || []).filter((file) => file.role === "input")
+    const targetFilesUsed = targetInputs.length
+    const targetPagesUsed = targetInputs.reduce(
+      (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 1),
+      0
+    )
+
+    if (targetFilesUsed === 0) {
+      return { success: false, error: "No uploaded files found for this batch." }
+    }
+
+    const { data: allBatches, error: allBatchesError } = await supabase
+      .from("batches")
+      .select("id, status, paid_at, total_pages, total_files, uploads(role, page_count)")
+      .eq("user_id", user.id)
+
+    if (allBatchesError || !allBatches) {
+      return { success: false, error: "Failed to verify available credits." }
+    }
+
+    let totalCreditsPages = 0
+    let totalCreditsFiles = 0
+    let usedPages = 0
+    let usedFiles = 0
+
+    for (const batch of allBatches) {
+      if (batch.id === batchId) continue
+      const isSettled = Boolean(batch.paid_at) || isCreditSettledStatus(batch.status)
+      if (!isSettled) continue
+
+      totalCreditsPages += Math.max(batch.total_pages ?? 0, 0)
+      totalCreditsFiles += Math.max(batch.total_files ?? 0, 0)
+
+      const inputs = (batch.uploads || []).filter((file) => file.role === "input")
+      usedFiles += inputs.length
+      usedPages += inputs.reduce(
+        (sum, file) => sum + (typeof file.page_count === "number" ? file.page_count : 1),
+        0
+      )
+    }
+
+    const remainingPages = Math.max(totalCreditsPages - usedPages, 0)
+    const remainingFiles = Math.max(totalCreditsFiles - usedFiles, 0)
+
+    if (targetPagesUsed > remainingPages || targetFilesUsed > remainingFiles) {
+      return {
+        success: false,
+        error: `Not enough credits remaining (${remainingPages} pages / ${remainingFiles} files left).`,
+      }
+    }
+
+    const { error: updateError } = await supabase
+      .from("batches")
+      .update({
+        status: "queued",
+        paid_at: new Date().toISOString(),
+        total_pages: 0,
+        total_files: 0,
+        pages_used: targetPagesUsed,
+        files_used: targetFilesUsed,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", batchId)
+      .eq("user_id", user.id)
+
+    if (updateError) {
+      return { success: false, error: updateError.message }
+    }
+
+    return { success: true, error: null }
+  } catch (error) {
+    console.error("Exception queuing batch with credits:", error)
+    return { success: false, error: "Failed to queue batch with existing credits" }
   }
 }
 
