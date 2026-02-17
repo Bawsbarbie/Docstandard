@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "TMS & ERP Comparisons | DocStandard",
   description:
     "Compare logistics and freight management systems. Side-by-side analysis of CargoWise, Magaya, SAP, Oracle, and more to find the right platform for your operations.",
+  alternates: {
+    canonical: "https://docstandard.co/comparison",
+  },
 }
 
 interface Comparison {

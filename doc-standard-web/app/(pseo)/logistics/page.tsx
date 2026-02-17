@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Logistics Document Processing Hub | DocStandard",
   description:
     "Transform logistics documents into clean, structured data for your TMS and ERP. Bills of lading, packing lists, delivery receipts, and PODs normalized fast.",
+  alternates: {
+    canonical: "https://docstandard.co/logistics",
+  },
 }
 
 export default async function LogisticsHubPage() {

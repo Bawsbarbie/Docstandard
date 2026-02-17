@@ -1,4 +1,13 @@
+import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
+
+export const metadata: Metadata = {
+  title: "About Us | DocStandard",
+  description: "Learn about DocStandard's mission to transform business documents into usable data.",
+  alternates: {
+    canonical: "https://docstandard.co/about",
+  },
+}
 import { Footer } from "@/components/landing/Footer"
 import { Mail, MapPin } from "lucide-react"
 import Link from "next/link"

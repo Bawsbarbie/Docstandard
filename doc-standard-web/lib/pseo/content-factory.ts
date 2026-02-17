@@ -945,7 +945,7 @@ export class ContentFactory {
       intent.metaDescription ||
       `Professional ${intent.name.toLowerCase()}. Flat-fee $799 document processing with same-day turnaround. Expert logistics solutions.`
 
-    const canonical = `/${city.countryCode}/${city.stateCode.toLowerCase()}/${city.slug}/${
+    const canonical = `https://docstandard.co/${city.countryCode}/${city.stateCode.toLowerCase()}/${city.slug}/${
       intent.slug
     }`
 

@@ -5,6 +5,22 @@ import Script from "next/script"
 export const metadata: Metadata = {
   title: "DocStandard.co - Document Processing for Logistics",
   description: "High-scale document processing and logistics solutions",
+  keywords: [
+    "document processing",
+    "logistics data",
+    "customs clearance",
+    "freight forwarding",
+    "EDI normalization",
+    "CargoWise integration",
+    "document standardization",
+    "TMS integration",
+    "ERP integration",
+    "logistics document processing",
+    "supply chain data",
+    "bill of lading processing",
+    "commercial invoice extraction",
+    "trade compliance documents"
+  ],
 }
 
 export default function RootLayout({

@@ -1,6 +1,13 @@
-"use client"
-
+import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
+
+export const metadata: Metadata = {
+  title: "DocStandard.co - Document Processing for Logistics",
+  description: "Transform messy business documents into clean, structured data. Flat-fee document processing with same-day turnaround.",
+  alternates: {
+    canonical: "https://docstandard.co",
+  },
+}
 import { Hero } from "@/components/landing/Hero"
 import { CredibilityStrip } from "@/components/landing/CredibilityStrip"
 import { ProblemSolution } from "@/components/landing/ProblemSolution"

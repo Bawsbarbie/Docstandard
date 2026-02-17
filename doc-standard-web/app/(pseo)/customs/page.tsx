@@ -1,8 +1,15 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { VerticalHub, generateMetadataForVertical } from "@/components/pseo/VerticalHub"
 
-export async function generateMetadata() {
-  return generateMetadataForVertical("customs")
+export async function generateMetadata(): Promise<Metadata> {
+  const base = generateMetadataForVertical("customs")
+  return {
+    ...base,
+    alternates: {
+      canonical: "https://docstandard.co/customs",
+    },
+  }
 }
 
 export default async function CustomsHubPage() {
