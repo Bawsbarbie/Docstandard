@@ -4,30 +4,6 @@ import { VerticalHub, generateMetadataForVertical } from "@/components/pseo/Vert
 import { generatedPageImports } from "@/generated/page-map"
 import { blogSlugSet } from "@/generated/blog-slugs"
 import { getCityBySlug } from "@/lib/pseo/city-data"
-
-const SYSTEM_SLUGS = [
-  "cargowise",
-  "magaya",
-  "sap",
-  "oracle",
-  "motive",
-  "descartes",
-  "mercurygate",
-  "flexport",
-  "freightos",
-  "kuebix",
-  "roserocket",
-  "manhattan",
-  "blueyonder",
-  "3pl-central",
-  "shipstation",
-] as const
-
-const SYSTEM_PATTERN = SYSTEM_SLUGS.join("|")
-const CITY_SYSTEM_SLUG_REGEX = new RegExp(
-  `^[a-z0-9-]+-(?:${SYSTEM_PATTERN})-(?:${SYSTEM_PATTERN})-[a-z0-9-]+$`,
-  "i"
-)
 const PRIMARY_CITY_VERTICAL = "shipping"
 
 interface PageProps {
@@ -54,18 +30,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .split("-")
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join(" ")
-    if (CITY_SYSTEM_SLUG_REGEX.test(params.vertical)) {
-      return {
-        title,
-        alternates: {
-          canonical: canonicalUrl,
-        },
-        robots: {
-          index: false,
-          follow: false,
-        },
-      }
-    }
     return {
       title,
       alternates: {
