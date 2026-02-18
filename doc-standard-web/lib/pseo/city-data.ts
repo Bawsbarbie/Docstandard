@@ -11,6 +11,33 @@ export interface CityData {
   priority: number
 }
 
+const CUSTOMS_SYSTEMS_BY_COUNTRY: Record<string, string[]> = {
+  USA: ["ACE", "AMS", "ABI"],
+  Canada: ["CARM", "ACI", "eManifest"],
+  Belgium: ["PLDA", "NCTS", "ICS2"],
+  Germany: ["ATLAS", "NCTS", "ICS2"],
+  Netherlands: ["AGS", "NCTS", "ICS2"],
+  "United Kingdom": ["CDS", "GVMS", "NCTS"],
+  Singapore: ["TradeNet", "UEN", "NTP"],
+  "Hong Kong": ["TDEC", "ROCARS", "ACE"],
+  China: ["China Single Window", "E-Port", "ICS2"],
+  India: ["ICEGATE", "SWIFT", "NCTS"],
+  Indonesia: ["INSW", "CEISA", "NLE"],
+  Malaysia: ["uCustoms", "Dagang Net", "ePermit"],
+  UAE: ["Mirsal 2", "Bayan", "Dubai Trade"],
+  Qatar: ["Al Nadeeb", "QCC", "Bayan"],
+  "South Korea": ["UNI-PASS", "KTNET", "NACCS"],
+  Brazil: ["Siscomex", "Portal Único", "DU-E"],
+}
+
+const CUSTOMS_SYSTEMS_BY_REGION: Record<string, string[]> = {
+  Europe: ["PLDA", "NCTS", "ICS2"],
+  "North America": ["ACE", "ACI", "ABI"],
+  Asia: ["TradeNet", "Single Window", "E-Customs"],
+  "Middle East": ["Mirsal 2", "Bayan", "Single Window"],
+  "South America": ["Siscomex", "VUCE", "SIGAD"],
+}
+
 export const cities: CityData[] = [
   // Europe
   { slug: "antwerp", name: "Antwerp", country: "Belgium", region: "Europe", logisticsHub: true, customsPort: true, majorPorts: ["Port of Antwerp"], priority: 95 },
@@ -66,4 +93,12 @@ export function getCityBySlug(slug: string): CityData | undefined {
 
 export function getAllCities(): CityData[] {
   return cities
+}
+
+export function getCustomsSystemsForCity(city: Pick<CityData, "country" | "region">): string[] {
+  return (
+    CUSTOMS_SYSTEMS_BY_COUNTRY[city.country] ??
+    CUSTOMS_SYSTEMS_BY_REGION[city.region] ??
+    ["ACE", "PLDA", "NCTS"]
+  )
 }
