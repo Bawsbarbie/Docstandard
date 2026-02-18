@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const { legacyRedirects } = require("./config/legacyRedirects")
+
 const nextConfig = {
   output: "standalone",
   typescript: {
@@ -37,6 +39,11 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/invoice-matching-services",
+        destination: "/services",
+        permanent: true,
+      },
       {
         source: "/sitemap-batch-:batch.xml",
         destination: "/sitemaps/sitemap-batch-:batch.xml",
@@ -77,6 +84,7 @@ const nextConfig = {
         destination: "/:vertical/:city",
         permanent: true,
       },
+      ...legacyRedirects,
     ]
   },
   images: {
