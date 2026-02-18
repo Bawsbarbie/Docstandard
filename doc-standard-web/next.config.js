@@ -40,6 +40,21 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/invoice-processing-automation",
+        destination: "/blog/invoice-data-extraction",
+        permanent: true,
+      },
+      {
+        source: "/customs/tokyo",
+        destination: "/customs",
+        permanent: true,
+      },
+      {
+        source: "/shipping/tokyo",
+        destination: "/shipping",
+        permanent: true,
+      },
+      {
         source: "/invoice-matching-services",
         destination: "/services",
         permanent: true,
