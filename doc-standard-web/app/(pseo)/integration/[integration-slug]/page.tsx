@@ -20,7 +20,7 @@ import { getIntegrationModel, getIntegrationSlugs } from "@/lib/pseo/integration
 
 interface PageProps {
   params: {
-    slug: string
+    "integration-slug": string
   }
 }
 
@@ -37,23 +37,24 @@ export async function generateStaticParams() {
     return []
   }
 
-  return slugs.slice(0, limit).map((slug) => ({ slug }))
+  return slugs.slice(0, limit).map((slug) => ({ "integration-slug": slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const model = await getIntegrationModel(params.slug)
+  const slug = params["integration-slug"]
+  const model = await getIntegrationModel(slug)
   if (!model) return { robots: { index: false } }
 
   return {
     title: `${model.title} | DocStandard Technical Bridge`,
     description: model.description,
-    alternates: { canonical: `https://docstandard.co/integration/${params.slug}` },
+    alternates: { canonical: `https://docstandard.co/integration/${slug}` },
     robots: { index: true, follow: true }
   }
 }
 
 export default async function IntegrationFactoryPage({ params }: PageProps) {
-  const model = await getIntegrationModel(params.slug)
+  const model = await getIntegrationModel(params["integration-slug"])
   if (!model) notFound()
 
   const faqSchema = {
