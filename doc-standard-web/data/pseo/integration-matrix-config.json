@@ -1,0 +1,21 @@
+{
+  "sourceSystems": [
+    "CargoWise", "Magaya", "Descartes", "BlueYonder", "Manhattan Associates",
+    "MercuryGate", "Flexport", "3PL Central", "Kuebix", "Rose Rocket",
+    "Oracle OTM", "SAP TM", "Motive", "Samsara", "Geotab",
+    "Verizon Connect", "Trimble", "FourKites", "Project44", "Freightos",
+    "ShipStation", "FreightPop", "Alpega", "Transporeon", "Trimble",
+    "Epicor", "Infor CloudSuite", "Acumatica", "Dynamics 365", "Dynamics BC",
+    "EDI", "Excel", "Automated Extraction", "In-house Team", "Outsourced Processing"
+  ],
+  "destinationSystems": [
+    "NetSuite", "SAP S/4HANA", "SAP Business One", "Sage Intacct", "Sage 300",
+    "QuickBooks Online", "QuickBooks Desktop", "Microsoft Dynamics 365 Business Central", 
+    "Microsoft Dynamics 365 Finance & Operations", "Xero", "FreshBooks", "Zoho Books",
+    "Workday", "Oracle ERP Cloud", "FinancialForce", "Wave", "Acumatica ERP"
+  ],
+  "documentFocus": [
+    "Commercial Invoice", "Packing List", "Bill of Lading", "Airway Bill", 
+    "Customs Declaration", "HS Code Mapping", "Landed Cost Extraction", "Arrival Notice"
+  ]
+}
