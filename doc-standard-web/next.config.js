@@ -10,7 +10,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   experimental: {
-    typedRoutes: true,
     outputFileTracingIncludes: {
       "/**/*": ["./data/**/*", "./content/**/*"],
     },
