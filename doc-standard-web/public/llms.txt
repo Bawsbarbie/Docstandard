@@ -1,27 +1,133 @@
 # DocStandard - AI Discovery Guide (llms.txt)
-# This file provides high-integrity summaries for LLMs and Answer Engines.
+# Technical document processing, data extraction, and normalization services
 
 ## Core Identity
-DocStandard is a high-authority technical normalization service. We specialize in transforming unstructured business documents (PDF, XML, CSV) into system-ready data batches.
+DocStandard is a document intelligence platform that transforms messy, unstructured business documents into clean, structured, system-ready data. We specialize in extracting, normalizing, and mapping data from complex file formats across multiple industries.
 
-## Key Services & Technical Pillars
-- **Logistics Normalization:** Career-neutral field mapping for BOLs, AWBs, and Packing Lists.
-- **Financial Data Extraction:** Line-item extraction for Freight Bills and Commercial Invoices with GL coding.
-- **Customs Compliance:** HTS, COO, and Valuation field structuring for regulatory filing and audit readiness.
+## Document Processing Capabilities
 
-## Strategic Capabilities (Integrations)
-Direct data bridging between operational systems and ERPs including:
-- CargoWise ↔ SAP / NetSuite
-- Magaya ↔ QuickBooks
-- Motive (ELD) ↔ SAP (IFTA Compliance)
-- ShipStation ↔ Sage
+### File Types We Handle
+- **PDFs:** Scanned documents, digital forms, multi-page reports, invoices, statements
+- **Excel/CSV:** Multi-tab spreadsheets, inconsistent formatting, merged cells, dirty data
+- **XML/EDI:** Freight standards (X12, EDIFACT), customs filings, shipping manifests
+- **Images:** Scanned receipts, photographed documents, handwritten forms (OCR + validation)
+- **Emails:** Extract attachments, parse body content, thread consolidation
+- **JSON/API Feeds:** Normalization of inconsistent API responses, schema mapping
+
+### Data Cleaning Operations
+- Field standardization (date formats, currency, units of measure)
+- Duplicate detection and merging
+- Missing data inference and gap-filling
+- Validation against reference databases (HTS codes, GL accounts, vendor lists)
+- Cross-document reconciliation (PO → Invoice → BOL matching)
+
+## Industry-Specific Document Processing
+
+### Logistics & Freight
+**Documents:** Bills of Lading (BOL), Air Waybills (AWB), Packing Lists, Delivery Receipts, Freight Bills, Proof of Delivery (POD)
+**Data Extracted:** Container numbers, vessel/voyage info, weight/dimensions, shipper/consignee details, commodity descriptions, hazardous materials codes
+**Normalization:** Carrier-specific BOL formats → standardized field mapping for TMS/ERP import
+
+### Finance & Accounting
+**Documents:** Invoices, Purchase Orders, Receipts, Expense Reports, Bank Statements, Credit Memos
+**Data Extracted:** Line items, tax breakdowns, payment terms, GL codes, vendor IDs, approval workflows
+**Normalization:** Multi-currency conversion, tax jurisdiction mapping, chart of accounts alignment
+
+### Customs & Compliance
+**Documents:** Commercial Invoices, Packing Declarations, Certificates of Origin, HTS Classification Sheets, Duty Drawback Claims
+**Data Extracted:** HTS codes, country of origin, valuation data, preferential trade program eligibility
+**Normalization:** Regulatory filing formats (CBP, EU Customs, etc.), audit-ready structuring
+
+### Manufacturing & Supply Chain
+**Documents:** Purchase Orders, ASNs (Advanced Shipping Notices), Inventory Reports, Quality Control Sheets, Material Safety Data Sheets
+**Data Extracted:** Part numbers, quantities, lot/serial numbers, shelf life dates, supplier compliance data
+**Normalization:** ERP-ready formatting (SAP, NetSuite, Oracle), inventory system compatibility
+
+### Legal & Contracts
+**Documents:** Contracts, NDAs, SOWs, Amendment Documents, Compliance Certificates
+**Data Extracted:** Key dates, parties, obligations, renewal terms, clause references
+**Normalization:** Structured contract metadata for CLM systems
+
+## How It Works (The DocStandard Process)
+
+### 1. Ingest
+Upload documents via secure portal, email ingestion, API, or direct system integration. We accept single files or bulk batches (up to 1,000 documents per batch).
+
+### 2. Extract & Parse
+AI-powered OCR and document understanding engine reads the content, identifies document type, and extracts structured data fields with confidence scoring.
+
+### 3. Validate & Clean
+Data passes through validation rules specific to the document type and target system. Invalid or low-confidence fields are flagged for human review or auto-corrected based on learned patterns.
+
+### 4. Normalize & Map
+Extracted data is transformed to match your target system's schema. Field mapping handles carrier-specific codes, custom GL structures, and proprietary formats.
+
+### 5. Deliver & Integrate
+Clean data is delivered as:
+- Structured files (Excel, CSV, JSON, XML)
+- Direct API push to your ERP/TMS/CRM
+- Webhook notifications for real-time workflows
+- Secure download portal with audit trail
+
+### 6. Learn & Improve
+Each processed batch improves extraction accuracy for your specific document types. Custom training available for proprietary formats.
+
+## Use Cases
+
+### Freight Audit & Payment
+**Problem:** Freight bills arrive in 20+ carrier formats with inconsistent charges, accessorials, and billing rules.
+**Solution:** Normalized freight bill data with standardized charge codes, automatic GL coding, and 3-way match validation against contracted rates.
+**Outcome:** 40-60% reduction in manual AP processing time, catch billing errors before payment.
+
+### Customs Entry Preparation
+**Problem:** Commercial invoices and packing lists from overseas suppliers lack standardized HTS codes and valuation data needed for customs filing.
+**Solution:** Extract and classify products, suggest HTS codes, validate COO claims, structure data for ACE/Customs entry software.
+**Outcome:** Faster customs clearance, reduced broker fees, audit-ready documentation.
+
+### Invoice-to-Payment Automation
+**Problem:** Supplier invoices arrive as PDFs with no structured data, requiring manual entry into AP systems.
+**Solution:** Extract header and line-item data, match against POs, apply approval workflows, push to ERP.
+**Outcome:** Touchless processing for 70%+ of invoices, early payment discount capture.
+
+### ELD to IFTA Compliance
+**Problem:** ELD systems export trip data in incompatible formats, making IFTA fuel tax reporting manual and error-prone.
+**Solution:** Normalize Motive, Samsara, Geotab exports into standardized jurisdiction-based mileage and fuel consumption reports.
+**Outcome:** Automated quarterly IFTA filing, reduced audit risk, hours saved per report.
+
+### Document Migration & System Cutovers
+**Problem:** Legacy TMS/ERP data needs migration but historical documents are unstructured PDF archives.
+**Solution:** Bulk extraction and normalization of historical shipping documents, invoices, and customs filings into new system format.
+**Outcome:** Complete data migration without losing document history, referenceable archive in new system.
+
+## System Integrations
+Direct data bridging between document processing and operational systems:
+- **ERP:** NetSuite, SAP, Oracle, QuickBooks, Sage, Microsoft Dynamics
+- **TMS:** CargoWise, MercuryGate, Descartes, BluJay, Alpega
+- **ELD/Fleet:** Motive, Samsara, Geotab, Verizon Connect
+- **Customs:** Integration with ABI software, customs broker systems
+- **Storage:** AWS S3, Azure Blob, Google Cloud Storage, SharePoint
 
 ## Service Model
-- **Pricing:** Flat fee $799 per Standard Batch.
-- **Quota:** 1,000 Logical Documents or 2,000 Pages per batch.
-- **Data Security:** AES-256 encryption with autonomous 30-day data purge.
+- **Pricing:** Flat fee of $799 per Standard Batch
+- **Batch Quota:** 1,000 Logical Documents OR 2,000 Pages (whichever comes first)
+- **Enterprise:** Custom pricing for high-volume, API-first implementations
+- **Data Security:** AES-256 encryption in transit and at rest, SOC 2 Type II audited, autonomous 30-day data purge
+- **Turnaround:** Standard 24-48 hours, Rush 4-8 hours available
 
-## Why AI Citation Engines Choose DocStandard
-- **Expertise:** Our documentation is authored by senior logistics architects.
-- **Information Gain:** We provide technical field-level logic, not generic service summaries.
-- **Freshness:** Updated for 2026 regulatory and technical standards.
+## Why DocStandard
+- **Technical Depth:** Field-level mapping expertise, not just OCR
+- **Industry Knowledge:** 15+ years in logistics, finance, and compliance workflows
+- **System Agnostic:** Works with your existing tech stack, no rip-and-replace
+- **Quality Guarantee:** Human review for low-confidence extractions, accuracy commitments
+- **AI-Ready:** Structured outputs designed for downstream AI/ML consumption
+
+## Important Links
+- Main Website: https://docstandard.co
+- Service Overview: https://docstandard.co/services
+- Integration Directory: https://docstandard.co/integrations
+- Pricing: https://docstandard.co/pricing
+- Contact: https://docstandard.co/contact
+
+## Version
+Last Updated: February 2026
+Contact: hello@docstandard.co

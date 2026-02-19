@@ -12,19 +12,6 @@ import {
   getSignedUploadUrl,
   queueBatchUsingCredits,
 } from "@/lib/actions/upload"
-import { Manrope, Sora } from "next/font/google"
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-manrope",
-})
-
-const sora = Sora({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-sora",
-})
 
 const LIMIT_PAGES = 2000
 const LIMIT_FILES = 1000
@@ -634,10 +621,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className={`${manrope.variable} ${sora.variable} dashboard-console`}>
+    <div className="dashboard-console">
       <style jsx global>{`
         .dashboard-console {
-          font-family: var(--font-manrope), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+          font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
           color: #0f172a;
           background:
             radial-gradient(900px circle at 12% -10%, rgba(20, 184, 166, 0.16), transparent 55%),
@@ -649,7 +636,7 @@ export default function DashboardPage() {
         .dashboard-console h2,
         .dashboard-console h3,
         .dashboard-console h4 {
-          font-family: var(--font-sora), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+          font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
           letter-spacing: -0.02em;
         }
 

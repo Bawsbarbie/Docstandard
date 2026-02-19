@@ -1,0 +1,768 @@
+# DocStandard - Complete Technical Documentation (llms-full.txt)
+# For AI agents, coding assistants, and technical implementations
+
+---
+
+## Table of Contents
+1. [Core Platform Overview](#1-core-platform-overview)
+2. [Document Type Specifications](#2-document-type-specifications)
+3. [Data Extraction Field Maps](#3-data-extraction-field-maps)
+4. [API Reference](#4-api-reference)
+5. [Integration Patterns](#5-integration-patterns)
+6. [File Format Specifications](#6-file-format-specifications)
+7. [Use Case Deep Dives](#7-use-case-deep-dives)
+8. [Error Handling & Troubleshooting](#8-error-handling--troubleshooting)
+9. [Security & Compliance](#9-security--compliance)
+
+---
+
+## 1. Core Platform Overview
+
+### 1.1 Architecture
+DocStandard operates as a document intelligence pipeline with three core layers:
+
+**Ingestion Layer**
+- Multi-format file acceptance (PDF, Excel, CSV, XML, Images, Email)
+- Pre-processing: OCR, deskew, noise reduction for scanned documents
+- Document classification: Automatic type detection with confidence scoring
+
+**Processing Layer**
+- Extraction Engine: Layout-aware OCR + NLP entity recognition
+- Validation Engine: Rule-based + ML-based validation
+- Normalization Engine: Schema transformation, field mapping, data enrichment
+
+**Delivery Layer**
+- Output generation: Structured files (CSV, JSON, XML, Excel)
+- API endpoints: RESTful and webhook-based delivery
+- Integration adapters: Pre-built connectors for major ERP/TMS systems
+
+### 1.2 Processing Capacity
+- Standard Batch: 1,000 logical documents OR 2,000 pages
+- File size limit: 50MB per individual file
+- Batch size limit: 500 files per upload
+- Processing time: 24-48 hours standard, 4-8 hours rush
+
+---
+
+## 2. Document Type Specifications
+
+### 2.1 Bills of Lading (BOL)
+
+**Document Characteristics**
+- Format: PDF (scanned or digital), sometimes Excel/XML via EDI
+- Complexity: High (multiple formats per carrier, inconsistent field placement)
+- Typical pages: 1-3 per BOL
+
+**Extracted Data Fields**
+```json
+{
+  "document_type": "BOL",
+  "bol_number": "string",
+  "carrier_scac": "string",
+  "carrier_name": "string",
+  "shipper": {
+    "name": "string",
+    "address": "string",
+    "city": "string",
+    "state": "string",
+    "zip": "string",
+    "country": "string"
+  },
+  "consignee": {
+    "name": "string",
+    "address": "string",
+    "city": "string",
+    "state": "string",
+    "zip": "string",
+    "country": "string"
+  },
+  "notify_party": {
+    "name": "string",
+    "address": "string"
+  },
+  "vessel_voyage": "string",
+  "port_of_loading": "string",
+  "port_of_discharge": "string",
+  "place_of_receipt": "string",
+  "place_of_delivery": "string",
+  "cargo_items": [
+    {
+      "container_number": "string",
+      "seal_number": "string",
+      "description": "string",
+      "hs_code": "string",
+      "packages": "number",
+      "package_type": "string",
+      "weight_kg": "number",
+      "weight_lbs": "number",
+      "volume_cbm": "number",
+      "volume_cft": "number",
+      "hazardous": "boolean",
+      "un_number": "string",
+      "class": "string"
+    }
+  ],
+  "total_packages": "number",
+  "total_weight_kg": "number",
+  "total_volume_cbm": "number",
+  "freight_terms": "string (PREPAID/COLLECT)",
+  "release_type": "string (ORIGINAL/EXPRESS/SEA WAYBILL)",
+  "issue_date": "date",
+  "place_of_issue": "string",
+  "number_of_originals": "number"
+}
+```
+
+**Carrier-Specific Variations**
+- Maersk: Uses proprietary layout with container details in separate table
+- MSC: Includes booking reference number prominently
+- CMA CGM: Has unique hazardous materials declaration section
+- Hapag-Lloyd: Separate fields for VGM (Verified Gross Mass)
+
+---
+
+### 2.2 Commercial Invoices
+
+**Document Characteristics**
+- Format: PDF, sometimes Excel
+- Complexity: Medium (standardized format but variable line item structures)
+- Typical pages: 1-2 per invoice
+
+**Extracted Data Fields**
+```json
+{
+  "document_type": "COMMERCIAL_INVOICE",
+  "invoice_number": "string",
+  "invoice_date": "date",
+  "po_number": "string",
+  "exporter": {
+    "name": "string",
+    "address": "string",
+    "tax_id": "string",
+    "contact": "string"
+  },
+  "importer": {
+    "name": "string",
+    "address": "string",
+    "tax_id": "string",
+    "contact": "string"
+  },
+  "manufacturer": {
+    "name": "string",
+    "address": "string",
+    "country": "string"
+  },
+  "line_items": [
+    {
+      "line_number": "number",
+      "description": "string",
+      "hs_code": "string",
+      "country_of_origin": "string",
+      "quantity": "number",
+      "unit": "string (EA/KG/MTR/etc)",
+      "unit_price": "number",
+      "currency": "string (USD/EUR/GBP/etc)",
+      "total_value": "number",
+      "gross_weight_kg": "number",
+      "net_weight_kg": "number"
+    }
+  ],
+  "total_value": "number",
+  "total_value_currency": "string",
+  "incoterms": "string (FOB/CIF/DDP/etc)",
+  "payment_terms": "string",
+  "bank_details": {
+    "bank_name": "string",
+    "account_number": "string",
+    "swift_code": "string"
+  },
+  "declaration_statement": "string"
+}
+```
+
+---
+
+### 2.3 Freight Bills / Carrier Invoices
+
+**Document Characteristics**
+- Format: PDF (most common), Excel, CSV, XML via EDI
+- Complexity: High (dozens of charge types, accessorials, varying formats)
+- Typical pages: 1-5 per invoice
+
+**Extracted Data Fields**
+```json
+{
+  "document_type": "FREIGHT_BILL",
+  "invoice_number": "string",
+  "invoice_date": "date",
+  "due_date": "date",
+  "carrier_name": "string",
+  "carrier_scac": "string",
+  "bill_to": {
+    "name": "string",
+    "account_number": "string",
+    "address": "string"
+  },
+  "shipment_references": [
+    {
+      "type": "string (BOL/PO/PRO/TRACKING)",
+      "value": "string"
+    }
+  ],
+  "shipment_details": {
+    "origin": "string",
+    "destination": "string",
+    "ship_date": "date",
+    "delivery_date": "date",
+    "mode": "string (LTL/FTL/AIR/OCEAN)",
+    "equipment_type": "string",
+    "weight": "number",
+    "weight_uom": "string (LBS/KG)"
+  },
+  "line_charges": [
+    {
+      "charge_code": "string",
+      "charge_description": "string",
+      "amount": "number",
+      "currency": "string",
+      "gl_code_suggestion": "string"
+    }
+  ],
+  "summary": {
+    "subtotal": "number",
+    "fuel_surcharge": "number",
+    "accessorials_total": "number",
+    "tax_amount": "number",
+    "total_due": "number",
+    "currency": "string"
+  }
+}
+```
+
+**Common Charge Codes**
+- FRT: Base freight charge
+- FSC: Fuel surcharge
+- RES: Residential delivery
+- LIFT: Liftgate service
+- INS: Insurance
+- DET: Detention
+- DEM: Demurrage
+- PER: Per diem
+- CHS: Chassis rental
+- PREP: Pre-pull
+- STORAGE: Storage fees
+
+---
+
+### 2.4 Packing Lists
+
+**Document Characteristics**
+- Format: PDF, Excel
+- Complexity: Low to Medium
+- Typical pages: 1-3 per list
+
+**Extracted Data Fields**
+```json
+{
+  "document_type": "PACKING_LIST",
+  "pl_number": "string",
+  "invoice_number": "string",
+  "date": "date",
+  "exporter": {
+    "name": "string",
+    "address": "string"
+  },
+  "consignee": {
+    "name": "string",
+    "address": "string"
+  },
+  "vessel": "string",
+  "voyage": "string",
+  "container_numbers": ["string"],
+  "total_packages": "number",
+  "total_gross_weight_kg": "number",
+  "total_net_weight_kg": "number",
+  "total_volume_cbm": "number",
+  "packages": [
+    {
+      "package_number": "string",
+      "marks_numbers": "string",
+      "description": "string",
+      "quantity": "number",
+      "type": "string (CTN/PLT/DRUM/etc)",
+      "gross_weight_kg": "number",
+      "net_weight_kg": "number",
+      "dimensions_cm": {
+        "length": "number",
+        "width": "number",
+        "height": "number"
+      }
+    }
+  ]
+}
+```
+
+---
+
+## 3. Data Extraction Field Maps
+
+### 3.1 Confidence Scoring
+Each extracted field receives a confidence score (0.0 - 1.0):
+
+| Score Range | Meaning | Action |
+|-------------|---------|--------|
+| 0.95 - 1.00 | High confidence | Auto-accept |
+| 0.80 - 0.94 | Medium confidence | Review suggested |
+| 0.60 - 0.79 | Low confidence | Human review required |
+| < 0.60 | Unreliable | Re-extract or manual entry |
+
+### 3.2 Field Validation Rules
+
+**Date Fields**
+- Format standardization: MM/DD/YYYY → ISO 8601 (YYYY-MM-DD)
+- Range validation: Dates within reasonable business window (±1 year)
+- Cross-field validation: Ship date ≤ Delivery date
+
+**Currency Fields**
+- Normalization to decimal format
+- Currency code extraction and standardization (USD, EUR, GBP)
+- Multi-currency handling with exchange rate reference
+
+**Weight/Measurement Fields**
+- Unit detection (lbs/kg, inches/cm, etc.)
+- Standard conversion to base units
+- Cross-validation (sum of line items = total)
+
+**Reference Numbers**
+- Pattern matching for common formats (BOL numbers, PO numbers)
+- Checksum validation where applicable
+- Cross-document matching (BOL ↔ Invoice ↔ Packing List)
+
+---
+
+## 4. API Reference
+
+### 4.1 Authentication
+All API requests require an API key passed in the header:
+```
+Authorization: Bearer {your_api_key}
+Content-Type: application/json
+```
+
+### 4.2 Endpoints
+
+#### Submit Batch
+```
+POST /api/v1/batches
+```
+
+**Request Body**
+```json
+{
+  "batch_name": "Q4 Freight Bills",
+  "document_type": "FREIGHT_BILL",
+  "target_system": "netsuite",
+  "file_urls": [
+    "https://your-storage.com/file1.pdf",
+    "https://your-storage.com/file2.pdf"
+  ],
+  "field_mapping_override": {
+    "custom_gl_codes": {
+      "FRT": "6100-Freight",
+      "FSC": "6105-Fuel"
+    }
+  },
+  "webhook_url": "https://your-system.com/webhook/docstandard",
+  "priority": "standard"
+}
+```
+
+**Response**
+```json
+{
+  "batch_id": "batch_abc123xyz",
+  "status": "received",
+  "estimated_completion": "2026-02-20T14:00:00Z",
+  "document_count": 45,
+  "tracking_url": "https://docstandard.co/batch/batch_abc123xyz"
+}
+```
+
+#### Check Batch Status
+```
+GET /api/v1/batches/{batch_id}
+```
+
+**Response**
+```json
+{
+  "batch_id": "batch_abc123xyz",
+  "status": "processing",
+  "progress": {
+    "total": 45,
+    "completed": 23,
+    "failed": 0,
+    "pending": 22
+  },
+  "created_at": "2026-02-18T10:00:00Z",
+  "estimated_completion": "2026-02-20T14:00:00Z"
+}
+```
+
+#### Get Results
+```
+GET /api/v1/batches/{batch_id}/results
+```
+
+**Response**
+```json
+{
+  "batch_id": "batch_abc123xyz",
+  "status": "completed",
+  "documents": [
+    {
+      "document_id": "doc_001",
+      "filename": "invoice_12345.pdf",
+      "status": "completed",
+      "extracted_data": { /* full extracted JSON */ },
+      "confidence_scores": {
+        "invoice_number": 0.98,
+        "total_amount": 0.95,
+        "line_items": 0.87
+      },
+      "review_flags": ["low_confidence_line_items"],
+      "download_url": "https://api.docstandard.co/download/doc_001.json"
+    }
+  ],
+  "summary": {
+    "total": 45,
+    "successful": 43,
+    "needs_review": 2,
+    "failed": 0
+  },
+  "export_formats": {
+    "json": "https://api.docstandard.co/batches/batch_abc123xyz/export/json",
+    "csv": "https://api.docstandard.co/batches/batch_abc123xyz/export/csv",
+    "excel": "https://api.docstandard.co/batches/batch_abc123xyz/export/xlsx"
+  }
+}
+```
+
+### 4.3 Webhook Events
+
+DocStandard sends webhook notifications for the following events:
+
+| Event | Description | Payload |
+|-------|-------------|---------|
+| `batch.received` | Batch upload confirmed | Batch ID, document count |
+| `batch.processing` | Processing started | Batch ID, estimated completion |
+| `batch.completed` | All documents processed | Batch ID, summary stats |
+| `document.completed` | Individual document done | Document ID, extracted data |
+| `document.needs_review` | Low confidence fields | Document ID, flagged fields |
+| `batch.failed` | Critical error | Batch ID, error details |
+
+---
+
+## 5. Integration Patterns
+
+### 5.1 NetSuite Integration
+
+**Data Flow**
+1. DocStandard extracts vendor bill data from freight invoices
+2. Validates against NetSuite vendor records
+3. Creates Vendor Bill records with line-level GL coding
+4. Attaches original PDF to transaction
+
+**Field Mapping Example**
+```json
+{
+  "docstandard_field": "carrier_name",
+  "netsuite_field": "entity",
+  "transformation": "lookup_vendor_id"
+},
+{
+  "docstandard_field": "line_charges[].amount",
+  "netsuite_field": "expense.items[].amount",
+  "transformation": "none"
+},
+{
+  "docstandard_field": "line_charges[].gl_code_suggestion",
+  "netsuite_field": "expense.items[].account",
+  "transformation": "map_gl_account"
+}
+```
+
+### 5.2 SAP Integration
+
+**Supported Modules**
+- MM (Materials Management): Invoice verification, GR/IR clearing
+- FI (Financial Accounting): AP posting, GL account assignment
+- TM (Transportation Management): Freight order settlement
+
+**IDoc Support**
+- INVOIC02 (Invoice)
+- SHPMNT05 (Shipment)
+- PAYEXT (Payment advice)
+
+### 5.3 QuickBooks Integration
+
+**Capabilities**
+- Create Bills from freight invoices
+- Auto-match against POs
+- Expense categorization
+- Attachment preservation
+
+**API Version Support**
+- QuickBooks Online (REST API v3)
+- QuickBooks Desktop (via QBO bridge)
+
+### 5.4 CargoWise Integration
+
+**Two-Way Data Flow**
+- **Export from CW:** Shipment data, job references, cost allocations
+- **Import to CW:** Processed freight costs, customs entry data, document attachments
+
+**eAdapter Support**
+- XML message format
+- Automated polling
+- Error queue handling
+
+---
+
+## 6. File Format Specifications
+
+### 6.1 Output Formats
+
+#### JSON (Default)
+- Structured, nested objects
+- Best for API consumption
+- Includes full metadata and confidence scores
+
+#### CSV/Excel
+- Flattened structure
+- One row per line item (with parent document reference)
+- Best for import to spreadsheet-based workflows
+
+#### XML
+- EDI-compatible formats (X12, EDIFACT)
+- Custom schema support
+- Best for legacy system integration
+
+### 6.2 Custom Field Mapping
+
+Clients can define custom field mappings for their specific systems:
+
+```json
+{
+  "mapping_name": "AcmeCorp_ERP_Mapping",
+  "rules": [
+    {
+      "source": "bol_number",
+      "target": "shipment_ref",
+      "transform": "uppercase"
+    },
+    {
+      "source": "consignee.name",
+      "target": "customer_name",
+      "transform": "lookup_customer_id"
+    },
+    {
+      "source": "cargo_items[].weight_lbs",
+      "target": "total_weight",
+      "transform": "sum_array"
+    }
+  ]
+}
+```
+
+---
+
+## 7. Use Case Deep Dives
+
+### 7.1 Freight Audit Automation
+
+**The Problem**
+Mid-sized manufacturer receives 200+ freight bills monthly from 15+ carriers. Each carrier uses different invoice formats, charge codes, and billing rules. AP team spends 3-4 days monthly manually processing, coding, and verifying freight invoices.
+
+**The DocStandard Solution**
+
+1. **Ingestion Setup**
+   - Email ingestion rule: auto-forward freight bills from carriers
+   - API integration: Direct pull from carrier portals (FedEx, UPS, Conway, etc.)
+
+2. **Extraction Configuration**
+   - Carrier-specific models trained for each major carrier
+   - Custom charge code mapping to client's GL structure
+   - Contract rate validation against negotiated tariff
+
+3. **Validation Rules**
+   - 3-way match: Invoice vs PO vs Delivery receipt
+   - Duplicate detection: Prevent double-payment
+   - Tolerance checking: Flag variances >5% from expected
+
+4. **Integration**
+   - Auto-create vendor bills in NetSuite
+   - Apply pre-approved GL coding
+   - Route exceptions to freight manager for approval
+
+**Results**
+- Processing time: 3-4 days → 4 hours
+- Error rate: 8% → <1%
+- Early payment discounts captured: $12K/quarter
+- Disputes won: Increased 40% with better documentation
+
+---
+
+### 7.2 Customs Entry Preparation
+
+**The Problem**
+Importer receives commercial invoices and packing lists from 50+ Asian suppliers. Documents are inconsistent, HS codes often missing or incorrect, and customs broker charges $75-150 per entry for manual data entry.
+
+**The DocStandard Solution**
+
+1. **Document Collection**
+   - Supplier portal: Upload links sent to suppliers
+   - Email ingestion: Supplier invoices auto-forwarded
+   - Batch upload: Monthly consolidation option
+
+2. **Data Extraction & Enrichment**
+   - Extract all line items with descriptions
+   - AI-powered HS code suggestion based on product description
+   - Country of origin validation
+   - Valuation checks (transaction value vs similar products)
+
+3. **Compliance Checks**
+   - AES filing requirement flags
+   - FDA/EPA/USDA flags for regulated products
+   - Antidumping/countervailing duty checks
+   - FTA eligibility (USMCA, etc.)
+
+4. **Output to Broker**
+   - Structured data in broker's preferred format
+   - ACE entry template population
+   - Supporting document package (PDFs + extracted data)
+
+**Results**
+- Broker fees: $75-150/entry → $35/entry
+- Entry prep time: 2 hours → 15 minutes
+- Customs holds: Reduced 60% with accurate HS coding
+- Duty savings: $45K/year through FTA optimization
+
+---
+
+### 7.3 Invoice-to-Payment Automation
+
+**The Problem**
+Distributor receives 500+ supplier invoices monthly as PDFs. Manual data entry creates 2-day processing delays, missed early payment discounts, and frequent data entry errors.
+
+**The DocStandard Solution**
+
+1. **Multi-Channel Ingestion**
+   - Email: AP email monitored for invoice attachments
+   - Portal: Supplier self-service upload
+   - API: E-invoice receiving (Peppol, etc.)
+
+2. **Intelligent Extraction**
+   - Header data: Vendor, invoice number, date, total
+   - Line items: Description, quantity, unit price, amount
+   - PO matching: Auto-link to purchase orders
+
+3. **Workflow Routing**
+   - Match found + within tolerance: Auto-approve
+   - No PO match: Route to department manager
+   - Over tolerance: Route to procurement
+   - Duplicate detected: Flag and hold
+
+4. **ERP Integration**
+   - Create AP invoice in SAP
+   - Apply cash discount terms
+   - Schedule payment per terms
+   - Archive document with audit trail
+
+**Results**
+- Touchless processing: 0% → 72% of invoices
+- Processing time: 2 days → same day
+- Early pay discounts: Captured $28K/year previously missed
+- Headcount: 2.5 FTE → 1 FTE
+
+---
+
+## 8. Error Handling & Troubleshooting
+
+### 8.1 Common Errors
+
+**Low Confidence Scores**
+- Cause: Poor scan quality, handwritten content, unusual layouts
+- Resolution: Human review queue, re-scan request, custom model training
+
+**Document Classification Failure**
+- Cause: Hybrid documents, unfamiliar formats
+- Resolution: Manual classification, training sample submission
+
+**Validation Failures**
+- Cause: Data conflicts, missing required fields
+- Resolution: Exception queue, client notification, rule adjustment
+
+**Integration Errors**
+- Cause: API changes, authentication expiry, rate limiting
+- Resolution: Retry logic, alerting, fallback to manual export
+
+### 8.2 Retry Logic
+
+DocStandard implements exponential backoff for transient failures:
+- Initial retry: 5 minutes
+- Second retry: 15 minutes
+- Third retry: 45 minutes
+- Final retry: 2 hours
+- After 4 failures: Human escalation
+
+---
+
+## 9. Security & Compliance
+
+### 9.1 Data Security
+
+**Encryption**
+- In transit: TLS 1.3
+- At rest: AES-256
+- Key management: AWS KMS with rotation
+
+**Access Controls**
+- Role-based access (RBAC)
+- Multi-factor authentication (MFA)
+- IP allowlisting available
+- Audit logging of all access
+
+**Data Retention**
+- Standard: 30 days post-processing
+- Extended: Available up to 1 year
+- Deletion: Autonomous purge with certificate
+
+### 9.2 Compliance Certifications
+
+- SOC 2 Type II
+- GDPR compliant
+- CCPA compliant
+- ISO 27001 certified (in progress)
+
+### 9.3 Audit Trail
+
+Every document processed includes:
+- Upload timestamp and user
+- Processing history
+- Extraction confidence scores
+- Validation results
+- Human review actions (if any)
+- Export/download history
+
+---
+
+## Contact & Support
+
+**Technical Support:** tech@docstandard.co
+**API Documentation:** https://docs.docstandard.co/api
+**Status Page:** https://status.docstandard.co
+**Emergency:** +1-XXX-XXX-XXXX (24/7)
+
+**Version:** 2026.02
+**Last Updated:** February 18, 2026

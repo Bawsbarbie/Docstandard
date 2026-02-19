@@ -115,7 +115,7 @@ export default async function NearMeSlugPage({ params }: PageProps) {
     },
     {
       q: `How fast is turnaround for ${model.actionLabel.toLowerCase()} batches for ${model.cityName} operators?`,
-      a: `Our platform is designed for the high-velocity requirements of the ${model.cityName} logistics market. We offer a standard 24-48 hour turnaround for full ${model.documentLabel.toLowerCase()} batches, with rush workflows available in 4-8 hours to meet critical ${model.portName} clearance deadlines or local month-end finance closes.`,
+      a: `Our platform is designed for the high-velocity requirements of the ${model.cityName} logistics market. We offer a standard 24-72 hour turnaround for full ${model.documentLabel.toLowerCase()} batches, with rush workflows available in 4-8 hours to meet critical ${model.portName} clearance deadlines or local month-end finance closes.`,
     },
     {
       q: `Do you support both port and air cargo document flows in the ${model.cityName} area?`,
@@ -380,8 +380,8 @@ export default async function NearMeSlugPage({ params }: PageProps) {
                 <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-indigo-600">Step {i + 1}</p>
                 <h3 className="text-xl font-bold text-slate-900">{step}</h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  {step === "Upload" && `Securely ingest ${model.documentLabel.toLowerCase()} files from your operations in the ${model.cityName} region via direct API, email monitor, or our high-speed bulk upload portal. We handle batches up to 1,000 records per upload.`}
-                  {step === "Extract" && `Our AI document intelligence engine identifies document types and extracts 99.5%+ of fields without manual template mapping. We specifically target port-specific reference numbers and carrier-neutral field structures.`}
+                  {step === "Upload" && `Securely ingest ${model.documentLabel.toLowerCase()} files from your operations in the ${model.cityName} region via direct API, email monitor, or our high-speed bulk upload portal. We handle batches up to 2,000 files and 1,000 documents per upload—with specialized handling for higher volumes.`}
+                  {step === "Extract" && `Our AI document intelligence engine is trained for 99%+ field accuracy across complex logistics documents. Every extraction is then double-checked by our human-in-the-loop auditors to ensure 100% data integrity before it hits your ERP.`}
                   {step === "Validate" && `Extracted records are cross-validated against ${model.systems.join(" / ")} business rules. We check for missing HTS codes, quantity variances, and SCAC code accuracy before the final normalization pass.`}
                   {step === "Deliver" && `Receive system-ready JSON, XML, or CSV payloads directly into your ${model.cityName}-based tech stack. Every record includes a full audit trail and confidence score for your compliance team.`}
                 </p>

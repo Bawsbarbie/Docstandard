@@ -3,23 +3,28 @@ import "./globals.css"
 import Script from "next/script"
 
 export const metadata: Metadata = {
-  title: "DocStandard.co - Document Processing for Logistics",
-  description: "High-scale document processing and logistics solutions",
+  title: "DocStandard - Document Processing & Data Extraction Platform",
+  description: "Transform unstructured business documents into clean, structured data. PDF, Excel, CSV extraction and normalization for finance, customs, manufacturing, and logistics.",
   keywords: [
     "document processing",
-    "logistics data",
-    "customs clearance",
-    "freight forwarding",
+    "data extraction",
+    "PDF processing",
+    "invoice processing",
+    "document data extraction",
+    "automated data entry",
+    "OCR data extraction",
+    "document normalization",
+    "financial document processing",
+    "customs document processing",
+    "freight bill processing",
+    "ERP integration",
+    "accounting automation",
+    "AP automation",
     "EDI normalization",
     "CargoWise integration",
-    "document standardization",
-    "TMS integration",
-    "ERP integration",
-    "logistics document processing",
-    "supply chain data",
-    "bill of lading processing",
-    "commercial invoice extraction",
-    "trade compliance documents"
+    "NetSuite integration",
+    "SAP integration",
+    "QuickBooks integration"
   ],
 }
 

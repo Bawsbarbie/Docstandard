@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     q: "How quickly can DocStandard integrate with our existing Magaya or Verizon Connect setup?",
-    a: "Most integrations are live within 24-48 hours. DocStandard connects via standard APIs and requires no IT infrastructure changes. You start seeing ROI immediately—saving 20+ hours weekly on data entry and reconciliation."
+    a: "Most integrations are live within 24-72 hours. DocStandard connects via standard APIs and requires no IT infrastructure changes. You start seeing ROI immediately—saving 20+ hours weekly on data entry and reconciliation."
   }
 ]
 

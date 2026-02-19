@@ -379,7 +379,7 @@ export default async function ShippingHubPage() {
               <ul className="space-y-2 text-slate-600">
                 <li>Ocean BOL: 12-24 hours with container validation</li>
                 <li>Air waybill: 6-12 hours for structured AWB formats</li>
-                <li>Manifest sets: 24-48 hours based on quality</li>
+                <li>Manifest sets: 24-72 hours based on quality</li>
                 <li>Throughput: up to 500 shipping documents per business day</li>
               </ul>
             </div>
