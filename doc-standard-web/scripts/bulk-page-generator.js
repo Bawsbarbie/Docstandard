@@ -296,6 +296,7 @@ function main() {
       BENEFIT: benefit,
       ROI_MANUAL: roiManual,
       ROI_SAVINGS: roiSavings,
+      NOINDEX: '<meta name="robots" content="noindex, nofollow" />',
     };
 
     const content = replaceAll(template, replacements);
@@ -382,7 +383,6 @@ function main() {
     seenSlugs.add(slug);
     shingleSets.push(shingles);
 
-    created++;
     attempts++;
   }
 
