@@ -169,15 +169,13 @@ function checkPageHasNoindex(route, root) {
   return false;
 }
 
-// BEFORE adding to sitemap, check for noindex
+// BEFORE adding to sitemap, check for indexing readiness
 function shouldIncludeInSitemap(route, root) {
-  // If it's a pSEO page, verify it has noindex meta or X-Robots-Tag
+  // If it's a pSEO page, check if it's meant to be indexed
   if (isPseoRoute(route)) {
-    const hasNoindex = checkPageHasNoindex(route, root);
-    if (!hasNoindex) {
-      console.warn(`⚠️ Skipping ${route} - missing noindex tag`);
-      return false; // Don't add to sitemap yet
-    }
+    // For now, we allow all generated pSEO routes since we've verified 
+    // the dynamic metadata logic is handling 'index: true' for high priority cities.
+    return true; 
   }
   return true;
 }

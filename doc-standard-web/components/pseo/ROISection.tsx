@@ -22,12 +22,12 @@ export function ROISection({
   const manualEffortValue = manualEffort ?? "13.3h"
   const withDocStandardValue = withDocStandard ?? "24h turnaround"
   const formatAnnualSavings = (value: string) => {
-    const match = value.match(/^\$([\d,]+)(?:\/year)?$/i)
+    const match = value.match(/^\$([\d,]+)(?:\+)?(?:\/year)?$/i)
     if (!match) return value
     const raw = Number(match[1].replace(/,/g, ""))
     if (!Number.isFinite(raw)) return value
-    const short = raw >= 1000 ? `$${Math.round(raw / 1000)}K/year` : `$${raw}/year`
-    return short
+    const short = raw >= 1000 ? `$${Math.round(raw / 1000)}K` : `$${raw}`
+    return `${short}/year`
   }
 
   const annualSavingsValue = formatAnnualSavings(annualSavings ?? "$120k")
@@ -58,8 +58,8 @@ export function ROISection({
                 <div className="text-blue-200 text-sm font-medium uppercase tracking-wider">With DocStandard</div>
                 <div className="text-xs text-blue-200/60 mt-2">{withDocStandardNoteValue}</div>
             </div>
-             <div className="bg-white rounded-2xl p-6 border border-white shadow-xl transform md:-translate-y-4">
-                <div className="text-4xl font-extrabold mb-2 text-blue-600">{annualSavingsValue}</div>
+             <div className="bg-white rounded-2xl p-6 border border-white shadow-xl transform md:-translate-y-4 min-w-[200px]">
+                <div className="text-4xl font-extrabold mb-2 text-blue-600 whitespace-nowrap">{annualSavingsValue}</div>
                 <div className="text-slate-600 text-sm font-medium uppercase tracking-wider">Annual Savings</div>
                 <div className="text-xs text-slate-400 mt-2">{annualSavingsNoteValue}</div>
             </div>

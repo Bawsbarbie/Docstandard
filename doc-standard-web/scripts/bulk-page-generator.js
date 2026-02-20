@@ -364,7 +364,19 @@ function main() {
     }
 
     const filePath = path.join(outDir, `${slug}.tsx`);
-    fs.writeFileSync(filePath, content, "utf8");
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, content, "utf8");
+      created++;
+    } else {
+      // If file exists, we consider it "created" for progress purposes
+      // but we don't increment created if we want exactly N *new* pages.
+      // For resume logic, we'll increment created to reach the target count.
+      created++;
+    }
+    
+    if (created % 100 === 0) {
+      console.log(`[PROGRESS] Generated ${created}/${count} pages...`);
+    }
 
     seenHashes.add(hash);
     seenSlugs.add(slug);

@@ -2,6 +2,14 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://docstandard.co/sitemaps/sitemap-batch-01.xml</loc>
-    <lastmod>2026-02-18</lastmod>
+    <lastmod>2026-02-20</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://docstandard.co/sitemaps/sitemap-batch-02.xml</loc>
+    <lastmod>2026-02-20</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://docstandard.co/sitemaps/sitemap-batch-03.xml</loc>
+    <lastmod>2026-02-20</lastmod>
   </sitemap>
 </sitemapindex>

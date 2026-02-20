@@ -3,5 +3,15 @@
   "Inconsistent data formats break integrations and require extensive manual cleanup work",
   "Missing fields trigger ERP validation failures that delay critical business processes",
   "Time-consuming manual cleanup before import creates bottlenecks in daily operations",
-  "Data quality issues cause reconciliation problems that require hours of investigation"
+  "Data quality issues cause reconciliation problems that require hours of investigation",
+  "Carrier invoice discrepancies remain undetected without line-item data normalization",
+  "VAT and tax compliance risks increase due to manual entry of cross-border document data",
+  "General Ledger mapping errors during manual entry cause significant month-end reconciliation lag",
+  "Duplicate invoice payments occur when manual systems fail to detect existing record hashes",
+  "Landed cost calculations are inaccurate due to delayed entry of secondary freight charges",
+  "Accounts Payable automation is blocked by unstructured PDF carrier invoices and bills",
+  "Audit trails are incomplete when manual data entry skips non-mandatory technical fields",
+  "Multi-currency conversion errors occur during manual reconciliation of international freight bills",
+  "Port storage and demurrage fees accumulate while waiting for manual document processing",
+  "Freight audit accuracy is compromised by high-volume, low-quality manual data inputs"
 ]

@@ -1,3 +1,4 @@
+import Head from "next/head"
 import Link from "next/link"
 import { Hero } from "@/components/pseo/Hero"
 import { RiskSection } from "@/components/pseo/RiskSection"
@@ -42,10 +43,9 @@ export default function V2Page({
   faqs = [],
   testimonials = [],
 }: V2PageProps) {
-  const resolvedFaqs =
-    faqs.length > 0
-      ? faqs
-      : [
+  const resolvedFaqs = (faqs.length > 0
+    ? faqs
+    : [
           {
             question: `Can you handle {{SYSTEM_A}} custom fields and how do you ensure they map correctly to {{SYSTEM_B}}?`,
             answer: `Yes, we handle custom {{SYSTEM_A}} fields comprehensively. Our process begins with a detailed field mapping session where we document every custom field in your {{SYSTEM_A}} instance, understand its business purpose, and identify the corresponding field or data structure in {{SYSTEM_B}}. For fields that don't have direct equivalents, we create transformation rules that combine multiple {{SYSTEM_A}} fields, apply business logic, or format data to match {{SYSTEM_B}}'s requirements. We validate these mappings against your business rules before every delivery, ensuring that custom fields are preserved and correctly interpreted in {{SYSTEM_B}}. This approach prevents data loss and maintains the integrity of your operational data across both systems.`,
@@ -107,7 +107,11 @@ export default function V2Page({
   }))
 
   return (
-    <main className="min-h-screen bg-white">
+    <>
+      <Head>
+        {{NOINDEX}}
+      </Head>
+      <main className="min-h-screen bg-white">
       {/* SCHEMA - AUTO-GENERATED */}
       <script
         type="application/ld+json"

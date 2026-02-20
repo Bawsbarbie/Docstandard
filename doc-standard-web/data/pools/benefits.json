@@ -3,5 +3,15 @@
   "Clean, validated data ready for immediate import reduces processing time significantly",
   "Reduced errors and improved data accuracy minimize reconciliation issues and audit risk",
   "Faster processing times and better efficiency enable faster business decision making",
-  "Seamless integration with existing systems eliminates the need for custom development work"
+  "Seamless integration with existing systems eliminates the need for custom development work",
+  "Line-item data normalization ensures 100% visibility into carrier invoice discrepancies",
+  "Automated VAT extraction reduces tax compliance risk for international logistics operations",
+  "Direct GL mapping integration eliminates month-end reconciliation bottlenecks and lag",
+  "Deterministic record hashing prevents duplicate invoice payments and data overlaps",
+  "Real-time data extraction enables precise and timely landed cost calculations per shipment",
+  "Unstructured PDF ingestion converts carrier invoices into system-ready AP automation feeds",
+  "Comprehensive technical field extraction ensures a bulletproof audit trail for every record",
+  "Automated multi-currency normalization handles international freight billing with zero errors",
+  "High-velocity document processing prevents port storage fees and demurrage accumulation",
+  "High-integrity data inputs enable 99.9% accuracy for enterprise freight audit workflows"
 ]
