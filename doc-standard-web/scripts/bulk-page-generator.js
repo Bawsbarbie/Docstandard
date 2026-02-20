@@ -172,6 +172,16 @@ function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+function clearGeneratedBatchDir(dir) {
+  if (!fs.existsSync(dir)) return;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isFile()) continue;
+    if (!/\.(t|j)sx?$/.test(entry.name)) continue;
+    fs.unlinkSync(path.join(dir, entry.name));
+  }
+}
+
 function countWordCount(text) {
   return text.split(/\s+/).filter(Boolean).length;
 }
@@ -208,6 +218,10 @@ function replaceAll(template, replacements) {
     out = out.replace(re, value);
   }
   return out;
+}
+
+function escapeForDoubleQuotedString(value) {
+  return String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
 }
 
 function generateRoi(seed) {
@@ -254,6 +268,7 @@ function main() {
 
   const outDir = path.join(root, "generated", `batch${batch}`);
   ensureDir(outDir);
+  clearGeneratedBatchDir(outDir);
 
   const seenHashes = new Set();
   const seenSlugs = new Set();
@@ -284,6 +299,8 @@ function main() {
 
     const roiManual = location.roiManual || roi.roiManual;
     const roiSavings = location.roiSavings || roi.roiSavings;
+    const mappingText = `${systemA} to ${systemB} mapping for ${city} keeps schema alignment predictable, lowers import friction, and supports cleaner reconciliation cycles.`;
+    const roiCalculationText = `${roiSavings} estimated annual savings reflects reduced manual cleanup (${roiManual}), fewer failed imports, and faster operational turnaround for ${city} teams.`;
 
     const replacements = {
       CITY: city,
@@ -297,9 +314,17 @@ function main() {
       ROI_MANUAL: roiManual,
       ROI_SAVINGS: roiSavings,
       NOINDEX: '<meta name="robots" content="noindex, nofollow" />',
+      MAPPING_TEXT: escapeForDoubleQuotedString(mappingText),
+      ROI_CALCULATION_TEXT: escapeForDoubleQuotedString(roiCalculationText),
     };
 
-    const content = replaceAll(template, replacements);
+    let content = replaceAll(template, replacements);
+    // Guard against malformed template fragment where resolvedFaqs array misses the closing parenthesis.
+    content = content.replace(/\n([ \t]*\])\n+([ \t]*const resolvedTestimonials)/, "\n$1)\n\n$2");
+    // Guard against malformed return fragment where JSX fragment close tag is missing.
+    if (content.includes("return (\n    <>") && !content.includes("\n    </>\n  )")) {
+      content = content.replace("\n    </main>\n  )", "\n    </main>\n    </>\n  )");
+    }
 
     // Check for unreplaced placeholders ({{KEY}} pattern), not JSX syntax
     const unreplacedPlaceholders = content.match(/\{\{[A-Z_]+\}\}/g);
@@ -365,15 +390,8 @@ function main() {
     }
 
     const filePath = path.join(outDir, `${slug}.tsx`);
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, content, "utf8");
-      created++;
-    } else {
-      // If file exists, we consider it "created" for progress purposes
-      // but we don't increment created if we want exactly N *new* pages.
-      // For resume logic, we'll increment created to reach the target count.
-      created++;
-    }
+    fs.writeFileSync(filePath, content, "utf8");
+    created++;
     
     if (created % 100 === 0) {
       console.log(`[PROGRESS] Generated ${created}/${count} pages...`);
