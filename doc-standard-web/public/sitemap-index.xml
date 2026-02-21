@@ -12,4 +12,12 @@
     <loc>https://docstandard.co/sitemaps/sitemap-batch-03.xml</loc>
     <lastmod>2026-02-21</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>https://docstandard.co/sitemaps/sitemap-near-me.xml</loc>
+    <lastmod>2026-02-21</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://docstandard.co/sitemaps/sitemap-comparisons-only.xml</loc>
+    <lastmod>2026-02-21</lastmod>
+  </sitemap>
 </sitemapindex>

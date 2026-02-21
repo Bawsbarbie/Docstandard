@@ -23,12 +23,25 @@ import {
 // In a real scenario, this would import from a shared comparison data lib
 // For this cleanup, we'll keep it simple to restore the V1 structure
 export default async function ComparisonPage({ params }: { params: { slug: string } }) {
-  // Parsing slug for system names (e.g., cargowise-vs-magaya)
-  const [systemA, vs, systemB] = params.slug.split("-")
-  if (!vs || vs !== "vs") notFound()
+  // Parse slug using the explicit "-vs-" delimiter so multi-segment slugs
+  // like "3pl-central-vs-oracle-erp-cloud" resolve correctly.
+  const separator = "-vs-"
+  const separatorIndex = params.slug.indexOf(separator)
+  if (separatorIndex <= 0) notFound()
 
-  const nameA = systemA.charAt(0).toUpperCase() + systemA.slice(1)
-  const nameB = systemB.charAt(0).toUpperCase() + systemB.slice(1)
+  const systemA = params.slug.slice(0, separatorIndex)
+  const systemB = params.slug.slice(separatorIndex + separator.length)
+  if (!systemB) notFound()
+
+  const toDisplayName = (value: string) =>
+    value
+      .split("-")
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+
+  const nameA = toDisplayName(systemA)
+  const nameB = toDisplayName(systemB)
 
   const internalLinks = [
     { label: `${nameA} Integration Guide`, href: `/integration/${systemA}-to-netsuite-bridge` },

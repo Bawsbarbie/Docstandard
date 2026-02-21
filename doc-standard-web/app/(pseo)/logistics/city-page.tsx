@@ -66,7 +66,7 @@ export default async function LogisticsCityPage({ params }: PageProps) {
             and accelerate shipment processing from hours to minutes.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-cyan-700 transition shadow-lg shadow-cyan-900/50">
+            <Link href="/upload" className="inline-flex items-center gap-2 bg-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-cyan-700 transition shadow-lg shadow-cyan-900/50">
               Start Processing <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">
@@ -553,7 +553,7 @@ export default async function LogisticsCityPage({ params }: PageProps) {
             Get your first batch processed within 24 hours.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-cyan-700 transition shadow-lg shadow-cyan-900/50">
+            <Link href="/upload" className="inline-flex items-center gap-2 bg-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-cyan-700 transition shadow-lg shadow-cyan-900/50">
               Start Processing <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">

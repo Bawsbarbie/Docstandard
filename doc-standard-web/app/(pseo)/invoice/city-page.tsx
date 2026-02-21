@@ -66,7 +66,7 @@ export default async function InvoiceCityPage({ params }: PageProps) {
             for your {cityName} operations.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-violet-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-violet-700 transition shadow-lg shadow-violet-900/50">
+            <Link href="/upload" className="inline-flex items-center gap-2 bg-violet-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-violet-700 transition shadow-lg shadow-violet-900/50">
               Start Processing <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">
@@ -555,7 +555,7 @@ export default async function InvoiceCityPage({ params }: PageProps) {
             Get your first batch processed and see the difference immediately.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/order" className="inline-flex items-center gap-2 bg-violet-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-violet-700 transition shadow-lg shadow-violet-900/50">
+            <Link href="/upload" className="inline-flex items-center gap-2 bg-violet-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-violet-700 transition shadow-lg shadow-violet-900/50">
               Start Processing <ArrowRight className="w-5 h-5" />
             </Link>
             <Link href="/integration" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition">

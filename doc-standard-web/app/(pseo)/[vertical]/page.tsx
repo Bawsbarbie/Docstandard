@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { VerticalHub, generateMetadataForVertical } from "@/components/pseo/VerticalHub"
-import { generatedPageImports } from "@/generated/page-map"
+import { generatedRouteImporters, generatedSlugs } from "@/generated/page-map"
 import { blogSlugSet } from "@/generated/blog-slugs"
 import { getCityBySlug } from "@/lib/pseo/city-data"
 const PRIMARY_CITY_VERTICAL = "shipping"
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  const importer = (generatedPageImports as Record<string, (() => Promise<any>) | undefined>)[
+  const importer = (generatedRouteImporters as Record<string, (() => Promise<any>) | undefined>)[
     params.vertical
   ]
   if (importer) {
@@ -49,11 +49,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  return Object.keys(generatedPageImports).map((vertical) => ({ vertical }))
+  return generatedSlugs.map((vertical) => ({ vertical }))
 }
 
 export default async function VerticalHubPage({ params }: PageProps) {
-  const importer = (generatedPageImports as Record<string, (() => Promise<any>) | undefined>)[
+  const importer = (generatedRouteImporters as Record<string, (() => Promise<any>) | undefined>)[
     params.vertical
   ]
   if (importer) {

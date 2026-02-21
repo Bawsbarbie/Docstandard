@@ -229,7 +229,7 @@ export function RelatedIntegrationsCard({
         {relatedIntegrations.map((integration) => (
           <Link
             key={integration.slug}
-            href={`/integrations/${integration.slug}`}
+            href={`/integration/${integration.slug}`}
             className="group block bg-white rounded-lg p-4 border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all duration-200"
           >
             <div className="flex items-start justify-between">
@@ -255,7 +255,7 @@ export function RelatedIntegrationsCard({
       
       <div className="mt-4 pt-4 border-t border-slate-200">
         <Link 
-          href="/integrations"
+          href="/integration"
           className="text-sm font-medium text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
         >
           View all integrations

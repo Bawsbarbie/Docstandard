@@ -22,6 +22,20 @@ function ensureDir(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
+function listBatchDirs(root) {
+  const generatedDir = path.join(root, "generated");
+  if (!fs.existsSync(generatedDir)) return [];
+  return fs
+    .readdirSync(generatedDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && /^batch\d+$/i.test(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => {
+      const aNum = Number(a.replace(/^batch/i, ""));
+      const bNum = Number(b.replace(/^batch/i, ""));
+      return aNum - bNum;
+    });
+}
+
 function mirrorToStandalone(root, sitemapsDir, indexPath) {
   const standalonePublic = path.join(root, ".next", "standalone", "public");
   if (!fs.existsSync(standalonePublic)) return;
@@ -34,7 +48,14 @@ function mirrorToStandalone(root, sitemapsDir, indexPath) {
   }
 
   const files = fs.existsSync(sitemapsDir)
-    ? fs.readdirSync(sitemapsDir).filter((name) => name.startsWith("sitemap-batch-"))
+    ? fs
+        .readdirSync(sitemapsDir)
+        .filter(
+          (name) =>
+            name.startsWith("sitemap-batch-") ||
+            name === "sitemap-near-me.xml" ||
+            name === "sitemap-comparisons-only.xml"
+        )
     : [];
   for (const name of files) {
     fs.copyFileSync(path.join(sitemapsDir, name), path.join(standaloneSitemaps, name));
@@ -43,7 +64,8 @@ function mirrorToStandalone(root, sitemapsDir, indexPath) {
   console.log(`Mirrored sitemaps to ${standalonePublic}`);
 }
 
-function listGeneratedSlugs(root, batches) {
+function listGeneratedSlugs(root) {
+  const batches = listBatchDirs(root);
   const seen = new Set();
   const slugs = [];
   for (const batch of batches) {
@@ -65,14 +87,14 @@ function listGeneratedSlugs(root, batches) {
 
 function listIntegrationSlugs(root) {
   try {
-    const filePath = path.join(root, "data", "content", "integration-details.json");
+    const filePath = path.join(root, "data", "pseo", "integration-factory-content.json");
     const content = fs.readFileSync(filePath, "utf-8");
     const parsed = JSON.parse(content);
-    if (Array.isArray(parsed)) {
-      return parsed.map((entry) => entry.slug).filter(Boolean);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return Object.keys(parsed).filter(Boolean);
     }
   } catch (e) {
-    console.warn("Warning: Could not load integration-details.json");
+    console.warn("Warning: Could not load integration-factory-content.json");
   }
   return [];
 }
@@ -252,7 +274,7 @@ function main() {
   const allRoutes = [];
 
   // 1. Generated pages
-  const generatedSlugs = listGeneratedSlugs(root, ["batch2", "batch3", "batch4", "batch5"]);
+  const generatedSlugs = listGeneratedSlugs(root);
   generatedSlugs.forEach((slug) => allRoutes.push(`/${slug}`));
 
   // 2. Integration pages
@@ -302,6 +324,17 @@ function main() {
     fs.writeFileSync(filePath, buildUrlset(batch, lastmod), "utf8");
     indexEntries.push(`${baseUrl}/sitemaps/${filename}`);
   });
+
+  // Keep full route inventory discoverable through dedicated sitemap files.
+  const supplementalSitemaps = ["sitemap-near-me.xml", "sitemap-comparisons-only.xml"];
+  for (const filename of supplementalSitemaps) {
+    const filePath = path.join(sitemapsDir, filename);
+    if (fs.existsSync(filePath)) {
+      indexEntries.push(`${baseUrl}/sitemaps/${filename}`);
+    } else {
+      console.warn(`Warning: supplemental sitemap missing: ${filePath}`);
+    }
+  }
 
   const indexPath = path.join(publicDir, "sitemap-index.xml");
   fs.writeFileSync(indexPath, buildIndex(indexEntries, lastmod), "utf8");
