@@ -367,7 +367,7 @@ export function OnboardingModal({
 
                 <div className="grid gap-3 text-sm text-slate-700">
                   {[
-                    { label: "24-48 hour turnaround (Standard tier)", Icon: Clock3 },
+                    { label: "24-72 hour turnaround (Standard tier)", Icon: Clock3 },
                     { label: "Human-verified accuracy", Icon: BadgeCheck },
                     { label: "Bank-level security", Icon: ShieldCheck },
                   ].map(({ label, Icon }) => (
