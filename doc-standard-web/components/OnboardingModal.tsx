@@ -229,8 +229,8 @@ export function OnboardingModal({
   if (!isOpen || hasCompleted) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm px-4 py-8">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-sm px-4 py-6">
+      <div className="relative w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
         <button
           onClick={onClose}
           className="absolute right-5 top-5 rounded-full border border-slate-300 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-500 transition hover:border-blue-500 hover:text-slate-900"
@@ -239,7 +239,7 @@ export function OnboardingModal({
           Close
         </button>
 
-        <div className="p-6 sm:p-10">
+        <div className="h-full overflow-y-auto p-6 sm:p-10">
           <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-slate-400">
             <span>Onboarding</span>
             <span>Step {step} of 3</span>
@@ -400,7 +400,7 @@ export function OnboardingModal({
             )}
 
             {step === 3 && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold">Upload and select a tier</h2>
                   <p className="text-sm text-slate-500 mt-2">
@@ -533,7 +533,7 @@ export function OnboardingModal({
                   <span className="text-slate-900">{deliveryEstimate}</span>
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="sticky bottom-0 z-10 -mx-1 flex flex-col gap-4 border-t border-slate-200 bg-white/95 px-1 pt-4 pb-1 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
                   <button
                     type="button"
                     onClick={() => transitionTo(2)}
