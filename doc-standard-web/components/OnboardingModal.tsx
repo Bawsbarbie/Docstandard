@@ -10,7 +10,7 @@ interface OnboardingModalProps {
     email: string
     company: string
     phone?: string
-    tier: "standard" | "expedited" | "compliance"
+    tier: "standard" | "expedited"
   }) => void
   isOpen: boolean
   onClose: () => void
@@ -23,7 +23,7 @@ interface OnboardingModalProps {
   storageKeySuffix?: string
 }
 
-type TierOption = "standard" | "expedited" | "compliance"
+type TierOption = "standard" | "expedited"
 
 const PROGRESS_KEY = "onboarding_progress"
 const COMPLETE_KEY = "onboarding_complete"
@@ -114,7 +114,11 @@ export function OnboardingModal({
       }
       if (parsed?.documentType) setDocumentType(parsed.documentType)
       if (parsed?.purposeUseCase) setPurposeUseCase(parsed.purposeUseCase)
-      if (parsed?.tier) setTier(parsed.tier)
+      if (parsed?.tier === "standard" || parsed?.tier === "expedited") {
+        setTier(parsed.tier)
+      } else if (parsed?.tier) {
+        setTier("standard")
+      }
       if (parsed?.fileSummary) setFileSummary(parsed.fileSummary)
     } catch {
       localStorage.removeItem(progressKey)
@@ -146,11 +150,9 @@ export function OnboardingModal({
     if (tier === "standard") {
       return formatDate(addHours(72))
     }
-    if (tier === "expedited") {
-      return formatDate(addHours(24))
-    }
-    const start = addHours(48)
-    const end = addHours(72)
+
+    const start = addHours(10)
+    const end = addHours(12)
     return `${formatDate(start)} – ${formatDate(end)}`
   }, [tier])
 
@@ -547,11 +549,7 @@ export function OnboardingModal({
                       },
                       {
                         value: "expedited",
-                        label: "Expedited ($1,099) • 24 hours • Priority queue",
-                      },
-                      {
-                        value: "compliance",
-                        label: "Compliance ($1,299) • 48-72 hours • Double-verified + audit trail",
+                        label: "Expedited ($1,299) • 10-12 hours • Priority queue",
                       },
                     ].map((option) => (
                       <label
