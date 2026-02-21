@@ -5,22 +5,29 @@ import { createClient } from "@/lib/supabase/client"
 import { OnboardingModal } from "@/components/OnboardingModal"
 
 const COMPLETE_KEY = "onboarding_complete"
+const getCompleteKey = (userId: string) => `${COMPLETE_KEY}:${userId}`
+
+type InitialProfileState = {
+  name: string
+  email: string
+  company: string
+  phone: string
+}
 
 export function OnboardingGate() {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [storageKeySuffix, setStorageKeySuffix] = useState<string>("")
+  const [initialProfile, setInitialProfile] = useState<InitialProfileState>({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+  })
 
   useEffect(() => {
     let isMounted = true
     const run = async () => {
-      if (localStorage.getItem(COMPLETE_KEY) === "true") {
-        if (isMounted) {
-          setIsLoading(false)
-          setIsOpen(false)
-        }
-        return
-      }
-
       const supabase = createClient()
       const { data: userData } = await supabase.auth.getUser()
       const user = userData.user
@@ -33,9 +40,22 @@ export function OnboardingGate() {
         return
       }
 
+      const completeKey = getCompleteKey(user.id)
+      if (isMounted) {
+        setStorageKeySuffix(user.id)
+      }
+
+      if (localStorage.getItem(completeKey) === "true") {
+        if (isMounted) {
+          setIsLoading(false)
+          setIsOpen(false)
+        }
+        return
+      }
+
       const { data: profile, error } = await supabase
         .from("profiles")
-        .select("onboarding_complete")
+        .select("onboarding_complete, full_name, email, company, phone")
         .eq("id", user.id)
         .maybeSingle()
 
@@ -43,8 +63,17 @@ export function OnboardingGate() {
         console.error("Failed to load onboarding profile", error)
       }
 
+      if (isMounted) {
+        setInitialProfile({
+          name: profile?.full_name ?? "",
+          email: profile?.email ?? user.email ?? "",
+          company: profile?.company ?? "",
+          phone: profile?.phone ?? "",
+        })
+      }
+
       if (profile?.onboarding_complete) {
-        localStorage.setItem(COMPLETE_KEY, "true")
+        localStorage.setItem(completeKey, "true")
         if (isMounted) {
           setIsLoading(false)
           setIsOpen(false)
@@ -93,9 +122,11 @@ export function OnboardingGate() {
             { onConflict: "id" }
           )
 
-        localStorage.setItem(COMPLETE_KEY, "true")
+        localStorage.setItem(getCompleteKey(user.id), "true")
         setIsOpen(false)
       }}
+      initialProfile={initialProfile}
+      storageKeySuffix={storageKeySuffix}
     />
   )
 }

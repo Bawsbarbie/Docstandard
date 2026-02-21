@@ -13,6 +13,13 @@ interface OnboardingModalProps {
   }) => void
   isOpen: boolean
   onClose: () => void
+  initialProfile?: {
+    name?: string
+    email?: string
+    company?: string
+    phone?: string
+  }
+  storageKeySuffix?: string
 }
 
 type TierOption = "standard" | "expedited" | "compliance"
@@ -26,7 +33,13 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const BATCH_PAGE_LIMIT = 2000
 const BATCH_FILE_LIMIT = 1000
 
-export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModalProps) {
+export function OnboardingModal({
+  onComplete,
+  isOpen,
+  onClose,
+  initialProfile,
+  storageKeySuffix,
+}: OnboardingModalProps) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [isFading, setIsFading] = useState(false)
   const [hasCompleted, setHasCompleted] = useState(false)
@@ -51,15 +64,32 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
 
   const hasHydrated = useRef(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const progressKey = storageKeySuffix ? `${PROGRESS_KEY}:${storageKeySuffix}` : PROGRESS_KEY
+  const completeKey = storageKeySuffix ? `${COMPLETE_KEY}:${storageKeySuffix}` : COMPLETE_KEY
+  const baseProfile = useMemo(
+    () => ({
+      name: initialProfile?.name ?? "",
+      email: initialProfile?.email ?? "",
+      company: initialProfile?.company ?? "",
+      phone: initialProfile?.phone ?? "",
+    }),
+    [initialProfile?.name, initialProfile?.email, initialProfile?.company, initialProfile?.phone]
+  )
 
   useEffect(() => {
     if (!isOpen) return
-    const completed = localStorage.getItem(COMPLETE_KEY) === "true"
+    const completed = localStorage.getItem(completeKey) === "true"
     setHasCompleted(completed)
     if (completed) return
 
-    const raw = localStorage.getItem(PROGRESS_KEY)
+    const raw = localStorage.getItem(progressKey)
     if (!raw) {
+      setProfile((prev) => ({
+        name: prev.name || baseProfile.name,
+        email: prev.email || baseProfile.email,
+        company: prev.company || baseProfile.company,
+        phone: prev.phone || baseProfile.phone,
+      }))
       hasHydrated.current = true
       return
     }
@@ -67,17 +97,27 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
     try {
       const parsed = JSON.parse(raw)
       if (parsed?.step) setStep(parsed.step)
-      if (parsed?.profile) setProfile((prev) => ({ ...prev, ...parsed.profile }))
+      if (parsed?.profile) {
+        setProfile({
+          name: parsed.profile.name || baseProfile.name,
+          email: parsed.profile.email || baseProfile.email,
+          company: parsed.profile.company || baseProfile.company,
+          phone: parsed.profile.phone || baseProfile.phone,
+        })
+      } else {
+        setProfile(baseProfile)
+      }
       if (parsed?.documentType) setDocumentType(parsed.documentType)
       if (parsed?.purposeUseCase) setPurposeUseCase(parsed.purposeUseCase)
       if (parsed?.tier) setTier(parsed.tier)
       if (parsed?.fileSummary) setFileSummary(parsed.fileSummary)
     } catch {
-      localStorage.removeItem(PROGRESS_KEY)
+      localStorage.removeItem(progressKey)
+      setProfile(baseProfile)
     } finally {
       hasHydrated.current = true
     }
-  }, [isOpen])
+  }, [isOpen, progressKey, completeKey, baseProfile])
 
   useEffect(() => {
     if (!isOpen || hasCompleted || !hasHydrated.current) return
@@ -89,8 +129,8 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
       tier,
       fileSummary,
     })
-    localStorage.setItem(PROGRESS_KEY, payload)
-  }, [step, profile, documentType, purposeUseCase, tier, fileSummary, isOpen, hasCompleted])
+    localStorage.setItem(progressKey, payload)
+  }, [step, profile, documentType, purposeUseCase, tier, fileSummary, isOpen, hasCompleted, progressKey])
 
   const deliveryEstimate = useMemo(() => {
     const now = new Date()
@@ -142,8 +182,8 @@ export function OnboardingModal({ onComplete, isOpen, onClose }: OnboardingModal
   }
 
   const handleComplete = () => {
-    localStorage.setItem(COMPLETE_KEY, "true")
-    localStorage.removeItem(PROGRESS_KEY)
+    localStorage.setItem(completeKey, "true")
+    localStorage.removeItem(progressKey)
     onComplete({
       name: profile.name.trim(),
       email: profile.email.trim(),
