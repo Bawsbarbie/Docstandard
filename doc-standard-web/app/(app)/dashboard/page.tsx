@@ -1420,7 +1420,7 @@ export default function DashboardPage() {
                     <h3 className="text-xl font-bold text-slate-900">Rush</h3>
                     <p className="text-slate-500 text-sm mb-6">10-12 hours</p>
                     <div className="flex items-baseline mb-6">
-                      <span className="text-4xl font-extrabold text-slate-900">$1,099</span>
+                      <span className="text-4xl font-extrabold text-slate-900">$1,299</span>
                       <span className="text-slate-500 ml-2">/batch</span>
                     </div>
                     <ul className="space-y-4 mb-8 text-sm text-slate-600">
