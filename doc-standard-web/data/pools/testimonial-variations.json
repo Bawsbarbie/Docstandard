@@ -1,0 +1,7 @@
+[
+  { "quote": "Connecting {{SYSTEM_A}} to {{SYSTEM_B}} used to be a nightmare. DocStandard eliminated manual re-keying and the data arrives clean every time. Our month-end close is smooth and accurate.", "author": "Jordan Miles", "role": "Operations Lead", "company": "North River Logistics" },
+  { "quote": "We stopped re-keying {{SYSTEM_A}} exports and closed reconciliation gaps in {{SYSTEM_B}} after the first batch. The savings in cleanup time and audit headaches have been immediate.", "author": "Priya Shah", "role": "Controller", "company": "Summit Freight Group" },
+  { "quote": "DocStandard mapped our {{SYSTEM_A}} fields to {{SYSTEM_B}} correctly on the first pass. No back-and-forth, no rework. The team understood both systems and flagged risks early.", "author": "Carlos Vega", "role": "Systems Manager", "company": "Atlas 3PL" },
+  { "quote": "Working near {{TERMINAL}}, we needed a high-integrity bridge for our {{SYSTEM_A}} data. DocStandard delivered exactly what our {{SYSTEM_B}} schema required.", "author": "Sarah Chen", "role": "Logistics Director", "company": "Pacific Gateway" },
+  { "quote": "The error reduction in our {{SYSTEM_B}} imports was the primary ROI driver. We reclaimed 15 hours a week previously lost to manual data correction from {{SYSTEM_A}}.", "author": "Marcus Thorne", "role": "Finance VP", "company": "Global Trade Hub" }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mapping_v1",
+    "text": "The field mappings between {{SYSTEM_A}} and {{SYSTEM_B}} aren't just technical translations—they're business-critical transformations that determine whether your data imports succeed or fail. When {{SYSTEM_A}} uses a different date format, currency precision, or naming convention than {{SYSTEM_B}} expects, the import process breaks, requiring manual intervention that delays operations and introduces human error. Our normalization logic handles these discrepancies automatically, ensuring that every field in your {{SYSTEM_A}} export maps correctly to {{SYSTEM_B}}'s schema, eliminating the validation errors that cause import failures."
+  },
+  {
+    "id": "mapping_v2",
+    "text": "Achieving technical harmony between {{SYSTEM_A}} and {{SYSTEM_B}} requires a deep understanding of logistics data structures. Without precise field mapping, {{CITY}} operations face a constant battle with data truncation and mismatched reference codes. Our platform acts as a high-integrity bridge, parsing complex {{SYSTEM_A}} records and restructuring them into the exact JSON or XML payloads {{SYSTEM_B}} requires. We focus on the 'Golden Record' fields—HTS codes, container references, and GL accounts—to ensure that your automated workflows trigger correctly without manual re-keying or correction loops."
+  },
+  {
+    "id": "mapping_v3",
+    "text": "Data integrity is the foundation of the {{SYSTEM_A}} to {{SYSTEM_B}} data flow. In the high-throughput environment of {{HUB}}, even a minor schema discrepancy can halt a month-end close or delay a customs filing. Our veteran-engineered mapping engine performs real-time validation on every record leaving {{SYSTEM_A}}. We handle the heavy lifting of multi-currency normalization and SCAC code verification before the data ever touches {{SYSTEM_B}}. This preemptive approach to data quality ensures that your finance and compliance teams are working with verified, system-ready information from the first batch."
+  }
+]

@@ -134,7 +134,7 @@ export default function V2Page({
       <div key="roi">
         <ROISection
           manualEffort={manualEffort}
-          withDocStandard="24h turnaround"
+          withDocStandard="24-72h expert turnaround"
           withDocStandardNote="1,000 files/batch"
           annualSavings={annualSavings}
           errorReduction={errorReduction}
@@ -185,11 +185,11 @@ export default function V2Page({
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-col items-start gap-6 rounded-3xl border border-blue-600 bg-blue-600 px-8 py-8 text-white md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Operational Efficiency</p>
-                <h3 className="mt-3 text-2xl font-semibold md:text-3xl">Optimize Your Document Workflows</h3>
-                <p className="mt-2 max-w-2xl text-sm text-white/80 md:text-base">Join dozens of logistics and finance teams who have eliminated manual data entry backlogs.</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Service-First Normalization</p>
+                <h3 className="mt-3 text-2xl font-semibold md:text-3xl">From Raw Files to Reconciled Records</h3>
+                <p className="mt-2 max-w-2xl text-sm text-white/80 md:text-base">Each batch is normalized by human operators, schema-checked, and delivered import-ready for finance and operations teams.</p>
               </div>
-              <Link href="/login" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-white/90">Get Started for $799 →</Link>
+              <Link href="/login" className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-blue-700 shadow-sm transition hover:bg-white/90">Start Secure Intake →</Link>
             </div>
           </div>
         </section>

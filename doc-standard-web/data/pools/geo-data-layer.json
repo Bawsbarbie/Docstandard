@@ -1,0 +1,58 @@
+[
+  {
+    "city": "Rotterdam",
+    "unlocode": "NLRTM",
+    "vat": "21%",
+    "customs": "Dutch Customs (Belastingdienst)",
+    "terminal": "ECT Delta Terminal",
+    "distance": "12km"
+  },
+  {
+    "city": "Antwerp",
+    "unlocode": "BEANR",
+    "vat": "21%",
+    "customs": "Belgian Customs (PLDA)",
+    "terminal": "MPET - MSC PSA European Terminal",
+    "distance": "8km"
+  },
+  {
+    "city": "Hamburg",
+    "unlocode": "DEHAM",
+    "vat": "19%",
+    "customs": "German ATLAS System",
+    "terminal": "HHLA Container Terminal Burchardkai",
+    "distance": "15km"
+  },
+  {
+    "city": "New York",
+    "unlocode": "USNYC",
+    "vat": "8.875%",
+    "customs": "US CBP (ACE)",
+    "terminal": "Maher Terminals",
+    "distance": "22km"
+  },
+  {
+    "city": "London",
+    "unlocode": "GBLON",
+    "vat": "20%",
+    "customs": "UK CDS (Customs Declaration Service)",
+    "terminal": "London Gateway (DP World)",
+    "distance": "40km"
+  },
+  {
+    "city": "Houston",
+    "unlocode": "USHOU",
+    "vat": "0% (Sales Tax 8.25%)",
+    "customs": "US CBP (ACE)",
+    "terminal": "Barbours Cut Terminal",
+    "distance": "25 miles"
+  },
+  {
+    "city": "Los Angeles",
+    "unlocode": "USLAX",
+    "vat": "0% (Sales Tax 9.5%)",
+    "customs": "US CBP (ACE)",
+    "terminal": "APM Terminals Los Angeles",
+    "distance": "20 miles"
+  }
+]

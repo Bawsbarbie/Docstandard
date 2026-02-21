@@ -1,0 +1,14 @@
+[
+  {
+    "id": "roi_v1",
+    "text": "The annual savings figure is based on three measurable factors: labor time reduction, error cost avoidance, and operational capacity recovery. For a typical {{CITY}} operation processing {{SYSTEM_A}} to {{SYSTEM_B}} transfers, manual data entry consumes significant hours per week. At an average operations specialist rate, this translates to compounding labor costs. Error cost avoidance accounts for the downstream impact of data quality issues, where failed imports delay financial reconciliation or vendor payments by 2-5 business days, creating cash flow gaps and operational friction."
+  },
+  {
+    "id": "roi_v2",
+    "text": "Our ROI model for {{CITY}} logistics teams focuses on 'Total Cost of Data Friction.' By automating the {{SYSTEM_A}} to {{SYSTEM_B}} bridge, we reclaim the 15-25% of staff time typically lost to manual document cleanup. In the context of {{HUB}}, this means faster turnaround for customs-ready data and reduced exposure to demurrage or storage fees caused by documentation delays. We calculate your specific savings by mapping your weekly file volume against the industry-standard error rate of 4% for manual re-keying, providing a clear path to operational freedom."
+  },
+  {
+    "id": "roi_v3",
+    "text": "Financial reconciliation speed is the primary driver of ROI for our {{SYSTEM_A}} to {{SYSTEM_B}} users. When data flows without manual intervention, {{CITY}} finance teams can close their books 40% faster. We eliminate the 'Data Trap' where teams spend hours tracking down missing HTS codes or fixing currency precision errors. Reclaiming this time allows your senior staff to focus on strategic exception management instead of low-value data entry. The compounding effect of 99.9% data accuracy across every shipment batch often delivers an ROI that pays for the service within the first 60 days of deployment."
+  }
+]

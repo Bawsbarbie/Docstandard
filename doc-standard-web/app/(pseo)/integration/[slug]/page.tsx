@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { Hero } from "@/components/pseo/Hero"
 import { RiskSection } from "@/components/pseo/RiskSection"
 import { PainSection } from "@/components/pseo/PainSection"
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${model.title} | DocStandard Technical Bridge`,
     description: model.description,
-    alternates: { canonical: `https://docstandard.co/integration/${params.slug}` },
+    alternates: { canonical: `https://docstandard.co/integration/${model.slug}` },
     robots: { index: true, follow: true }
   }
 }
@@ -33,6 +33,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function IntegrationFactoryPage({ params }: PageProps) {
   const model = await getIntegrationModel(params.slug)
   if (!model) notFound()
+  if (params.slug !== model.slug) {
+    permanentRedirect(`/integration/${model.slug}`)
+  }
 
   // Map JSON strings to standard component structures
   const resolvedFaqs = model.faqs?.map(f => ({ question: f.q, answer: f.a })) || []

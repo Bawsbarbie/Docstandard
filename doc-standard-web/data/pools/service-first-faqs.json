@@ -1,0 +1,34 @@
+[
+  {
+    "question": "We are migrating from {{SYSTEM_A}} to {{SYSTEM_B}}; how does DocStandard prevent data loss during the cutover?",
+    "answer": "Migration failure usually happens because of 'Data Legacy Debt'—unstructured records in {{SYSTEM_A}} that don't fit the strict schema of {{SYSTEM_B}}. DocStandard acts as the sanitization layer. We extract every legacy field from your {{SYSTEM_A}} exports, normalize the formats (dates, currencies, SCAC codes), and deliver a clean, system-ready payload for {{SYSTEM_B}} ingestion. We ensure you migrate intelligence, not technical debt."
+  },
+  {
+    "question": "Our {{SYSTEM_A}} to {{SYSTEM_B}} sync keeps failing on specific carrier invoices. Can you fix this?",
+    "answer": "Yes. Most integration failures aren't caused by the 'pipe' between systems, but by the 'garbage' inside the documents. When a carrier sends a non-standard PDF that {{SYSTEM_A}} can't parse correctly, it breaks the {{SYSTEM_B}} import. DocStandard specializes in template-free normalization. We ingest those unstructured files, validate the data against your business rules, and feed your integration a schema-stable JSON that never triggers an import error."
+  },
+  {
+    "question": "Do we still need DocStandard if {{SYSTEM_A}} already has a native export for {{SYSTEM_B}}?",
+    "answer": "Native exports are often 'dumb'—they move data without checking for quality. If your {{SYSTEM_A}} records contain manual entry errors or missing HTS codes, those errors will simply be replicated in {{SYSTEM_B}}, leading to massive reconciliation backlogs. DocStandard provides the 'Data Guardrail' in the middle. We audit and normalize every record *before* it hits your ERP, ensuring that your month-end reconciliation in {{SYSTEM_B}} takes minutes, not days."
+  },
+  {
+    "question": "How does DocStandard handle {{SYSTEM_A}} custom fields when mapping to {{SYSTEM_B}}?",
+    "answer": "We treat custom {{SYSTEM_A}} fields as first-class citizens. Our extraction engine is trained to identify non-standard labels and map them to the corresponding target fields in {{SYSTEM_B}} based on business logic. Whether it's a unique shipment reference or a project-specific GL code, we ensure that every custom data point is captured, cleaned, and correctly ingested without manual re-keying."
+  },
+  {
+    "question": "What is the typical turnaround time for a high-volume {{SYSTEM_A}} to {{SYSTEM_B}} batch?",
+    "answer": "For teams in {{CITY}}, we offer a standard 24-48 hour turnaround for full {{SYSTEM_A}} batches up to 2,000 files. For mission-critical operations near {{TERMINAL}}, we can deploy rush workflows that deliver system-ready {{SYSTEM_B}} records in 4-8 hours, ensuring your finance and compliance teams never fall behind the cargo flow."
+  },
+  {
+    "question": "Can DocStandard detect duplicate invoice payments during the {{SYSTEM_A}} to {{SYSTEM_B}} transition?",
+    "answer": "Yes. One of our core normalization gates is 'Deterministic Record Hashing.' We create a unique digital fingerprint for every record extracted from {{SYSTEM_A}}. If a duplicate invoice is submitted—even with a slightly different filename or format—our system flags it before it ever hits {{SYSTEM_B}}, saving your accounts payable team from costly overpayment errors."
+  },
+  {
+    "question": "Is the normalized data from {{SYSTEM_A}} compliant with {{CUSTOMS}} requirements?",
+    "answer": "Absolutely. Our engine is updated weekly with the latest {{CUSTOMS}} technical standards. When we process your {{SYSTEM_A}} documentation, we cross-validate extracted HTS codes and carrier SCAC codes against current master tables, ensuring your data is not just system-ready for {{SYSTEM_B}}, but fully audit-ready for regulatory filing."
+  },
+  {
+    "question": "How do you ensure data security for our {{SYSTEM_A}} exports?",
+    "answer": "Data security is the foundation of our engineering-veteran approach. All files exported from {{SYSTEM_A}} are encrypted in transit via TLS 1.3 and stored in isolated, AES-256 encrypted environments. We adhere to SOC 2 Type II standards, ensuring that your technical logistics data is handled with enterprise-grade privacy from the moment it leaves your local hub until it reaches {{SYSTEM_B}}."
+  }
+]

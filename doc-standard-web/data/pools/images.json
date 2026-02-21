@@ -1,0 +1,7 @@
+[
+  { "id": "banner_logistics_1", "path": "/images/banners/logistics.webp" },
+  { "id": "banner_shipping_1", "path": "/images/banners/shipping.webp" },
+  { "id": "banner_customs_1", "path": "/images/banners/customs.webp" },
+  { "id": "banner_finance_1", "path": "/images/banners/finance.webp" },
+  { "id": "banner_compliance_1", "path": "/images/banners/compliance.webp" }
+]

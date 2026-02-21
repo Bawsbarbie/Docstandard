@@ -1,0 +1,14 @@
+[
+  {
+    "id": "intro_v1",
+    "text": "Service-first normalization for {{HUB}} operations. We validate every field from {{SYSTEM_A}} source files before delivering {{SYSTEM_B}}-ready output."
+  },
+  {
+    "id": "intro_v2",
+    "text": "High-velocity data normalization for logistics teams near {{PORT}}. We specialize in converting {{SYSTEM_A}} exports into system-ready {{SYSTEM_B}} records."
+  },
+  {
+    "id": "intro_v3",
+    "text": "Professional freight data bridging for the {{CITY}} region. Our engineering-veteran approach ensures your {{SYSTEM_A}} data lands in {{SYSTEM_B}} without manual errors."
+  }
+]
