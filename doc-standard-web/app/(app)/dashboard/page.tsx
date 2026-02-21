@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client"
 import { createCheckoutSession } from "@/lib/actions/stripe"
 import { getBatchDownloads } from "@/lib/actions/download"
 import { updateProfile } from "@/lib/actions/profile"
+import { SUPPORTED_UPLOAD_TYPES_LABEL, UPLOAD_ACCEPT_ATTR } from "@/lib/upload/file-accept"
 import {
   createBatch,
   createUpload,
@@ -518,7 +519,7 @@ export default function DashboardPage() {
           method: "PUT",
           body: file,
           headers: {
-            "Content-Type": file.type,
+            "Content-Type": file.type || "application/octet-stream",
             "x-upsert": "true",
           },
         })
@@ -532,7 +533,7 @@ export default function DashboardPage() {
           batch_id: batch.id,
           original_name: file.name,
           file_size_bytes: file.size,
-          mime_type: file.type,
+          mime_type: file.type || "application/octet-stream",
           page_count: pageCount,
           storage_path: urlData.path,
           document_types: batchForm.documentType ? [batchForm.documentType] : undefined,
@@ -1670,6 +1671,7 @@ export default function DashboardPage() {
                             type="file"
                             className="hidden"
                             multiple
+                            accept={UPLOAD_ACCEPT_ATTR}
                             onChange={handleFiles}
                           />
                           <div className="space-y-1 text-center">
@@ -1692,7 +1694,7 @@ export default function DashboardPage() {
                               </span>
                               <p className="pl-1">{uploadPrompt}</p>
                             </div>
-                            <p className="text-xs text-slate-500">PDF, DOC, PNG, JPG up to 2GB</p>
+                            <p className="text-xs text-slate-500">{SUPPORTED_UPLOAD_TYPES_LABEL}</p>
                           </div>
                         </div>
                       </div>

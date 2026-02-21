@@ -1,6 +1,7 @@
 "use client"
 
 import { FileUploader } from "@/components/upload/FileUploader"
+import { SUPPORTED_UPLOAD_TYPES_LABEL } from "@/lib/upload/file-accept"
 
 export default function UploadPage() {
   return (
@@ -9,7 +10,7 @@ export default function UploadPage() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4">Upload Documents</h1>
           <p className="text-lg text-muted-foreground">
-            Upload your logistics documents for processing. We accept PDFs, images, Word docs, and Excel files.
+            Upload your logistics documents for processing. Supported formats: {SUPPORTED_UPLOAD_TYPES_LABEL}.
           </p>
           <div className="mt-4 p-4 rounded-lg bg-muted/50 border">
             <div className="flex items-start gap-3">

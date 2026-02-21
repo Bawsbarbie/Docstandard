@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BarChart3, BadgeCheck, Clock3, ShieldCheck, Upload, UserCheck } from "lucide-react"
+import { SUPPORTED_UPLOAD_TYPES_LABEL, UPLOAD_ACCEPT_ATTR } from "@/lib/upload/file-accept"
 
 interface OnboardingModalProps {
   onComplete: (data: {
@@ -452,6 +453,7 @@ export function OnboardingModal({
                     <p className="text-xs text-slate-500">
                       Limit: 2,000 pages OR 1,000 files per batch. Need more? Enterprise options.
                     </p>
+                    <p className="text-xs text-slate-500">Accepted: {SUPPORTED_UPLOAD_TYPES_LABEL}</p>
                   </div>
 
                   <div
@@ -466,6 +468,7 @@ export function OnboardingModal({
                       ref={fileInputRef}
                       type="file"
                       multiple
+                      accept={UPLOAD_ACCEPT_ATTR}
                       className="hidden"
                       onChange={handleFileInput}
                     />

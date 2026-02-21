@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { FileUploader } from "@/components/upload/FileUploader"
 import { X } from "lucide-react"
+import { SUPPORTED_UPLOAD_TYPES_LABEL } from "@/lib/upload/file-accept"
 
 type VerticalOption = "finance" | "customs" | "integration"
 
@@ -90,9 +91,9 @@ export function UploadBatchModal({ isOpen, onClose }: UploadBatchModalProps) {
             orderNotes={orderNotes}
             maxFiles={2000}
             maxSizeMB={50}
-            dropzoneLabel="Securely ingest raw .pdf, .xml, or .csv documents for normalization."
+            dropzoneLabel="Securely ingest your batch documents for normalization."
             dropzoneHint="Drag & drop or click to upload"
-            dropzoneDetail="PDF, XML, CSV, Images, DOCX, XLSX • Max 50MB per file"
+            dropzoneDetail={`${SUPPORTED_UPLOAD_TYPES_LABEL} • Max 50MB per file`}
           />
 
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">

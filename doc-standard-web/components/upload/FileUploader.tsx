@@ -10,6 +10,7 @@ import { useDropzone } from "react-dropzone"
 import { PDFDocument } from "pdf-lib"
 import { createBatch, getSignedUploadUrl, createUpload, completeBatchUpload } from "@/lib/actions/upload"
 import { createCheckoutSession } from "@/lib/actions/stripe"
+import { DROPZONE_ACCEPT, SUPPORTED_UPLOAD_TYPES_LABEL } from "@/lib/upload/file-accept"
 
 interface UploadFile {
   file: File
@@ -94,15 +95,7 @@ export function FileUploader({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "application/pdf": [".pdf"],
-      "text/csv": [".csv"],
-      "application/xml": [".xml"],
-      "text/xml": [".xml"],
-      "image/*": [".png", ".jpg", ".jpeg"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [".xlsx"],
-    },
+    accept: DROPZONE_ACCEPT,
     disabled: isUploading,
   })
 
@@ -147,7 +140,7 @@ export function FileUploader({
         method: "PUT",
         body: uploadFile.file,
         headers: {
-          "Content-Type": uploadFile.file.type,
+          "Content-Type": uploadFile.file.type || "application/octet-stream",
           "x-upsert": "true",
         },
       })
@@ -160,7 +153,7 @@ export function FileUploader({
         batch_id: currentBatchId,
         original_name: uploadFile.file.name,
         file_size_bytes: uploadFile.file.size,
-        mime_type: uploadFile.file.type,
+        mime_type: uploadFile.file.type || "application/octet-stream",
         page_count: pageCount,
         storage_path: urlData.path,
       })
@@ -334,7 +327,7 @@ export function FileUploader({
             </p>
             <p className="text-xs text-muted-foreground mt-2">
               {dropzoneDetail ||
-                `PDF, Images, DOCX, XLSX • Max ${maxSizeMB}MB per file • Up to ${maxFiles} files`}
+                `${SUPPORTED_UPLOAD_TYPES_LABEL} • Max ${maxSizeMB}MB per file • Up to ${maxFiles} files`}
             </p>
             {uploadFiles.length > 0 && (
               <p className="text-xs text-muted-foreground mt-2">
