@@ -107,7 +107,30 @@ const nextConfig = {
       },
 
       // ─────────────────────────────────────────────────────────────────────
-      // SECTION 3: Legacy one-off redirects
+      // SECTION 3: Old flat geo slug redirects
+      // Pattern: /:city-:systemA-:systemB-mdec-ades and /:city-:systemA-:systemB-integration
+      // These were root-level pages never indexed. All redirect to /logistics.
+      // The [..vertical] catch-all also handles these generically, but explicit
+      // rules here ensure Googlebot gets a fast 301 without hitting the app layer.
+      // ─────────────────────────────────────────────────────────────────────
+      // CargoWise + NetSuite city slugs
+      { source: "/:city-cargowise-netsuite-integration",   destination: "/logistics/integration/cargowise-to-netsuite-bridge", permanent: true },
+      { source: "/:city-cargowise-netsuite-mdec-ades",      destination: "/logistics/integration/cargowise-to-netsuite-bridge", permanent: true },
+      // SAP + QuickBooks city slugs
+      { source: "/:city-sap-quickbooks-integration",        destination: "/logistics", permanent: true },
+      { source: "/:city-sap-quickbooks-mdec-ades",          destination: "/logistics", permanent: true },
+      // Magaya + Oracle city slugs
+      { source: "/:city-magaya-oracle-integration",         destination: "/logistics/integration/magaya-to-oracle-erp-cloud-bridge", permanent: true },
+      { source: "/:city-magaya-oracle-mdec-ades",           destination: "/logistics/integration/magaya-to-oracle-erp-cloud-bridge", permanent: true },
+      // Motive + Microsoft city slugs
+      { source: "/:city-motive-microsoft-dynamics-integration", destination: "/logistics", permanent: true },
+      { source: "/:city-motive-microsoft-mdec-ades",        destination: "/logistics", permanent: true },
+      // Truncated / malformed slugs (the valencia long URL etc.)
+      { source: "/:city-cargowise-netsuite-manual-data-entry-:rest*", destination: "/logistics/integration/cargowise-to-netsuite-bridge", permanent: true },
+      { source: "/:city-sap-quickbooks-manual-data-entry-:rest*",     destination: "/logistics", permanent: true },
+
+      // ─────────────────────────────────────────────────────────────────────
+      // SECTION 4: Legacy one-off redirects
       // ─────────────────────────────────────────────────────────────────────
       {
         source: "/invoice-processing-automation",
