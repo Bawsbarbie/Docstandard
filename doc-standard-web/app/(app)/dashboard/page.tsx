@@ -119,6 +119,7 @@ export default function DashboardPage() {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const uploadFormRef = useRef<HTMLDivElement | null>(null)
   const batchErrorRef = useRef<HTMLDivElement | null>(null)
+  const filesRef = useRef<File[]>([])
 
   const [selectedTier, setSelectedTier] = useState<"standard" | "expedited" | "compliance">(
     "standard"
@@ -310,9 +311,24 @@ export default function DashboardPage() {
   }
 
   const getFileEstimateKey = (file: File) => `${file.name}:${file.size}:${file.lastModified}`
+  const mergeFilesByIdentity = (current: File[], incoming: File[]) => {
+    const seen = new Set(current.map((file) => getFileEstimateKey(file)))
+    const merged = [...current]
 
-  const applySelectedFiles = async (nextFiles: File[]) => {
+    for (const file of incoming) {
+      const key = getFileEstimateKey(file)
+      if (seen.has(key)) continue
+      merged.push(file)
+      seen.add(key)
+    }
+
+    return merged
+  }
+
+  const applySelectedFiles = async (incomingFiles: File[]) => {
+    const nextFiles = mergeFilesByIdentity(filesRef.current, incomingFiles)
     const currentRunId = ++pageEstimateRunRef.current
+    filesRef.current = nextFiles
     setFiles(nextFiles)
     setIsEstimatingPages(true)
 
@@ -336,6 +352,7 @@ export default function DashboardPage() {
 
   const handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFiles = Array.from(event.target.files ?? [])
+    event.target.value = ""
     void applySelectedFiles(nextFiles)
   }
 
@@ -360,6 +377,7 @@ export default function DashboardPage() {
   const openUploadForm = (useExistingCredits: boolean) => {
     setUseExistingCreditsForUpload(useExistingCredits)
     setShowUploadForm(true)
+    filesRef.current = []
     setFiles([])
     setPageEstimatesByFile({})
     setSelectedPageEstimate(0)

@@ -64,6 +64,7 @@ export function OnboardingModal({
 
   const hasHydrated = useRef(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const selectedFilesRef = useRef<File[]>([])
   const pageEstimateRunRef = useRef(0)
   const progressKey = storageKeySuffix ? `${PROGRESS_KEY}:${storageKeySuffix}` : PROGRESS_KEY
   const completeKey = storageKeySuffix ? `${COMPLETE_KEY}:${storageKeySuffix}` : COMPLETE_KEY
@@ -80,6 +81,7 @@ export function OnboardingModal({
 
   useEffect(() => {
     if (!isOpen) return
+    selectedFilesRef.current = []
     const completed = localStorage.getItem(completeKey) === "true"
     setHasCompleted(completed)
     if (completed) return
@@ -209,8 +211,23 @@ export function OnboardingModal({
     }
   }
 
-  const applySelectedFiles = async (nextFiles: File[]) => {
+  const getFileKey = (file: File) => `${file.name}:${file.size}:${file.lastModified}`
+  const mergeFilesByIdentity = (current: File[], incoming: File[]) => {
+    const seen = new Set(current.map((file) => getFileKey(file)))
+    const merged = [...current]
+    for (const file of incoming) {
+      const key = getFileKey(file)
+      if (seen.has(key)) continue
+      merged.push(file)
+      seen.add(key)
+    }
+    return merged
+  }
+
+  const applySelectedFiles = async (incomingFiles: File[]) => {
+    const nextFiles = mergeFilesByIdentity(selectedFilesRef.current, incomingFiles)
     const currentRunId = ++pageEstimateRunRef.current
+    selectedFilesRef.current = nextFiles
     setIsEstimatingPages(true)
 
     const pageCounts = await Promise.all(nextFiles.map((file) => estimatePagesForFile(file)))
@@ -226,6 +243,7 @@ export function OnboardingModal({
 
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFiles = Array.from(event.target.files ?? [])
+    event.target.value = ""
     void applySelectedFiles(nextFiles)
   }
 
@@ -420,7 +438,7 @@ export function OnboardingModal({
             )}
 
             {step === 3 && (
-              <div className="space-y-6 sm:space-y-8">
+              <div className="max-h-[calc(92vh-12rem)] overflow-y-auto pr-1 space-y-6 sm:space-y-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-semibold">Upload and select a tier</h2>
                   <p className="text-sm text-slate-500 mt-2">
