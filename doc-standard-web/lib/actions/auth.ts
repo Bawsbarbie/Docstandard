@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { createAdminClient } from "@/lib/supabase/admin"
 
 interface SignUpData {
   email: string
@@ -50,26 +49,6 @@ function formatSignUpError(message: string) {
   return message
 }
 
-async function createUserWithoutEmailConfirmation(data: SignUpData) {
-  try {
-    const admin = createAdminClient()
-    const { error } = await admin.auth.admin.createUser({
-      email: data.email,
-      password: data.password,
-      email_confirm: true,
-    })
-
-    if (error && !/already registered/i.test(error.message)) {
-      return error.message
-    }
-
-    return null
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown fallback signup error"
-    return message
-  }
-}
-
 /**
  * Sign up a new user with email and password
  */
@@ -77,7 +56,7 @@ export async function signUp(data: SignUpData) {
   const supabase = await createClient()
   const siteUrl = resolveSiteUrl()
 
-  const { error } = await supabase.auth.signUp({
+  const { data: signUpData, error } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
     options: {
@@ -95,32 +74,12 @@ export async function signUp(data: SignUpData) {
       email: data.email,
     })
 
-    if (isConfirmationEmailError(error.message)) {
-      const fallbackError = await createUserWithoutEmailConfirmation(data)
-
-      if (!fallbackError) {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: data.email,
-          password: data.password,
-        })
-
-        if (!signInError) {
-          revalidatePath("/", "layout")
-          redirect("/dashboard")
-        }
-
-        console.error("Fallback sign in failed after admin createUser:", signInError.message)
-        return {
-          error:
-            "Account was created, but automatic sign-in failed. Please try logging in.",
-        }
-      }
-
-      console.error("Fallback createUserWithoutEmailConfirmation failed:", fallbackError)
-      return { error: formatSignUpError(error.message) }
-    }
-
     return { error: formatSignUpError(error.message) }
+  }
+
+  if (!signUpData.session) {
+    revalidatePath("/", "layout")
+    redirect("/login?mode=login&check_email=1")
   }
 
   revalidatePath("/", "layout")

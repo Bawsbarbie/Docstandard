@@ -3,11 +3,12 @@
 import React, { useEffect, useState, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { FileText, Star, AlertCircle } from "lucide-react"
+import { FileText, Star, AlertCircle, CheckCircle2 } from "lucide-react"
 import { signUp, signIn } from "@/lib/actions/auth"
 
 function LoginSignupForm() {
   const searchParams = useSearchParams()
+  const showCheckEmailNotice = searchParams.get("check_email") === "1"
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -101,6 +102,16 @@ function LoginSignupForm() {
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            {/* Post-signup confirmation notice */}
+            {showCheckEmailNotice && isLogin && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-green-800">
+                  Account created. Check your inbox for a confirmation email before signing in.
+                </p>
               </div>
             )}
 
