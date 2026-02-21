@@ -3,6 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BarChart3, BadgeCheck, Clock3, ShieldCheck, Upload, UserCheck } from "lucide-react"
 import { SUPPORTED_UPLOAD_TYPES_LABEL, UPLOAD_ACCEPT_ATTR } from "@/lib/upload/file-accept"
+import {
+  completeBatchUpload,
+  createBatch,
+  createUpload,
+  getSignedUploadUrl,
+} from "@/lib/actions/upload"
+import { createCheckoutSession } from "@/lib/actions/stripe"
 
 interface OnboardingModalProps {
   onComplete: (data: {
@@ -11,7 +18,7 @@ interface OnboardingModalProps {
     company: string
     phone?: string
     tier: "standard" | "expedited"
-  }) => void
+  }) => void | Promise<void>
   isOpen: boolean
   onClose: () => void
   initialProfile?: {
@@ -70,6 +77,10 @@ export function OnboardingModal({
   const progressKey = storageKeySuffix ? `${PROGRESS_KEY}:${storageKeySuffix}` : PROGRESS_KEY
   const completeKey = storageKeySuffix ? `${COMPLETE_KEY}:${storageKeySuffix}` : COMPLETE_KEY
   const [isEstimatingPages, setIsEstimatingPages] = useState(false)
+  const [isSubmittingBatch, setIsSubmittingBatch] = useState(false)
+  const [isRedirectingToStripe, setIsRedirectingToStripe] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [pageEstimatesByFile, setPageEstimatesByFile] = useState<Record<string, number>>({})
   const baseProfile = useMemo(
     () => ({
       name: initialProfile?.name ?? "",
@@ -83,6 +94,8 @@ export function OnboardingModal({
   useEffect(() => {
     if (!isOpen) return
     selectedFilesRef.current = []
+    setPageEstimatesByFile({})
+    setSubmitError(null)
     const completed = localStorage.getItem(completeKey) === "true"
     setHasCompleted(completed)
     if (completed) return
@@ -188,16 +201,122 @@ export function OnboardingModal({
     transitionTo(2)
   }
 
-  const handleComplete = () => {
-    localStorage.setItem(completeKey, "true")
-    localStorage.removeItem(progressKey)
-    onComplete({
-      name: profile.name.trim(),
-      email: profile.email.trim(),
-      company: profile.company.trim(),
-      phone: profile.phone.trim() || undefined,
-      tier,
-    })
+  const handleComplete = async () => {
+    setSubmitError(null)
+
+    if (isEstimatingPages) {
+      setSubmitError("Still calculating page counts. Please wait and try again.")
+      return
+    }
+
+    if (selectedFilesRef.current.length === 0) {
+      setSubmitError("Please upload at least one file before continuing.")
+      return
+    }
+
+    if (!documentType) {
+      setSubmitError("Please select a document type.")
+      return
+    }
+
+    if (isOverLimit) {
+      setSubmitError("This upload exceeds the current batch limits.")
+      return
+    }
+
+    setIsSubmittingBatch(true)
+    setIsRedirectingToStripe(false)
+    let createdBatchId: string | null = null
+
+    try {
+      const notesPayload = {
+        source: "onboarding",
+        documentType,
+        purposeUseCase: purposeUseCase.trim() || undefined,
+      }
+
+      const { data: batch, error: batchError } = await createBatch({
+        tier,
+        notes: JSON.stringify(notesPayload),
+        total_pages: BATCH_PAGE_LIMIT,
+        total_files: BATCH_FILE_LIMIT,
+      })
+
+      if (batchError || !batch) {
+        throw new Error(batchError || "Failed to create batch.")
+      }
+      createdBatchId = batch.id
+
+      for (const file of selectedFilesRef.current) {
+        const { data: urlData, error: urlError } = await getSignedUploadUrl(batch.id, file.name)
+        if (urlError || !urlData) {
+          throw new Error(urlError || `Failed to get upload URL for ${file.name}.`)
+        }
+
+        const uploadResponse = await fetch(urlData.url, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": file.type || "application/octet-stream",
+            "x-upsert": "true",
+          },
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Upload failed for ${file.name}.`)
+        }
+
+        const pageCount = pageEstimatesByFile[getFileKey(file)] ?? 1
+        const { error: recordError } = await createUpload({
+          batch_id: batch.id,
+          original_name: file.name,
+          file_size_bytes: file.size,
+          mime_type: file.type || "application/octet-stream",
+          page_count: pageCount,
+          storage_path: urlData.path,
+          document_types: [documentType],
+        })
+
+        if (recordError) {
+          throw new Error(recordError)
+        }
+      }
+
+      const completeResult = await completeBatchUpload(batch.id)
+      if (!completeResult.success) {
+        throw new Error(completeResult.error || "Failed to finalize upload.")
+      }
+
+      await onComplete({
+        name: profile.name.trim(),
+        email: profile.email.trim(),
+        company: profile.company.trim(),
+        phone: profile.phone.trim() || undefined,
+        tier,
+      })
+
+      localStorage.setItem(completeKey, "true")
+      localStorage.removeItem(progressKey)
+
+      setIsRedirectingToStripe(true)
+      const { url, error } = await createCheckoutSession(batch.id)
+      if (url) {
+        window.location.href = url
+        return
+      }
+
+      throw new Error(error || "Failed to open secure checkout.")
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to submit onboarding batch."
+      setSubmitError(message)
+
+      if (createdBatchId) {
+        window.location.href = `/dashboard?payment=cancelled&batch_id=${createdBatchId}`
+      }
+    } finally {
+      setIsSubmittingBatch(false)
+      setIsRedirectingToStripe(false)
+    }
   }
 
   const estimatePagesForFile = async (file: File): Promise<number> => {
@@ -231,10 +350,17 @@ export function OnboardingModal({
     const nextFiles = mergeFilesByIdentity(selectedFilesRef.current, incomingFiles)
     const currentRunId = ++pageEstimateRunRef.current
     selectedFilesRef.current = nextFiles
+    setSubmitError(null)
     setIsEstimatingPages(true)
 
     const pageCounts = await Promise.all(nextFiles.map((file) => estimatePagesForFile(file)))
     if (currentRunId !== pageEstimateRunRef.current) return
+
+    const estimateMap: Record<string, number> = {}
+    nextFiles.forEach((file, index) => {
+      estimateMap[getFileKey(file)] = pageCounts[index] ?? 1
+    })
+    setPageEstimatesByFile(estimateMap)
 
     setFileSummary({
       count: nextFiles.length,
@@ -274,7 +400,8 @@ export function OnboardingModal({
         <div className="relative flex h-[92vh] w-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 rounded-full border border-slate-300 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-500 transition hover:border-blue-500 hover:text-slate-900"
+          disabled={isSubmittingBatch}
+          className="absolute right-5 top-5 rounded-full border border-slate-300 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-500 transition hover:border-blue-500 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Close modal"
         >
           Close
@@ -509,6 +636,12 @@ export function OnboardingModal({
                   </div>
                 </div>
 
+                {submitError && (
+                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="space-y-3">
                   <h3 className="text-sm font-semibold">Document Type</h3>
                   <select
@@ -585,10 +718,14 @@ export function OnboardingModal({
                   </button>
                   <button
                     onClick={handleComplete}
-                    disabled={isOverLimit || isEstimatingPages || !documentType}
+                    disabled={isSubmittingBatch || isOverLimit || isEstimatingPages || !documentType}
                     className="inline-flex items-center justify-center rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    Purchase & Start Processing
+                    {isSubmittingBatch
+                      ? isRedirectingToStripe
+                        ? "Redirecting to secure checkout..."
+                        : "Submitting..."
+                      : "Purchase & Start Processing"}
                   </button>
                 </div>
               </div>

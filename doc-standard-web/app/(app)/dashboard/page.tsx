@@ -252,6 +252,10 @@ export default function DashboardPage() {
   )
 
   const recentBatches = batches.slice(0, 3)
+  const pendingPaymentBatch = useMemo(
+    () => batches.find((batch) => (batch.status === "uploaded" || batch.status === "created") && !batch.paid_at) ?? null,
+    [batches]
+  )
 
   const creditSettledBatches = useMemo(
     () => batches.filter((batch) => isCreditSettledBatch(batch)),
@@ -1024,6 +1028,27 @@ export default function DashboardPage() {
                     New Batch
                   </button>
                 </div>
+
+                {pendingPaymentBatch && (
+                  <div className="panel mb-6 border-amber-200 bg-amber-50/70 p-4 md:p-5">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-amber-900">Payment Pending</p>
+                        <p className="text-sm text-amber-800">
+                          Your latest batch upload is saved. Continue checkout to start processing.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRetryPayment(pendingPaymentBatch.id)}
+                        disabled={retryingBatchId === pendingPaymentBatch.id}
+                        className="inline-flex items-center justify-center rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50"
+                      >
+                        {retryingBatchId === pendingPaymentBatch.id ? "Opening..." : "Continue Payment"}
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                   <div className="panel p-6 transition-shadow hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)]">
