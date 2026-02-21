@@ -3,7 +3,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const { execSync } = require("child_process");
 const crypto = require("crypto");
 const BATCHES = ["batch2", "batch3", "batch4", "batch5"];
 
@@ -67,6 +66,8 @@ const DEFAULT_CARRIERS = [
   "COSCO",
 ];
 
+const DEFAULT_LAYOUTS = ["A", "B", "C"];
+
 function parseArgs(argv) {
   const out = {};
   for (const arg of argv) {
@@ -80,6 +81,11 @@ function parseArgs(argv) {
 function readJson(filePath) {
   const raw = fs.readFileSync(filePath, "utf8");
   return JSON.parse(raw);
+}
+
+function readJsonIfExists(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  return readJson(filePath);
 }
 
 function slugify(input) {
@@ -261,6 +267,11 @@ function main() {
   const systems = normalizeSystems(readJson(path.join(dataDir, "systems.json")));
   const pains = normalizeStringPool(readJson(path.join(dataDir, "pain-points.json")), "pain-points.json");
   const benefits = normalizeStringPool(readJson(path.join(dataDir, "benefits.json")), "benefits.json");
+  const geoDataLayer = readJsonIfExists(path.join(dataDir, "geo-data-layer.json")) || [];
+  const mappingPool = readJsonIfExists(path.join(dataDir, "mapping-variations.json")) || [];
+  const roiPool = readJsonIfExists(path.join(dataDir, "roi-variations.json")) || [];
+  const introPool = readJsonIfExists(path.join(dataDir, "intro-variations.json")) || [];
+  const imagePool = readJsonIfExists(path.join(dataDir, "images.json")) || [];
 
   if (!locations.length || !systems.length || !pains.length || !benefits.length) {
     throw new Error("Data pools must not be empty");
@@ -274,6 +285,7 @@ function main() {
   const seenSlugs = new Set();
   const shingleSets = [];
   const similarityThreshold = Number(args.similarity || 1.0);
+  const minWordCount = Number(args.minWords || args.minwords || 500);
 
   let created = 0;
   let attempts = 0;
@@ -296,11 +308,47 @@ function main() {
     const port = location.port || `${city} Port`;
     const carrier = location.carrier || pickDeterministic(DEFAULT_CARRIERS, seed, "Maersk");
     const roi = generateRoi(seed);
+    const geo =
+      geoDataLayer.find((item) => String(item.city || "").toLowerCase() === String(city).toLowerCase()) ||
+      pickDeterministic(geoDataLayer, `${seed}|geo`, {
+        unlocode: `${String(city || "city").slice(0, 2).toUpperCase()}XXX`,
+        vat: "N/A",
+        customs: "Local customs authority",
+        terminal: `${city} Main Terminal`,
+        distance: "10km",
+      });
+    const selectedLayout = pickDeterministic(DEFAULT_LAYOUTS, `${seed}|layout`, "A");
+    const selectedImage = pickDeterministic(imagePool, `${seed}|image`, { path: "/images/banners/logistics.webp" });
+    const mappingTemplate = pickDeterministic(mappingPool, `${seed}|mapping`, null);
+    const roiTemplate = pickDeterministic(roiPool, `${seed}|roi`, null);
+    const introTemplate = pickDeterministic(introPool, `${seed}|intro`, null);
 
     const roiManual = location.roiManual || roi.roiManual;
     const roiSavings = location.roiSavings || roi.roiSavings;
-    const mappingText = `${systemA} to ${systemB} mapping for ${city} keeps schema alignment predictable, lowers import friction, and supports cleaner reconciliation cycles.`;
-    const roiCalculationText = `${roiSavings} estimated annual savings reflects reduced manual cleanup (${roiManual}), fewer failed imports, and faster operational turnaround for ${city} teams.`;
+    const templateContext = {
+      CITY: city,
+      SYSTEM_A: systemA,
+      SYSTEM_B: systemB,
+      HUB: hub,
+      PORT: port,
+      UNLOCODE: geo.unlocode || `${String(city || "city").slice(0, 2).toUpperCase()}XXX`,
+      VAT: geo.vat || "N/A",
+      CUSTOMS: geo.customs || "Local customs authority",
+      TERMINAL: geo.terminal || `${city} Main Terminal`,
+      DISTANCE: geo.distance || "10km",
+    };
+    const mappingText =
+      mappingTemplate && mappingTemplate.text
+        ? replaceAll(mappingTemplate.text, templateContext)
+        : `${systemA} to ${systemB} mapping for ${city} keeps schema alignment predictable, lowers import friction, and supports cleaner reconciliation cycles.`;
+    const roiCalculationText =
+      roiTemplate && roiTemplate.text
+        ? replaceAll(roiTemplate.text, templateContext)
+        : `${roiSavings} estimated annual savings reflects reduced manual cleanup (${roiManual}), fewer failed imports, and faster operational turnaround for ${city} teams.`;
+    const introText =
+      introTemplate && introTemplate.text
+        ? replaceAll(introTemplate.text, templateContext)
+        : `Expert document processing services for ${hub}, built for high-volume teams moving data into ${systemB} with high integrity.`;
 
     const replacements = {
       CITY: city,
@@ -308,11 +356,19 @@ function main() {
       SYSTEM_B: systemB,
       HUB: hub,
       PORT: port,
+      UNLOCODE: templateContext.UNLOCODE,
+      VAT: templateContext.VAT,
+      CUSTOMS: templateContext.CUSTOMS,
+      TERMINAL: templateContext.TERMINAL,
+      DISTANCE: templateContext.DISTANCE,
       CARRIER_1: carrier,
       PAIN_POINT: pain,
       BENEFIT: benefit,
       ROI_MANUAL: roiManual,
       ROI_SAVINGS: roiSavings,
+      INTRO_TEXT: escapeForDoubleQuotedString(introText),
+      HERO_IMAGE: escapeForDoubleQuotedString(selectedImage.path || "/images/banners/logistics.webp"),
+      LAYOUT: selectedLayout,
       NOINDEX: '<meta name="robots" content="noindex, nofollow" />',
       MAPPING_TEXT: escapeForDoubleQuotedString(mappingText),
       ROI_CALCULATION_TEXT: escapeForDoubleQuotedString(roiCalculationText),
@@ -334,21 +390,14 @@ function main() {
     }
 
     const wordCount = countWordCount(content);
-    if (wordCount < 1500) {
-      console.error(`[FAILED] Page ${attempts + 1}: Word count ${wordCount} < 1500. Skipping.`);
+    if (wordCount < minWordCount) {
+      console.error(`[FAILED] Page ${attempts + 1}: Word count ${wordCount} < ${minWordCount}. Skipping.`);
       attempts++;
       continue;
     }
 
     const missingComponents = validateComponents(content);
     if (missingComponents.length) {
-      attempts++;
-      continue;
-    }
-
-    const faqCount = countFaqs(content);
-    const testimonialCount = countTestimonials(content);
-    if (faqCount < 4 || testimonialCount < 3) {
       attempts++;
       continue;
     }

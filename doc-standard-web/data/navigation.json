@@ -1,0 +1,62 @@
+{
+  "megaMenu": {
+    "columns": [
+      {
+        "title": "By Industry & Use Case",
+        "links": [
+          { "name": "Finance & Accounting", "href": "/finance" },
+          { "name": "Customs & Compliance", "href": "/customs" },
+          { "name": "Logistics Management", "href": "/logistics" },
+          { "name": "Shipping Ops", "href": "/shipping" },
+          { "name": "Invoice Automation", "href": "/invoice" }
+        ]
+      },
+      {
+        "title": "System Integrations",
+        "links": [
+          { "name": "CargoWise", "href": "/integration/cargowise" },
+          { "name": "NetSuite", "href": "/integration/netsuite" },
+          { "name": "SAP", "href": "/integration/sap" },
+          { "name": "Magaya", "href": "/integration/magaya" },
+          { "name": "View All Integrations", "href": "/integration/cargowise" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "name": "Comparison Guides", "href": "/comparison" },
+          { "name": "Blog", "href": "/blog" },
+          { "name": "Contact", "href": "/contact" }
+        ]
+      },
+      {
+        "title": "Local Solutions (Near Me)",
+        "links": [
+          { "name": "Los Angeles", "href": "/near-me/los-angeles" },
+          { "name": "New York", "href": "/near-me/new-york" },
+          { "name": "Houston", "href": "/near-me/houston" },
+          { "name": "Miami", "href": "/near-me/miami" },
+          { "name": "View All Locations", "href": "/near-me/los-angeles" }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "coreIntegrations": ["CargoWise", "NetSuite", "SAP", "Magaya", "Oracle", "Motive", "MercuryGate", "Descartes", "Flexport", "Freightos"],
+    "comparisonGuides": [
+      { "name": "CargoWise vs NetSuite", "href": "/comparison/cargowise-vs-netsuite" },
+      { "name": "CargoWise vs SAP", "href": "/comparison/cargowise-vs-sap-s4hana" },
+      { "name": "Magaya vs Oracle", "href": "/comparison/magaya-vs-oracle-erp-cloud" },
+      { "name": "NetSuite vs QuickBooks", "href": "/comparison/netsuite-vs-quickbooks-online" },
+      { "name": "SAP vs QuickBooks", "href": "/comparison/sap-s4hana-vs-quickbooks-online" }
+    ],
+    "globalPortCities": ["Los Angeles", "New York", "Houston", "Miami", "Savannah"],
+    "technicalVerticals": [
+      { "name": "Finance", "href": "/finance" },
+      { "name": "Customs", "href": "/customs" },
+      { "name": "Logistics", "href": "/logistics" },
+      { "name": "Shipping", "href": "/shipping" },
+      { "name": "Invoice", "href": "/invoice" }
+    ]
+  }
+}
