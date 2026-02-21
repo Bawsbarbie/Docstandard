@@ -6,7 +6,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server"
-import { getStripe, STRIPE_CONFIG } from "@/lib/stripe"
+import { getStripe, STRIPE_CONFIG, getTierPriceCents } from "@/lib/stripe"
 import type { Batch } from "@/lib/types/database"
 import { headers } from "next/headers"
 
@@ -101,6 +101,13 @@ export async function createCheckoutSession(
 
     const fileCount = files?.length || 0
     const appUrl = await resolveAppUrl()
+    const unitAmount = getTierPriceCents(batch.tier)
+    const tierLabel =
+      batch.tier === "expedited"
+        ? "Expedited"
+        : batch.tier === "compliance"
+          ? "Compliance"
+          : "Standard"
 
     // Create Stripe Checkout Session
     const session = await getStripe().checkout.sessions.create({
@@ -118,10 +125,10 @@ export async function createCheckoutSession(
         {
           price_data: {
             currency: STRIPE_CONFIG.currency,
-            unit_amount: STRIPE_CONFIG.price_cents,
+            unit_amount: unitAmount,
             product_data: {
               name: "Document Processing Service",
-              description: `Professional document processing for ${fileCount} file${fileCount !== 1 ? "s" : ""}`,
+              description: `${tierLabel} document processing for ${fileCount} file${fileCount !== 1 ? "s" : ""}`,
               images: [],
             },
           },
@@ -133,6 +140,8 @@ export async function createCheckoutSession(
       metadata: {
         batch_id: batchId,
         user_id: user.id,
+        tier: batch.tier,
+        price_cents: unitAmount.toString(),
         file_count: fileCount.toString(),
       },
     })
@@ -142,6 +151,7 @@ export async function createCheckoutSession(
       .from("batches")
       .update({
         stripe_session_id: session.id,
+        price_cents: unitAmount,
       })
       .eq("id", batchId)
       .eq("user_id", user.id)

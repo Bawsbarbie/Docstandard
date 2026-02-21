@@ -7,6 +7,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { getTierPriceCents } from "@/lib/stripe"
 import type {
   Batch,
   Upload,
@@ -35,14 +36,15 @@ export async function createBatch(
     }
 
     // Insert batch
+    const selectedTier = input?.tier || "standard"
     const { data, error } = await supabase
       .from("batches")
       .insert({
         user_id: user.id,
-        tier: input?.tier || "standard",
+        tier: selectedTier,
         notes: input?.notes || null,
         status: "created",
-        price_cents: 79900, // $799.00
+        price_cents: getTierPriceCents(selectedTier),
         total_pages: input?.total_pages ?? 2000,
         total_files: input?.total_files ?? 1000,
         customer_email: user.email ?? null,
