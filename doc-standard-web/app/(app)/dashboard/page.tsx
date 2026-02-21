@@ -1418,7 +1418,7 @@ export default function DashboardPage() {
 
                   <div className="panel p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                     <h3 className="text-xl font-bold text-slate-900">Rush</h3>
-                    <p className="text-slate-500 text-sm mb-6">12-24 hours</p>
+                    <p className="text-slate-500 text-sm mb-6">10-12 hours</p>
                     <div className="flex items-baseline mb-6">
                       <span className="text-4xl font-extrabold text-slate-900">$1,099</span>
                       <span className="text-slate-500 ml-2">/batch</span>
