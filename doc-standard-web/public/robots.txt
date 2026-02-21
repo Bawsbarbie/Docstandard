@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
 
+# Noindex application routes — no crawl needed
+Disallow: /dashboard
+Disallow: /upload
+Disallow: /success
+Disallow: /checkout/
+Disallow: /login
+
+# Old geo-slug pages are gone; save crawl budget
+Disallow: /near-me/
+
 Sitemap: https://docstandard.co/sitemap-index.xml

@@ -38,19 +38,80 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // ─────────────────────────────────────────────────────────────────────
+      // SECTION 1: New canonical URL structure — integration pages
+      // Old flat /integration/:slug → new canonical /:vertical/integration/:slug
+      // These are the proven click drivers; must be 308 to preserve link equity.
+      // ─────────────────────────────────────────────────────────────────────
+      {
+        source: "/integration/:slug",
+        destination: "/logistics/integration/:slug",
+        permanent: true,
+      },
+
+      // ─────────────────────────────────────────────────────────────────────
+      // SECTION 2: Sub-vertical hub consolidation
+      // /shipping, /customs, /compliance, /finance, /invoice all fold into
+      // /logistics in the new architecture. Intent-slug pages under each
+      // sub-vertical redirect to the equivalent logistics path.
+      // ─────────────────────────────────────────────────────────────────────
+      {
+        source: "/shipping",
+        destination: "/logistics",
+        permanent: true,
+      },
+      {
+        source: "/shipping/:path*",
+        destination: "/logistics/:path*",
+        permanent: true,
+      },
+      {
+        source: "/customs",
+        destination: "/logistics",
+        permanent: true,
+      },
+      {
+        source: "/customs/:path*",
+        destination: "/logistics/:path*",
+        permanent: true,
+      },
+      {
+        source: "/compliance",
+        destination: "/logistics",
+        permanent: true,
+      },
+      {
+        source: "/compliance/:path*",
+        destination: "/logistics/:path*",
+        permanent: true,
+      },
+      {
+        source: "/finance",
+        destination: "/logistics",
+        permanent: true,
+      },
+      {
+        source: "/finance/:path*",
+        destination: "/logistics/:path*",
+        permanent: true,
+      },
+      {
+        source: "/invoice",
+        destination: "/logistics",
+        permanent: true,
+      },
+      {
+        source: "/invoice/:path*",
+        destination: "/logistics/:path*",
+        permanent: true,
+      },
+
+      // ─────────────────────────────────────────────────────────────────────
+      // SECTION 3: Legacy one-off redirects
+      // ─────────────────────────────────────────────────────────────────────
       {
         source: "/invoice-processing-automation",
         destination: "/blog/invoice-data-extraction",
-        permanent: true,
-      },
-      {
-        source: "/customs/tokyo",
-        destination: "/customs",
-        permanent: true,
-      },
-      {
-        source: "/shipping/tokyo",
-        destination: "/shipping",
         permanent: true,
       },
       {
@@ -63,41 +124,16 @@ const nextConfig = {
         destination: "/sitemaps/sitemap-batch-:batch.xml",
         permanent: true,
       },
-      // Redirect old city-system URLs to new format
-      {
-        source: "/:city-:systemA-:systemB-integration",
-        destination: "/integration/:city/:systemA/:systemB",
-        permanent: true,
-      },
-      {
-        source: "/:city-:systemA-:systemB-data-bridge",
-        destination: "/integration/:city/:systemA/:systemB",
-        permanent: true,
-      },
-      {
-        source: "/:city-:systemA-:systemB-bridge",
-        destination: "/integration/:city/:systemA/:systemB",
-        permanent: true,
-      },
-      {
-        source: "/:city-:systemA-:systemB-normalization",
-        destination: "/integration/:city/:systemA/:systemB",
-        permanent: true,
-      },
-      // Redirect legacy vertical/city canonical-like URLs to working vertical city pages
-      {
-        source:
-          "/:country/:state/:city/:vertical(shipping|customs|compliance|finance|logistics|invoice)",
-        destination: "/:vertical/:city",
-        permanent: true,
-      },
-      // Redirect malformed region-prefixed vertical/city URLs (e.g. /europe/nl/rotterdam/logistics)
-      {
-        source:
-          "/:region/:country/:city/:vertical(shipping|customs|compliance|finance|logistics|invoice)",
-        destination: "/:vertical/:city",
-        permanent: true,
-      },
+
+      // ─────────────────────────────────────────────────────────────────────
+      // SECTION 4: Legacy city/vertical redirects
+      // These were previously sending /vertical/city to batch-generated pages.
+      // Preserved here to avoid breaking any inbound links, but they now point
+      // to the correct logistics vertical path.
+      // NOTE: legacyRedirects entries are processed after the above rules;
+      // any /compliance/:city or /shipping/:city entries there are now
+      // superseded by the wildcards above (Section 2).
+      // ─────────────────────────────────────────────────────────────────────
       ...legacyRedirects,
     ]
   },

@@ -1,0 +1,57 @@
+{
+  "_comment": "Document types by vertical. Each document generates its own URL segment and page variation.",
+
+  "logistics": [
+    { "id": "bill-of-lading",             "name": "Bill of Lading",                    "slug": "bill-of-lading",              "abbrev": "BOL",    "priority": 1 },
+    { "id": "commercial-invoice",         "name": "Commercial Invoice",                "slug": "commercial-invoice",          "abbrev": "CI",     "priority": 2 },
+    { "id": "packing-list",               "name": "Packing List",                      "slug": "packing-list",                "abbrev": "PL",     "priority": 3 },
+    { "id": "air-waybill",                "name": "Air Waybill",                       "slug": "air-waybill",                 "abbrev": "AWB",    "priority": 4 },
+    { "id": "customs-declaration",        "name": "Customs Declaration",               "slug": "customs-declaration",         "abbrev": "CD",     "priority": 5 },
+    { "id": "arrival-notice",             "name": "Arrival Notice",                    "slug": "arrival-notice",              "abbrev": "AN",     "priority": 6 },
+    { "id": "proof-of-delivery",          "name": "Proof of Delivery",                 "slug": "proof-of-delivery",           "abbrev": "POD",    "priority": 7 },
+    { "id": "freight-invoice",            "name": "Freight Invoice",                   "slug": "freight-invoice",             "abbrev": "FI",     "priority": 8 },
+    { "id": "hs-code-mapping",            "name": "HS Code Mapping",                   "slug": "hs-code-mapping",             "abbrev": "HS",     "priority": 9 },
+    { "id": "landed-cost-statement",      "name": "Landed Cost Statement",             "slug": "landed-cost-statement",       "abbrev": "LCS",    "priority": 10 },
+    { "id": "isf-filing",                 "name": "ISF Filing",                        "slug": "isf-filing",                  "abbrev": "ISF",    "priority": 11 },
+    { "id": "delivery-receipt",           "name": "Delivery Receipt",                  "slug": "delivery-receipt",            "abbrev": "DR",     "priority": 12 }
+  ],
+
+  "accountants": [
+    { "id": "tax-return",                 "name": "Tax Return",                        "slug": "tax-return",                  "abbrev": "TR",     "priority": 1 },
+    { "id": "financial-statement",        "name": "Financial Statement",               "slug": "financial-statement",         "abbrev": "FS",     "priority": 2 },
+    { "id": "client-engagement-letter",   "name": "Client Engagement Letter",          "slug": "client-engagement-letter",    "abbrev": "CEL",    "priority": 3 },
+    { "id": "chart-of-accounts",          "name": "Chart of Accounts",                 "slug": "chart-of-accounts",           "abbrev": "COA",    "priority": 4 },
+    { "id": "payroll-report",             "name": "Payroll Report",                    "slug": "payroll-report",              "abbrev": "PR",     "priority": 5 },
+    { "id": "bank-reconciliation",        "name": "Bank Reconciliation",               "slug": "bank-reconciliation",         "abbrev": "BR",     "priority": 6 },
+    { "id": "audit-report",              "name": "Audit Report",                       "slug": "audit-report",                "abbrev": "AR",     "priority": 7 },
+    { "id": "expense-report",            "name": "Expense Report",                     "slug": "expense-report",              "abbrev": "ER",     "priority": 8 },
+    { "id": "w2-1099",                    "name": "W-2 / 1099 Forms",                  "slug": "w2-1099-forms",               "abbrev": "W2",     "priority": 9 },
+    { "id": "trial-balance",             "name": "Trial Balance",                      "slug": "trial-balance",               "abbrev": "TB",     "priority": 10 }
+  ],
+
+  "real-estate": [
+    { "id": "lease-agreement",            "name": "Lease Agreement",                   "slug": "lease-agreement",             "abbrev": "LA",     "priority": 1 },
+    { "id": "tenant-application",         "name": "Tenant Application",                "slug": "tenant-application",          "abbrev": "TA",     "priority": 2 },
+    { "id": "rent-roll",                  "name": "Rent Roll",                         "slug": "rent-roll",                   "abbrev": "RR",     "priority": 3 },
+    { "id": "property-management-report", "name": "Property Management Report",        "slug": "property-management-report",  "abbrev": "PMR",    "priority": 4 },
+    { "id": "security-deposit-ledger",    "name": "Security Deposit Ledger",           "slug": "security-deposit-ledger",     "abbrev": "SDL",    "priority": 5 },
+    { "id": "maintenance-invoice",        "name": "Maintenance Invoice",               "slug": "maintenance-invoice",         "abbrev": "MI",     "priority": 6 },
+    { "id": "closing-disclosure",         "name": "Closing Disclosure",                "slug": "closing-disclosure",          "abbrev": "CD",     "priority": 7 },
+    { "id": "title-report",               "name": "Title Report",                      "slug": "title-report",                "abbrev": "TR",     "priority": 8 },
+    { "id": "hoa-document",               "name": "HOA Document",                      "slug": "hoa-document",                "abbrev": "HOA",    "priority": 9 },
+    { "id": "property-tax-statement",     "name": "Property Tax Statement",            "slug": "property-tax-statement",      "abbrev": "PTS",    "priority": 10 }
+  ],
+
+  "warehousing": [
+    { "id": "pick-ticket",                "name": "Pick Ticket",                       "slug": "pick-ticket",                 "abbrev": "PT",     "priority": 1 },
+    { "id": "packing-slip",               "name": "Packing Slip",                      "slug": "packing-slip",                "abbrev": "PS",     "priority": 2 },
+    { "id": "receiving-report",           "name": "Receiving Report",                  "slug": "receiving-report",            "abbrev": "RR",     "priority": 3 },
+    { "id": "purchase-order",             "name": "Purchase Order",                    "slug": "purchase-order",              "abbrev": "PO",     "priority": 4 },
+    { "id": "stock-transfer-order",       "name": "Stock Transfer Order",              "slug": "stock-transfer-order",        "abbrev": "STO",    "priority": 5 },
+    { "id": "cycle-count-sheet",          "name": "Cycle Count Sheet",                 "slug": "cycle-count-sheet",           "abbrev": "CCS",    "priority": 6 },
+    { "id": "outbound-bol",               "name": "Outbound Bill of Lading",           "slug": "outbound-bill-of-lading",     "abbrev": "BOL",    "priority": 7 },
+    { "id": "returns-authorization",      "name": "Returns Authorization",             "slug": "returns-authorization",       "abbrev": "RA",     "priority": 8 },
+    { "id": "inventory-adjustment",       "name": "Inventory Adjustment",              "slug": "inventory-adjustment",        "abbrev": "IA",     "priority": 9 },
+    { "id": "supplier-invoice",           "name": "Supplier Invoice",                  "slug": "supplier-invoice",            "abbrev": "SI",     "priority": 10 }
+  ]
+}

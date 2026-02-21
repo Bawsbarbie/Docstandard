@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
+import { buildMeta } from "@/lib/pseo/metadata"
+
+export const metadata: Metadata = buildMeta({
+  title: "Terms of Service",
+  description: "Read DocStandard's terms of service. Understand the rules governing use of our document processing and data normalization platform.",
+  canonicalPath: "/terms",
+})
 
 export default function TermsOfServicePage() {
   return (

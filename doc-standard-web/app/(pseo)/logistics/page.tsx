@@ -2,6 +2,12 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import SVGDiagram from "@/components/diagrams/SVGDiagramGenerator"
+import {
+  buildBreadcrumbSchema,
+  buildOrganizationSchema,
+  buildWebPageSchema,
+  serializeSchemas,
+} from "@/lib/pseo/schema"
 
 export const metadata: Metadata = {
   title: "Logistics Document Processing Hub | DocStandard",
@@ -13,8 +19,27 @@ export const metadata: Metadata = {
 }
 
 export default async function LogisticsHubPage() {
+  const schemaJson = serializeSchemas([
+    buildWebPageSchema({
+      name: "Logistics Document Processing Hub",
+      description:
+        "Transform logistics documents into clean, structured data for your TMS and ERP. Bills of lading, packing lists, delivery receipts, and PODs normalized fast.",
+      url: "https://docstandard.co/logistics",
+    }),
+    buildBreadcrumbSchema([
+      { name: "Home", url: "https://docstandard.co" },
+      { name: "Logistics", url: "https://docstandard.co/logistics" },
+    ]),
+    buildOrganizationSchema(),
+  ])
+
   return (
     <div className="bg-white text-slate-900">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: schemaJson }}
+      />
       <section className="relative overflow-hidden py-20 px-6">
         <div className="absolute inset-0 z-0">
           <Image
@@ -43,10 +68,10 @@ export default async function LogisticsHubPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/integration"
+              href="/logistics/integration"
               className="inline-flex items-center gap-2 bg-white text-slate-900 px-6 py-3 rounded-lg font-semibold hover:bg-slate-100 transition"
             >
-              View System Integrations -&gt;
+              View System Integrations →
             </Link>
             <Link
               href="#pipeline"
@@ -350,35 +375,23 @@ export default async function LogisticsHubPage() {
             can keep current workflows intact.
           </p>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="font-semibold mb-3">Transportation Management Systems</h3>
-              <ul className="space-y-2 text-slate-600">
-                <li>CargoWise</li>
-                <li>SAP TM</li>
-                <li>Oracle Transportation Management</li>
-                <li>MercuryGate</li>
-                <li>Blue Yonder (JDA)</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="font-semibold mb-3">Enterprise Resource Planning</h3>
-              <ul className="space-y-2 text-slate-600">
-                <li>SAP S/4HANA</li>
-                <li>Oracle NetSuite</li>
-                <li>Microsoft Dynamics 365</li>
-                <li>Sage</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="font-semibold mb-3">Warehouse Management Systems</h3>
-              <ul className="space-y-2 text-slate-600">
-                <li>Blue Yonder WMS</li>
-                <li>SAP EWM</li>
-                <li>Manhattan Associates</li>
-                <li>HighJump (Korber)</li>
-              </ul>
-            </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Link href="/logistics/integration/cargowise-to-netsuite-bridge" className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition">
+              <h3 className="font-semibold mb-1 group-hover:text-blue-600 transition-colors">CargoWise → NetSuite</h3>
+              <p className="text-sm text-slate-500">Normalize CargoWise freight data for clean NetSuite import.</p>
+            </Link>
+            <Link href="/logistics/integration/cargowise-to-sap-s4hana-bridge" className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition">
+              <h3 className="font-semibold mb-1 group-hover:text-blue-600 transition-colors">CargoWise → SAP S/4HANA</h3>
+              <p className="text-sm text-slate-500">Extract and standardize logistics documents for SAP S/4HANA integration.</p>
+            </Link>
+            <Link href="/logistics/integration/manhattan-associates-to-netsuite-bridge" className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition">
+              <h3 className="font-semibold mb-1 group-hover:text-blue-600 transition-colors">Manhattan Associates → NetSuite</h3>
+              <p className="text-sm text-slate-500">Bridge warehouse operations data from Manhattan to NetSuite.</p>
+            </Link>
+            <Link href="/logistics/integration/sap-tm-to-sap-s4hana-bridge" className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-blue-300 transition">
+              <h3 className="font-semibold mb-1 group-hover:text-blue-600 transition-colors">SAP TM → SAP S/4HANA</h3>
+              <p className="text-sm text-slate-500">Normalize transport management records for SAP financial integration.</p>
+            </Link>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -461,8 +474,8 @@ export default async function LogisticsHubPage() {
             </Link>
           </div>
           <div className="text-center">
-            <Link href="/integration" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
-              View All Integrations →
+            <Link href="/logistics/integration" className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
+              View All Logistics Integrations →
             </Link>
           </div>
         </div>
@@ -474,21 +487,26 @@ export default async function LogisticsHubPage() {
             depend on clean logistics inputs, while customs clearance relies on accurate BOL and
             packing list data. Explore the related services below.
           </p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/finance" className="text-blue-600 font-semibold hover:underline">
-              Freight bill auditing and logistics finance
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+            <Link href="/accountants" className="group rounded-xl border border-slate-200 bg-white p-5 hover:shadow-md transition">
+              <p className="font-semibold group-hover:text-blue-600 transition-colors">Accountants</p>
+              <p className="text-sm text-slate-500 mt-1">Tax filings and accounting software integrations.</p>
             </Link>
-            <Link href="/customs" className="text-blue-600 font-semibold hover:underline">
-              Customs clearance document preparation
+            <Link href="/real-estate" className="group rounded-xl border border-slate-200 bg-white p-5 hover:shadow-md transition">
+              <p className="font-semibold group-hover:text-blue-600 transition-colors">Real Estate</p>
+              <p className="text-sm text-slate-500 mt-1">Lease agreements and property management integrations.</p>
             </Link>
-            <Link href="/compliance" className="text-blue-600 font-semibold hover:underline">
-              Logistics compliance documentation
+            <Link href="/warehousing" className="group rounded-xl border border-slate-200 bg-white p-5 hover:shadow-md transition">
+              <p className="font-semibold group-hover:text-blue-600 transition-colors">Warehousing</p>
+              <p className="text-sm text-slate-500 mt-1">Pick tickets and WMS document processing.</p>
             </Link>
-            <Link href="/shipping" className="text-blue-600 font-semibold hover:underline">
-              Ocean and air freight document processing
-            </Link>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-6">
             <Link href="/comparison" className="text-blue-600 font-semibold hover:underline">
               Compare logistics platforms
+            </Link>
+            <Link href="/blog" className="text-blue-600 font-semibold hover:underline">
+              Logistics operations blog
             </Link>
           </div>
         </div>

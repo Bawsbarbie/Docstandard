@@ -1,0 +1,25 @@
+🔍 Getting GSC stats (dashboard aligned)...
+
+📊 Pages with search impressions...
+  ✅ 131 pages with impressions
+
+════════════════════════════════════════════════════════════
+📈 GSC INDEXATION STATUS (Dashboard Aligned)
+════════════════════════════════════════════════════════════
+Site: sc-domain:docstandard.co
+Last Updated: 2/21/2026, 8:23:12 PM
+
+🟢 Dashboard "Indexed": 40 URLs
+📊 Pages with impressions: 131
+📈 Search impressions (90d): 818
+🖱️ Search clicks (90d): 3
+📍 Avg position: 18.8
+
+🎉🎉🎉 MILESTONE REACHED! 🎉🎉🎉
+   40 URLs indexed
+   Next batch release APPROVED
+
+Action: Proceed with next 132 URL batch
+
+💾 Report saved: /Users/bawsbarbie/clawd/doc-standard-web/reports/gsc-dashboard-stats.json
+════════════════════════════════════════════════════════════

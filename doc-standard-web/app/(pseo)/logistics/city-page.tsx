@@ -27,11 +27,24 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const cityData = getCityBySlug(params.city)
-  if (!cityData) return { title: "Not Found" }
+  if (!cityData) return { title: "Not Found", robots: { index: false } }
+
+  const title = `Logistics Document Processing in ${cityData.name} | DocStandard`
+  const description = `Streamline logistics document processing in ${cityData.name}. Transform BOLs, packing lists, and freight documents into clean, structured data. Eliminate manual data entry delays.`
+  const canonical = `https://docstandard.co/logistics/city/${params.city}`
 
   return {
-    title: `Logistics Document Processing in ${cityData.name} | DocStandard`,
-    description: `Streamline logistics document processing in ${cityData.name}. Transform BOLs, packing lists, and freight documents into clean, structured data. Eliminate manual data entry delays.`,
+    title,
+    description,
+    alternates: { canonical },
+    robots: { index: true, follow: true },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: "website",
+      siteName: "DocStandard",
+    },
   }
 }
 

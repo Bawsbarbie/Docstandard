@@ -1,0 +1,55 @@
+{
+  "_comment": "Problem states (hurdles) that differentiate integration pages. Each hurdle = a unique angle / search intent. Slug is used in URLs: /{vertical}/integration/{source}-to-{destination}/{hurdle}",
+
+  "logistics": [
+    { "id": "gl-mapping",              "name": "GL Account Mapping",            "slug": "gl-mapping",              "priority": 1, "description": "Normalizing general ledger account codes between logistics and ERP systems" },
+    { "id": "data-migration",          "name": "Data Migration",                "slug": "data-migration",          "priority": 2, "description": "Moving historical shipment and financial data to a new system" },
+    { "id": "format-normalization",    "name": "Format Normalization",          "slug": "format-normalization",    "priority": 3, "description": "Transforming non-standard document formats into system-ready structured data" },
+    { "id": "custom-field-mapping",    "name": "Custom Field Mapping",          "slug": "custom-field-mapping",    "priority": 4, "description": "Mapping proprietary fields between source and destination systems" },
+    { "id": "multi-currency",          "name": "Multi-Currency Handling",       "slug": "multi-currency",          "priority": 5, "description": "Converting and reconciling multi-currency freight and duty charges" },
+    { "id": "tax-compliance",          "name": "Tax Compliance",                "slug": "tax-compliance",          "priority": 6, "description": "Ensuring duty, VAT, and tax data is correctly formatted for compliance" },
+    { "id": "duplicate-detection",     "name": "Duplicate Detection",           "slug": "duplicate-detection",     "priority": 7, "description": "Identifying and removing duplicate shipment records across systems" },
+    { "id": "edi-translation",         "name": "EDI Translation",               "slug": "edi-translation",         "priority": 8, "description": "Converting EDI 850/810/214 transactions into readable business data" },
+    { "id": "legacy-cleanup",          "name": "Legacy Data Cleanup",           "slug": "legacy-cleanup",          "priority": 9, "description": "Cleaning and standardizing data from legacy or deprecated logistics systems" },
+    { "id": "isf-ams-prep",            "name": "ISF / AMS Filing Prep",         "slug": "isf-ams-prep",            "priority": 10, "description": "Preparing and formatting data for ISF and AMS customs pre-filing requirements" }
+  ],
+
+  "accountants": [
+    { "id": "coa-mapping",             "name": "Chart of Accounts Mapping",     "slug": "coa-mapping",             "priority": 1, "description": "Mapping client chart of accounts to a standard or destination system's COA" },
+    { "id": "tax-code-normalization",  "name": "Tax Code Normalization",        "slug": "tax-code-normalization",  "priority": 2, "description": "Standardizing tax codes and rates across multiple client entities" },
+    { "id": "client-data-migration",   "name": "Client Data Migration",         "slug": "client-data-migration",   "priority": 3, "description": "Moving client financial records from one software platform to another" },
+    { "id": "multi-entity",            "name": "Multi-Entity Consolidation",    "slug": "multi-entity",            "priority": 4, "description": "Consolidating financials across multiple client entities or subsidiaries" },
+    { "id": "payroll-sync",            "name": "Payroll Sync",                  "slug": "payroll-sync",            "priority": 5, "description": "Synchronizing payroll data between HR and accounting systems" },
+    { "id": "document-digitization",   "name": "Document Digitization",         "slug": "document-digitization",   "priority": 6, "description": "Converting paper or scanned financial documents to structured digital data" },
+    { "id": "legacy-cleanup",          "name": "Legacy Data Cleanup",           "slug": "legacy-cleanup",          "priority": 7, "description": "Cleaning and standardizing data from outdated accounting software" },
+    { "id": "compliance-formatting",   "name": "Compliance Formatting",         "slug": "compliance-formatting",   "priority": 8, "description": "Formatting financial data to meet IRS, GAAP, or IFRS compliance requirements" },
+    { "id": "year-end-processing",     "name": "Year-End Processing",           "slug": "year-end-processing",     "priority": 9, "description": "Automating year-end document preparation, reconciliation, and filing workflows" },
+    { "id": "audit-trail",             "name": "Audit Trail Preparation",       "slug": "audit-trail",             "priority": 10, "description": "Structuring financial data to create a clean, traceable audit trail" }
+  ],
+
+  "real-estate": [
+    { "id": "lease-extraction",        "name": "Lease Data Extraction",         "slug": "lease-extraction",        "priority": 1, "description": "Extracting tenant, term, rent, and clause data from lease PDFs" },
+    { "id": "rent-roll-normalization", "name": "Rent Roll Normalization",       "slug": "rent-roll-normalization", "priority": 2, "description": "Standardizing rent roll formats across multiple properties or management companies" },
+    { "id": "tenant-data-migration",   "name": "Tenant Record Migration",       "slug": "tenant-data-migration",   "priority": 3, "description": "Moving tenant records and payment history between property management platforms" },
+    { "id": "cam-reconciliation",      "name": "CAM Reconciliation",            "slug": "cam-reconciliation",      "priority": 4, "description": "Calculating and reconciling Common Area Maintenance charges from operating expense data" },
+    { "id": "document-digitization",   "name": "Document Digitization",         "slug": "document-digitization",   "priority": 5, "description": "Converting paper leases, applications, and title documents to structured digital records" },
+    { "id": "legacy-migration",        "name": "Legacy Software Migration",     "slug": "legacy-migration",        "priority": 6, "description": "Migrating data from outdated property management software to modern platforms" },
+    { "id": "multi-property",          "name": "Multi-Property Consolidation",  "slug": "multi-property",          "priority": 7, "description": "Consolidating data from multiple properties into a single reporting view" },
+    { "id": "compliance-formatting",   "name": "Compliance Formatting",         "slug": "compliance-formatting",   "priority": 8, "description": "Formatting property and tenant data for HUD, LIHTC, or local regulatory compliance" },
+    { "id": "maintenance-sync",        "name": "Maintenance Data Sync",         "slug": "maintenance-sync",        "priority": 9, "description": "Syncing work order and maintenance invoice data to accounting and reporting systems" },
+    { "id": "title-processing",        "name": "Title Document Processing",     "slug": "title-processing",        "priority": 10, "description": "Extracting and structuring data from title reports and closing disclosures" }
+  ],
+
+  "warehousing": [
+    { "id": "sku-normalization",       "name": "SKU Normalization",             "slug": "sku-normalization",       "priority": 1, "description": "Standardizing SKU formats and product identifiers across WMS and ERP systems" },
+    { "id": "inventory-reconciliation","name": "Inventory Reconciliation",      "slug": "inventory-reconciliation","priority": 2, "description": "Reconciling physical inventory counts with WMS and ERP records" },
+    { "id": "multi-location-sync",     "name": "Multi-Location Sync",          "slug": "multi-location-sync",     "priority": 3, "description": "Synchronizing inventory levels across multiple warehouse locations or 3PL partners" },
+    { "id": "erp-data-migration",      "name": "ERP Data Migration",           "slug": "erp-data-migration",      "priority": 4, "description": "Migrating inventory and order data from legacy WMS to a new ERP platform" },
+    { "id": "order-management",        "name": "Order Management Integration", "slug": "order-management",        "priority": 5, "description": "Connecting order intake, fulfillment, and shipping data between systems" },
+    { "id": "returns-processing",      "name": "Returns Processing",           "slug": "returns-processing",      "priority": 6, "description": "Automating the capture and processing of RMAs and return authorization documents" },
+    { "id": "supplier-mapping",        "name": "Supplier Data Mapping",        "slug": "supplier-mapping",        "priority": 7, "description": "Mapping supplier codes, lead times, and contact data between procurement and WMS systems" },
+    { "id": "cycle-count-automation",  "name": "Cycle Count Automation",       "slug": "cycle-count-automation",  "priority": 8, "description": "Automating cycle count data capture and variance reporting" },
+    { "id": "barcode-standardization", "name": "Barcode Standardization",      "slug": "barcode-standardization", "priority": 9, "description": "Normalizing barcode formats (GS1, SSCC, UPC) across fulfillment and receiving workflows" },
+    { "id": "3pl-data-exchange",       "name": "3PL Data Exchange",            "slug": "3pl-data-exchange",       "priority": 10, "description": "Standardizing data formats for sharing inventory and order data with 3PL partners" }
+  ]
+}

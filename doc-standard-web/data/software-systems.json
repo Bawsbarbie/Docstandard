@@ -1,0 +1,126 @@
+{
+  "_comment": "All software systems by vertical. 'role' indicates whether the system appears as source, destination, or both in integrations. 'slug' must match the slug used in integration-factory-content.json keys.",
+
+  "logistics": {
+    "source": [
+      { "id": "cargowise",           "name": "CargoWise",                   "slug": "cargowise",           "category": "tms" },
+      { "id": "magaya",              "name": "Magaya",                      "slug": "magaya",              "category": "tms" },
+      { "id": "descartes",           "name": "Descartes",                   "slug": "descartes",           "category": "tms" },
+      { "id": "blueyonder",          "name": "Blue Yonder",                 "slug": "blueyonder",          "category": "scm" },
+      { "id": "manhattan",           "name": "Manhattan Associates",        "slug": "manhattan-associates","category": "wms" },
+      { "id": "mercurygate",         "name": "MercuryGate",                 "slug": "mercurygate",         "category": "tms" },
+      { "id": "flexport",            "name": "Flexport",                    "slug": "flexport",            "category": "freight" },
+      { "id": "3pl-central",         "name": "3PL Central",                 "slug": "3pl-central",         "category": "wms" },
+      { "id": "kuebix",              "name": "Kuebix",                      "slug": "kuebix",              "category": "tms" },
+      { "id": "rose-rocket",         "name": "Rose Rocket",                 "slug": "rose-rocket",         "category": "tms" },
+      { "id": "oracle-otm",          "name": "Oracle OTM",                  "slug": "oracle-otm",          "category": "tms" },
+      { "id": "sap-tm",              "name": "SAP TM",                      "slug": "sap-tm",              "category": "tms" },
+      { "id": "motive",              "name": "Motive",                      "slug": "motive",              "category": "eld" },
+      { "id": "samsara",             "name": "Samsara",                     "slug": "samsara",             "category": "eld" },
+      { "id": "geotab",              "name": "Geotab",                      "slug": "geotab",              "category": "eld" },
+      { "id": "verizon-connect",     "name": "Verizon Connect",             "slug": "verizon-connect",     "category": "eld" },
+      { "id": "trimble",             "name": "Trimble",                     "slug": "trimble",             "category": "tms" },
+      { "id": "fourkites",           "name": "FourKites",                   "slug": "fourkites",           "category": "visibility" },
+      { "id": "project44",           "name": "Project44",                   "slug": "project44",           "category": "visibility" },
+      { "id": "freightos",           "name": "Freightos",                   "slug": "freightos",           "category": "freight" },
+      { "id": "shipstation",         "name": "ShipStation",                 "slug": "shipstation",         "category": "shipping" },
+      { "id": "freightpop",          "name": "FreightPop",                  "slug": "freightpop",          "category": "tms" },
+      { "id": "alpega",              "name": "Alpega",                      "slug": "alpega",              "category": "tms" },
+      { "id": "transporeon",         "name": "Transporeon",                 "slug": "transporeon",         "category": "tms" },
+      { "id": "epicor",              "name": "Epicor",                      "slug": "epicor",              "category": "erp" },
+      { "id": "infor-cloudsuite",    "name": "Infor CloudSuite",            "slug": "infor-cloudsuite",    "category": "erp" },
+      { "id": "dynamics-365",        "name": "Dynamics 365",                "slug": "dynamics-365",        "category": "erp" },
+      { "id": "dynamics-bc",         "name": "Dynamics BC",                 "slug": "dynamics-bc",         "category": "erp" }
+    ],
+    "destination": [
+      { "id": "netsuite",            "name": "NetSuite",                    "slug": "netsuite",            "category": "erp" },
+      { "id": "sap-s4hana",          "name": "SAP S/4HANA",                 "slug": "sap-s4hana",          "category": "erp" },
+      { "id": "sap-business-one",    "name": "SAP Business One",            "slug": "sap-business-one",    "category": "erp" },
+      { "id": "sage-intacct",        "name": "Sage Intacct",                "slug": "sage-intacct",        "category": "erp" },
+      { "id": "sage-300",            "name": "Sage 300",                    "slug": "sage-300",            "category": "erp" },
+      { "id": "quickbooks-online",   "name": "QuickBooks Online",           "slug": "quickbooks-online",   "category": "accounting" },
+      { "id": "quickbooks-desktop",  "name": "QuickBooks Desktop",          "slug": "quickbooks-desktop",  "category": "accounting" },
+      { "id": "dynamics-bc",         "name": "Microsoft Dynamics 365 BC",   "slug": "dynamics-bc",         "category": "erp" },
+      { "id": "dynamics-fo",         "name": "Microsoft Dynamics 365 F&O",  "slug": "dynamics-fo",         "category": "erp" },
+      { "id": "xero",                "name": "Xero",                        "slug": "xero",                "category": "accounting" },
+      { "id": "freshbooks",          "name": "FreshBooks",                  "slug": "freshbooks",          "category": "accounting" },
+      { "id": "zoho-books",          "name": "Zoho Books",                  "slug": "zoho-books",          "category": "accounting" },
+      { "id": "workday",             "name": "Workday",                     "slug": "workday",             "category": "hrm-erp" },
+      { "id": "oracle-erp",          "name": "Oracle ERP Cloud",            "slug": "oracle-erp-cloud",    "category": "erp" },
+      { "id": "financialforce",      "name": "FinancialForce",              "slug": "financialforce",      "category": "erp" },
+      { "id": "acumatica",           "name": "Acumatica ERP",               "slug": "acumatica-erp",       "category": "erp" }
+    ]
+  },
+
+  "accountants": {
+    "source": [
+      { "id": "quickbooks-online",   "name": "QuickBooks Online",           "slug": "quickbooks-online",   "category": "accounting" },
+      { "id": "quickbooks-desktop",  "name": "QuickBooks Desktop",          "slug": "quickbooks-desktop",  "category": "accounting" },
+      { "id": "xero",                "name": "Xero",                        "slug": "xero",                "category": "accounting" },
+      { "id": "freshbooks",          "name": "FreshBooks",                  "slug": "freshbooks",          "category": "accounting" },
+      { "id": "sage-50",             "name": "Sage 50",                     "slug": "sage-50",             "category": "accounting" },
+      { "id": "sage-intacct",        "name": "Sage Intacct",                "slug": "sage-intacct",        "category": "erp" },
+      { "id": "clio",                "name": "Clio",                        "slug": "clio",                "category": "practice-mgmt" },
+      { "id": "karbon",              "name": "Karbon",                      "slug": "karbon",              "category": "practice-mgmt" },
+      { "id": "taxdome",             "name": "TaxDome",                     "slug": "taxdome",             "category": "tax-practice" },
+      { "id": "canopy",              "name": "Canopy",                      "slug": "canopy",              "category": "tax-practice" },
+      { "id": "drake",               "name": "Drake Tax",                   "slug": "drake",               "category": "tax-software" },
+      { "id": "cch",                 "name": "CCH Axcess",                  "slug": "cch-axcess",          "category": "tax-software" }
+    ],
+    "destination": [
+      { "id": "quickbooks-online",   "name": "QuickBooks Online",           "slug": "quickbooks-online",   "category": "accounting" },
+      { "id": "xero",                "name": "Xero",                        "slug": "xero",                "category": "accounting" },
+      { "id": "netsuite",            "name": "NetSuite",                    "slug": "netsuite",            "category": "erp" },
+      { "id": "sage-intacct",        "name": "Sage Intacct",                "slug": "sage-intacct",        "category": "erp" },
+      { "id": "workday",             "name": "Workday",                     "slug": "workday",             "category": "hrm-erp" },
+      { "id": "dynamics-bc",         "name": "Microsoft Dynamics 365 BC",   "slug": "dynamics-bc",         "category": "erp" },
+      { "id": "excel",               "name": "Excel / CSV",                 "slug": "excel",               "category": "spreadsheet" }
+    ]
+  },
+
+  "real-estate": {
+    "source": [
+      { "id": "appfolio",            "name": "AppFolio",                    "slug": "appfolio",            "category": "pms" },
+      { "id": "yardi",               "name": "Yardi",                       "slug": "yardi",               "category": "pms" },
+      { "id": "buildium",            "name": "Buildium",                    "slug": "buildium",            "category": "pms" },
+      { "id": "mri-software",        "name": "MRI Software",                "slug": "mri-software",        "category": "pms" },
+      { "id": "dotloop",             "name": "Dotloop",                     "slug": "dotloop",             "category": "transaction-mgmt" },
+      { "id": "docusign",            "name": "DocuSign",                    "slug": "docusign",            "category": "esign" },
+      { "id": "skyslope",            "name": "Skyslope",                    "slug": "skyslope",            "category": "transaction-mgmt" },
+      { "id": "propertyware",        "name": "Propertyware",                "slug": "propertyware",        "category": "pms" },
+      { "id": "rent-manager",        "name": "Rent Manager",                "slug": "rent-manager",        "category": "pms" },
+      { "id": "costar",              "name": "CoStar",                      "slug": "costar",              "category": "data" }
+    ],
+    "destination": [
+      { "id": "quickbooks-online",   "name": "QuickBooks Online",           "slug": "quickbooks-online",   "category": "accounting" },
+      { "id": "xero",                "name": "Xero",                        "slug": "xero",                "category": "accounting" },
+      { "id": "netsuite",            "name": "NetSuite",                    "slug": "netsuite",            "category": "erp" },
+      { "id": "sage-intacct",        "name": "Sage Intacct",                "slug": "sage-intacct",        "category": "erp" },
+      { "id": "excel",               "name": "Excel / CSV",                 "slug": "excel",               "category": "spreadsheet" },
+      { "id": "dynamics-bc",         "name": "Microsoft Dynamics 365 BC",   "slug": "dynamics-bc",         "category": "erp" }
+    ]
+  },
+
+  "warehousing": {
+    "source": [
+      { "id": "fishbowl",            "name": "Fishbowl",                    "slug": "fishbowl",            "category": "wms" },
+      { "id": "inflow",              "name": "inFlow",                      "slug": "inflow",              "category": "inventory" },
+      { "id": "cin7",                "name": "Cin7",                        "slug": "cin7",                "category": "inventory" },
+      { "id": "deposco",             "name": "Deposco",                     "slug": "deposco",             "category": "wms" },
+      { "id": "3pl-central",         "name": "3PL Central (Extensiv)",      "slug": "3pl-central",         "category": "wms" },
+      { "id": "logiwa",              "name": "Logiwa",                      "slug": "logiwa",              "category": "wms" },
+      { "id": "skuvault",            "name": "SkuVault",                    "slug": "skuvault",            "category": "inventory" },
+      { "id": "stowga",              "name": "Stowga",                      "slug": "stowga",              "category": "wms" },
+      { "id": "hopstack",            "name": "Hopstack",                    "slug": "hopstack",            "category": "wms" }
+    ],
+    "destination": [
+      { "id": "netsuite",            "name": "NetSuite",                    "slug": "netsuite",            "category": "erp" },
+      { "id": "sap-s4hana",          "name": "SAP S/4HANA",                 "slug": "sap-s4hana",          "category": "erp" },
+      { "id": "quickbooks-online",   "name": "QuickBooks Online",           "slug": "quickbooks-online",   "category": "accounting" },
+      { "id": "dynamics-bc",         "name": "Microsoft Dynamics 365 BC",   "slug": "dynamics-bc",         "category": "erp" },
+      { "id": "xero",                "name": "Xero",                        "slug": "xero",                "category": "accounting" },
+      { "id": "excel",               "name": "Excel / CSV",                 "slug": "excel",               "category": "spreadsheet" },
+      { "id": "sage-intacct",        "name": "Sage Intacct",                "slug": "sage-intacct",        "category": "erp" }
+    ]
+  }
+}

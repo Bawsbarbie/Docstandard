@@ -40,3 +40,6 @@ next-env.d.ts
 # config files with secrets
 /config/gsc-service-account.json
 /config/*.json
+.next.stale-*/
+gsc-full-dump.txt
+verified-urls.txt

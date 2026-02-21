@@ -1,7 +1,15 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import type { Route } from "next"
 import { getAllBlogPosts } from "@/lib/blog/fs"
 import { ArrowRight } from "lucide-react"
+import { buildMeta } from "@/lib/pseo/metadata"
+
+export const metadata: Metadata = buildMeta({
+  title: "Expert Perspective | Logistics & Document Processing Blog",
+  description: "Expert analysis and technical guidance for logistics, accounting, and real estate teams managing document normalization and ERP integrations.",
+  canonicalPath: "/blog",
+})
 
 export default async function BlogIndexPage() {
   const posts = await getAllBlogPosts()

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "logistics",
+    "slug": "logistics",
+    "name": "Logistics",
+    "phase": 1,
+    "status": "active",
+    "hubTitle": "Logistics Document Processing Hub",
+    "hubDescription": "Transform logistics documents into clean, structured data for your TMS and ERP. Bills of lading, packing lists, delivery receipts, and PODs normalized fast.",
+    "canonical": "https://docstandard.co/logistics",
+    "image": "/images/banners/logistics.webp",
+    "color": "blue",
+    "industries": ["freight forwarding", "3PL", "customs brokerage", "ocean freight", "air freight"],
+    "integrationRoute": "/logistics/integration",
+    "documentsRoute": "/logistics/documents"
+  },
+  {
+    "id": "accountants",
+    "slug": "accountants",
+    "name": "Accountants",
+    "phase": 1,
+    "status": "planned",
+    "hubTitle": "Accounting Document Processing Hub",
+    "hubDescription": "Normalize client documents, tax filings, and financial statements into clean structured data for your accounting software. Built for CPA firms, bookkeepers, and tax practices.",
+    "canonical": "https://docstandard.co/accountants",
+    "image": "/images/banners/finance.webp",
+    "color": "green",
+    "industries": ["CPA firms", "bookkeeping", "tax preparation", "audit", "payroll"],
+    "integrationRoute": "/accountants/integration",
+    "documentsRoute": "/accountants/documents"
+  },
+  {
+    "id": "real-estate",
+    "slug": "real-estate",
+    "name": "Real Estate",
+    "phase": 1,
+    "status": "planned",
+    "hubTitle": "Real Estate Document Processing Hub",
+    "hubDescription": "Extract and normalize lease agreements, rent rolls, tenant applications, and property records into clean structured data for your property management stack.",
+    "canonical": "https://docstandard.co/real-estate",
+    "image": "/images/banners/logistics.webp",
+    "color": "amber",
+    "industries": ["property management", "commercial real estate", "residential brokerage", "HOA management", "title companies"],
+    "integrationRoute": "/real-estate/integration",
+    "documentsRoute": "/real-estate/documents"
+  },
+  {
+    "id": "warehousing",
+    "slug": "warehousing",
+    "name": "Warehousing",
+    "phase": 1,
+    "status": "planned",
+    "hubTitle": "Warehousing Document Processing Hub",
+    "hubDescription": "Convert pick tickets, packing slips, receiving reports, and inventory documents into system-ready data for your WMS and ERP. Built for 3PLs, distributors, and fulfillment centers.",
+    "canonical": "https://docstandard.co/warehousing",
+    "image": "/images/banners/logistics.webp",
+    "color": "slate",
+    "industries": ["3PL warehousing", "distribution", "fulfillment", "manufacturing", "e-commerce"],
+    "integrationRoute": "/warehousing/integration",
+    "documentsRoute": "/warehousing/documents"
+  }
+]

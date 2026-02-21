@@ -27,11 +27,18 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const cityData = getCityBySlug(params.city)
-  if (!cityData) return { title: "Not Found" }
+  if (!cityData) return { title: "Not Found", robots: { index: false } }
+
+  const title = `Freight Bill Processing in ${cityData.name} | DocStandard`
+  const description = `Automate freight bill auditing and payment processing in ${cityData.name}. Catch billing errors, validate carrier charges, and streamline AP workflows with 99%+ accuracy.`
+  const canonical = `https://docstandard.co/finance/city/${params.city}`
 
   return {
-    title: `Freight Bill Processing in ${cityData.name} | DocStandard`,
-    description: `Automate freight bill auditing and payment processing in ${cityData.name}. Catch billing errors, validate carrier charges, and streamline AP workflows with 99%+ accuracy.`,
+    title,
+    description,
+    alternates: { canonical },
+    robots: { index: true, follow: true },
+    openGraph: { title, description, url: canonical, type: "website", siteName: "DocStandard" },
   }
 }
 

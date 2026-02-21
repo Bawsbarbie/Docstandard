@@ -6,7 +6,12 @@ const path = require("path");
 const dotenv = require("dotenv");
 
 const MAX_URLS_PER_BATCH = 2000;
-const CITY_SYSTEM_SLUG_REGEX = /^\/[a-z0-9-]+-(cargowise|magaya|sap|oracle|motive|descartes|mercurygate|flexport|freightos|kuebix|roserocket|manhattan|blueyonder|3pl-central|shipstation)-([a-z0-9-]+)-[a-z0-9-]+$/i;
+
+// Regex for old flat geo-city slug pages (now 404 — excluded from sitemap)
+const OLD_GEO_SLUG_REGEX = /^\/[a-z0-9-]+-(cargowise|magaya|sap|oracle|motive|descartes|mercurygate|flexport|freightos|kuebix|roserocket|manhattan|blueyonder|3pl-central|shipstation)-([a-z0-9-]+)-[a-z0-9-]+$/i;
+
+// New canonical verticals
+const CANONICAL_VERTICALS = ["logistics", "accountants", "real-estate", "warehousing"];
 
 function parseArgs(argv) {
   const out = {};
@@ -85,18 +90,61 @@ function listGeneratedSlugs(root) {
   return slugs;
 }
 
-function listIntegrationSlugs(root) {
+/**
+ * Logistics integrations — Phase 1 cap of 200 pages.
+ * Source: integration-factory-content.json (existing logistics slugs).
+ * New canonical path: /logistics/integration/{slug}
+ */
+function listLogisticsIntegrationRoutes(root) {
   try {
     const filePath = path.join(root, "data", "pseo", "integration-factory-content.json");
     const content = fs.readFileSync(filePath, "utf-8");
     const parsed = JSON.parse(content);
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-      return Object.keys(parsed).filter(Boolean);
+      // Limit to top 200 as defined in generateStaticParams
+      return Object.keys(parsed)
+        .filter(Boolean)
+        .slice(0, 200)
+        .map((slug) => `/logistics/integration/${slug}`);
     }
   } catch (e) {
     console.warn("Warning: Could not load integration-factory-content.json");
   }
   return [];
+}
+
+/**
+ * New vertical integrations (accountants, real-estate, warehousing).
+ * Source: data/software-systems.json — cross-product of source × destination.
+ * Path pattern: /{vertical}/integration/{source-slug}-to-{dest-slug}
+ */
+function listNewVerticalIntegrationRoutes(root) {
+  const routes = [];
+  try {
+    const filePath = path.join(root, "data", "software-systems.json");
+    const systems = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+    for (const vertical of ["accountants", "real-estate", "warehousing"]) {
+      const verticalData = systems[vertical];
+      if (!verticalData) continue;
+      const sources = verticalData.source || [];
+      const destinations = verticalData.destination || [];
+      for (const src of sources) {
+        for (const dst of destinations) {
+          if (!src.slug || !dst.slug) continue;
+          routes.push(`/${vertical}/integration/${src.slug}-to-${dst.slug}`);
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Warning: Could not load software-systems.json:", e.message);
+  }
+  return routes;
+}
+
+// Keep legacy name for backwards compat but redirect to new canonical
+function listIntegrationSlugs(root) {
+  return listLogisticsIntegrationRoutes(root);
 }
 
 function listBlogSlugs(root) {
@@ -120,46 +168,56 @@ function listBlogSlugs(root) {
 }
 
 function getStaticRoutes() {
+  // ONLY indexable public pages — noindex pages (login, dashboard, upload,
+  // success, contact) and redirect-only routes (old sub-verticals) are omitted.
   return [
+    // Marketing
     "/",
     "/about",
-    "/contact",
     "/services",
-    "/upload",
-    "/login",
-    "/dashboard",
-    "/success",
+    "/blog",
+    // Canonical vertical hubs
     "/logistics",
-    "/finance",
-    "/customs",
-    "/compliance",
-    "/invoice",
-    "/shipping",
+    "/accountants",
+    "/real-estate",
+    "/warehousing",
+    // Tool hubs
+    "/comparison",
   ];
 }
 
 function getBlockedRoutes() {
+  // Old sub-vertical paths that now 308 redirect to /logistics
   return new Set([
+    "/shipping",
+    "/finance",
+    "/customs",
+    "/compliance",
+    "/invoice",
+    // Specific broken city pages from old architecture
     "/invoice/antwerp",
     "/invoice/chicago",
     "/finance/rotterdam",
     "/customs/hamburg",
     "/compliance/new-york",
+    // Noindex app routes
+    "/upload",
+    "/login",
+    "/dashboard",
+    "/success",
+    "/contact",
   ]);
 }
 
 function isPseoRoute(route) {
-  return (
-    CITY_SYSTEM_SLUG_REGEX.test(route) ||
-    route.startsWith("/integration/") ||
-    route.startsWith("/blog/") ||
-    route === "/logistics" ||
-    route === "/shipping" ||
-    route === "/finance" ||
-    route === "/customs" ||
-    route === "/compliance" ||
-    route === "/invoice"
-  );
+  // New canonical patterns
+  if (CANONICAL_VERTICALS.some((v) => route.startsWith(`/${v}/integration/`))) return true;
+  if (route.startsWith("/comparison/")) return true;
+  if (route.startsWith("/blog/")) return true;
+  if (CANONICAL_VERTICALS.includes(route.slice(1))) return true;
+  // Old flat geo slug — these are now 404, excluded elsewhere
+  if (OLD_GEO_SLUG_REGEX.test(route)) return true;
+  return false;
 }
 
 function checkPageHasNoindex(route, root) {
@@ -191,14 +249,18 @@ function checkPageHasNoindex(route, root) {
   return false;
 }
 
-// BEFORE adding to sitemap, check for indexing readiness
-function shouldIncludeInSitemap(route, root) {
-  // If it's a pSEO page, check if it's meant to be indexed
-  if (isPseoRoute(route)) {
-    // For now, we allow all generated pSEO routes since we've verified 
-    // the dynamic metadata logic is handling 'index: true' for high priority cities.
-    return true; 
-  }
+// Gate: only include routes that are actually indexable.
+function shouldIncludeInSitemap(route, _root) {
+  // Old flat geo-slug pages — route now returns 404 after architecture change.
+  if (OLD_GEO_SLUG_REGEX.test(route)) return false;
+
+  // Old /integration/* paths — redirected to /logistics/integration/*
+  if (route.startsWith("/integration/")) return false;
+
+  // /near-me/* — these are handled by the supplemental sitemap-near-me.xml
+  // They are city-level pages gated by DA; don't include in main batches.
+  if (route.startsWith("/near-me/")) return false;
+
   return true;
 }
 
@@ -273,21 +335,29 @@ function main() {
   // Collect all URLs
   const allRoutes = [];
 
-  // 1. Generated pages
-  const generatedSlugs = listGeneratedSlugs(root);
-  generatedSlugs.forEach((slug) => allRoutes.push(`/${slug}`));
+  // 1. Logistics integration pages (new canonical /logistics/integration/{slug})
+  const logisticsRoutes = listLogisticsIntegrationRoutes(root);
+  logisticsRoutes.forEach((route) => allRoutes.push(route));
+  console.log(`Logistics integrations: ${logisticsRoutes.length}`);
 
-  // 2. Integration pages
-  const integrationSlugs = listIntegrationSlugs(root);
-  integrationSlugs.forEach((slug) => allRoutes.push(`/integration/${slug}`));
+  // 2. New vertical integration pages (accountants / real-estate / warehousing)
+  const newVerticalRoutes = listNewVerticalIntegrationRoutes(root);
+  newVerticalRoutes.forEach((route) => allRoutes.push(route));
+  console.log(`New vertical integrations: ${newVerticalRoutes.length}`);
 
   // 3. Blog posts
   const blogSlugs = listBlogSlugs(root);
   blogSlugs.forEach((slug) => allRoutes.push(`/blog/${slug}`));
+  console.log(`Blog posts: ${blogSlugs.length}`);
 
-  // 4. Static routes (including verticals)
+  // 4. Static routes (only indexable canonical pages)
   const staticRoutes = getStaticRoutes();
   staticRoutes.forEach((route) => allRoutes.push(route));
+  console.log(`Static routes: ${staticRoutes.length}`);
+
+  // NOTE: Old generated geo-city slugs are intentionally NOT added here.
+  // Those pages now return 404 after the architecture change (Step 1).
+  // Old /near-me/* pages are handled by the supplemental sitemap-near-me.xml.
 
   // Deduplicate, remove explicitly blocked URLs, apply noindex guard, and sort
   const blocked = getBlockedRoutes();

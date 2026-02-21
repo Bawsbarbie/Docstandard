@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown"
 import { getBlogPost, getBlogSlugs } from "@/lib/blog/fs"
 import { HeaderBanner } from "@/components/blog/HeaderBanner"
 import { ArrowRight } from "lucide-react"
+import { buildBreadcrumbSchema, serializeSchemas } from "@/lib/pseo/schema"
 
 const inferClusterId = (slug: string) => {
   const normalized = slug.toLowerCase()
@@ -18,15 +19,21 @@ const inferClusterId = (slug: string) => {
 
 export async function generateMetadata({ params }: { params: { vertical: string } }): Promise<Metadata> {
   const post = await getBlogPost(params.vertical)
-  if (!post) return { title: "Not Found" }
+  if (!post) return { title: "Not Found", robots: { index: false } }
 
+  const { buildBlogPostMeta } = await import("@/lib/pseo/metadata")
   return {
-    title: post.title,
-    description: post.description,
+    ...buildBlogPostMeta({
+      slug: params.vertical,
+      title: post.title,
+      description: post.description ?? "",
+    }),
     openGraph: {
       title: post.title,
-      description: post.description,
+      description: post.description ?? "",
       type: "article",
+      url: `https://docstandard.co/blog/${params.vertical}`,
+      siteName: "DocStandard",
     },
   }
 }
@@ -73,14 +80,25 @@ export default async function BlogPostPage({ params }: { params: { vertical: str
     url: canonicalUrl,
   }
 
-  const jsonLdString = JSON.stringify(schema)
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: "Home", url: "https://docstandard.co" },
+    { name: "Blog", url: "https://docstandard.co/blog" },
+    { name: sanitize(post.title), url: canonicalUrl },
+  ])
 
   return (
     <main className="bg-white">
+      {/* Article schema */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
-        dangerouslySetInnerHTML={{ __html: jsonLdString }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      {/* BreadcrumbList schema */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: serializeSchemas([breadcrumbSchema]) }}
       />
 
       <section className="px-4 pt-12 pb-10">

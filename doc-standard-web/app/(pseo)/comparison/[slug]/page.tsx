@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { buildBreadcrumbSchema, serializeSchemas } from "@/lib/pseo/schema"
 import { 
   ArrowRight, 
   BarChart3, 
@@ -19,9 +20,24 @@ import {
   Building2,
   DollarSign
 } from "lucide-react"
+import { buildComparisonMeta } from "@/lib/pseo/metadata"
 
-// In a real scenario, this would import from a shared comparison data lib
-// For this cleanup, we'll keep it simple to restore the V1 structure
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const separator = "-vs-"
+  const separatorIndex = params.slug.indexOf(separator)
+  if (separatorIndex <= 0) return { robots: { index: false } }
+
+  const slugA = params.slug.slice(0, separatorIndex)
+  const slugB = params.slug.slice(separatorIndex + separator.length)
+  if (!slugB) return { robots: { index: false } }
+
+  return buildComparisonMeta({ slugA, slugB })
+}
+
 export default async function ComparisonPage({ params }: { params: { slug: string } }) {
   // Parse slug using the explicit "-vs-" delimiter so multi-segment slugs
   // like "3pl-central-vs-oracle-erp-cloud" resolve correctly.
@@ -50,8 +66,24 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
     { label: "Logistics Finance Hub", href: "/finance" }
   ]
 
+  const canonicalUrl = `https://docstandard.co/comparison/${slug}`
+
   return (
     <main className="min-h-screen bg-white leading-relaxed">
+      {/* BreadcrumbList schema */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeSchemas([
+            buildBreadcrumbSchema([
+              { name: "Home", url: "https://docstandard.co" },
+              { name: "Comparisons", url: "https://docstandard.co/comparison" },
+              { name: `${nameA} vs ${nameB}`, url: canonicalUrl },
+            ]),
+          ]),
+        }}
+      />
       {/* LLM Entity Schema */}
       <script
         type="application/ld+json"

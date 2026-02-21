@@ -12,14 +12,19 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const cityData = getCityBySlug(params.city)
-  if (!cityData) return { title: "Not Found" }
-  
-  const cityName = cityData.name
-  const country = cityData.country
-  
+  if (!cityData) return { title: "Not Found", robots: { index: false } }
+
+  const { name: cityName, country } = cityData
+  const title = `Customs Document Processing in ${cityName} | DocStandard`
+  const description = `Accelerate customs clearance in ${cityName}, ${country}. Automate customs declarations, duty calculations, and entry documentation for faster port processing.`
+  const canonical = `https://docstandard.co/customs/city/${params.city}`
+
   return {
-    title: `Customs Document Processing in ${cityName} | DocStandard`,
-    description: `Accelerate customs clearance in ${cityName}, ${country}. Automate customs declarations, duty calculations, and entry documentation for faster port processing.`,
+    title,
+    description,
+    alternates: { canonical },
+    robots: { index: true, follow: true },
+    openGraph: { title, description, url: canonical, type: "website", siteName: "DocStandard" },
   }
 }
 

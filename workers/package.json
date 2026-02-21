@@ -1,0 +1,17 @@
+{
+  "name": "clawteam-workers",
+  "version": "1.0.0",
+  "description": "Background workers for the ClawTeam multi-agent system",
+  "scripts": {
+    "research": "node research-worker.js",
+    "observer": "node observer-worker.js",
+    "test": "node test-research.js",
+    "start": "./manage.sh start-all",
+    "stop": "./manage.sh stop-all",
+    "status": "./manage.sh status dex && ./manage.sh status nova"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^17.3.1"
+  }
+}

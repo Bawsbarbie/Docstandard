@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
+import { buildMeta } from "@/lib/pseo/metadata"
+
+export const metadata: Metadata = buildMeta({
+  title: "Privacy Policy",
+  description: "Read DocStandard's privacy policy. Learn how we collect, use, and protect your data when you use our document processing platform.",
+  canonicalPath: "/privacy",
+})
 
 export default function PrivacyPolicyPage() {
   return (

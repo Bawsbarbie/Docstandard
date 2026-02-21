@@ -1,5 +1,13 @@
+import type { Metadata } from "next"
 import { Navbar } from "@/components/landing/Navbar"
 import { Footer } from "@/components/landing/Footer"
+import { buildMeta } from "@/lib/pseo/metadata"
+
+export const metadata: Metadata = buildMeta({
+  title: "Security",
+  description: "DocStandard's security practices: encryption in transit and at rest, access controls, audit logging, and data handling for enterprise document processing.",
+  canonicalPath: "/security",
+})
 
 export default function SecurityPage() {
   return (
