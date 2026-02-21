@@ -433,7 +433,7 @@ export function getVerticalIntegrationModel(
 
   const title = `${src} to ${dst} Data Normalization | ${vertical.name} | DocStandard`
   const h1 = `${src} to ${dst} Document Normalization`
-  const description = `Clean, structured data from ${src} into ${dest} — fast. DocStandard normalizes ${vertical.name.toLowerCase()} documents for error-free ${dst} import. Audit-ready output, 24–72h turnaround.`
+  const description = `Clean, structured data from ${src} into ${dst} — fast. DocStandard normalizes ${vertical.name.toLowerCase()} documents for error-free ${dst} import. Audit-ready output, 24–72h turnaround.`
 
   return {
     vertical: verticalId,
