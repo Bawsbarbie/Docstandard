@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import { UploadCloud, Cog, FileJson } from "lucide-react"
 

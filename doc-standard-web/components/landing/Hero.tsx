@@ -1,7 +1,4 @@
-"use client"
-
 import React from "react"
-import { motion } from "framer-motion"
 import { ArrowRight, Upload, Database, FileText, CheckCircle } from "lucide-react"
 import Link from "next/link"
 
@@ -18,12 +15,7 @@ export const Hero: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center lg:text-left"
-          >
+          <div className="text-center lg:text-left">
             <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-brand-600 text-xs font-semibold uppercase tracking-wide mb-6">
               <span className="w-2 h-2 bg-brand-500 rounded-full mr-2 animate-pulse"></span>
               Professional Document Processing
@@ -68,15 +60,10 @@ export const Hero: React.FC = () => {
                 <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" /> Real Results
               </span>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Visual Animation */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="relative w-full aspect-square max-w-[500px] mx-auto">
               {/* Background Glass Plate */}
               <div className="absolute inset-0 bg-gradient-to-br from-white to-blue-50 rounded-[2.5rem] shadow-2xl border border-white/50 backdrop-blur-xl z-0"></div>
@@ -84,11 +71,7 @@ export const Hero: React.FC = () => {
               {/* Floating Elements Container */}
               <div className="absolute inset-0 flex items-center justify-center z-10">
                 {/* Left Card: Messy Doc */}
-                <motion.div
-                  animate={{ x: [0, 10, 0], y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                  className="absolute left-4 top-1/4 w-40 h-52 bg-white rounded-xl shadow-lg border border-gray-100 p-3 transform -rotate-6"
-                >
+                <div className="absolute left-4 top-1/4 w-40 h-52 bg-white rounded-xl shadow-lg border border-gray-100 p-3 transform -rotate-6">
                   <div className="w-8 h-8 bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
                     <FileText className="text-gray-400 w-5 h-5" />
                   </div>
@@ -100,26 +83,18 @@ export const Hero: React.FC = () => {
                     <div className="h-2 bg-gray-100 rounded w-full"></div>
                   </div>
                   <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-400"></div>
-                </motion.div>
+                </div>
 
                 {/* Arrow / Connection */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-1 bg-gradient-to-r from-gray-200 via-brand-400 to-gray-200 opacity-30"></div>
 
                 {/* Center Processing Node */}
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-brand-600 rounded-2xl shadow-xl shadow-brand-500/40 flex items-center justify-center z-20 border-4 border-white"
-                >
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-brand-600 rounded-2xl shadow-xl shadow-brand-500/40 flex items-center justify-center z-20 border-4 border-white">
                   <Database className="text-white w-8 h-8" />
-                </motion.div>
+                </div>
 
                 {/* Right Card: Structured Data */}
-                <motion.div
-                  animate={{ x: [0, -5, 0], y: [0, 8, 0] }}
-                  transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
-                  className="absolute right-4 bottom-1/4 w-48 h-56 bg-white rounded-xl shadow-xl border border-blue-50 p-0 overflow-hidden transform rotate-3"
-                >
+                <div className="absolute right-4 bottom-1/4 w-48 h-56 bg-white rounded-xl shadow-xl border border-blue-50 p-0 overflow-hidden transform rotate-3">
                   <div className="bg-slate-50 border-b border-gray-100 p-3 flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-green-400"></div>
                     <div className="text-[10px] text-gray-500 font-mono">
@@ -138,10 +113,10 @@ export const Hero: React.FC = () => {
                       </React.Fragment>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

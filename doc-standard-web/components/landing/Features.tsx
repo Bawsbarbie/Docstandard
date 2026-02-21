@@ -1,7 +1,4 @@
-"use client"
-
 import React from "react"
-import { motion } from "framer-motion"
 import {
   FileText,
   FileSpreadsheet,
@@ -63,12 +60,8 @@ export const Features: React.FC = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {docTypes.map((doc, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
               className="group p-8 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-100 transition-all duration-300"
             >
               <div className="w-12 h-12 bg-blue-50 text-brand-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand-600 group-hover:text-white transition-all duration-300">
@@ -76,7 +69,7 @@ export const Features: React.FC = () => {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">{doc.title}</h3>
               <p className="text-gray-600 leading-relaxed">{doc.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

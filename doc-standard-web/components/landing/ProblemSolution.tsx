@@ -1,7 +1,4 @@
-"use client"
-
 import React from "react"
-import { motion } from "framer-motion"
 import { FileWarning, ArrowRightLeft, Database } from "lucide-react"
 
 export const ProblemSolution: React.FC = () => {
@@ -20,12 +17,7 @@ export const ProblemSolution: React.FC = () => {
 
         <div className="grid md:grid-cols-3 gap-8 items-center relative">
           {/* Step 1: Problem */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col items-center text-center"
-          >
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col items-center text-center">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
               <FileWarning className="w-8 h-8 text-red-500" />
             </div>
@@ -35,7 +27,7 @@ export const ProblemSolution: React.FC = () => {
             <p className="text-gray-600">
               Unstructured forms, invoices, and messy PDFs that block automation.
             </p>
-          </motion.div>
+          </div>
 
           {/* Connection Icon (Desktop) */}
           <div className="hidden md:flex justify-center absolute left-1/3 -translate-x-1/2 z-10">
@@ -45,13 +37,7 @@ export const ProblemSolution: React.FC = () => {
           </div>
 
           {/* Middle: The Gap */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="bg-brand-900 p-8 rounded-2xl shadow-xl h-full flex flex-col items-center text-center justify-center relative overflow-hidden"
-          >
+          <div className="bg-brand-900 p-8 rounded-2xl shadow-xl h-full flex flex-col items-center text-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-800 to-brand-950 z-0"></div>
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-4">
@@ -72,7 +58,7 @@ export const ProblemSolution: React.FC = () => {
                 </li>
               </ul>
             </div>
-          </motion.div>
+          </div>
 
           {/* Connection Icon (Desktop) */}
           <div className="hidden md:flex justify-center absolute right-1/3 translate-x-1/2 z-10">
@@ -82,13 +68,7 @@ export const ProblemSolution: React.FC = () => {
           </div>
 
           {/* Step 3: Solution */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col items-center text-center"
-          >
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col items-center text-center">
             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6">
               <Database className="w-8 h-8 text-green-500" />
             </div>
@@ -96,7 +76,7 @@ export const ProblemSolution: React.FC = () => {
             <p className="text-gray-600">
               Clean, consistent, structured outputs ready for your workflows.
             </p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

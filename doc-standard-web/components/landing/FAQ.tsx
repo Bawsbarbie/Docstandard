@@ -1,7 +1,4 @@
-"use client"
-
-import React, { useState } from "react"
-import { Plus, Minus } from "lucide-react"
+import React from "react"
 
 interface FAQItem {
   question: string
@@ -17,7 +14,7 @@ const questions: FAQItem[] = [
   {
     question: "Is this a software platform?",
     answer:
-      "No. DocStandard is a professional service. We handle the processing and deliver results. You don’t need to configure or manage software.",
+      "No. DocStandard is a professional service. We handle the processing and deliver results. You don't need to configure or manage software.",
   },
   {
     question: "How are documents delivered?",
@@ -77,46 +74,27 @@ const questions: FAQItem[] = [
 ]
 
 export const FAQ: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
-
-  // Split questions into two halves for 2-column layout
   const midPoint = Math.ceil(questions.length / 2)
   const leftColumn = questions.slice(0, midPoint)
   const rightColumn = questions.slice(midPoint)
 
   const renderFAQItem = (item: FAQItem, index: number, columnOffset: number) => {
     const globalIndex = index + columnOffset
-    return (
-      <div
-        key={globalIndex}
-        className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-      >
-        <button
-          className="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none"
-          onClick={() =>
-            setOpenIndex(openIndex === globalIndex ? null : globalIndex)
-          }
-        >
-          <span className="font-semibold text-gray-900">{item.question}</span>
-          {openIndex === globalIndex ? (
-            <Minus className="w-5 h-5 text-brand-600 flex-shrink-0" />
-          ) : (
-            <Plus className="w-5 h-5 text-gray-400 flex-shrink-0" />
-          )}
-        </button>
 
-        <div
-          className={`transition-all duration-300 ease-in-out ${
-            openIndex === globalIndex
-              ? "max-h-96 opacity-100"
-              : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="px-6 pb-6 text-gray-600 leading-relaxed">
-            {item.answer}
-          </div>
-        </div>
-      </div>
+    return (
+      <details
+        key={globalIndex}
+        className="group rounded-xl border border-gray-100 bg-white shadow-sm"
+        open={globalIndex === 0}
+      >
+        <summary className="cursor-pointer list-none px-6 py-4 font-semibold text-gray-900 marker:content-none">
+          <span className="inline-flex w-full items-center justify-between gap-4">
+            <span>{item.question}</span>
+            <span className="text-brand-600 transition-transform group-open:rotate-45">+</span>
+          </span>
+        </summary>
+        <div className="px-6 pb-6 text-gray-600 leading-relaxed">{item.answer}</div>
+      </details>
     )
   }
 
@@ -128,18 +106,12 @@ export const FAQ: React.FC = () => {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          {/* Left Column */}
           <div className="space-y-4">
-            {leftColumn.map((item, index) =>
-              renderFAQItem(item, index, 0)
-            )}
+            {leftColumn.map((item, index) => renderFAQItem(item, index, 0))}
           </div>
 
-          {/* Right Column */}
           <div className="space-y-4">
-            {rightColumn.map((item, index) =>
-              renderFAQItem(item, index, midPoint)
-            )}
+            {rightColumn.map((item, index) => renderFAQItem(item, index, midPoint))}
           </div>
         </div>
       </div>
