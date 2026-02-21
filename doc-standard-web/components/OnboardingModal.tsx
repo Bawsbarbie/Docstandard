@@ -64,8 +64,10 @@ export function OnboardingModal({
 
   const hasHydrated = useRef(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const pageEstimateRunRef = useRef(0)
   const progressKey = storageKeySuffix ? `${PROGRESS_KEY}:${storageKeySuffix}` : PROGRESS_KEY
   const completeKey = storageKeySuffix ? `${COMPLETE_KEY}:${storageKeySuffix}` : COMPLETE_KEY
+  const [isEstimatingPages, setIsEstimatingPages] = useState(false)
   const baseProfile = useMemo(
     () => ({
       name: initialProfile?.name ?? "",
@@ -193,27 +195,44 @@ export function OnboardingModal({
     })
   }
 
-  const updateFiles = (nextFiles: File[]) => {
-    const totalPages = nextFiles.reduce((acc, file) => {
-      const anyFile = file as File & { pageCount?: number }
-      return acc + (anyFile.pageCount ?? 1)
-    }, 0)
+  const estimatePagesForFile = async (file: File): Promise<number> => {
+    const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+    if (!isPdf) return 1
+
+    try {
+      const fileBuffer = await file.arrayBuffer()
+      const { PDFDocument } = await import("pdf-lib")
+      const pdf = await PDFDocument.load(fileBuffer, { ignoreEncryption: true })
+      return Math.max(pdf.getPageCount(), 1)
+    } catch {
+      return 1
+    }
+  }
+
+  const applySelectedFiles = async (nextFiles: File[]) => {
+    const currentRunId = ++pageEstimateRunRef.current
+    setIsEstimatingPages(true)
+
+    const pageCounts = await Promise.all(nextFiles.map((file) => estimatePagesForFile(file)))
+    if (currentRunId !== pageEstimateRunRef.current) return
+
     setFileSummary({
       count: nextFiles.length,
-      totalPages,
+      totalPages: pageCounts.reduce((sum, pages) => sum + pages, 0),
       names: nextFiles.map((file) => file.name),
     })
+    setIsEstimatingPages(false)
   }
 
   const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFiles = Array.from(event.target.files ?? [])
-    updateFiles(nextFiles)
+    void applySelectedFiles(nextFiles)
   }
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault()
     const nextFiles = Array.from(event.dataTransfer.files ?? [])
-    updateFiles(nextFiles)
+    void applySelectedFiles(nextFiles)
   }
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -229,8 +248,9 @@ export function OnboardingModal({
   if (!isOpen || hasCompleted) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/60 backdrop-blur-sm px-4 py-6">
-      <div className="relative w-full max-w-3xl max-h-[92vh] overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm px-4 py-6">
+      <div className="mx-auto flex min-h-full w-full max-w-3xl items-center">
+        <div className="relative flex h-[92vh] w-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white text-slate-900 shadow-2xl">
         <button
           onClick={onClose}
           className="absolute right-5 top-5 rounded-full border border-slate-300 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-500 transition hover:border-blue-500 hover:text-slate-900"
@@ -239,7 +259,7 @@ export function OnboardingModal({
           Close
         </button>
 
-        <div className="h-full overflow-y-auto p-6 sm:p-10">
+        <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-10">
           <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-slate-400">
             <span>Onboarding</span>
             <span>Step {step} of 3</span>
@@ -450,6 +470,9 @@ export function OnboardingModal({
                     ) : (
                       <p>No files selected yet.</p>
                     )}
+                    {isEstimatingPages && (
+                      <p className="text-xs mt-1 text-slate-500">Estimating PDF page counts...</p>
+                    )}
                     <p className={`text-xs mt-1 ${isOverLimit ? "text-red-600" : "text-slate-500"}`}>
                       Remaining this batch: {remainingPages.toLocaleString()} pages and{" "}
                       {remainingFiles.toLocaleString()} files
@@ -543,7 +566,8 @@ export function OnboardingModal({
                   </button>
                   <button
                     onClick={handleComplete}
-                    className="inline-flex items-center justify-center rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400"
+                    disabled={isOverLimit || isEstimatingPages || !documentType}
+                    className="inline-flex items-center justify-center rounded-xl bg-blue-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     Purchase & Start Processing
                   </button>
@@ -552,6 +576,7 @@ export function OnboardingModal({
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   )
