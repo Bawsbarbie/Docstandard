@@ -413,6 +413,11 @@ export interface ComparisonData {
   estimatedSyncTime: Record<string, string>
   docStandardFit: string
   bottomLine: string
+  // Document volume / cost metrics (used in ROI section)
+  monthlyDocumentVolume?: string
+  costPerDocumentBefore?: string
+  costPerDocumentAfter?: string
+  monthlyErrorCost?: string
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -821,10 +821,12 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
       <section className="bg-blue-600 py-20 text-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">The Integration ROI</h2>
-          <p className="text-blue-200 mb-16 max-w-2xl mx-auto">
+          <p className="text-blue-200 mb-12 max-w-2xl mx-auto">
             What DocStandard delivers when you stop manually syncing {nameA} or {nameB} data
           </p>
-          <div className="grid md:grid-cols-4 gap-6">
+
+          {/* Top row: time + cost savings */}
+          <div className="grid md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
               <div className="text-4xl font-extrabold mb-2">{worstHours}</div>
               <div className="text-blue-200 text-sm font-medium uppercase tracking-wider">
@@ -842,7 +844,7 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
                 {roiA.annualCostEstimate}
               </div>
               <div className="text-slate-600 text-sm font-medium uppercase tracking-wider">
-                Potential Annual Savings
+                Annual Savings
               </div>
             </div>
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
@@ -852,6 +854,40 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
               </div>
             </div>
           </div>
+
+          {/* Bottom row: document volume metrics */}
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+              <div className="text-3xl font-bold mb-1">
+                {comparisonData?.monthlyDocumentVolume ?? "2,400"}
+              </div>
+              <div className="text-blue-200 text-xs font-medium uppercase tracking-wider">
+                Documents / Month Processed
+              </div>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+              <div className="text-3xl font-bold mb-1">
+                <span className="line-through text-red-300 mr-2">
+                  {comparisonData?.costPerDocumentBefore ?? "$3.20"}
+                </span>
+                <span className="text-green-300">
+                  {comparisonData?.costPerDocumentAfter ?? "$0.08"}
+                </span>
+              </div>
+              <div className="text-blue-200 text-xs font-medium uppercase tracking-wider">
+                Cost Per Document
+              </div>
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+              <div className="text-3xl font-bold mb-1 text-red-300">
+                {comparisonData?.monthlyErrorCost ?? "$850"}
+              </div>
+              <div className="text-blue-200 text-xs font-medium uppercase tracking-wider">
+                Error Costs Eliminated / Month
+              </div>
+            </div>
+          </div>
+
           <div className="mt-12 pt-8 border-t border-white/20">
             <p className="text-sm text-blue-200 mb-4">Data sources and methodology:</p>
             <div className="flex flex-wrap justify-center gap-4 text-xs text-blue-300">

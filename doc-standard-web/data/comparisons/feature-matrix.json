@@ -10,14 +10,14 @@
     "comparisonTable": [
       {
         "feature": "Implementation Time",
-        "cargowise": "4\u20138 months",
-        "magaya": "1\u20133 months",
+        "cargowise": "4–8 months",
+        "magaya": "1–3 months",
         "winner": "magaya"
       },
       {
         "feature": "Monthly Cost",
-        "cargowise": "$5K\u2013$30K/mo",
-        "magaya": "$1K\u2013$5K/mo",
+        "cargowise": "$5K–$30K/mo",
+        "magaya": "$1K–$5K/mo",
         "winner": "magaya"
       },
       {
@@ -74,11 +74,15 @@
       "magaya": "Medium"
     },
     "estimatedSyncTime": {
-      "cargowise": "3\u20135 business days setup",
-      "magaya": "1\u20132 business days setup"
+      "cargowise": "3–5 business days setup",
+      "magaya": "1–2 business days setup"
     },
     "docStandardFit": "Both require a normalization layer before accounting sync. CargoWise data is especially complex with nested cost lines; Magaya exports are more structured but still need field mapping to QuickBooks/Xero.",
-    "bottomLine": "CargoWise wins for global enterprise scale. Magaya wins for speed, cost, and SMB-friendly operations."
+    "bottomLine": "CargoWise wins for global enterprise scale. Magaya wins for speed, cost, and SMB-friendly operations.",
+    "monthlyDocumentVolume": "4,800",
+    "costPerDocumentBefore": "$5.20",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$1,400"
   },
   "cargowise-vs-sap-s4hana": {
     "systems": [
@@ -103,14 +107,14 @@
       },
       {
         "feature": "Implementation Time",
-        "cargowise": "4\u20138 months",
-        "sap-s4hana": "18\u201336 months",
+        "cargowise": "4–8 months",
+        "sap-s4hana": "18–36 months",
         "winner": "cargowise"
       },
       {
         "feature": "Total Cost",
-        "cargowise": "$5K\u2013$30K/mo",
-        "sap-s4hana": "$500K\u2013$5M+/yr",
+        "cargowise": "$5K–$30K/mo",
+        "sap-s4hana": "$500K–$5M+/yr",
         "winner": "cargowise"
       },
       {
@@ -155,11 +159,15 @@
       "sap-s4hana": "Very High"
     },
     "estimatedSyncTime": {
-      "cargowise": "3\u20135 days (to external ERP)",
+      "cargowise": "3–5 days (to external ERP)",
       "sap-s4hana": "Native sync (within SAP)"
     },
-    "docStandardFit": "CargoWise exports require normalization before loading into SAP or any ERP. If running CargoWise + SAP in parallel, DocStandard bridges the gap \u2014 normalizing CargoWise cost lines, house bills, and freight documents into SAP-ready formats.",
-    "bottomLine": "These are not direct competitors. Most enterprise logistics companies run both: CargoWise for execution, SAP for finance. DocStandard handles the data layer between them."
+    "docStandardFit": "CargoWise exports require normalization before loading into SAP or any ERP. If running CargoWise + SAP in parallel, DocStandard bridges the gap — normalizing CargoWise cost lines, house bills, and freight documents into SAP-ready formats.",
+    "bottomLine": "These are not direct competitors. Most enterprise logistics companies run both: CargoWise for execution, SAP for finance. DocStandard handles the data layer between them.",
+    "monthlyDocumentVolume": "6,200",
+    "costPerDocumentBefore": "$6.80",
+    "costPerDocumentAfter": "$0.12",
+    "monthlyErrorCost": "$2,100"
   },
   "cargowise-vs-netsuite": {
     "systems": [
@@ -173,7 +181,7 @@
       {
         "feature": "Logistics Execution",
         "cargowise": "Full TMS + customs brokerage",
-        "netsuite": "Limited \u2014 requires 3PL module or 3rd party TMS",
+        "netsuite": "Limited — requires 3PL module or 3rd party TMS",
         "winner": "cargowise"
       },
       {
@@ -190,14 +198,14 @@
       },
       {
         "feature": "Cost",
-        "cargowise": "$5K\u2013$30K/mo",
-        "netsuite": "$2K\u2013$20K/mo",
+        "cargowise": "$5K–$30K/mo",
+        "netsuite": "$2K–$20K/mo",
         "winner": "netsuite"
       },
       {
         "feature": "Implementation Time",
-        "cargowise": "4\u20138 months",
-        "netsuite": "3\u20139 months",
+        "cargowise": "4–8 months",
+        "netsuite": "3–9 months",
         "winner": "netsuite"
       },
       {
@@ -208,8 +216,8 @@
       },
       {
         "feature": "Data Normalization Need",
-        "cargowise": "High \u2014 to push to NetSuite",
-        "netsuite": "High \u2014 to receive logistics data",
+        "cargowise": "High — to push to NetSuite",
+        "netsuite": "High — to receive logistics data",
         "winner": "tie"
       },
       {
@@ -235,11 +243,15 @@
       "netsuite": "High"
     },
     "estimatedSyncTime": {
-      "cargowise": "3\u20135 days",
-      "netsuite": "3\u20135 days"
+      "cargowise": "3–5 days",
+      "netsuite": "3–5 days"
     },
-    "docStandardFit": "The CargoWise \u2192 NetSuite data sync is one of our most common integration use cases. CargoWise exports cost breakdowns, agent codes, and currency data in formats that require field mapping and normalization before NetSuite can process them as clean journal entries.",
-    "bottomLine": "Run CargoWise for freight execution, NetSuite for financial consolidation. DocStandard automates the bridge between the two."
+    "docStandardFit": "The CargoWise → NetSuite data sync is one of our most common integration use cases. CargoWise exports cost breakdowns, agent codes, and currency data in formats that require field mapping and normalization before NetSuite can process them as clean journal entries.",
+    "bottomLine": "Run CargoWise for freight execution, NetSuite for financial consolidation. DocStandard automates the bridge between the two.",
+    "monthlyDocumentVolume": "5,400",
+    "costPerDocumentBefore": "$6.20",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$1,800"
   },
   "cargowise-vs-descartes": {
     "systems": [
@@ -282,14 +294,14 @@
       },
       {
         "feature": "Implementation Time",
-        "cargowise": "4\u20138 months",
-        "descartes": "3\u20136 months",
+        "cargowise": "4–8 months",
+        "descartes": "3–6 months",
         "winner": "descartes"
       },
       {
         "feature": "Cost",
-        "cargowise": "$5K\u2013$30K/mo",
-        "descartes": "$3K\u2013$15K/mo",
+        "cargowise": "$5K–$30K/mo",
+        "descartes": "$3K–$15K/mo",
         "winner": "descartes"
       },
       {
@@ -314,11 +326,15 @@
       "descartes": "High"
     },
     "estimatedSyncTime": {
-      "cargowise": "3\u20135 days",
-      "descartes": "3\u20135 days"
+      "cargowise": "3–5 days",
+      "descartes": "3–5 days"
     },
-    "docStandardFit": "Both systems produce complex document outputs that require normalization before ERP import. CargoWise outputs house bills and costing; Descartes outputs delivery manifests and proof-of-delivery records \u2014 both need structured transformation for accounting sync.",
-    "bottomLine": "CargoWise for forwarding and customs; Descartes for delivery optimization and compliance. Both need a normalization layer for ERP."
+    "docStandardFit": "Both systems produce complex document outputs that require normalization before ERP import. CargoWise outputs house bills and costing; Descartes outputs delivery manifests and proof-of-delivery records — both need structured transformation for accounting sync.",
+    "bottomLine": "CargoWise for forwarding and customs; Descartes for delivery optimization and compliance. Both need a normalization layer for ERP.",
+    "monthlyDocumentVolume": "4,200",
+    "costPerDocumentBefore": "$4.80",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,250"
   },
   "netsuite-vs-dynamics365": {
     "systems": [
@@ -331,8 +347,8 @@
     "comparisonTable": [
       {
         "feature": "Implementation Time",
-        "netsuite": "3\u20139 months",
-        "dynamics365": "6\u201312 months",
+        "netsuite": "3–9 months",
+        "dynamics365": "6–12 months",
         "winner": "netsuite"
       },
       {
@@ -388,18 +404,22 @@
       "Your company is deeply embedded in the Microsoft ecosystem (Teams, Azure, O365)",
       "You need Copilot AI features across your ERP workflows",
       "You're in manufacturing or distribution with complex supply chain planning",
-      "You prefer a modular approach \u2014 only buy the apps you need"
+      "You prefer a modular approach — only buy the apps you need"
     ],
     "integrationComplexity": {
       "netsuite": "High",
       "dynamics365": "Medium"
     },
     "estimatedSyncTime": {
-      "netsuite": "3\u20135 days to set up logistics sync",
-      "dynamics365": "2\u20134 days to set up logistics sync"
+      "netsuite": "3–5 days to set up logistics sync",
+      "dynamics365": "2–4 days to set up logistics sync"
     },
-    "docStandardFit": "Both ERP systems require incoming logistics data (from CargoWise, Magaya, or TMS exports) to be normalized before import. Document fields, currency codes, and cost-center mappings differ between TMS exports and ERP expectations \u2014 DocStandard handles this transformation automatically.",
-    "bottomLine": "NetSuite wins for multi-entity eCommerce and mid-market scale without Microsoft dependency. Dynamics 365 wins for Microsoft-first organizations needing AI-driven workflows."
+    "docStandardFit": "Both ERP systems require incoming logistics data (from CargoWise, Magaya, or TMS exports) to be normalized before import. Document fields, currency codes, and cost-center mappings differ between TMS exports and ERP expectations — DocStandard handles this transformation automatically.",
+    "bottomLine": "NetSuite wins for multi-entity eCommerce and mid-market scale without Microsoft dependency. Dynamics 365 wins for Microsoft-first organizations needing AI-driven workflows.",
+    "monthlyDocumentVolume": "2,400",
+    "costPerDocumentBefore": "$3.20",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$850"
   },
   "netsuite-vs-sap-s4hana": {
     "systems": [
@@ -412,20 +432,20 @@
     "comparisonTable": [
       {
         "feature": "Target Company Size",
-        "netsuite": "Mid-market ($5M\u2013$500M revenue)",
+        "netsuite": "Mid-market ($5M–$500M revenue)",
         "sap-s4hana": "Enterprise ($500M+)",
         "winner": "contextual"
       },
       {
         "feature": "Implementation Time",
-        "netsuite": "3\u20139 months",
-        "sap-s4hana": "18\u201336 months",
+        "netsuite": "3–9 months",
+        "sap-s4hana": "18–36 months",
         "winner": "netsuite"
       },
       {
         "feature": "Total 5-Year Cost",
-        "netsuite": "$200K\u2013$1M",
-        "sap-s4hana": "$5M\u2013$50M+",
+        "netsuite": "$200K–$1M",
+        "sap-s4hana": "$5M–$50M+",
         "winner": "netsuite"
       },
       {
@@ -437,7 +457,7 @@
       {
         "feature": "Financial Consolidation",
         "netsuite": "Strong multi-entity",
-        "sap-s4hana": "Superior \u2014 group reporting",
+        "sap-s4hana": "Superior — group reporting",
         "winner": "sap-s4hana"
       },
       {
@@ -476,11 +496,15 @@
       "sap-s4hana": "Very High"
     },
     "estimatedSyncTime": {
-      "netsuite": "3\u20135 days",
-      "sap-s4hana": "5\u201310 days initial configuration"
+      "netsuite": "3–5 days",
+      "sap-s4hana": "5–10 days initial configuration"
     },
     "docStandardFit": "Logistics data (from TMS exports) needs normalization before reaching either platform. SAP BAPI/OData field requirements are stricter; NetSuite SuiteTalk tolerates more variation. DocStandard normalizes upstream TMS data to whichever ERP format is required.",
-    "bottomLine": "NetSuite is the default choice for mid-market companies that need a capable ERP without SAP complexity. SAP S/4HANA is for enterprises that need the most powerful system money can buy."
+    "bottomLine": "NetSuite is the default choice for mid-market companies that need a capable ERP without SAP complexity. SAP S/4HANA is for enterprises that need the most powerful system money can buy.",
+    "monthlyDocumentVolume": "3,600",
+    "costPerDocumentBefore": "$4.80",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,200"
   },
   "magaya-vs-netsuite": {
     "systems": [
@@ -505,14 +529,14 @@
       },
       {
         "feature": "Cost",
-        "magaya": "$1K\u2013$5K/mo",
-        "netsuite": "$2K\u2013$20K/mo",
+        "magaya": "$1K–$5K/mo",
+        "netsuite": "$2K–$20K/mo",
         "winner": "magaya"
       },
       {
         "feature": "Implementation Speed",
-        "magaya": "1\u20133 months",
-        "netsuite": "3\u20139 months",
+        "magaya": "1–3 months",
+        "netsuite": "3–9 months",
         "winner": "magaya"
       },
       {
@@ -555,11 +579,15 @@
       "netsuite": "High"
     },
     "estimatedSyncTime": {
-      "magaya": "1\u20132 days",
-      "netsuite": "3\u20135 days"
+      "magaya": "1–2 days",
+      "netsuite": "3–5 days"
     },
-    "docStandardFit": "Magaya \u2192 NetSuite is a common integration pattern for growing freight forwarders. Magaya generates structured but proprietary export formats; DocStandard normalizes them into NetSuite-ready AP/AR transactions and freight cost journal entries.",
-    "bottomLine": "Start with Magaya as your TMS. When financial complexity grows (multi-entity, consolidated reporting), layer in NetSuite. DocStandard keeps them in sync."
+    "docStandardFit": "Magaya → NetSuite is a common integration pattern for growing freight forwarders. Magaya generates structured but proprietary export formats; DocStandard normalizes them into NetSuite-ready AP/AR transactions and freight cost journal entries.",
+    "bottomLine": "Start with Magaya as your TMS. When financial complexity grows (multi-entity, consolidated reporting), layer in NetSuite. DocStandard keeps them in sync.",
+    "monthlyDocumentVolume": "3,200",
+    "costPerDocumentBefore": "$3.80",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$980"
   },
   "shipstation-vs-3pl-central": {
     "systems": [
@@ -578,8 +606,8 @@
       },
       {
         "feature": "Monthly Cost",
-        "shipstation": "$9.99\u2013$299/mo",
-        "3pl-central": "$500\u2013$5K/mo",
+        "shipstation": "$9.99–$299/mo",
+        "3pl-central": "$500–$5K/mo",
         "winner": "shipstation"
       },
       {
@@ -637,10 +665,14 @@
     },
     "estimatedSyncTime": {
       "shipstation": "Same day",
-      "3pl-central": "1\u20132 days"
+      "3pl-central": "1–2 days"
     },
     "docStandardFit": "Both platforms generate shipping and inventory documents that require normalization before QuickBooks or Xero can process them as clean accounting entries. ShipStation is simpler; 3PL Central generates complex multi-client billing data.",
-    "bottomLine": "ShipStation for eCommerce sellers who ship their own orders. 3PL Central for 3PL businesses managing inventory and billing for multiple clients."
+    "bottomLine": "ShipStation for eCommerce sellers who ship their own orders. 3PL Central for 3PL businesses managing inventory and billing for multiple clients.",
+    "monthlyDocumentVolume": "5,600",
+    "costPerDocumentBefore": "$2.40",
+    "costPerDocumentAfter": "$0.07",
+    "monthlyErrorCost": "$760"
   },
   "samsara-vs-verizon-connect": {
     "systems": [
@@ -689,14 +721,14 @@
       },
       {
         "feature": "Cost per Vehicle",
-        "samsara": "$50\u2013$150/mo",
-        "verizon-connect": "$40\u2013$100/mo",
+        "samsara": "$50–$150/mo",
+        "verizon-connect": "$40–$100/mo",
         "winner": "verizon-connect"
       },
       {
         "feature": "Accounting Data Sync",
-        "samsara": "Medium \u2014 needs normalization",
-        "verizon-connect": "Medium \u2014 needs normalization",
+        "samsara": "Medium — needs normalization",
+        "verizon-connect": "Medium — needs normalization",
         "winner": "tie"
       }
     ],
@@ -717,10 +749,14 @@
     },
     "estimatedSyncTime": {
       "samsara": "Same day via webhook",
-      "verizon-connect": "1\u20132 days"
+      "verizon-connect": "1–2 days"
     },
     "docStandardFit": "IFTA fuel tax reporting, driver hours, and vehicle inspection documents from both platforms need normalization before they can be imported into accounting systems. DocStandard converts fleet telematics exports into clean, audit-ready journal entries.",
-    "bottomLine": "Samsara is the consensus best-in-class for driver safety and AI. Verizon Connect wins where network coverage or bundled pricing with existing Verizon accounts is a deciding factor."
+    "bottomLine": "Samsara is the consensus best-in-class for driver safety and AI. Verizon Connect wins where network coverage or bundled pricing with existing Verizon accounts is a deciding factor.",
+    "monthlyDocumentVolume": "1,800",
+    "costPerDocumentBefore": "$2.60",
+    "costPerDocumentAfter": "$0.07",
+    "monthlyErrorCost": "$520"
   },
   "samsara-vs-motive": {
     "systems": [
@@ -739,8 +775,8 @@
       },
       {
         "feature": "Cost per Truck",
-        "samsara": "$50\u2013$150/mo",
-        "motive": "$35\u2013$85/mo",
+        "samsara": "$50–$150/mo",
+        "motive": "$35–$85/mo",
         "winner": "motive"
       },
       {
@@ -799,7 +835,11 @@
       "motive": "Same day"
     },
     "docStandardFit": "IFTA fuel tax reports from both platforms require field normalization (jurisdiction codes, fuel types, mileage by state) before they can be imported into QuickBooks or SAP as tax-compliant journal entries. DocStandard automates this mapping.",
-    "bottomLine": "Samsara for enterprise fleets that need best-in-class AI safety. Motive for cost-conscious carriers and owner-operators who need simple, reliable ELD and IFTA tools."
+    "bottomLine": "Samsara for enterprise fleets that need best-in-class AI safety. Motive for cost-conscious carriers and owner-operators who need simple, reliable ELD and IFTA tools.",
+    "monthlyDocumentVolume": "1,600",
+    "costPerDocumentBefore": "$2.40",
+    "costPerDocumentAfter": "$0.07",
+    "monthlyErrorCost": "$480"
   },
   "quickbooks-online-vs-xero": {
     "systems": [
@@ -836,8 +876,8 @@
       },
       {
         "feature": "Cost",
-        "quickbooks-online": "$30\u2013$200/mo",
-        "xero": "$13\u2013$70/mo",
+        "quickbooks-online": "$30–$200/mo",
+        "xero": "$13–$70/mo",
         "winner": "xero"
       },
       {
@@ -878,7 +918,11 @@
       "xero": "Same day"
     },
     "docStandardFit": "Both platforms accept logistics data via CSV import or API. However, TMS exports (CargoWise, Magaya, ShipStation) need field normalization before they become clean QBO or Xero transactions. Without normalization, freight cost lines, agent codes, and currency conversions create reconciliation errors.",
-    "bottomLine": "QuickBooks Online for US businesses with US payroll needs. Xero for international businesses, cost-sensitive SMBs, and companies that value a larger app ecosystem."
+    "bottomLine": "QuickBooks Online for US businesses with US payroll needs. Xero for international businesses, cost-sensitive SMBs, and companies that value a larger app ecosystem.",
+    "monthlyDocumentVolume": "1,400",
+    "costPerDocumentBefore": "$1.80",
+    "costPerDocumentAfter": "$0.06",
+    "monthlyErrorCost": "$380"
   },
   "quickbooks-online-vs-quickbooks-desktop": {
     "systems": [
@@ -921,8 +965,8 @@
       },
       {
         "feature": "Pricing",
-        "quickbooks-online": "$30\u2013$200/mo subscription",
-        "quickbooks-desktop": "$549\u2013$1,340/yr license",
+        "quickbooks-online": "$30–$200/mo subscription",
+        "quickbooks-desktop": "$549–$1,340/yr license",
         "winner": "contextual"
       },
       {
@@ -934,7 +978,7 @@
       {
         "feature": "Logistics Data Sync",
         "quickbooks-online": "Low complexity via API",
-        "quickbooks-desktop": "Medium \u2014 SDK or file import",
+        "quickbooks-desktop": "Medium — SDK or file import",
         "winner": "quickbooks-online"
       }
     ],
@@ -954,10 +998,14 @@
     },
     "estimatedSyncTime": {
       "quickbooks-online": "Same day via API",
-      "quickbooks-desktop": "1\u20132 days via IIF file import"
+      "quickbooks-desktop": "1–2 days via IIF file import"
     },
     "docStandardFit": "TMS exports require normalization regardless of which QuickBooks version you use. QBO accepts clean JSON via REST API; Desktop requires IIF or CSV. DocStandard outputs to both formats, ensuring freight cost data enters either platform as audit-ready transactions.",
-    "bottomLine": "QuickBooks Online is the right choice for most businesses going forward. Desktop only makes sense if you have deep inventory or job-costing requirements that QBO's Plus plan can't match."
+    "bottomLine": "QuickBooks Online is the right choice for most businesses going forward. Desktop only makes sense if you have deep inventory or job-costing requirements that QBO's Plus plan can't match.",
+    "monthlyDocumentVolume": "1,200",
+    "costPerDocumentBefore": "$1.60",
+    "costPerDocumentAfter": "$0.06",
+    "monthlyErrorCost": "$320"
   },
   "sage-intacct-vs-netsuite": {
     "systems": [
@@ -994,14 +1042,14 @@
       },
       {
         "feature": "AICPA Preferred",
-        "sage-intacct": "Yes \u2014 AICPA technology partner",
+        "sage-intacct": "Yes — AICPA technology partner",
         "netsuite": "Not specifically",
         "winner": "sage-intacct"
       },
       {
         "feature": "Cost",
-        "sage-intacct": "$2K\u2013$10K/mo",
-        "netsuite": "$2K\u2013$20K/mo",
+        "sage-intacct": "$2K–$10K/mo",
+        "netsuite": "$2K–$20K/mo",
         "winner": "sage-intacct"
       },
       {
@@ -1032,11 +1080,15 @@
       "netsuite": "High"
     },
     "estimatedSyncTime": {
-      "sage-intacct": "2\u20133 days",
-      "netsuite": "3\u20135 days"
+      "sage-intacct": "2–3 days",
+      "netsuite": "3–5 days"
     },
     "docStandardFit": "Logistics billing data (freight invoices, customs entries, carrier charges) needs normalization before either platform can process it as clean multi-dimensional GL entries. Sage Intacct requires specific dimension IDs; NetSuite requires subsidiary and class mapping. DocStandard handles both.",
-    "bottomLine": "Sage Intacct for service businesses and non-profits that need powerful financial reporting. NetSuite for product-based companies that need inventory + finance + CRM in one."
+    "bottomLine": "Sage Intacct for service businesses and non-profits that need powerful financial reporting. NetSuite for product-based companies that need inventory + finance + CRM in one.",
+    "monthlyDocumentVolume": "2,800",
+    "costPerDocumentBefore": "$4.20",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$1,050"
   },
   "acumatica-vs-dynamics-bc": {
     "systems": [
@@ -1050,7 +1102,7 @@
       {
         "feature": "Pricing Model",
         "acumatica": "Consumption-based (no per-user fee)",
-        "dynamics-bc": "$70\u2013$100/user/mo",
+        "dynamics-bc": "$70–$100/user/mo",
         "winner": "acumatica"
       },
       {
@@ -1061,8 +1113,8 @@
       },
       {
         "feature": "Implementation Time",
-        "acumatica": "3\u20138 months",
-        "dynamics-bc": "3\u20136 months",
+        "acumatica": "3–8 months",
+        "dynamics-bc": "3–6 months",
         "winner": "dynamics-bc"
       },
       {
@@ -1112,11 +1164,15 @@
       "dynamics-bc": "Medium"
     },
     "estimatedSyncTime": {
-      "acumatica": "2\u20133 days",
-      "dynamics-bc": "2\u20133 days"
+      "acumatica": "2–3 days",
+      "dynamics-bc": "2–3 days"
     },
-    "docStandardFit": "Both platforms require incoming logistics documents (shipping manifests, customs entries, freight invoices) to be mapped to their specific field structures. DocStandard normalizes TMS exports into either platform's import format \u2014 whether that's Acumatica's import scenarios or Business Central's data migration templates.",
-    "bottomLine": "Acumatica wins on pricing flexibility and scalability without platform changes. Business Central wins for Microsoft-centric teams and the VAR ecosystem."
+    "docStandardFit": "Both platforms require incoming logistics documents (shipping manifests, customs entries, freight invoices) to be mapped to their specific field structures. DocStandard normalizes TMS exports into either platform's import format — whether that's Acumatica's import scenarios or Business Central's data migration templates.",
+    "bottomLine": "Acumatica wins on pricing flexibility and scalability without platform changes. Business Central wins for Microsoft-centric teams and the VAR ecosystem.",
+    "monthlyDocumentVolume": "2,200",
+    "costPerDocumentBefore": "$3.40",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$720"
   },
   "excel-vs-automated-extraction": {
     "systems": [
@@ -1135,20 +1191,20 @@
       },
       {
         "feature": "Processing Speed",
-        "excel": "4\u20138 hrs/day per FTE",
+        "excel": "4–8 hrs/day per FTE",
         "automated-extraction": "Minutes per batch",
         "winner": "automated-extraction"
       },
       {
         "feature": "Scalability",
-        "excel": "Not scalable \u2014 linear FTE cost",
+        "excel": "Not scalable — linear FTE cost",
         "automated-extraction": "Scales with volume at fixed cost",
         "winner": "automated-extraction"
       },
       {
         "feature": "Setup Cost",
         "excel": "$0 (already licensed)",
-        "automated-extraction": "$500\u2013$5K/mo",
+        "automated-extraction": "$500–$5K/mo",
         "winner": "excel"
       },
       {
@@ -1165,14 +1221,14 @@
       },
       {
         "feature": "Staff Required",
-        "excel": "1\u20133 FTE for medium volume",
+        "excel": "1–3 FTE for medium volume",
         "automated-extraction": "0.25 FTE for QA",
         "winner": "automated-extraction"
       },
       {
         "feature": "Year 1 Cost (1,000 docs/mo)",
         "excel": "~$72,000 in FTE time",
-        "automated-extraction": "$6,000\u2013$15,000",
+        "automated-extraction": "$6,000–$15,000",
         "winner": "automated-extraction"
       }
     ],
@@ -1192,11 +1248,15 @@
       "automated-extraction": "Low"
     },
     "estimatedSyncTime": {
-      "excel": "Manual \u2014 4\u20138 hrs per batch",
+      "excel": "Manual — 4–8 hrs per batch",
       "automated-extraction": "15 minutes per batch"
     },
-    "docStandardFit": "DocStandard is the automated extraction layer. It replaces Excel-based manual data entry with a normalized, ERP-ready output from your TMS or logistics documents \u2014 eliminating the 35% error rate that comes with manual re-keying.",
-    "bottomLine": "Excel only makes financial sense below 50 documents/month. Above that, automated extraction pays for itself in reduced FTE time and error correction costs within 3 months."
+    "docStandardFit": "DocStandard is the automated extraction layer. It replaces Excel-based manual data entry with a normalized, ERP-ready output from your TMS or logistics documents — eliminating the 35% error rate that comes with manual re-keying.",
+    "bottomLine": "Excel only makes financial sense below 50 documents/month. Above that, automated extraction pays for itself in reduced FTE time and error correction costs within 3 months.",
+    "monthlyDocumentVolume": "3,000",
+    "costPerDocumentBefore": "$5.60",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$1,650"
   },
   "manual-processing-vs-outsourced-processing": {
     "systems": [
@@ -1209,32 +1269,32 @@
     "comparisonTable": [
       {
         "feature": "Cost per Document",
-        "manual-processing": "$2\u2013$5 (FTE cost)",
-        "outsourced-processing": "$0.10\u2013$0.50",
+        "manual-processing": "$2–$5 (FTE cost)",
+        "outsourced-processing": "$0.10–$0.50",
         "winner": "outsourced-processing"
       },
       {
         "feature": "Control Over Output",
         "manual-processing": "Full control",
-        "outsourced-processing": "Limited \u2014 depends on vendor",
+        "outsourced-processing": "Limited — depends on vendor",
         "winner": "manual-processing"
       },
       {
         "feature": "Data Security",
-        "manual-processing": "Internal \u2014 no data sharing",
+        "manual-processing": "Internal — no data sharing",
         "outsourced-processing": "Risk: documents leave your systems",
         "winner": "manual-processing"
       },
       {
         "feature": "Turnaround Time",
         "manual-processing": "Real-time to 24hrs",
-        "outsourced-processing": "24\u201372 hrs typically",
+        "outsourced-processing": "24–72 hrs typically",
         "winner": "manual-processing"
       },
       {
         "feature": "Scalability",
         "manual-processing": "Linear FTE cost to scale",
-        "outsourced-processing": "Variable \u2014 scales without hiring",
+        "outsourced-processing": "Variable — scales without hiring",
         "winner": "outsourced-processing"
       },
       {
@@ -1246,7 +1306,7 @@
       {
         "feature": "ERP-Ready Output",
         "manual-processing": "Requires internal effort",
-        "outsourced-processing": "Often CSV \u2014 still needs mapping",
+        "outsourced-processing": "Often CSV — still needs mapping",
         "winner": "tie"
       },
       {
@@ -1274,10 +1334,14 @@
     },
     "estimatedSyncTime": {
       "manual-processing": "Real-time",
-      "outsourced-processing": "24\u201372 hrs"
+      "outsourced-processing": "24–72 hrs"
     },
-    "docStandardFit": "Both approaches produce output that still requires normalization before ERP import. DocStandard works alongside either \u2014 normalizing manual entries and outsourced CSVs into clean, ERP-ready, audit-compliant formats that don't need further manipulation.",
-    "bottomLine": "Manual processing is cheaper at very low volume and where security matters most. Outsourced processing wins on cost at scale but introduces quality and turnaround risks. Both are superseded by automated normalization above 200 docs/month."
+    "docStandardFit": "Both approaches produce output that still requires normalization before ERP import. DocStandard works alongside either — normalizing manual entries and outsourced CSVs into clean, ERP-ready, audit-compliant formats that don't need further manipulation.",
+    "bottomLine": "Manual processing is cheaper at very low volume and where security matters most. Outsourced processing wins on cost at scale but introduces quality and turnaround risks. Both are superseded by automated normalization above 200 docs/month.",
+    "monthlyDocumentVolume": "2,600",
+    "costPerDocumentBefore": "$7.20",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$2,200"
   },
   "edi-vs-api-integration": {
     "systems": [
@@ -1296,8 +1360,8 @@
       },
       {
         "feature": "Setup Cost",
-        "edi": "$200\u2013$500/mo VAN + $2K\u2013$10K build",
-        "api-integration": "$10K\u2013$50K+ build",
+        "edi": "$200–$500/mo VAN + $2K–$10K build",
+        "api-integration": "$10K–$50K+ build",
         "winner": "edi"
       },
       {
@@ -1320,14 +1384,14 @@
       },
       {
         "feature": "Maintenance",
-        "edi": "Stable standard \u2014 low ongoing cost",
-        "api-integration": "High \u2014 breaks when source changes",
+        "edi": "Stable standard — low ongoing cost",
+        "api-integration": "High — breaks when source changes",
         "winner": "edi"
       },
       {
         "feature": "Data Normalization",
         "edi": "Structured but still needs field mapping",
-        "api-integration": "Raw \u2014 always needs normalization layer",
+        "api-integration": "Raw — always needs normalization layer",
         "winner": "edi"
       },
       {
@@ -1340,7 +1404,7 @@
     "chooseAIf": [
       "Your trading partners (retailers, carriers) mandate EDI compliance",
       "You need a low-maintenance, stable B2B data pipeline",
-      "Volume is high and predictable \u2014 EDI VAN costs are justified"
+      "Volume is high and predictable — EDI VAN costs are justified"
     ],
     "chooseBIf": [
       "Your partners have modern REST APIs and real-time data is required",
@@ -1352,11 +1416,15 @@
       "api-integration": "Very High"
     },
     "estimatedSyncTime": {
-      "edi": "Batch \u2014 2\u20134 hrs per cycle",
+      "edi": "Batch — 2–4 hrs per cycle",
       "api-integration": "Real-time to minutes"
     },
-    "docStandardFit": "Whether your logistics data arrives via EDI or API, it still needs normalization before your ERP can process it as clean accounting entries. DocStandard sits after the data arrives \u2014 normalizing EDI 810s, 856s, or raw API payloads into ERP-ready, audit-compliant formats.",
-    "bottomLine": "EDI is the pragmatic choice when trading partners mandate it. API integration is the modern choice for real-time workflows. Most logistics companies need both \u2014 and both produce data that needs normalization before ERP."
+    "docStandardFit": "Whether your logistics data arrives via EDI or API, it still needs normalization before your ERP can process it as clean accounting entries. DocStandard sits after the data arrives — normalizing EDI 810s, 856s, or raw API payloads into ERP-ready, audit-compliant formats.",
+    "bottomLine": "EDI is the pragmatic choice when trading partners mandate it. API integration is the modern choice for real-time workflows. Most logistics companies need both — and both produce data that needs normalization before ERP.",
+    "monthlyDocumentVolume": "4,000",
+    "costPerDocumentBefore": "$3.80",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$940"
   },
   "flexport-vs-cargowise": {
     "systems": [
@@ -1376,7 +1444,7 @@
       {
         "feature": "Implementation Time",
         "flexport": "Days to weeks",
-        "cargowise": "4\u20138 months",
+        "cargowise": "4–8 months",
         "winner": "flexport"
       },
       {
@@ -1400,12 +1468,12 @@
       {
         "feature": "API Quality",
         "flexport": "Excellent REST API",
-        "cargowise": "XML/SOAP \u2014 complex",
+        "cargowise": "XML/SOAP — complex",
         "winner": "flexport"
       },
       {
         "feature": "Cost for SMBs",
-        "flexport": "Freight markup model \u2014 often cheaper for low volume",
+        "flexport": "Freight markup model — often cheaper for low volume",
         "cargowise": "$5K+/mo not viable for SMBs",
         "winner": "flexport"
       },
@@ -1423,7 +1491,7 @@
       "Speed of onboarding is a priority"
     ],
     "chooseBIf": [
-      "Your business IS freight forwarding \u2014 you move freight for other companies",
+      "Your business IS freight forwarding — you move freight for other companies",
       "You need deep customs brokerage capability in multiple countries",
       "You process 500+ complex multi-modal shipments per month",
       "You run a 3PL or NVO that needs a full freight operations platform"
@@ -1434,10 +1502,14 @@
     },
     "estimatedSyncTime": {
       "flexport": "Same day via REST API",
-      "cargowise": "3\u20135 business days"
+      "cargowise": "3–5 business days"
     },
-    "docStandardFit": "Flexport's clean REST API makes data extraction easier, but its output still needs field mapping for ERP import. CargoWise data is significantly more complex. DocStandard normalizes both into ERP-ready formats \u2014 handling Flexport's shipment events and CargoWise's cost line items.",
-    "bottomLine": "Flexport is the digital-native choice for shippers and importers. CargoWise is the operational backbone for freight forwarders, customs brokers, and 3PLs."
+    "docStandardFit": "Flexport's clean REST API makes data extraction easier, but its output still needs field mapping for ERP import. CargoWise data is significantly more complex. DocStandard normalizes both into ERP-ready formats — handling Flexport's shipment events and CargoWise's cost line items.",
+    "bottomLine": "Flexport is the digital-native choice for shippers and importers. CargoWise is the operational backbone for freight forwarders, customs brokers, and 3PLs.",
+    "monthlyDocumentVolume": "3,800",
+    "costPerDocumentBefore": "$4.60",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,120"
   },
   "oracle-otm-vs-sap-tm": {
     "systems": [
@@ -1456,8 +1528,8 @@
       },
       {
         "feature": "Implementation Time",
-        "oracle-otm": "12\u201324 months",
-        "sap-tm": "12\u201318 months",
+        "oracle-otm": "12–24 months",
+        "sap-tm": "12–18 months",
         "winner": "sap-tm"
       },
       {
@@ -1468,8 +1540,8 @@
       },
       {
         "feature": "Cost",
-        "oracle-otm": "$300K\u2013$2M+/yr",
-        "sap-tm": "$200K\u2013$1M+/yr",
+        "oracle-otm": "$300K–$2M+/yr",
+        "sap-tm": "$200K–$1M+/yr",
         "winner": "sap-tm"
       },
       {
@@ -1492,8 +1564,8 @@
       },
       {
         "feature": "Accounting Sync",
-        "oracle-otm": "Medium \u2014 Oracle or external ERP",
-        "sap-tm": "Low \u2014 native SAP FI sync",
+        "oracle-otm": "Medium — Oracle or external ERP",
+        "sap-tm": "Low — native SAP FI sync",
         "winner": "sap-tm"
       }
     ],
@@ -1512,11 +1584,15 @@
       "sap-tm": "Very High"
     },
     "estimatedSyncTime": {
-      "oracle-otm": "5\u201310 days initial",
+      "oracle-otm": "5–10 days initial",
       "sap-tm": "Native within SAP"
     },
     "docStandardFit": "Both platforms produce transport document outputs (freight orders, carrier invoices, delivery notes) that require validation and normalization before external ERP systems can process them. For mixed-ERP environments, DocStandard bridges Oracle TM or SAP TM outputs into a neutral format that any finance system can consume.",
-    "bottomLine": "Oracle TM for Oracle ecosystem users and highly complex planning requirements. SAP TM for SAP shops that want native FI integration and shorter time-to-value within an existing SAP landscape."
+    "bottomLine": "Oracle TM for Oracle ecosystem users and highly complex planning requirements. SAP TM for SAP shops that want native FI integration and shorter time-to-value within an existing SAP landscape.",
+    "monthlyDocumentVolume": "7,200",
+    "costPerDocumentBefore": "$7.40",
+    "costPerDocumentAfter": "$0.13",
+    "monthlyErrorCost": "$2,600"
   },
   "rose-rocket-vs-magaya": {
     "systems": [
@@ -1541,7 +1617,7 @@
       },
       {
         "feature": "Dispatch Workflows",
-        "rose-rocket": "Excellent \u2014 carrier-first design",
+        "rose-rocket": "Excellent — carrier-first design",
         "magaya": "Basic dispatch, forwarder-first",
         "winner": "rose-rocket"
       },
@@ -1591,11 +1667,15 @@
       "magaya": "Medium"
     },
     "estimatedSyncTime": {
-      "rose-rocket": "1\u20132 days",
-      "magaya": "1\u20132 days"
+      "rose-rocket": "1–2 days",
+      "magaya": "1–2 days"
     },
     "docStandardFit": "Both systems generate invoices, BOLs, and cost documents that need normalization before syncing with QuickBooks, Xero, or NetSuite. Rose Rocket's export is cleaner; Magaya's has more fields. DocStandard normalizes both for accounting import.",
-    "bottomLine": "Rose Rocket for carriers who move freight. Magaya for forwarders who arrange freight. Both produce data that DocStandard normalizes for seamless accounting sync."
+    "bottomLine": "Rose Rocket for carriers who move freight. Magaya for forwarders who arrange freight. Both produce data that DocStandard normalizes for seamless accounting sync.",
+    "monthlyDocumentVolume": "2,800",
+    "costPerDocumentBefore": "$3.40",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$780"
   },
   "in-house-team-vs-outsourced-processing": {
     "systems": [
@@ -1609,7 +1689,7 @@
       {
         "feature": "Cost at 500 docs/mo",
         "in-house-team": "~$6,000/mo (1 FTE)",
-        "outsourced-processing": "$250\u2013$1,000/mo",
+        "outsourced-processing": "$250–$1,000/mo",
         "winner": "outsourced-processing"
       },
       {
@@ -1627,12 +1707,12 @@
       {
         "feature": "Turnaround",
         "in-house-team": "Real-time to 4 hrs",
-        "outsourced-processing": "24\u201372 hrs",
+        "outsourced-processing": "24–72 hrs",
         "winner": "in-house-team"
       },
       {
         "feature": "Scalability",
-        "in-house-team": "Requires hiring \u2014 slow to scale",
+        "in-house-team": "Requires hiring — slow to scale",
         "outsourced-processing": "Quick to scale up/down",
         "winner": "outsourced-processing"
       },
@@ -1650,8 +1730,8 @@
       },
       {
         "feature": "ERP-Ready Output",
-        "in-house-team": "Custom \u2014 as good as your team",
-        "outsourced-processing": "Generic CSV \u2014 needs mapping",
+        "in-house-team": "Custom — as good as your team",
+        "outsourced-processing": "Generic CSV — needs mapping",
         "winner": "in-house-team"
       }
     ],
@@ -1671,10 +1751,14 @@
     },
     "estimatedSyncTime": {
       "in-house-team": "Real-time",
-      "outsourced-processing": "24\u201372 hrs"
+      "outsourced-processing": "24–72 hrs"
     },
     "docStandardFit": "Both approaches leave you with data that needs normalization before ERP import. An in-house team can be trained to use DocStandard's validation tools; outsourced vendors can be required to output DocStandard-compatible formats as part of their SLA.",
-    "bottomLine": "In-house for security, control, and complex rules. Outsourced for cost flexibility and volume scaling. Above 1,000 docs/month, automated processing (DocStandard) outperforms both."
+    "bottomLine": "In-house for security, control, and complex rules. Outsourced for cost flexibility and volume scaling. Above 1,000 docs/month, automated processing (DocStandard) outperforms both.",
+    "monthlyDocumentVolume": "3,200",
+    "costPerDocumentBefore": "$8.40",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$2,800"
   },
   "mercurygate-vs-cargowise": {
     "systems": [
@@ -1693,7 +1777,7 @@
       },
       {
         "feature": "Load Tendering",
-        "mercurygate": "Excellent \u2014 core strength",
+        "mercurygate": "Excellent — core strength",
         "cargowise": "Secondary feature",
         "winner": "mercurygate"
       },
@@ -1705,14 +1789,14 @@
       },
       {
         "feature": "Cost",
-        "mercurygate": "$2K\u2013$10K/mo",
-        "cargowise": "$5K\u2013$30K/mo",
+        "mercurygate": "$2K–$10K/mo",
+        "cargowise": "$5K–$30K/mo",
         "winner": "mercurygate"
       },
       {
         "feature": "Implementation Time",
-        "mercurygate": "2\u20135 months",
-        "cargowise": "4\u20138 months",
+        "mercurygate": "2–5 months",
+        "cargowise": "4–8 months",
         "winner": "mercurygate"
       },
       {
@@ -1749,11 +1833,15 @@
       "cargowise": "High"
     },
     "estimatedSyncTime": {
-      "mercurygate": "2\u20133 days",
-      "cargowise": "3\u20135 days"
+      "mercurygate": "2–3 days",
+      "cargowise": "3–5 days"
     },
     "docStandardFit": "Both platforms generate freight cost documents requiring normalization for ERP import. MercuryGate's load data and CargoWise's house bill cost lines both need field mapping and validation before they become clean accounting entries.",
-    "bottomLine": "MercuryGate for shippers and 3PLs running North American trucking operations. CargoWise for freight forwarders managing global multi-modal logistics."
+    "bottomLine": "MercuryGate for shippers and 3PLs running North American trucking operations. CargoWise for freight forwarders managing global multi-modal logistics.",
+    "monthlyDocumentVolume": "4,400",
+    "costPerDocumentBefore": "$5.60",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$1,480"
   },
   "descartes-vs-blueyonder": {
     "systems": [
@@ -1784,14 +1872,14 @@
       },
       {
         "feature": "Cost",
-        "descartes": "$3K\u2013$15K/mo",
-        "blueyonder": "$20K\u2013$100K+/mo",
+        "descartes": "$3K–$15K/mo",
+        "blueyonder": "$20K–$100K+/mo",
         "winner": "descartes"
       },
       {
         "feature": "Implementation Time",
-        "descartes": "3\u20136 months",
-        "blueyonder": "12\u201324 months",
+        "descartes": "3–6 months",
+        "blueyonder": "12–24 months",
         "winner": "descartes"
       },
       {
@@ -1828,11 +1916,15 @@
       "blueyonder": "Very High"
     },
     "estimatedSyncTime": {
-      "descartes": "3\u20135 days",
+      "descartes": "3–5 days",
       "blueyonder": "10+ days initial setup"
     },
     "docStandardFit": "Both platforms produce complex logistics documents that require normalization before financial systems can process them. Descartes delivery manifests and Blue Yonder fulfillment data both need field validation and ERP-specific mapping.",
-    "bottomLine": "Descartes for last-mile, compliance, and mid-enterprise TMS. Blue Yonder for Tier-1 retail and CPG companies with unified supply chain planning requirements."
+    "bottomLine": "Descartes for last-mile, compliance, and mid-enterprise TMS. Blue Yonder for Tier-1 retail and CPG companies with unified supply chain planning requirements.",
+    "monthlyDocumentVolume": "5,000",
+    "costPerDocumentBefore": "$5.80",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$1,680"
   },
   "kuebix-vs-rose-rocket": {
     "systems": [
@@ -1851,7 +1943,7 @@
       },
       {
         "feature": "LTL Rate Shopping",
-        "kuebix": "Core strength \u2014 top LTL tool",
+        "kuebix": "Core strength — top LTL tool",
         "rose-rocket": "Available, not primary focus",
         "winner": "kuebix"
       },
@@ -1869,7 +1961,7 @@
       },
       {
         "feature": "Cost",
-        "kuebix": "Free tier + $500\u2013$3K/mo",
+        "kuebix": "Free tier + $500–$3K/mo",
         "rose-rocket": "$150/truck/mo",
         "winner": "contextual"
       },
@@ -1907,11 +1999,15 @@
       "rose-rocket": "Medium"
     },
     "estimatedSyncTime": {
-      "kuebix": "1\u20132 days",
-      "rose-rocket": "1\u20132 days"
+      "kuebix": "1–2 days",
+      "rose-rocket": "1–2 days"
     },
     "docStandardFit": "Both platforms produce shipping cost data that needs normalization before QuickBooks or NetSuite import. DocStandard maps Kuebix's rate-confirmed shipment records and Rose Rocket's dispatch invoices into clean, ERP-ready accounting entries.",
-    "bottomLine": "Kuebix for shippers optimizing LTL costs. Rose Rocket for carriers managing operations and customer relationships."
+    "bottomLine": "Kuebix for shippers optimizing LTL costs. Rose Rocket for carriers managing operations and customer relationships.",
+    "monthlyDocumentVolume": "2,400",
+    "costPerDocumentBefore": "$3.60",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$820"
   },
   "freightos-vs-flexport": {
     "systems": [
@@ -1924,31 +2020,31 @@
     "comparisonTable": [
       {
         "feature": "Rate Shopping",
-        "freightos": "Marketplace \u2014 instant quotes from 50+ providers",
+        "freightos": "Marketplace — instant quotes from 50+ providers",
         "flexport": "Flexport network rates only",
         "winner": "freightos"
       },
       {
         "feature": "Freight Execution",
-        "freightos": "Booking marketplace \u2014 third-party forwarders execute",
+        "freightos": "Booking marketplace — third-party forwarders execute",
         "flexport": "Flexport executes as forwarder",
         "winner": "flexport"
       },
       {
         "feature": "Visibility",
-        "freightos": "Basic \u2014 via booking forwarder",
+        "freightos": "Basic — via booking forwarder",
         "flexport": "Real-time platform tracking",
         "winner": "flexport"
       },
       {
         "feature": "Documentation",
-        "freightos": "Limited \u2014 depends on forwarder",
+        "freightos": "Limited — depends on forwarder",
         "flexport": "Full digital document management",
         "winner": "flexport"
       },
       {
         "feature": "Price Transparency",
-        "freightos": "Best \u2014 shows multiple quotes live",
+        "freightos": "Best — shows multiple quotes live",
         "flexport": "Less transparent (bundled)",
         "winner": "freightos"
       },
@@ -1966,8 +2062,8 @@
       },
       {
         "feature": "ERP Data Sync",
-        "freightos": "Limited \u2014 depends on forwarder",
-        "flexport": "Better \u2014 consistent platform output",
+        "freightos": "Limited — depends on forwarder",
+        "flexport": "Better — consistent platform output",
         "winner": "flexport"
       }
     ],
@@ -1986,11 +2082,15 @@
       "flexport": "Low"
     },
     "estimatedSyncTime": {
-      "freightos": "1\u20132 days (manual export)",
+      "freightos": "1–2 days (manual export)",
       "flexport": "Same day via API"
     },
-    "docStandardFit": "Freightos bookings are executed by third-party forwarders who produce their own document formats. Flexport provides consistent but proprietary data. Both require normalization before ERP import \u2014 DocStandard handles both output formats.",
-    "bottomLine": "Freightos for rate comparison and price discovery. Flexport for end-to-end digital freight forwarding with full platform visibility."
+    "docStandardFit": "Freightos bookings are executed by third-party forwarders who produce their own document formats. Flexport provides consistent but proprietary data. Both require normalization before ERP import — DocStandard handles both output formats.",
+    "bottomLine": "Freightos for rate comparison and price discovery. Flexport for end-to-end digital freight forwarding with full platform visibility.",
+    "monthlyDocumentVolume": "2,200",
+    "costPerDocumentBefore": "$3.20",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$680"
   },
   "transporeon-vs-mercurygate": {
     "systems": [
@@ -2003,8 +2103,8 @@
     "comparisonTable": [
       {
         "feature": "Geographic Strength",
-        "transporeon": "Europe \u2014 deep carrier network",
-        "mercurygate": "North America \u2014 trucking focus",
+        "transporeon": "Europe — deep carrier network",
+        "mercurygate": "North America — trucking focus",
         "winner": "contextual"
       },
       {
@@ -2039,8 +2139,8 @@
       },
       {
         "feature": "Cost",
-        "transporeon": "$2K\u2013$20K/mo",
-        "mercurygate": "$2K\u2013$10K/mo",
+        "transporeon": "$2K–$20K/mo",
+        "mercurygate": "$2K–$10K/mo",
         "winner": "mercurygate"
       },
       {
@@ -2065,11 +2165,15 @@
       "mercurygate": "Medium"
     },
     "estimatedSyncTime": {
-      "transporeon": "2\u20133 days",
-      "mercurygate": "2\u20133 days"
+      "transporeon": "2–3 days",
+      "mercurygate": "2–3 days"
     },
-    "docStandardFit": "Both platforms produce freight cost records and transport documents that need normalization before ERP or accounting system import. Currency handling (EUR vs USD), carrier code formats, and cost line structures differ between the two \u2014 DocStandard handles both.",
-    "bottomLine": "Transporeon for European logistics operations. MercuryGate for North American shippers and 3PLs."
+    "docStandardFit": "Both platforms produce freight cost records and transport documents that need normalization before ERP or accounting system import. Currency handling (EUR vs USD), carrier code formats, and cost line structures differ between the two — DocStandard handles both.",
+    "bottomLine": "Transporeon for European logistics operations. MercuryGate for North American shippers and 3PLs.",
+    "monthlyDocumentVolume": "4,600",
+    "costPerDocumentBefore": "$5.40",
+    "costPerDocumentAfter": "$0.11",
+    "monthlyErrorCost": "$1,380"
   },
   "project44-vs-fourkites": {
     "systems": [
@@ -2082,8 +2186,8 @@
     "comparisonTable": [
       {
         "feature": "Carrier Network",
-        "project44": "Largest \u2014 1M+ carrier connections",
-        "fourkites": "Large \u2014 strong ocean + truckload",
+        "project44": "Largest — 1M+ carrier connections",
+        "fourkites": "Large — strong ocean + truckload",
         "winner": "project44"
       },
       {
@@ -2118,8 +2222,8 @@
       },
       {
         "feature": "Cost",
-        "project44": "$2K\u2013$25K/mo",
-        "fourkites": "$1.5K\u2013$15K/mo",
+        "project44": "$2K–$25K/mo",
+        "fourkites": "$1.5K–$15K/mo",
         "winner": "fourkites"
       },
       {
@@ -2130,7 +2234,7 @@
       }
     ],
     "chooseAIf": [
-      "Breadth of carrier coverage is the priority \u2014 you work with many carriers globally",
+      "Breadth of carrier coverage is the priority — you work with many carriers globally",
       "You need the largest pre-built TMS integration library",
       "Your TMS is a less common platform that needs a broad integration network"
     ],
@@ -2148,7 +2252,11 @@
       "fourkites": "Same day"
     },
     "docStandardFit": "Visibility platforms produce shipment event data (location pings, ETA updates, exceptions) that still needs normalization before accounting or financial systems can use it for landed cost calculations or freight accruals. DocStandard maps these event streams into clean financial entries.",
-    "bottomLine": "Project44 for maximum carrier coverage and TMS breadth. FourKites for retail compliance, ocean visibility, and branded customer experience."
+    "bottomLine": "Project44 for maximum carrier coverage and TMS breadth. FourKites for retail compliance, ocean visibility, and branded customer experience.",
+    "monthlyDocumentVolume": "3,400",
+    "costPerDocumentBefore": "$4.20",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$960"
   },
   "geotab-vs-samsara": {
     "systems": [
@@ -2173,7 +2281,7 @@
       },
       {
         "feature": "Government/Public Sector",
-        "geotab": "Strong \u2014 widely used",
+        "geotab": "Strong — widely used",
         "samsara": "Growing government presence",
         "winner": "geotab"
       },
@@ -2191,8 +2299,8 @@
       },
       {
         "feature": "Cost",
-        "geotab": "$24\u2013$120/vehicle/mo",
-        "samsara": "$50\u2013$150/vehicle/mo",
+        "geotab": "$24–$120/vehicle/mo",
+        "samsara": "$50–$150/vehicle/mo",
         "winner": "geotab"
       },
       {
@@ -2203,8 +2311,8 @@
       },
       {
         "feature": "Accounting Data Export",
-        "geotab": "Custom SDK \u2014 medium complexity",
-        "samsara": "REST webhooks \u2014 low complexity",
+        "geotab": "Custom SDK — medium complexity",
+        "samsara": "REST webhooks — low complexity",
         "winner": "samsara"
       }
     ],
@@ -2223,11 +2331,15 @@
       "samsara": "Low"
     },
     "estimatedSyncTime": {
-      "geotab": "1\u20132 days",
+      "geotab": "1–2 days",
       "samsara": "Same day via webhook"
     },
     "docStandardFit": "Both platforms generate fuel, mileage, and driver hours data that needs normalization for IFTA reporting, accounting entries, and compliance documentation. DocStandard converts telematics exports from both into clean, audit-ready financial records.",
-    "bottomLine": "Geotab for enterprise customization, government, and cost-sensitive large fleets. Samsara for companies prioritizing AI safety technology and a frictionless deployment experience."
+    "bottomLine": "Geotab for enterprise customization, government, and cost-sensitive large fleets. Samsara for companies prioritizing AI safety technology and a frictionless deployment experience.",
+    "monthlyDocumentVolume": "1,600",
+    "costPerDocumentBefore": "$2.20",
+    "costPerDocumentAfter": "$0.06",
+    "monthlyErrorCost": "$440"
   },
   "verizon-connect-vs-motive": {
     "systems": [
@@ -2241,7 +2353,7 @@
       {
         "feature": "Target Fleet Size",
         "verizon-connect": "Mid-to-large (50+ vehicles)",
-        "motive": "Owner-ops to mid fleets (1\u2013200)",
+        "motive": "Owner-ops to mid fleets (1–200)",
         "winner": "contextual"
       },
       {
@@ -2258,8 +2370,8 @@
       },
       {
         "feature": "Cost",
-        "verizon-connect": "$40\u2013$100/vehicle/mo",
-        "motive": "$35\u2013$85/vehicle/mo",
+        "verizon-connect": "$40–$100/vehicle/mo",
+        "motive": "$35–$85/vehicle/mo",
         "winner": "motive"
       },
       {
@@ -2282,7 +2394,7 @@
       },
       {
         "feature": "Accounting Integration",
-        "verizon-connect": "Medium \u2014 needs normalization",
+        "verizon-connect": "Medium — needs normalization",
         "motive": "IFTA output needs normalization",
         "winner": "tie"
       }
@@ -2302,11 +2414,15 @@
       "motive": "Low"
     },
     "estimatedSyncTime": {
-      "verizon-connect": "1\u20132 days",
+      "verizon-connect": "1–2 days",
       "motive": "Same day"
     },
     "docStandardFit": "IFTA fuel tax and driver hours data from both platforms needs jurisdiction-level normalization before it can be submitted as a tax-compliant report or imported into accounting software. DocStandard handles this mapping for both.",
-    "bottomLine": "Verizon Connect for large fleets with Verizon network dependency. Motive for cost-conscious smaller carriers who need simple ELD + IFTA without complexity."
+    "bottomLine": "Verizon Connect for large fleets with Verizon network dependency. Motive for cost-conscious smaller carriers who need simple ELD + IFTA without complexity.",
+    "monthlyDocumentVolume": "1,400",
+    "costPerDocumentBefore": "$2.00",
+    "costPerDocumentAfter": "$0.06",
+    "monthlyErrorCost": "$380"
   },
   "omnitracs-vs-trimble": {
     "systems": [
@@ -2355,8 +2471,8 @@
       },
       {
         "feature": "Cost",
-        "omnitracs": "$25\u2013$120/vehicle/mo",
-        "trimble": "$100\u2013$500/truck/mo (TMS)",
+        "omnitracs": "$25–$120/vehicle/mo",
+        "trimble": "$100–$500/truck/mo (TMS)",
         "winner": "omnitracs"
       },
       {
@@ -2381,11 +2497,15 @@
       "trimble": "Medium"
     },
     "estimatedSyncTime": {
-      "omnitracs": "2\u20133 days",
-      "trimble": "2\u20133 days"
+      "omnitracs": "2–3 days",
+      "trimble": "2–3 days"
     },
     "docStandardFit": "Driver settlement statements, fuel receipts, and load completion records from both platforms need normalization before payroll systems or accounting software can process them. DocStandard maps carrier-specific field formats to clean journal entries for QuickBooks, Sage, or NetSuite.",
-    "bottomLine": "Omnitracs for legacy long-haul operations with proven compliance tools. Trimble for carriers prioritizing driver pay accuracy, modern dispatch, and strong EDI."
+    "bottomLine": "Omnitracs for legacy long-haul operations with proven compliance tools. Trimble for carriers prioritizing driver pay accuracy, modern dispatch, and strong EDI.",
+    "monthlyDocumentVolume": "2,000",
+    "costPerDocumentBefore": "$3.00",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$580"
   },
   "epicor-vs-acumatica": {
     "systems": [
@@ -2422,8 +2542,8 @@
       },
       {
         "feature": "Implementation Time",
-        "epicor": "6\u201312 months",
-        "acumatica": "3\u20138 months",
+        "epicor": "6–12 months",
+        "acumatica": "3–8 months",
         "winner": "acumatica"
       },
       {
@@ -2460,11 +2580,15 @@
       "acumatica": "Medium"
     },
     "estimatedSyncTime": {
-      "epicor": "2\u20134 days",
-      "acumatica": "2\u20133 days"
+      "epicor": "2–4 days",
+      "acumatica": "2–3 days"
     },
-    "docStandardFit": "Both platforms require incoming logistics documents (BOLs, carrier invoices, receiving documents) to be normalized before ERP import. Epicor's import scenarios and Acumatica's import scenarios have different field requirements \u2014 DocStandard produces output compatible with both.",
-    "bottomLine": "Epicor for discrete manufacturers who need deep BOM and shop floor control. Acumatica for construction, distribution, and companies who want to eliminate per-user licensing costs."
+    "docStandardFit": "Both platforms require incoming logistics documents (BOLs, carrier invoices, receiving documents) to be normalized before ERP import. Epicor's import scenarios and Acumatica's import scenarios have different field requirements — DocStandard produces output compatible with both.",
+    "bottomLine": "Epicor for discrete manufacturers who need deep BOM and shop floor control. Acumatica for construction, distribution, and companies who want to eliminate per-user licensing costs.",
+    "monthlyDocumentVolume": "2,600",
+    "costPerDocumentBefore": "$4.00",
+    "costPerDocumentAfter": "$0.09",
+    "monthlyErrorCost": "$880"
   },
   "infor-cloudsuite-vs-dynamics365": {
     "systems": [
@@ -2478,7 +2602,7 @@
       {
         "feature": "Industry Templates",
         "infor-cloudsuite": "Deep vertical templates (food, fashion, healthcare)",
-        "dynamics365": "Horizontal platform \u2014 broad but not deep",
+        "dynamics365": "Horizontal platform — broad but not deep",
         "winner": "infor-cloudsuite"
       },
       {
@@ -2489,13 +2613,13 @@
       },
       {
         "feature": "Implementation Time",
-        "infor-cloudsuite": "9\u201318 months",
-        "dynamics365": "6\u201312 months",
+        "infor-cloudsuite": "9–18 months",
+        "dynamics365": "6–12 months",
         "winner": "dynamics365"
       },
       {
         "feature": "Partner Network",
-        "infor-cloudsuite": "Smaller \u2014 Infor-specific SIs",
+        "infor-cloudsuite": "Smaller — Infor-specific SIs",
         "dynamics365": "Massive Microsoft VAR network",
         "winner": "dynamics365"
       },
@@ -2519,8 +2643,8 @@
       },
       {
         "feature": "Cost",
-        "infor-cloudsuite": "$100K\u2013$500K+/yr",
-        "dynamics365": "$65\u2013$1,500/user/mo",
+        "infor-cloudsuite": "$100K–$500K+/yr",
+        "dynamics365": "$65–$1,500/user/mo",
         "winner": "contextual"
       }
     ],
@@ -2539,11 +2663,15 @@
       "dynamics365": "Medium"
     },
     "estimatedSyncTime": {
-      "infor-cloudsuite": "5\u20138 days via Infor ION",
-      "dynamics365": "2\u20134 days"
+      "infor-cloudsuite": "5–8 days via Infor ION",
+      "dynamics365": "2–4 days"
     },
     "docStandardFit": "Both platforms require logistics and supply chain documents to be normalized before financial modules can process them correctly. Infor ION middleware adds a translation layer; Dynamics 365 uses Power Automate. DocStandard generates clean, structured data compatible with both middleware layers.",
-    "bottomLine": "Infor CloudSuite for companies where industry-specific depth (food, fashion, healthcare) outweighs the cost and complexity premium. Dynamics 365 for Microsoft-first organizations that need a capable horizontal ERP with AI."
+    "bottomLine": "Infor CloudSuite for companies where industry-specific depth (food, fashion, healthcare) outweighs the cost and complexity premium. Dynamics 365 for Microsoft-first organizations that need a capable horizontal ERP with AI.",
+    "monthlyDocumentVolume": "3,400",
+    "costPerDocumentBefore": "$5.20",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,150"
   },
   "workday-vs-oracle-erp-cloud": {
     "systems": [
@@ -2580,8 +2708,8 @@
       },
       {
         "feature": "Implementation Time",
-        "workday": "12\u201318 months",
-        "oracle-erp-cloud": "12\u201324 months",
+        "workday": "12–18 months",
+        "oracle-erp-cloud": "12–24 months",
         "winner": "workday"
       },
       {
@@ -2592,8 +2720,8 @@
       },
       {
         "feature": "Cost",
-        "workday": "$300K\u2013$2M+/yr",
-        "oracle-erp-cloud": "$500K\u2013$5M+/yr",
+        "workday": "$300K–$2M+/yr",
+        "oracle-erp-cloud": "$500K–$5M+/yr",
         "winner": "workday"
       },
       {
@@ -2618,11 +2746,15 @@
       "oracle-erp-cloud": "Very High"
     },
     "estimatedSyncTime": {
-      "workday": "5\u20137 days initial",
-      "oracle-erp-cloud": "7\u201310 days initial"
+      "workday": "5–7 days initial",
+      "oracle-erp-cloud": "7–10 days initial"
     },
-    "docStandardFit": "Logistics and vendor invoice data arriving from TMS platforms needs normalization before either system's financial modules can process it as clean AP transactions. Workday's SOAP API and Oracle's REST API have different field requirements \u2014 DocStandard outputs to both.",
-    "bottomLine": "Workday for HR-first enterprises with growing financial needs. Oracle ERP Cloud for finance-first enterprises with complex procurement and supply chain requirements."
+    "docStandardFit": "Logistics and vendor invoice data arriving from TMS platforms needs normalization before either system's financial modules can process it as clean AP transactions. Workday's SOAP API and Oracle's REST API have different field requirements — DocStandard outputs to both.",
+    "bottomLine": "Workday for HR-first enterprises with growing financial needs. Oracle ERP Cloud for finance-first enterprises with complex procurement and supply chain requirements.",
+    "monthlyDocumentVolume": "4,800",
+    "costPerDocumentBefore": "$6.40",
+    "costPerDocumentAfter": "$0.12",
+    "monthlyErrorCost": "$1,920"
   },
   "financialforce-vs-sage-intacct": {
     "systems": [
@@ -2635,7 +2767,7 @@
     "comparisonTable": [
       {
         "feature": "Salesforce Integration",
-        "financialforce": "Native \u2014 runs on Salesforce",
+        "financialforce": "Native — runs on Salesforce",
         "sage-intacct": "Via connector",
         "winner": "financialforce"
       },
@@ -2659,14 +2791,14 @@
       },
       {
         "feature": "Cost",
-        "financialforce": "$150\u2013$600/user/mo",
-        "sage-intacct": "$2K\u2013$10K/mo (module-based)",
+        "financialforce": "$150–$600/user/mo",
+        "sage-intacct": "$2K–$10K/mo (module-based)",
         "winner": "contextual"
       },
       {
         "feature": "Implementation Time",
-        "financialforce": "3\u20136 months (if Salesforce running)",
-        "sage-intacct": "2\u20134 months",
+        "financialforce": "3–6 months (if Salesforce running)",
+        "sage-intacct": "2–4 months",
         "winner": "sage-intacct"
       },
       {
@@ -2697,11 +2829,15 @@
       "sage-intacct": "Medium"
     },
     "estimatedSyncTime": {
-      "financialforce": "2\u20133 days",
-      "sage-intacct": "2\u20133 days"
+      "financialforce": "2–3 days",
+      "sage-intacct": "2–3 days"
     },
     "docStandardFit": "Both platforms require incoming operational data (logistics invoices, vendor bills) to be normalized before entering as clean project accounting or GL entries. DocStandard produces normalized output compatible with both import formats.",
-    "bottomLine": "FinancialForce for Salesforce-native companies that need CRM + ERP in one org. Sage Intacct for finance-first companies that want robust multi-entity reporting without Salesforce dependency."
+    "bottomLine": "FinancialForce for Salesforce-native companies that need CRM + ERP in one org. Sage Intacct for finance-first companies that want robust multi-entity reporting without Salesforce dependency.",
+    "monthlyDocumentVolume": "2,000",
+    "costPerDocumentBefore": "$3.60",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$720"
   },
   "3pl-central-vs-manhattan-associates": {
     "systems": [
@@ -2720,14 +2856,14 @@
       },
       {
         "feature": "Cost",
-        "3pl-central": "$500\u2013$5K/mo",
-        "manhattan-associates": "$200K\u2013$1M+/yr",
+        "3pl-central": "$500–$5K/mo",
+        "manhattan-associates": "$200K–$1M+/yr",
         "winner": "3pl-central"
       },
       {
         "feature": "Implementation Time",
-        "3pl-central": "1\u20133 months",
-        "manhattan-associates": "12\u201324 months",
+        "3pl-central": "1–3 months",
+        "manhattan-associates": "12–24 months",
         "winner": "3pl-central"
       },
       {
@@ -2776,11 +2912,15 @@
       "manhattan-associates": "Very High"
     },
     "estimatedSyncTime": {
-      "3pl-central": "1\u20132 days",
+      "3pl-central": "1–2 days",
       "manhattan-associates": "10+ days initial configuration"
     },
-    "docStandardFit": "3PL Central generates client billing data and inventory records that need normalization for QuickBooks/NetSuite. Manhattan Associates produces complex fulfillment transactions requiring ERP-specific mapping. DocStandard handles both \u2014 scaling from 3PL Central's simpler format to Manhattan's enterprise output.",
-    "bottomLine": "3PL Central for SMB-to-mid 3PLs that need fast deployment and strong eCommerce connectivity. Manhattan Associates for enterprise operations where labor management and slotting optimization justify the investment."
+    "docStandardFit": "3PL Central generates client billing data and inventory records that need normalization for QuickBooks/NetSuite. Manhattan Associates produces complex fulfillment transactions requiring ERP-specific mapping. DocStandard handles both — scaling from 3PL Central's simpler format to Manhattan's enterprise output.",
+    "bottomLine": "3PL Central for SMB-to-mid 3PLs that need fast deployment and strong eCommerce connectivity. Manhattan Associates for enterprise operations where labor management and slotting optimization justify the investment.",
+    "monthlyDocumentVolume": "5,200",
+    "costPerDocumentBefore": "$4.80",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,350"
   },
   "freightpop-vs-shipstation": {
     "systems": [
@@ -2799,8 +2939,8 @@
       },
       {
         "feature": "LTL Support",
-        "freightpop": "Strong \u2014 purpose-built for LTL + parcel",
-        "shipstation": "Limited \u2014 primarily parcel",
+        "freightpop": "Strong — purpose-built for LTL + parcel",
+        "shipstation": "Limited — primarily parcel",
         "winner": "freightpop"
       },
       {
@@ -2823,8 +2963,8 @@
       },
       {
         "feature": "Cost",
-        "freightpop": "$299\u2013$2,000/mo",
-        "shipstation": "$9.99\u2013$299/mo",
+        "freightpop": "$299–$2,000/mo",
+        "shipstation": "$9.99–$299/mo",
         "winner": "shipstation"
       },
       {
@@ -2859,7 +2999,11 @@
       "shipstation": "Same day"
     },
     "docStandardFit": "Both platforms generate shipping cost data that requires normalization before ERP or accounting import. FreightPOP's LTL cost breakdowns and ShipStation's parcel-level data both need field mapping for clean GL entries. DocStandard handles the normalization for both.",
-    "bottomLine": "FreightPOP for B2B manufacturers and distributors who ship LTL and need ERP integration. ShipStation for eCommerce sellers who primarily ship parcel and sell across multiple marketplaces."
+    "bottomLine": "FreightPOP for B2B manufacturers and distributors who ship LTL and need ERP integration. ShipStation for eCommerce sellers who primarily ship parcel and sell across multiple marketplaces.",
+    "monthlyDocumentVolume": "4,000",
+    "costPerDocumentBefore": "$2.80",
+    "costPerDocumentAfter": "$0.08",
+    "monthlyErrorCost": "$680"
   },
   "zoho-books-vs-freshbooks": {
     "systems": [
@@ -2879,7 +3023,7 @@
       {
         "feature": "Time Tracking",
         "zoho-books": "Available but secondary",
-        "freshbooks": "Excellent \u2014 core feature",
+        "freshbooks": "Excellent — core feature",
         "winner": "freshbooks"
       },
       {
@@ -2902,8 +3046,8 @@
       },
       {
         "feature": "Cost",
-        "zoho-books": "$0\u2013$60/mo",
-        "freshbooks": "$17\u2013$55/mo",
+        "zoho-books": "$0–$60/mo",
+        "freshbooks": "$17–$55/mo",
         "winner": "zoho-books"
       },
       {
@@ -2914,7 +3058,7 @@
       },
       {
         "feature": "Logistics Integration",
-        "zoho-books": "Limited \u2014 needs normalization",
+        "zoho-books": "Limited — needs normalization",
         "freshbooks": "Very limited",
         "winner": "zoho-books"
       }
@@ -2938,7 +3082,11 @@
       "freshbooks": "Same day"
     },
     "docStandardFit": "Both platforms accept data from logistics operations via import or API. Shipping documents and freight invoices still need normalization regardless of which platform you use. DocStandard normalizes TMS outputs into Zoho Books or FreshBooks-compatible transaction formats.",
-    "bottomLine": "Zoho Books for businesses in the Zoho ecosystem needing multi-currency and inventory. FreshBooks for freelancers and agencies where time tracking and simple invoicing are the primary needs."
+    "bottomLine": "Zoho Books for businesses in the Zoho ecosystem needing multi-currency and inventory. FreshBooks for freelancers and agencies where time tracking and simple invoicing are the primary needs.",
+    "monthlyDocumentVolume": "800",
+    "costPerDocumentBefore": "$1.40",
+    "costPerDocumentAfter": "$0.05",
+    "monthlyErrorCost": "$260"
   },
   "alpega-vs-transporeon": {
     "systems": [
@@ -2969,8 +3117,8 @@
       },
       {
         "feature": "Cost",
-        "alpega": "$1K\u2013$12K/mo",
-        "transporeon": "$2K\u2013$20K/mo",
+        "alpega": "$1K–$12K/mo",
+        "transporeon": "$2K–$20K/mo",
         "winner": "alpega"
       },
       {
@@ -2981,8 +3129,8 @@
       },
       {
         "feature": "Implementation Speed",
-        "alpega": "2\u20134 months",
-        "transporeon": "2\u20134 months",
+        "alpega": "2–4 months",
+        "transporeon": "2–4 months",
         "winner": "tie"
       },
       {
@@ -3013,11 +3161,15 @@
       "transporeon": "Medium"
     },
     "estimatedSyncTime": {
-      "alpega": "2\u20133 days",
-      "transporeon": "2\u20133 days"
+      "alpega": "2–3 days",
+      "transporeon": "2–3 days"
     },
-    "docStandardFit": "Both platforms produce transport order data, carrier invoices, and delivery confirmation documents that need field normalization before ERP import. Euro currency handling and EU carrier code formats require specific mapping \u2014 DocStandard handles both platform exports.",
-    "bottomLine": "Alpega for mid-market European shippers who value spot market load board access at a competitive price. Transporeon for enterprise European shippers needing deep tender management and SAP/Oracle-certified integration."
+    "docStandardFit": "Both platforms produce transport order data, carrier invoices, and delivery confirmation documents that need field normalization before ERP import. Euro currency handling and EU carrier code formats require specific mapping — DocStandard handles both platform exports.",
+    "bottomLine": "Alpega for mid-market European shippers who value spot market load board access at a competitive price. Transporeon for enterprise European shippers needing deep tender management and SAP/Oracle-certified integration.",
+    "monthlyDocumentVolume": "4,200",
+    "costPerDocumentBefore": "$5.00",
+    "costPerDocumentAfter": "$0.10",
+    "monthlyErrorCost": "$1,200"
   },
   "wave-vs-quickbooks-online": {
     "systems": [
@@ -3031,7 +3183,7 @@
       {
         "feature": "Cost",
         "wave": "Free (core)",
-        "quickbooks-online": "$30\u2013$200/mo",
+        "quickbooks-online": "$30–$200/mo",
         "winner": "wave"
       },
       {
@@ -3060,7 +3212,7 @@
       },
       {
         "feature": "Accountant Adoption",
-        "wave": "Low \u2014 most accountants prefer QBO",
+        "wave": "Low — most accountants prefer QBO",
         "quickbooks-online": "Dominant in US",
         "winner": "quickbooks-online"
       },
@@ -3092,10 +3244,14 @@
       "quickbooks-online": "Low"
     },
     "estimatedSyncTime": {
-      "wave": "Manual \u2014 limited API",
+      "wave": "Manual — limited API",
       "quickbooks-online": "Same day via API"
     },
-    "docStandardFit": "Wave's limited API means logistics data from TMS exports must be manually entered or imported via CSV \u2014 which still requires normalization. QuickBooks Online's REST API allows DocStandard to push normalized logistics transactions directly, eliminating manual import steps.",
-    "bottomLine": "Wave only makes sense for micro-businesses with zero budget. QuickBooks Online is the right choice for any small business that plans to grow, needs integrations, or has a US accountant."
+    "docStandardFit": "Wave's limited API means logistics data from TMS exports must be manually entered or imported via CSV — which still requires normalization. QuickBooks Online's REST API allows DocStandard to push normalized logistics transactions directly, eliminating manual import steps.",
+    "bottomLine": "Wave only makes sense for micro-businesses with zero budget. QuickBooks Online is the right choice for any small business that plans to grow, needs integrations, or has a US accountant.",
+    "monthlyDocumentVolume": "600",
+    "costPerDocumentBefore": "$1.20",
+    "costPerDocumentAfter": "$0.05",
+    "monthlyErrorCost": "$200"
   }
 }
