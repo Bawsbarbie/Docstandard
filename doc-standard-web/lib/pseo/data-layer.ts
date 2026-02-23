@@ -21,6 +21,8 @@ import systemsData from "@/data/software-systems.json"
 import documentsData from "@/data/documents.json"
 import hurdlesData from "@/data/hurdles.json"
 import locationsData from "@/data/locations.json"
+import systemProfilesData from "@/data/comparisons/system-profiles.json"
+import featureMatrixData from "@/data/comparisons/feature-matrix.json"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -370,5 +372,179 @@ export function estimatePageCount(
       integrationWithCity +
       cityCount +
       documentCount,
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Comparison Data Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface SystemProfile {
+  name: string
+  category: string
+  bestFor: string[]
+  pricing: { model: string; entry: string; typical: string }
+  api: { type: string; complexity: string; notes: string }
+  industries: string[]
+  strengths: string[]
+  weaknesses: string[]
+  integrationComplexity: string
+  typicalDataVolume: string
+  accountingSyncDifficulty: string
+  implementationMonths: string
+  errorRateWithoutNormalization: string
+  manualHoursPerDay: string
+}
+
+export interface ComparisonRow {
+  feature: string
+  [key: string]: string
+}
+
+export interface ComparisonData {
+  systems: string[]
+  category: string
+  useCase: string
+  winner: string
+  comparisonTable: ComparisonRow[]
+  chooseAIf: string[]
+  chooseBIf: string[]
+  integrationComplexity: Record<string, string>
+  estimatedSyncTime: Record<string, string>
+  docStandardFit: string
+  bottomLine: string
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Comparison Data Access
+// ─────────────────────────────────────────────────────────────────────────────
+
+const profiles = systemProfilesData as Record<string, SystemProfile>
+const matrix = featureMatrixData as Record<string, ComparisonData>
+
+/**
+ * Returns system profile for a given slug (e.g. "cargowise", "netsuite").
+ * Returns null if not found.
+ */
+export function getSystemProfile(slug: string): SystemProfile | null {
+  return profiles[slug] ?? null
+}
+
+/**
+ * Returns all system profile slugs.
+ */
+export function getAllSystemSlugs(): string[] {
+  return Object.keys(profiles)
+}
+
+/**
+ * Looks up feature-matrix data for a comparison page slug.
+ * The slug format is "{systemA}-vs-{systemB}".
+ * Also tries the reversed order "{systemB}-vs-{systemA}" for symmetry.
+ */
+export function getComparisonData(slugA: string, slugB: string): ComparisonData | null {
+  const key = `${slugA}-vs-${slugB}`
+  const reverseKey = `${slugB}-vs-${slugA}`
+  return matrix[key] ?? matrix[reverseKey] ?? null
+}
+
+/**
+ * Parses a comparison page slug (e.g. "netsuite-vs-dynamics365") into
+ * the two system keys, accounting for multi-word system names.
+ * Returns { slugA, slugB } or null if the slug doesn't look like a comparison.
+ */
+export function parseComparisonSlug(
+  slug: string
+): { slugA: string; slugB: string } | null {
+  // Find the "-vs-" separator
+  const vsIdx = slug.indexOf("-vs-")
+  if (vsIdx === -1) return null
+  const slugA = slug.slice(0, vsIdx)
+  const slugB = slug.slice(vsIdx + 4)
+  return { slugA, slugB }
+}
+
+/**
+ * Returns the full comparison data and both system profiles for a page slug.
+ * Also returns resolved display names for both systems.
+ */
+export function resolveComparison(pageSlug: string): {
+  slugA: string
+  slugB: string
+  nameA: string
+  nameB: string
+  profileA: SystemProfile | null
+  profileB: SystemProfile | null
+  comparisonData: ComparisonData | null
+} | null {
+  const parsed = parseComparisonSlug(pageSlug)
+  if (!parsed) return null
+
+  const { slugA, slugB } = parsed
+  const profileA = getSystemProfile(slugA)
+  const profileB = getSystemProfile(slugB)
+  const comparisonData = getComparisonData(slugA, slugB)
+
+  // Derive display names: prefer profile name, fall back to title-cased slug
+  const toDisplayName = (slug: string, profile: SystemProfile | null) =>
+    profile?.name ?? slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+
+  return {
+    slugA,
+    slugB,
+    nameA: toDisplayName(slugA, profileA),
+    nameB: toDisplayName(slugB, profileB),
+    profileA,
+    profileB,
+    comparisonData,
+  }
+}
+
+/**
+ * Derives a complexity label from a system slug.
+ * Used for ROI and integration complexity sections.
+ */
+export function calculateIntegrationComplexity(
+  systemSlug: string
+): "Low" | "Medium" | "High" | "Very High" {
+  const profile = getSystemProfile(systemSlug)
+  if (!profile) return "Medium"
+  const c = profile.integrationComplexity
+  if (c === "Very High") return "Very High"
+  if (c === "High") return "High"
+  if (c === "Medium") return "Medium"
+  return "Low"
+}
+
+/**
+ * Returns a DocStandard-specific ROI blurb for a system, based on its
+ * manual hours and error rate data.
+ */
+export function getSystemRoiStats(systemSlug: string): {
+  errorRate: string
+  manualHours: string
+  annualCostEstimate: string
+  syncDifficulty: string
+} {
+  const profile = getSystemProfile(systemSlug)
+  if (!profile) {
+    return {
+      errorRate: "~20%",
+      manualHours: "3–5 hrs/day",
+      annualCostEstimate: "$40,000–$80,000",
+      syncDifficulty: "Medium",
+    }
+  }
+  // Parse manual hours range and calculate annual cost estimate at $35/hr
+  const hours = profile.manualHoursPerDay
+  const low = parseFloat(hours.split("–")[0]) || 2
+  const high = parseFloat(hours.split("–")[1]) || 4
+  const annualLow = Math.round(low * 220 * 35 / 1000) * 1000
+  const annualHigh = Math.round(high * 220 * 35 / 1000) * 1000
+  return {
+    errorRate: profile.errorRateWithoutNormalization,
+    manualHours: `${hours} hrs/day`,
+    annualCostEstimate: `$${annualLow.toLocaleString()}–$${annualHigh.toLocaleString()}`,
+    syncDifficulty: profile.accountingSyncDifficulty,
   }
 }

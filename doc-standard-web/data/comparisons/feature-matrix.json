@@ -1,0 +1,3101 @@
+{
+  "cargowise-vs-magaya": {
+    "systems": [
+      "cargowise",
+      "magaya"
+    ],
+    "category": "TMS",
+    "useCase": "Freight forwarding and customs brokerage operations",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Implementation Time",
+        "cargowise": "4\u20138 months",
+        "magaya": "1\u20133 months",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Monthly Cost",
+        "cargowise": "$5K\u2013$30K/mo",
+        "magaya": "$1K\u2013$5K/mo",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Global Customs Coverage",
+        "cargowise": "130+ countries",
+        "magaya": "Americas-focused",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Accounting Sync Difficulty",
+        "cargowise": "High",
+        "magaya": "Medium",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Scalability",
+        "cargowise": "Enterprise-grade",
+        "magaya": "SMB to mid-market",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Carrier Integrations",
+        "cargowise": "500+",
+        "magaya": "100+",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Warehouse Module",
+        "cargowise": "Built-in",
+        "magaya": "Strong built-in",
+        "winner": "tie"
+      },
+      {
+        "feature": "Learning Curve",
+        "cargowise": "Steep",
+        "magaya": "Moderate",
+        "winner": "magaya"
+      }
+    ],
+    "chooseAIf": [
+      "You operate in 5+ countries with complex customs requirements",
+      "You handle 1,000+ shipments per month",
+      "You need deep air, ocean, and customs brokerage in one platform",
+      "You have budget for a large-scale deployment with dedicated IT"
+    ],
+    "chooseBIf": [
+      "You are a small-to-mid freight forwarder or NVOCC",
+      "You need to go live within 90 days",
+      "Your operations are primarily in North America or Latin America",
+      "Budget is under $3,000/month for your TMS"
+    ],
+    "integrationComplexity": {
+      "cargowise": "High",
+      "magaya": "Medium"
+    },
+    "estimatedSyncTime": {
+      "cargowise": "3\u20135 business days setup",
+      "magaya": "1\u20132 business days setup"
+    },
+    "docStandardFit": "Both require a normalization layer before accounting sync. CargoWise data is especially complex with nested cost lines; Magaya exports are more structured but still need field mapping to QuickBooks/Xero.",
+    "bottomLine": "CargoWise wins for global enterprise scale. Magaya wins for speed, cost, and SMB-friendly operations."
+  },
+  "cargowise-vs-sap-s4hana": {
+    "systems": [
+      "cargowise",
+      "sap-s4hana"
+    ],
+    "category": "TMS vs ERP",
+    "useCase": "Global logistics operations with enterprise ERP financial management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Logistics Depth",
+        "cargowise": "Industry-leading TMS",
+        "sap-s4hana": "SAP TM module required",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Financial Management",
+        "cargowise": "Basic financial module",
+        "sap-s4hana": "Best-in-class ERP finance",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Implementation Time",
+        "cargowise": "4\u20138 months",
+        "sap-s4hana": "18\u201336 months",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Total Cost",
+        "cargowise": "$5K\u2013$30K/mo",
+        "sap-s4hana": "$500K\u2013$5M+/yr",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Customs Compliance",
+        "cargowise": "Native, 130+ countries",
+        "sap-s4hana": "SAP GTS module required",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Financial Reporting",
+        "cargowise": "Limited",
+        "sap-s4hana": "Comprehensive",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Multi-Entity Support",
+        "cargowise": "Good",
+        "sap-s4hana": "Enterprise-grade",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Accounting Sync Difficulty",
+        "cargowise": "High to ERP",
+        "sap-s4hana": "Native",
+        "winner": "sap-s4hana"
+      }
+    ],
+    "chooseAIf": [
+      "Your primary need is logistics execution (forwarding, customs, brokerage)",
+      "You want a purpose-built TMS without ERP overhead",
+      "You don't already have SAP deployed company-wide",
+      "You need to be operational in under 12 months"
+    ],
+    "chooseBIf": [
+      "You are a manufacturing enterprise that needs ERP + logistics in one ecosystem",
+      "You already use SAP modules across finance, HR, and procurement",
+      "You have a 24-month runway for a full digital transformation",
+      "Your annual tech budget exceeds $2M"
+    ],
+    "integrationComplexity": {
+      "cargowise": "High",
+      "sap-s4hana": "Very High"
+    },
+    "estimatedSyncTime": {
+      "cargowise": "3\u20135 days (to external ERP)",
+      "sap-s4hana": "Native sync (within SAP)"
+    },
+    "docStandardFit": "CargoWise exports require normalization before loading into SAP or any ERP. If running CargoWise + SAP in parallel, DocStandard bridges the gap \u2014 normalizing CargoWise cost lines, house bills, and freight documents into SAP-ready formats.",
+    "bottomLine": "These are not direct competitors. Most enterprise logistics companies run both: CargoWise for execution, SAP for finance. DocStandard handles the data layer between them."
+  },
+  "cargowise-vs-netsuite": {
+    "systems": [
+      "cargowise",
+      "netsuite"
+    ],
+    "category": "TMS vs ERP",
+    "useCase": "Freight forwarding with mid-market ERP financial management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Logistics Execution",
+        "cargowise": "Full TMS + customs brokerage",
+        "netsuite": "Limited \u2014 requires 3PL module or 3rd party TMS",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Financial Management",
+        "cargowise": "Basic GL/AP/AR",
+        "netsuite": "Full ERP with multi-entity",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Freight Cost Accounting",
+        "cargowise": "Native accruals and invoicing",
+        "netsuite": "Requires TMS integration",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Cost",
+        "cargowise": "$5K\u2013$30K/mo",
+        "netsuite": "$2K\u2013$20K/mo",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Implementation Time",
+        "cargowise": "4\u20138 months",
+        "netsuite": "3\u20139 months",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Reporting & Analytics",
+        "cargowise": "Logistics-specific",
+        "netsuite": "Full financial + operational",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Data Normalization Need",
+        "cargowise": "High \u2014 to push to NetSuite",
+        "netsuite": "High \u2014 to receive logistics data",
+        "winner": "tie"
+      },
+      {
+        "feature": "Carrier Network",
+        "cargowise": "500+",
+        "netsuite": "Via 3rd party TMS only",
+        "winner": "cargowise"
+      }
+    ],
+    "chooseAIf": [
+      "Your core business is freight forwarding or customs brokerage",
+      "You need deep multi-modal logistics capabilities",
+      "You handle complex airway bills, house bills, and customs entries daily"
+    ],
+    "chooseBIf": [
+      "You are a shipper or logistics business needing unified ERP + operational data",
+      "You have multiple business entities and subsidiaries to consolidate",
+      "You want one system for finance, inventory, and CRM",
+      "Your logistics volume is secondary to your financial operations"
+    ],
+    "integrationComplexity": {
+      "cargowise": "High",
+      "netsuite": "High"
+    },
+    "estimatedSyncTime": {
+      "cargowise": "3\u20135 days",
+      "netsuite": "3\u20135 days"
+    },
+    "docStandardFit": "The CargoWise \u2192 NetSuite data sync is one of our most common integration use cases. CargoWise exports cost breakdowns, agent codes, and currency data in formats that require field mapping and normalization before NetSuite can process them as clean journal entries.",
+    "bottomLine": "Run CargoWise for freight execution, NetSuite for financial consolidation. DocStandard automates the bridge between the two."
+  },
+  "cargowise-vs-descartes": {
+    "systems": [
+      "cargowise",
+      "descartes"
+    ],
+    "category": "TMS",
+    "useCase": "Global freight forwarding and compliance vs route optimization and last-mile",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Global Customs",
+        "cargowise": "Native, 130+ countries",
+        "descartes": "Strong compliance modules",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Route Optimization",
+        "cargowise": "Basic",
+        "descartes": "Industry-leading",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Last-Mile Delivery",
+        "cargowise": "Not focused",
+        "descartes": "Core strength",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Ocean/Air Freight",
+        "cargowise": "Deep native support",
+        "descartes": "Available, less deep",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Carrier Network",
+        "cargowise": "500+ forwarding carriers",
+        "descartes": "Wide, route-focused",
+        "winner": "tie"
+      },
+      {
+        "feature": "Implementation Time",
+        "cargowise": "4\u20138 months",
+        "descartes": "3\u20136 months",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Cost",
+        "cargowise": "$5K\u2013$30K/mo",
+        "descartes": "$3K\u2013$15K/mo",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Accounting Sync",
+        "cargowise": "High complexity",
+        "descartes": "High complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Your business is freight forwarding or customs brokerage",
+      "You manage complex multi-modal international shipments",
+      "You need a single platform for air, ocean, customs, and invoicing"
+    ],
+    "chooseBIf": [
+      "Route optimization and last-mile delivery efficiency are your KPIs",
+      "You need strong regulatory compliance for domestic trucking",
+      "You're a shipper or carrier focused on delivery performance"
+    ],
+    "integrationComplexity": {
+      "cargowise": "High",
+      "descartes": "High"
+    },
+    "estimatedSyncTime": {
+      "cargowise": "3\u20135 days",
+      "descartes": "3\u20135 days"
+    },
+    "docStandardFit": "Both systems produce complex document outputs that require normalization before ERP import. CargoWise outputs house bills and costing; Descartes outputs delivery manifests and proof-of-delivery records \u2014 both need structured transformation for accounting sync.",
+    "bottomLine": "CargoWise for forwarding and customs; Descartes for delivery optimization and compliance. Both need a normalization layer for ERP."
+  },
+  "netsuite-vs-dynamics365": {
+    "systems": [
+      "netsuite",
+      "dynamics365"
+    ],
+    "category": "ERP",
+    "useCase": "Mid-to-enterprise financial management and supply chain",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Implementation Time",
+        "netsuite": "3\u20139 months",
+        "dynamics365": "6\u201312 months",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Microsoft 365 Integration",
+        "netsuite": "Limited",
+        "dynamics365": "Native",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Multi-Entity Management",
+        "netsuite": "Strong",
+        "dynamics365": "Good with F&O",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "eCommerce Native",
+        "netsuite": "SuiteCommerce built-in",
+        "dynamics365": "Via Commerce module",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "AI/Copilot Features",
+        "netsuite": "Limited AI",
+        "dynamics365": "Microsoft Copilot integration",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Licensing Model",
+        "netsuite": "Per-module annual",
+        "dynamics365": "Per-user per-app",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "netsuite": "High complexity",
+        "dynamics365": "Medium complexity",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Cost at 50 Users",
+        "netsuite": "~$5,000/mo",
+        "dynamics365": "~$7,500/mo (F&O)",
+        "winner": "netsuite"
+      }
+    ],
+    "chooseAIf": [
+      "You're a fast-growing eCommerce or wholesale company",
+      "You have multiple subsidiaries or legal entities to consolidate",
+      "You don't use Microsoft 365 across your company",
+      "You want a unified ERP + CRM + eCommerce in one platform"
+    ],
+    "chooseBIf": [
+      "Your company is deeply embedded in the Microsoft ecosystem (Teams, Azure, O365)",
+      "You need Copilot AI features across your ERP workflows",
+      "You're in manufacturing or distribution with complex supply chain planning",
+      "You prefer a modular approach \u2014 only buy the apps you need"
+    ],
+    "integrationComplexity": {
+      "netsuite": "High",
+      "dynamics365": "Medium"
+    },
+    "estimatedSyncTime": {
+      "netsuite": "3\u20135 days to set up logistics sync",
+      "dynamics365": "2\u20134 days to set up logistics sync"
+    },
+    "docStandardFit": "Both ERP systems require incoming logistics data (from CargoWise, Magaya, or TMS exports) to be normalized before import. Document fields, currency codes, and cost-center mappings differ between TMS exports and ERP expectations \u2014 DocStandard handles this transformation automatically.",
+    "bottomLine": "NetSuite wins for multi-entity eCommerce and mid-market scale without Microsoft dependency. Dynamics 365 wins for Microsoft-first organizations needing AI-driven workflows."
+  },
+  "netsuite-vs-sap-s4hana": {
+    "systems": [
+      "netsuite",
+      "sap-s4hana"
+    ],
+    "category": "ERP",
+    "useCase": "Enterprise financial operations and supply chain management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target Company Size",
+        "netsuite": "Mid-market ($5M\u2013$500M revenue)",
+        "sap-s4hana": "Enterprise ($500M+)",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Implementation Time",
+        "netsuite": "3\u20139 months",
+        "sap-s4hana": "18\u201336 months",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Total 5-Year Cost",
+        "netsuite": "$200K\u2013$1M",
+        "sap-s4hana": "$5M\u2013$50M+",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Manufacturing Depth",
+        "netsuite": "Moderate",
+        "sap-s4hana": "Best-in-class",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Financial Consolidation",
+        "netsuite": "Strong multi-entity",
+        "sap-s4hana": "Superior \u2014 group reporting",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Customization Flexibility",
+        "netsuite": "SuiteScript",
+        "sap-s4hana": "ABAP + BTP",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Partner Ecosystem",
+        "netsuite": "Large SI network",
+        "sap-s4hana": "Massive SAP partner network",
+        "winner": "sap-s4hana"
+      },
+      {
+        "feature": "Logistics Data Sync Ease",
+        "netsuite": "Medium-High",
+        "sap-s4hana": "High",
+        "winner": "netsuite"
+      }
+    ],
+    "chooseAIf": [
+      "Your revenue is between $5M and $500M with growth plans",
+      "You want to be live in under 12 months",
+      "You don't have an in-house SAP team",
+      "You need unified eCommerce + ERP + CRM without enterprise complexity"
+    ],
+    "chooseBIf": [
+      "You're a manufacturing or chemicals enterprise with 1,000+ employees",
+      "You have a multi-year digital transformation budget",
+      "You need best-in-class procurement, manufacturing, and financial consolidation",
+      "You already use SAP modules across your organization"
+    ],
+    "integrationComplexity": {
+      "netsuite": "High",
+      "sap-s4hana": "Very High"
+    },
+    "estimatedSyncTime": {
+      "netsuite": "3\u20135 days",
+      "sap-s4hana": "5\u201310 days initial configuration"
+    },
+    "docStandardFit": "Logistics data (from TMS exports) needs normalization before reaching either platform. SAP BAPI/OData field requirements are stricter; NetSuite SuiteTalk tolerates more variation. DocStandard normalizes upstream TMS data to whichever ERP format is required.",
+    "bottomLine": "NetSuite is the default choice for mid-market companies that need a capable ERP without SAP complexity. SAP S/4HANA is for enterprises that need the most powerful system money can buy."
+  },
+  "magaya-vs-netsuite": {
+    "systems": [
+      "magaya",
+      "netsuite"
+    ],
+    "category": "TMS vs ERP",
+    "useCase": "Small freight forwarder financial and operations management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Freight Operations",
+        "magaya": "Purpose-built TMS",
+        "netsuite": "Limited without 3PL module",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Financial Reporting",
+        "magaya": "Basic GL/invoicing",
+        "netsuite": "Full ERP financial suite",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Cost",
+        "magaya": "$1K\u2013$5K/mo",
+        "netsuite": "$2K\u2013$20K/mo",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Implementation Speed",
+        "magaya": "1\u20133 months",
+        "netsuite": "3\u20139 months",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Multi-Entity Support",
+        "magaya": "Limited",
+        "netsuite": "Strong",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Accounting Sync to ERP",
+        "magaya": "Medium complexity",
+        "netsuite": "N/A (is the ERP)",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "Customs Brokerage",
+        "magaya": "Moderate",
+        "netsuite": "Not native",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Scalability",
+        "magaya": "SMB to mid-market",
+        "netsuite": "Mid-market to enterprise",
+        "winner": "netsuite"
+      }
+    ],
+    "chooseAIf": [
+      "You are a small-to-mid freight forwarder who needs a complete TMS fast",
+      "Your primary need is shipment management, not multi-entity financials",
+      "You are in North America or Latin America"
+    ],
+    "chooseBIf": [
+      "You need unified ERP + CRM + financial management as your primary system",
+      "You have multiple business entities to consolidate",
+      "Your logistics is just one part of a broader operational business"
+    ],
+    "integrationComplexity": {
+      "magaya": "Medium",
+      "netsuite": "High"
+    },
+    "estimatedSyncTime": {
+      "magaya": "1\u20132 days",
+      "netsuite": "3\u20135 days"
+    },
+    "docStandardFit": "Magaya \u2192 NetSuite is a common integration pattern for growing freight forwarders. Magaya generates structured but proprietary export formats; DocStandard normalizes them into NetSuite-ready AP/AR transactions and freight cost journal entries.",
+    "bottomLine": "Start with Magaya as your TMS. When financial complexity grows (multi-entity, consolidated reporting), layer in NetSuite. DocStandard keeps them in sync."
+  },
+  "shipstation-vs-3pl-central": {
+    "systems": [
+      "shipstation",
+      "3pl-central"
+    ],
+    "category": "WMS/Shipping",
+    "useCase": "eCommerce fulfillment and warehouse management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target User",
+        "shipstation": "eCommerce sellers (Shopify, Amazon)",
+        "3pl-central": "3PL warehouse operators",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Monthly Cost",
+        "shipstation": "$9.99\u2013$299/mo",
+        "3pl-central": "$500\u2013$5K/mo",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "Multi-Client Support",
+        "shipstation": "Limited",
+        "3pl-central": "Core feature",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Billing Automation",
+        "shipstation": "Basic",
+        "3pl-central": "Advanced 3PL billing engine",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Carrier Rate Shopping",
+        "shipstation": "150+ carriers, real-time rates",
+        "3pl-central": "Good, EDI-focused",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "eCommerce Integrations",
+        "shipstation": "100+ platforms (Shopify, WooCommerce)",
+        "3pl-central": "50+ platforms",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "Warehouse Operations",
+        "shipstation": "Basic pick/pack",
+        "3pl-central": "Full WMS with slotting and cycle count",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Accounting Sync",
+        "shipstation": "Low complexity",
+        "3pl-central": "Medium complexity",
+        "winner": "shipstation"
+      }
+    ],
+    "chooseAIf": [
+      "You are an eCommerce seller managing your own shipping",
+      "You sell on Shopify, Amazon, or WooCommerce and need multi-carrier label printing",
+      "Budget is under $300/month",
+      "You ship from your own location (not a warehouse business)"
+    ],
+    "chooseBIf": [
+      "You run a 3PL that manages inventory and fulfillment for multiple clients",
+      "You need client billing, receiving workflows, and warehouse-level inventory tracking",
+      "Your warehouse handles 500+ SKUs across multiple customers",
+      "You need a scalable WMS that grows with your 3PL business"
+    ],
+    "integrationComplexity": {
+      "shipstation": "Low",
+      "3pl-central": "Medium"
+    },
+    "estimatedSyncTime": {
+      "shipstation": "Same day",
+      "3pl-central": "1\u20132 days"
+    },
+    "docStandardFit": "Both platforms generate shipping and inventory documents that require normalization before QuickBooks or Xero can process them as clean accounting entries. ShipStation is simpler; 3PL Central generates complex multi-client billing data.",
+    "bottomLine": "ShipStation for eCommerce sellers who ship their own orders. 3PL Central for 3PL businesses managing inventory and billing for multiple clients."
+  },
+  "samsara-vs-verizon-connect": {
+    "systems": [
+      "samsara",
+      "verizon-connect"
+    ],
+    "category": "Fleet",
+    "useCase": "Fleet telematics, ELD compliance, and driver management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Hardware Quality",
+        "samsara": "Best-in-class dashcams",
+        "verizon-connect": "Solid, wide hardware range",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Network Reliability",
+        "samsara": "Multi-carrier SIM",
+        "verizon-connect": "Verizon 4G LTE",
+        "winner": "verizon-connect"
+      },
+      {
+        "feature": "AI Safety Features",
+        "samsara": "Industry-leading AI coaching",
+        "verizon-connect": "Basic driver alerts",
+        "winner": "samsara"
+      },
+      {
+        "feature": "ELD Compliance",
+        "samsara": "FMCSA certified, easy",
+        "verizon-connect": "FMCSA certified",
+        "winner": "tie"
+      },
+      {
+        "feature": "Customer Support",
+        "samsara": "Generally strong",
+        "verizon-connect": "Frequently cited as poor",
+        "winner": "samsara"
+      },
+      {
+        "feature": "API Quality",
+        "samsara": "Excellent REST API",
+        "verizon-connect": "Available, less developer-friendly",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Cost per Vehicle",
+        "samsara": "$50\u2013$150/mo",
+        "verizon-connect": "$40\u2013$100/mo",
+        "winner": "verizon-connect"
+      },
+      {
+        "feature": "Accounting Data Sync",
+        "samsara": "Medium \u2014 needs normalization",
+        "verizon-connect": "Medium \u2014 needs normalization",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Driver safety and AI coaching are top priorities",
+      "You want the best dashcam technology on the market",
+      "Your IT team wants to build integrations via a developer-friendly API",
+      "You value a strong NPS and customer support experience"
+    ],
+    "chooseBIf": [
+      "Network reliability in remote areas is critical and Verizon coverage is superior locally",
+      "You want to bundle fleet management with existing Verizon business accounts",
+      "Cost is the primary driver and Verizon pricing is more competitive for your fleet size"
+    ],
+    "integrationComplexity": {
+      "samsara": "Low",
+      "verizon-connect": "Medium"
+    },
+    "estimatedSyncTime": {
+      "samsara": "Same day via webhook",
+      "verizon-connect": "1\u20132 days"
+    },
+    "docStandardFit": "IFTA fuel tax reporting, driver hours, and vehicle inspection documents from both platforms need normalization before they can be imported into accounting systems. DocStandard converts fleet telematics exports into clean, audit-ready journal entries.",
+    "bottomLine": "Samsara is the consensus best-in-class for driver safety and AI. Verizon Connect wins where network coverage or bundled pricing with existing Verizon accounts is a deciding factor."
+  },
+  "samsara-vs-motive": {
+    "systems": [
+      "samsara",
+      "motive"
+    ],
+    "category": "Fleet",
+    "useCase": "ELD compliance and fleet management for carriers",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target Fleet Size",
+        "samsara": "Mid to enterprise fleets",
+        "motive": "Owner-operators to mid fleets",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Cost per Truck",
+        "samsara": "$50\u2013$150/mo",
+        "motive": "$35\u2013$85/mo",
+        "winner": "motive"
+      },
+      {
+        "feature": "ELD Compliance",
+        "samsara": "Full FMCSA",
+        "motive": "Full FMCSA",
+        "winner": "tie"
+      },
+      {
+        "feature": "IFTA Reporting",
+        "samsara": "Available",
+        "motive": "Built-in, easy to use",
+        "winner": "motive"
+      },
+      {
+        "feature": "AI Dashcams",
+        "samsara": "Best-in-class",
+        "motive": "Good, improving rapidly",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Driver App",
+        "samsara": "Strong",
+        "motive": "Highly rated by drivers",
+        "winner": "motive"
+      },
+      {
+        "feature": "Dispatch Tools",
+        "samsara": "Good",
+        "motive": "Strong for carrier dispatch",
+        "winner": "tie"
+      },
+      {
+        "feature": "Accounting Integration",
+        "samsara": "Medium complexity",
+        "motive": "IFTA-to-accounting is key use case",
+        "winner": "motive"
+      }
+    ],
+    "chooseAIf": [
+      "You have a mid-to-large fleet and want the best AI safety technology",
+      "Enterprise features like advanced analytics and fleet utilization scoring matter",
+      "Your IT team wants to integrate fleet data with ERP via modern REST API"
+    ],
+    "chooseBIf": [
+      "You are an owner-operator or manage a small-to-mid fleet on a tight budget",
+      "IFTA reporting and simple driver HOS logging are your primary needs",
+      "Driver satisfaction with the mobile app is important for retention"
+    ],
+    "integrationComplexity": {
+      "samsara": "Low",
+      "motive": "Low"
+    },
+    "estimatedSyncTime": {
+      "samsara": "Same day",
+      "motive": "Same day"
+    },
+    "docStandardFit": "IFTA fuel tax reports from both platforms require field normalization (jurisdiction codes, fuel types, mileage by state) before they can be imported into QuickBooks or SAP as tax-compliant journal entries. DocStandard automates this mapping.",
+    "bottomLine": "Samsara for enterprise fleets that need best-in-class AI safety. Motive for cost-conscious carriers and owner-operators who need simple, reliable ELD and IFTA tools."
+  },
+  "quickbooks-online-vs-xero": {
+    "systems": [
+      "quickbooks-online",
+      "xero"
+    ],
+    "category": "Accounting",
+    "useCase": "SMB accounting and bookkeeping for logistics-adjacent businesses",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "US Market Share",
+        "quickbooks-online": "Dominant (~80% US SMB market)",
+        "xero": "Strong in AU/NZ/UK; growing in US",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Ease of Use",
+        "quickbooks-online": "Easy",
+        "xero": "Very easy",
+        "winner": "xero"
+      },
+      {
+        "feature": "Payroll (US)",
+        "quickbooks-online": "Native + strong",
+        "xero": "Gusto integration",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "App Marketplace",
+        "quickbooks-online": "700+ integrations",
+        "xero": "1,000+ integrations",
+        "winner": "xero"
+      },
+      {
+        "feature": "Cost",
+        "quickbooks-online": "$30\u2013$200/mo",
+        "xero": "$13\u2013$70/mo",
+        "winner": "xero"
+      },
+      {
+        "feature": "Multi-Currency",
+        "quickbooks-online": "Advanced plan only",
+        "xero": "All plans",
+        "winner": "xero"
+      },
+      {
+        "feature": "Bank Reconciliation",
+        "quickbooks-online": "Strong",
+        "xero": "Excellent",
+        "winner": "xero"
+      },
+      {
+        "feature": "Accountant Network",
+        "quickbooks-online": "Dominant in US",
+        "xero": "Preferred in AU/NZ/UK",
+        "winner": "contextual"
+      }
+    ],
+    "chooseAIf": [
+      "You are a US-based business with a US accountant",
+      "You need native payroll without adding a third-party tool",
+      "Your industry-specific software integrates with QuickBooks first"
+    ],
+    "chooseBIf": [
+      "You are based in Australia, New Zealand, UK, or South Africa",
+      "Cost is a primary concern and multi-currency is needed from day one",
+      "You want a cleaner UI and a larger app marketplace"
+    ],
+    "integrationComplexity": {
+      "quickbooks-online": "Low",
+      "xero": "Low"
+    },
+    "estimatedSyncTime": {
+      "quickbooks-online": "Same day",
+      "xero": "Same day"
+    },
+    "docStandardFit": "Both platforms accept logistics data via CSV import or API. However, TMS exports (CargoWise, Magaya, ShipStation) need field normalization before they become clean QBO or Xero transactions. Without normalization, freight cost lines, agent codes, and currency conversions create reconciliation errors.",
+    "bottomLine": "QuickBooks Online for US businesses with US payroll needs. Xero for international businesses, cost-sensitive SMBs, and companies that value a larger app ecosystem."
+  },
+  "quickbooks-online-vs-quickbooks-desktop": {
+    "systems": [
+      "quickbooks-online",
+      "quickbooks-desktop"
+    ],
+    "category": "Accounting",
+    "useCase": "US SMB accounting: cloud vs local installation",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Deployment",
+        "quickbooks-online": "Cloud-only",
+        "quickbooks-desktop": "Local install + optional hosting",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Inventory Management",
+        "quickbooks-online": "Basic (Plus plan)",
+        "quickbooks-desktop": "Advanced inventory tracking",
+        "winner": "quickbooks-desktop"
+      },
+      {
+        "feature": "Job Costing",
+        "quickbooks-online": "Limited",
+        "quickbooks-desktop": "Strong (Premier, Enterprise)",
+        "winner": "quickbooks-desktop"
+      },
+      {
+        "feature": "Remote Access",
+        "quickbooks-online": "Native cloud access",
+        "quickbooks-desktop": "Requires hosting service",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Integrations",
+        "quickbooks-online": "700+ modern integrations",
+        "quickbooks-desktop": "Limited to SDK-based connectors",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Pricing",
+        "quickbooks-online": "$30\u2013$200/mo subscription",
+        "quickbooks-desktop": "$549\u2013$1,340/yr license",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Future-Proofing",
+        "quickbooks-online": "Intuit's primary investment",
+        "quickbooks-desktop": "Declining investment from Intuit",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "quickbooks-online": "Low complexity via API",
+        "quickbooks-desktop": "Medium \u2014 SDK or file import",
+        "winner": "quickbooks-online"
+      }
+    ],
+    "chooseAIf": [
+      "You work remotely or have a distributed accounting team",
+      "You want modern app integrations with your TMS or shipping platform",
+      "You're starting fresh and want Intuit's long-term supported product"
+    ],
+    "chooseBIf": [
+      "You have complex manufacturing inventory or job costing needs",
+      "You work offline or in a regulated environment requiring local data control",
+      "Your accountant or legacy software already requires QuickBooks Desktop"
+    ],
+    "integrationComplexity": {
+      "quickbooks-online": "Low",
+      "quickbooks-desktop": "Medium"
+    },
+    "estimatedSyncTime": {
+      "quickbooks-online": "Same day via API",
+      "quickbooks-desktop": "1\u20132 days via IIF file import"
+    },
+    "docStandardFit": "TMS exports require normalization regardless of which QuickBooks version you use. QBO accepts clean JSON via REST API; Desktop requires IIF or CSV. DocStandard outputs to both formats, ensuring freight cost data enters either platform as audit-ready transactions.",
+    "bottomLine": "QuickBooks Online is the right choice for most businesses going forward. Desktop only makes sense if you have deep inventory or job-costing requirements that QBO's Plus plan can't match."
+  },
+  "sage-intacct-vs-netsuite": {
+    "systems": [
+      "sage-intacct",
+      "netsuite"
+    ],
+    "category": "ERP",
+    "useCase": "Mid-market financial management and multi-entity accounting",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target Industry",
+        "sage-intacct": "Non-profits, healthcare, SaaS",
+        "netsuite": "eCommerce, wholesale, multi-entity",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Financial Reporting",
+        "sage-intacct": "Best-in-class for multi-dim reporting",
+        "netsuite": "Strong, customizable",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Inventory Management",
+        "sage-intacct": "Limited (add-on)",
+        "netsuite": "Strong native",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "eCommerce Integration",
+        "sage-intacct": "Via 3rd party",
+        "netsuite": "SuiteCommerce native",
+        "winner": "netsuite"
+      },
+      {
+        "feature": "AICPA Preferred",
+        "sage-intacct": "Yes \u2014 AICPA technology partner",
+        "netsuite": "Not specifically",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Cost",
+        "sage-intacct": "$2K\u2013$10K/mo",
+        "netsuite": "$2K\u2013$20K/mo",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Logistics Data Integration",
+        "sage-intacct": "Medium complexity",
+        "netsuite": "High complexity",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Multi-Currency",
+        "sage-intacct": "Strong",
+        "netsuite": "Strong",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "You are in non-profit, healthcare, professional services, or SaaS",
+      "Multi-dimensional financial reporting is your primary need",
+      "Your accountant or auditor recommends AICPA-aligned software"
+    ],
+    "chooseBIf": [
+      "You have complex inventory or eCommerce operations",
+      "You need a unified ERP with CRM, inventory, and financial management",
+      "You have multiple subsidiaries that share inventory and operations"
+    ],
+    "integrationComplexity": {
+      "sage-intacct": "Medium",
+      "netsuite": "High"
+    },
+    "estimatedSyncTime": {
+      "sage-intacct": "2\u20133 days",
+      "netsuite": "3\u20135 days"
+    },
+    "docStandardFit": "Logistics billing data (freight invoices, customs entries, carrier charges) needs normalization before either platform can process it as clean multi-dimensional GL entries. Sage Intacct requires specific dimension IDs; NetSuite requires subsidiary and class mapping. DocStandard handles both.",
+    "bottomLine": "Sage Intacct for service businesses and non-profits that need powerful financial reporting. NetSuite for product-based companies that need inventory + finance + CRM in one."
+  },
+  "acumatica-vs-dynamics-bc": {
+    "systems": [
+      "acumatica",
+      "dynamics-bc"
+    ],
+    "category": "ERP",
+    "useCase": "Mid-market ERP for distribution and manufacturing companies",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Pricing Model",
+        "acumatica": "Consumption-based (no per-user fee)",
+        "dynamics-bc": "$70\u2013$100/user/mo",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Microsoft Integration",
+        "acumatica": "Via connectors",
+        "dynamics-bc": "Native Teams, Excel, Outlook",
+        "winner": "dynamics-bc"
+      },
+      {
+        "feature": "Implementation Time",
+        "acumatica": "3\u20138 months",
+        "dynamics-bc": "3\u20136 months",
+        "winner": "dynamics-bc"
+      },
+      {
+        "feature": "Construction Module",
+        "acumatica": "Industry-leading",
+        "dynamics-bc": "Limited",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Scalability",
+        "acumatica": "Scales to enterprise without re-platform",
+        "dynamics-bc": "Upgrade to D365 F&O needed at enterprise",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "acumatica": "Medium complexity",
+        "dynamics-bc": "Low-Medium complexity",
+        "winner": "dynamics-bc"
+      },
+      {
+        "feature": "Partner Network",
+        "acumatica": "Growing, smaller than Microsoft",
+        "dynamics-bc": "Massive Microsoft VAR network",
+        "winner": "dynamics-bc"
+      },
+      {
+        "feature": "Customization",
+        "acumatica": "Strong low-code platform",
+        "dynamics-bc": "AL extensions, requires developer",
+        "winner": "acumatica"
+      }
+    ],
+    "chooseAIf": [
+      "You have many users and want to avoid per-user licensing costs",
+      "You are in construction, manufacturing, or field service",
+      "You want to scale to enterprise without switching platforms",
+      "Customizability is more important than Microsoft ecosystem depth"
+    ],
+    "chooseBIf": [
+      "Your team relies heavily on Microsoft 365, Teams, and Excel daily",
+      "You want the largest possible partner/consultant network",
+      "You are upgrading from legacy Microsoft products (NAV, GP)"
+    ],
+    "integrationComplexity": {
+      "acumatica": "Medium",
+      "dynamics-bc": "Medium"
+    },
+    "estimatedSyncTime": {
+      "acumatica": "2\u20133 days",
+      "dynamics-bc": "2\u20133 days"
+    },
+    "docStandardFit": "Both platforms require incoming logistics documents (shipping manifests, customs entries, freight invoices) to be mapped to their specific field structures. DocStandard normalizes TMS exports into either platform's import format \u2014 whether that's Acumatica's import scenarios or Business Central's data migration templates.",
+    "bottomLine": "Acumatica wins on pricing flexibility and scalability without platform changes. Business Central wins for Microsoft-centric teams and the VAR ecosystem."
+  },
+  "excel-vs-automated-extraction": {
+    "systems": [
+      "excel",
+      "automated-extraction"
+    ],
+    "category": "Manual vs Automated",
+    "useCase": "Document data entry and logistics accounting reconciliation",
+    "winner": "automated-extraction",
+    "comparisonTable": [
+      {
+        "feature": "Error Rate",
+        "excel": "35% on average",
+        "automated-extraction": "5% average",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "Processing Speed",
+        "excel": "4\u20138 hrs/day per FTE",
+        "automated-extraction": "Minutes per batch",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "Scalability",
+        "excel": "Not scalable \u2014 linear FTE cost",
+        "automated-extraction": "Scales with volume at fixed cost",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "Setup Cost",
+        "excel": "$0 (already licensed)",
+        "automated-extraction": "$500\u2013$5K/mo",
+        "winner": "excel"
+      },
+      {
+        "feature": "Audit Trail",
+        "excel": "Manual version control",
+        "automated-extraction": "Full timestamped log",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "ERP Readiness",
+        "excel": "Requires manual field mapping",
+        "automated-extraction": "ERP-ready output",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "Staff Required",
+        "excel": "1\u20133 FTE for medium volume",
+        "automated-extraction": "0.25 FTE for QA",
+        "winner": "automated-extraction"
+      },
+      {
+        "feature": "Year 1 Cost (1,000 docs/mo)",
+        "excel": "~$72,000 in FTE time",
+        "automated-extraction": "$6,000\u2013$15,000",
+        "winner": "automated-extraction"
+      }
+    ],
+    "chooseAIf": [
+      "You process fewer than 50 documents per month",
+      "You have zero budget for software tools",
+      "Your document formats change constantly and require human interpretation"
+    ],
+    "chooseBIf": [
+      "You process 50+ documents per month and want to eliminate manual re-keying",
+      "Your accounting team spends more than 2 hours/day on data entry",
+      "Audit compliance and data accuracy are top priorities",
+      "You want to scale operations without hiring more data entry staff"
+    ],
+    "integrationComplexity": {
+      "excel": "N/A",
+      "automated-extraction": "Low"
+    },
+    "estimatedSyncTime": {
+      "excel": "Manual \u2014 4\u20138 hrs per batch",
+      "automated-extraction": "15 minutes per batch"
+    },
+    "docStandardFit": "DocStandard is the automated extraction layer. It replaces Excel-based manual data entry with a normalized, ERP-ready output from your TMS or logistics documents \u2014 eliminating the 35% error rate that comes with manual re-keying.",
+    "bottomLine": "Excel only makes financial sense below 50 documents/month. Above that, automated extraction pays for itself in reduced FTE time and error correction costs within 3 months."
+  },
+  "manual-processing-vs-outsourced-processing": {
+    "systems": [
+      "manual-processing",
+      "outsourced-processing"
+    ],
+    "category": "Manual vs Service",
+    "useCase": "Document processing workflow for logistics and accounting teams",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Cost per Document",
+        "manual-processing": "$2\u2013$5 (FTE cost)",
+        "outsourced-processing": "$0.10\u2013$0.50",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "Control Over Output",
+        "manual-processing": "Full control",
+        "outsourced-processing": "Limited \u2014 depends on vendor",
+        "winner": "manual-processing"
+      },
+      {
+        "feature": "Data Security",
+        "manual-processing": "Internal \u2014 no data sharing",
+        "outsourced-processing": "Risk: documents leave your systems",
+        "winner": "manual-processing"
+      },
+      {
+        "feature": "Turnaround Time",
+        "manual-processing": "Real-time to 24hrs",
+        "outsourced-processing": "24\u201372 hrs typically",
+        "winner": "manual-processing"
+      },
+      {
+        "feature": "Scalability",
+        "manual-processing": "Linear FTE cost to scale",
+        "outsourced-processing": "Variable \u2014 scales without hiring",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "Error Rate",
+        "manual-processing": "42% average",
+        "outsourced-processing": "22% average",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "ERP-Ready Output",
+        "manual-processing": "Requires internal effort",
+        "outsourced-processing": "Often CSV \u2014 still needs mapping",
+        "winner": "tie"
+      },
+      {
+        "feature": "Compliance Risk",
+        "manual-processing": "Internal accountability",
+        "outsourced-processing": "Shared vendor risk",
+        "winner": "manual-processing"
+      }
+    ],
+    "chooseAIf": [
+      "Data security and confidentiality are non-negotiable",
+      "Your documents require complex business rules that only your team understands",
+      "You need real-time processing, not 24-72 hour turnaround",
+      "Volume is low (< 200 docs/month) and existing staff can absorb it"
+    ],
+    "chooseBIf": [
+      "You have predictable volume peaks you can't staff for internally",
+      "Cost per document is the primary metric and budget is limited",
+      "Your documents are standardized formats (BOL, invoice) with low rule complexity",
+      "You're in a region with labor cost advantages for outsourced vendors"
+    ],
+    "integrationComplexity": {
+      "manual-processing": "N/A",
+      "outsourced-processing": "Low"
+    },
+    "estimatedSyncTime": {
+      "manual-processing": "Real-time",
+      "outsourced-processing": "24\u201372 hrs"
+    },
+    "docStandardFit": "Both approaches produce output that still requires normalization before ERP import. DocStandard works alongside either \u2014 normalizing manual entries and outsourced CSVs into clean, ERP-ready, audit-compliant formats that don't need further manipulation.",
+    "bottomLine": "Manual processing is cheaper at very low volume and where security matters most. Outsourced processing wins on cost at scale but introduces quality and turnaround risks. Both are superseded by automated normalization above 200 docs/month."
+  },
+  "edi-vs-api-integration": {
+    "systems": [
+      "edi",
+      "api-integration"
+    ],
+    "category": "Technical",
+    "useCase": "B2B data exchange between logistics and financial systems",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Industry Standard",
+        "edi": "Required by large retailers and carriers",
+        "api-integration": "Modern tech-forward companies",
+        "winner": "edi"
+      },
+      {
+        "feature": "Setup Cost",
+        "edi": "$200\u2013$500/mo VAN + $2K\u2013$10K build",
+        "api-integration": "$10K\u2013$50K+ build",
+        "winner": "edi"
+      },
+      {
+        "feature": "Real-Time Data",
+        "edi": "Batch (not real-time)",
+        "api-integration": "Real-time with webhooks",
+        "winner": "api-integration"
+      },
+      {
+        "feature": "Error Recovery",
+        "edi": "Manual acknowledgement (997/999)",
+        "api-integration": "Programmatic retry logic",
+        "winner": "api-integration"
+      },
+      {
+        "feature": "Trading Partner Requirement",
+        "edi": "Many retailers mandate X12 EDI",
+        "api-integration": "Not mandated, flexible",
+        "winner": "edi"
+      },
+      {
+        "feature": "Maintenance",
+        "edi": "Stable standard \u2014 low ongoing cost",
+        "api-integration": "High \u2014 breaks when source changes",
+        "winner": "edi"
+      },
+      {
+        "feature": "Data Normalization",
+        "edi": "Structured but still needs field mapping",
+        "api-integration": "Raw \u2014 always needs normalization layer",
+        "winner": "edi"
+      },
+      {
+        "feature": "Developer Dependency",
+        "edi": "Low post-setup",
+        "api-integration": "High ongoing",
+        "winner": "edi"
+      }
+    ],
+    "chooseAIf": [
+      "Your trading partners (retailers, carriers) mandate EDI compliance",
+      "You need a low-maintenance, stable B2B data pipeline",
+      "Volume is high and predictable \u2014 EDI VAN costs are justified"
+    ],
+    "chooseBIf": [
+      "Your partners have modern REST APIs and real-time data is required",
+      "You are building a custom integration for a unique workflow not covered by EDI standards",
+      "Your company has engineering resources to maintain custom API integrations"
+    ],
+    "integrationComplexity": {
+      "edi": "High",
+      "api-integration": "Very High"
+    },
+    "estimatedSyncTime": {
+      "edi": "Batch \u2014 2\u20134 hrs per cycle",
+      "api-integration": "Real-time to minutes"
+    },
+    "docStandardFit": "Whether your logistics data arrives via EDI or API, it still needs normalization before your ERP can process it as clean accounting entries. DocStandard sits after the data arrives \u2014 normalizing EDI 810s, 856s, or raw API payloads into ERP-ready, audit-compliant formats.",
+    "bottomLine": "EDI is the pragmatic choice when trading partners mandate it. API integration is the modern choice for real-time workflows. Most logistics companies need both \u2014 and both produce data that needs normalization before ERP."
+  },
+  "flexport-vs-cargowise": {
+    "systems": [
+      "flexport",
+      "cargowise"
+    ],
+    "category": "TMS",
+    "useCase": "Digital freight forwarding vs traditional enterprise TMS",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "User Experience",
+        "flexport": "Modern, intuitive UI",
+        "cargowise": "Powerful but complex UI",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Implementation Time",
+        "flexport": "Days to weeks",
+        "cargowise": "4\u20138 months",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Customs Depth",
+        "flexport": "Good for standard imports/exports",
+        "cargowise": "130+ country compliance",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Ocean Freight Network",
+        "flexport": "Strong, carrier-agnostic",
+        "cargowise": "Carrier-integrated",
+        "winner": "tie"
+      },
+      {
+        "feature": "Freight Forwarding Depth",
+        "flexport": "eCommerce-first, good for standard shipments",
+        "cargowise": "Enterprise freight forwarding",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "API Quality",
+        "flexport": "Excellent REST API",
+        "cargowise": "XML/SOAP \u2014 complex",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Cost for SMBs",
+        "flexport": "Freight markup model \u2014 often cheaper for low volume",
+        "cargowise": "$5K+/mo not viable for SMBs",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Enterprise Scalability",
+        "flexport": "Mid-market ceiling",
+        "cargowise": "Enterprise-grade, no ceiling",
+        "winner": "cargowise"
+      }
+    ],
+    "chooseAIf": [
+      "You are an importer or exporter (not a freight forwarder by trade)",
+      "You want a simple, modern interface for managing ocean and air shipments",
+      "You process under 200 shipments per month",
+      "Speed of onboarding is a priority"
+    ],
+    "chooseBIf": [
+      "Your business IS freight forwarding \u2014 you move freight for other companies",
+      "You need deep customs brokerage capability in multiple countries",
+      "You process 500+ complex multi-modal shipments per month",
+      "You run a 3PL or NVO that needs a full freight operations platform"
+    ],
+    "integrationComplexity": {
+      "flexport": "Low",
+      "cargowise": "High"
+    },
+    "estimatedSyncTime": {
+      "flexport": "Same day via REST API",
+      "cargowise": "3\u20135 business days"
+    },
+    "docStandardFit": "Flexport's clean REST API makes data extraction easier, but its output still needs field mapping for ERP import. CargoWise data is significantly more complex. DocStandard normalizes both into ERP-ready formats \u2014 handling Flexport's shipment events and CargoWise's cost line items.",
+    "bottomLine": "Flexport is the digital-native choice for shippers and importers. CargoWise is the operational backbone for freight forwarders, customs brokers, and 3PLs."
+  },
+  "oracle-otm-vs-sap-tm": {
+    "systems": [
+      "oracle-otm",
+      "sap-tm"
+    ],
+    "category": "TMS",
+    "useCase": "Enterprise transport management for large manufacturers and shippers",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "ERP Ecosystem",
+        "oracle-otm": "Oracle ERP Cloud, JDE, E-Business Suite",
+        "sap-tm": "SAP S/4HANA, SAP ECC",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Implementation Time",
+        "oracle-otm": "12\u201324 months",
+        "sap-tm": "12\u201318 months",
+        "winner": "sap-tm"
+      },
+      {
+        "feature": "Multi-Modal Planning",
+        "oracle-otm": "Industry-leading configurability",
+        "sap-tm": "Strong, tightly integrated with SAP",
+        "winner": "oracle-otm"
+      },
+      {
+        "feature": "Cost",
+        "oracle-otm": "$300K\u2013$2M+/yr",
+        "sap-tm": "$200K\u2013$1M+/yr",
+        "winner": "sap-tm"
+      },
+      {
+        "feature": "Carrier Management",
+        "oracle-otm": "Strong contract and rate management",
+        "sap-tm": "Good, tighter SAP integration",
+        "winner": "oracle-otm"
+      },
+      {
+        "feature": "Non-ERP Vendor Flexibility",
+        "oracle-otm": "Can run without Oracle ERP",
+        "sap-tm": "Best only within SAP ecosystem",
+        "winner": "oracle-otm"
+      },
+      {
+        "feature": "Freight Settlement to Finance",
+        "oracle-otm": "Good, complex to configure",
+        "sap-tm": "Seamless within SAP FI",
+        "winner": "sap-tm"
+      },
+      {
+        "feature": "Accounting Sync",
+        "oracle-otm": "Medium \u2014 Oracle or external ERP",
+        "sap-tm": "Low \u2014 native SAP FI sync",
+        "winner": "sap-tm"
+      }
+    ],
+    "chooseAIf": [
+      "You run Oracle ERP Cloud, JD Edwards, or E-Business Suite as your financial backbone",
+      "You need maximum configurability in transport planning rules",
+      "You are a large shipper that wants TMS independent of your ERP vendor"
+    ],
+    "chooseBIf": [
+      "You are already committed to SAP S/4HANA across your enterprise",
+      "Seamless freight settlement to SAP Financial Accounting is required",
+      "You want the shortest implementation path within an SAP landscape"
+    ],
+    "integrationComplexity": {
+      "oracle-otm": "Very High",
+      "sap-tm": "Very High"
+    },
+    "estimatedSyncTime": {
+      "oracle-otm": "5\u201310 days initial",
+      "sap-tm": "Native within SAP"
+    },
+    "docStandardFit": "Both platforms produce transport document outputs (freight orders, carrier invoices, delivery notes) that require validation and normalization before external ERP systems can process them. For mixed-ERP environments, DocStandard bridges Oracle TM or SAP TM outputs into a neutral format that any finance system can consume.",
+    "bottomLine": "Oracle TM for Oracle ecosystem users and highly complex planning requirements. SAP TM for SAP shops that want native FI integration and shorter time-to-value within an existing SAP landscape."
+  },
+  "rose-rocket-vs-magaya": {
+    "systems": [
+      "rose-rocket",
+      "magaya"
+    ],
+    "category": "TMS",
+    "useCase": "Carrier operations and dispatch management for North American logistics",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target User",
+        "rose-rocket": "Asset carriers, trucking companies",
+        "magaya": "Freight forwarders, NVOCCs",
+        "winner": "contextual"
+      },
+      {
+        "feature": "UI/UX",
+        "rose-rocket": "Modern, clean, top-rated",
+        "magaya": "Functional, less modern",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Dispatch Workflows",
+        "rose-rocket": "Excellent \u2014 carrier-first design",
+        "magaya": "Basic dispatch, forwarder-first",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Ocean/Air Freight",
+        "rose-rocket": "Limited",
+        "magaya": "Strong native support",
+        "winner": "magaya"
+      },
+      {
+        "feature": "Customer Portal",
+        "rose-rocket": "Strong self-service portal",
+        "magaya": "Available, less polished",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Cost",
+        "rose-rocket": "$150/truck/mo",
+        "magaya": "$500+/mo base",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Accounting Integration",
+        "rose-rocket": "QuickBooks, Xero integration",
+        "magaya": "Native accounting module",
+        "winner": "tie"
+      },
+      {
+        "feature": "International Customs",
+        "rose-rocket": "Not supported",
+        "magaya": "Basic customs support",
+        "winner": "magaya"
+      }
+    ],
+    "chooseAIf": [
+      "You are a trucking company or asset-based carrier (not a freight forwarder)",
+      "Modern dispatch workflows and a clean customer portal are priorities",
+      "You focus on North American road freight"
+    ],
+    "chooseBIf": [
+      "Your business model is freight forwarding with ocean/air components",
+      "You need a combined TMS + accounting + WMS for a freight forwarder",
+      "You operate in Latin America or handle cross-border customs frequently"
+    ],
+    "integrationComplexity": {
+      "rose-rocket": "Medium",
+      "magaya": "Medium"
+    },
+    "estimatedSyncTime": {
+      "rose-rocket": "1\u20132 days",
+      "magaya": "1\u20132 days"
+    },
+    "docStandardFit": "Both systems generate invoices, BOLs, and cost documents that need normalization before syncing with QuickBooks, Xero, or NetSuite. Rose Rocket's export is cleaner; Magaya's has more fields. DocStandard normalizes both for accounting import.",
+    "bottomLine": "Rose Rocket for carriers who move freight. Magaya for forwarders who arrange freight. Both produce data that DocStandard normalizes for seamless accounting sync."
+  },
+  "in-house-team-vs-outsourced-processing": {
+    "systems": [
+      "in-house-team",
+      "outsourced-processing"
+    ],
+    "category": "Service",
+    "useCase": "Document processing operations management strategy",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Cost at 500 docs/mo",
+        "in-house-team": "~$6,000/mo (1 FTE)",
+        "outsourced-processing": "$250\u2013$1,000/mo",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "Data Security",
+        "in-house-team": "Full control",
+        "outsourced-processing": "Third-party data access risk",
+        "winner": "in-house-team"
+      },
+      {
+        "feature": "Process Control",
+        "in-house-team": "Complete",
+        "outsourced-processing": "Limited to SLA terms",
+        "winner": "in-house-team"
+      },
+      {
+        "feature": "Turnaround",
+        "in-house-team": "Real-time to 4 hrs",
+        "outsourced-processing": "24\u201372 hrs",
+        "winner": "in-house-team"
+      },
+      {
+        "feature": "Scalability",
+        "in-house-team": "Requires hiring \u2014 slow to scale",
+        "outsourced-processing": "Quick to scale up/down",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "Accuracy",
+        "in-house-team": "28% error rate (trained)",
+        "outsourced-processing": "22% error rate",
+        "winner": "outsourced-processing"
+      },
+      {
+        "feature": "Staff Risk",
+        "in-house-team": "Single point of failure",
+        "outsourced-processing": "Vendor continuity risk",
+        "winner": "tie"
+      },
+      {
+        "feature": "ERP-Ready Output",
+        "in-house-team": "Custom \u2014 as good as your team",
+        "outsourced-processing": "Generic CSV \u2014 needs mapping",
+        "winner": "in-house-team"
+      }
+    ],
+    "chooseAIf": [
+      "You process legally sensitive or confidential documents that can't leave your systems",
+      "Your document rules are complex enough that only your team can apply them correctly",
+      "Real-time processing within your own workflow is non-negotiable"
+    ],
+    "chooseBIf": [
+      "You have predictable but seasonal volume spikes you can't staff for",
+      "Cost reduction is the primary goal and turnaround flexibility is acceptable",
+      "You're in an early-stage company without capacity to hire a dedicated processing team"
+    ],
+    "integrationComplexity": {
+      "in-house-team": "Varies",
+      "outsourced-processing": "Low"
+    },
+    "estimatedSyncTime": {
+      "in-house-team": "Real-time",
+      "outsourced-processing": "24\u201372 hrs"
+    },
+    "docStandardFit": "Both approaches leave you with data that needs normalization before ERP import. An in-house team can be trained to use DocStandard's validation tools; outsourced vendors can be required to output DocStandard-compatible formats as part of their SLA.",
+    "bottomLine": "In-house for security, control, and complex rules. Outsourced for cost flexibility and volume scaling. Above 1,000 docs/month, automated processing (DocStandard) outperforms both."
+  },
+  "mercurygate-vs-cargowise": {
+    "systems": [
+      "mercurygate",
+      "cargowise"
+    ],
+    "category": "TMS",
+    "useCase": "North American shipper TMS vs global freight forwarding platform",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target User",
+        "mercurygate": "North American shippers and 3PLs",
+        "cargowise": "Freight forwarders and customs brokers",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Load Tendering",
+        "mercurygate": "Excellent \u2014 core strength",
+        "cargowise": "Secondary feature",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "Customs Compliance",
+        "mercurygate": "Limited",
+        "cargowise": "130+ countries native",
+        "winner": "cargowise"
+      },
+      {
+        "feature": "Cost",
+        "mercurygate": "$2K\u2013$10K/mo",
+        "cargowise": "$5K\u2013$30K/mo",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "Implementation Time",
+        "mercurygate": "2\u20135 months",
+        "cargowise": "4\u20138 months",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "Rating Engine",
+        "mercurygate": "Strong, flexible LTL/FTL rating",
+        "cargowise": "Freight rate management",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "Carrier Network",
+        "mercurygate": "Wide North American trucking",
+        "cargowise": "Global ocean/air/customs",
+        "winner": "contextual"
+      },
+      {
+        "feature": "ERP Integration",
+        "mercurygate": "Medium complexity",
+        "cargowise": "High complexity",
+        "winner": "mercurygate"
+      }
+    ],
+    "chooseAIf": [
+      "You are a shipper or 3PL managing North American trucking (LTL/FTL)",
+      "Load tendering, carrier rating, and analytics are your KPIs",
+      "You don't need customs brokerage or global ocean freight"
+    ],
+    "chooseBIf": [
+      "Your business is freight forwarding with ocean, air, and customs components",
+      "You need a single platform across global offices",
+      "Complex customs compliance in multiple countries is required"
+    ],
+    "integrationComplexity": {
+      "mercurygate": "Medium",
+      "cargowise": "High"
+    },
+    "estimatedSyncTime": {
+      "mercurygate": "2\u20133 days",
+      "cargowise": "3\u20135 days"
+    },
+    "docStandardFit": "Both platforms generate freight cost documents requiring normalization for ERP import. MercuryGate's load data and CargoWise's house bill cost lines both need field mapping and validation before they become clean accounting entries.",
+    "bottomLine": "MercuryGate for shippers and 3PLs running North American trucking operations. CargoWise for freight forwarders managing global multi-modal logistics."
+  },
+  "descartes-vs-blueyonder": {
+    "systems": [
+      "descartes",
+      "blueyonder"
+    ],
+    "category": "TMS",
+    "useCase": "Enterprise logistics planning and route optimization",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Route Optimization",
+        "descartes": "Best-in-class last-mile",
+        "blueyonder": "AI-driven network planning",
+        "winner": "tie"
+      },
+      {
+        "feature": "WMS Integration",
+        "descartes": "Via connectors",
+        "blueyonder": "Native unified WMS+TMS",
+        "winner": "blueyonder"
+      },
+      {
+        "feature": "AI/ML Planning",
+        "descartes": "Strong for delivery routing",
+        "blueyonder": "Superior demand sensing and supply planning",
+        "winner": "blueyonder"
+      },
+      {
+        "feature": "Cost",
+        "descartes": "$3K\u2013$15K/mo",
+        "blueyonder": "$20K\u2013$100K+/mo",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Implementation Time",
+        "descartes": "3\u20136 months",
+        "blueyonder": "12\u201324 months",
+        "winner": "descartes"
+      },
+      {
+        "feature": "Target Industry",
+        "descartes": "Compliance, last-mile, customs",
+        "blueyonder": "Retail, CPG, automotive",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Accounting Data Complexity",
+        "descartes": "High",
+        "blueyonder": "High",
+        "winner": "tie"
+      },
+      {
+        "feature": "Scalability",
+        "descartes": "Enterprise-capable",
+        "blueyonder": "True enterprise only",
+        "winner": "descartes"
+      }
+    ],
+    "chooseAIf": [
+      "Last-mile delivery optimization and route compliance are your priorities",
+      "You need regulatory compliance tools alongside TMS",
+      "You are mid-market and need enterprise features at a manageable cost"
+    ],
+    "chooseBIf": [
+      "You are a Tier-1 retailer or CPG needing unified WMS + TMS + demand planning",
+      "AI-driven supply chain orchestration is a strategic priority",
+      "Your IT budget exceeds $5M/year for logistics technology"
+    ],
+    "integrationComplexity": {
+      "descartes": "High",
+      "blueyonder": "Very High"
+    },
+    "estimatedSyncTime": {
+      "descartes": "3\u20135 days",
+      "blueyonder": "10+ days initial setup"
+    },
+    "docStandardFit": "Both platforms produce complex logistics documents that require normalization before financial systems can process them. Descartes delivery manifests and Blue Yonder fulfillment data both need field validation and ERP-specific mapping.",
+    "bottomLine": "Descartes for last-mile, compliance, and mid-enterprise TMS. Blue Yonder for Tier-1 retail and CPG companies with unified supply chain planning requirements."
+  },
+  "kuebix-vs-rose-rocket": {
+    "systems": [
+      "kuebix",
+      "rose-rocket"
+    ],
+    "category": "TMS",
+    "useCase": "Mid-market TMS for shippers and carriers in North America",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target User",
+        "kuebix": "Shippers (manufacturers, distributors)",
+        "rose-rocket": "Carriers and 3PLs",
+        "winner": "contextual"
+      },
+      {
+        "feature": "LTL Rate Shopping",
+        "kuebix": "Core strength \u2014 top LTL tool",
+        "rose-rocket": "Available, not primary focus",
+        "winner": "kuebix"
+      },
+      {
+        "feature": "Dispatch Workflows",
+        "kuebix": "Limited",
+        "rose-rocket": "Carrier-first dispatch design",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Customer Portal",
+        "kuebix": "Basic tracking",
+        "rose-rocket": "Strong branded customer portal",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Cost",
+        "kuebix": "Free tier + $500\u2013$3K/mo",
+        "rose-rocket": "$150/truck/mo",
+        "winner": "contextual"
+      },
+      {
+        "feature": "UI Modernity",
+        "kuebix": "Functional",
+        "rose-rocket": "Modern and clean",
+        "winner": "rose-rocket"
+      },
+      {
+        "feature": "Carrier Integrations",
+        "kuebix": "Good EDI carrier connections",
+        "rose-rocket": "Growing carrier API library",
+        "winner": "kuebix"
+      },
+      {
+        "feature": "Accounting Sync",
+        "kuebix": "Medium complexity",
+        "rose-rocket": "Direct QuickBooks/Xero",
+        "winner": "rose-rocket"
+      }
+    ],
+    "chooseAIf": [
+      "You are a shipper wanting to optimize LTL rates and carrier selection",
+      "You have an existing EDI carrier network",
+      "Budget is tight and a freemium entry point is needed"
+    ],
+    "chooseBIf": [
+      "You are a carrier or 3PL managing customer loads and dispatch",
+      "A clean customer-facing tracking portal matters for your brand",
+      "Modern UI and simple accounting integration are priorities"
+    ],
+    "integrationComplexity": {
+      "kuebix": "Medium",
+      "rose-rocket": "Medium"
+    },
+    "estimatedSyncTime": {
+      "kuebix": "1\u20132 days",
+      "rose-rocket": "1\u20132 days"
+    },
+    "docStandardFit": "Both platforms produce shipping cost data that needs normalization before QuickBooks or NetSuite import. DocStandard maps Kuebix's rate-confirmed shipment records and Rose Rocket's dispatch invoices into clean, ERP-ready accounting entries.",
+    "bottomLine": "Kuebix for shippers optimizing LTL costs. Rose Rocket for carriers managing operations and customer relationships."
+  },
+  "freightos-vs-flexport": {
+    "systems": [
+      "freightos",
+      "flexport"
+    ],
+    "category": "TMS",
+    "useCase": "Digital freight booking and rate comparison for SMB importers/exporters",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Rate Shopping",
+        "freightos": "Marketplace \u2014 instant quotes from 50+ providers",
+        "flexport": "Flexport network rates only",
+        "winner": "freightos"
+      },
+      {
+        "feature": "Freight Execution",
+        "freightos": "Booking marketplace \u2014 third-party forwarders execute",
+        "flexport": "Flexport executes as forwarder",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Visibility",
+        "freightos": "Basic \u2014 via booking forwarder",
+        "flexport": "Real-time platform tracking",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Documentation",
+        "freightos": "Limited \u2014 depends on forwarder",
+        "flexport": "Full digital document management",
+        "winner": "flexport"
+      },
+      {
+        "feature": "Price Transparency",
+        "freightos": "Best \u2014 shows multiple quotes live",
+        "flexport": "Less transparent (bundled)",
+        "winner": "freightos"
+      },
+      {
+        "feature": "Platform Cost",
+        "freightos": "Free to search + forwarder markup",
+        "flexport": "Free platform + freight markup",
+        "winner": "tie"
+      },
+      {
+        "feature": "API Access",
+        "freightos": "Available for rate integration",
+        "flexport": "Excellent REST API",
+        "winner": "flexport"
+      },
+      {
+        "feature": "ERP Data Sync",
+        "freightos": "Limited \u2014 depends on forwarder",
+        "flexport": "Better \u2014 consistent platform output",
+        "winner": "flexport"
+      }
+    ],
+    "chooseAIf": [
+      "You want to compare rates from multiple freight forwarders before committing",
+      "Price discovery and spot market rate shopping are your primary needs",
+      "You already have a preferred forwarder but want market rate benchmarks"
+    ],
+    "chooseBIf": [
+      "You want one company handling your freight end-to-end with full visibility",
+      "Consistent documentation and tracking within one platform matters",
+      "You plan to build an API integration to your ERP or TMS"
+    ],
+    "integrationComplexity": {
+      "freightos": "Low",
+      "flexport": "Low"
+    },
+    "estimatedSyncTime": {
+      "freightos": "1\u20132 days (manual export)",
+      "flexport": "Same day via API"
+    },
+    "docStandardFit": "Freightos bookings are executed by third-party forwarders who produce their own document formats. Flexport provides consistent but proprietary data. Both require normalization before ERP import \u2014 DocStandard handles both output formats.",
+    "bottomLine": "Freightos for rate comparison and price discovery. Flexport for end-to-end digital freight forwarding with full platform visibility."
+  },
+  "transporeon-vs-mercurygate": {
+    "systems": [
+      "transporeon",
+      "mercurygate"
+    ],
+    "category": "TMS",
+    "useCase": "Shipper TMS for European vs North American freight operations",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Geographic Strength",
+        "transporeon": "Europe \u2014 deep carrier network",
+        "mercurygate": "North America \u2014 trucking focus",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Tender Management",
+        "transporeon": "Best-in-class for European shippers",
+        "mercurygate": "Strong for NA truckload",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Spot Market",
+        "transporeon": "Large European load board",
+        "mercurygate": "North American spot capabilities",
+        "winner": "contextual"
+      },
+      {
+        "feature": "API Quality",
+        "transporeon": "REST, improving post-Trimble",
+        "mercurygate": "REST + EDI, solid",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "ERP Integration",
+        "transporeon": "SAP-certified connectors strong",
+        "mercurygate": "Good NetSuite/Dynamics connectors",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Carrier Compliance Tools",
+        "transporeon": "European GDPR, CMR compliance",
+        "mercurygate": "US DOT, FMCSA compliance",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Cost",
+        "transporeon": "$2K\u2013$20K/mo",
+        "mercurygate": "$2K\u2013$10K/mo",
+        "winner": "mercurygate"
+      },
+      {
+        "feature": "Accounting Data Sync",
+        "transporeon": "Medium complexity",
+        "mercurygate": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "You are a European shipper needing access to a deep carrier tender network",
+      "You ship primarily within the EU or require European compliance tools",
+      "SAP integration is a priority"
+    ],
+    "chooseBIf": [
+      "You are a North American shipper or 3PL",
+      "LTL and FTL rate optimization for US carriers is your primary need",
+      "You use NetSuite or Dynamics as your ERP"
+    ],
+    "integrationComplexity": {
+      "transporeon": "Medium",
+      "mercurygate": "Medium"
+    },
+    "estimatedSyncTime": {
+      "transporeon": "2\u20133 days",
+      "mercurygate": "2\u20133 days"
+    },
+    "docStandardFit": "Both platforms produce freight cost records and transport documents that need normalization before ERP or accounting system import. Currency handling (EUR vs USD), carrier code formats, and cost line structures differ between the two \u2014 DocStandard handles both.",
+    "bottomLine": "Transporeon for European logistics operations. MercuryGate for North American shippers and 3PLs."
+  },
+  "project44-vs-fourkites": {
+    "systems": [
+      "project44",
+      "fourkites"
+    ],
+    "category": "Visibility",
+    "useCase": "Real-time supply chain visibility and shipment tracking",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Carrier Network",
+        "project44": "Largest \u2014 1M+ carrier connections",
+        "fourkites": "Large \u2014 strong ocean + truckload",
+        "winner": "project44"
+      },
+      {
+        "feature": "Ocean Visibility",
+        "project44": "Good and improving",
+        "fourkites": "Strong ocean container tracking",
+        "winner": "fourkites"
+      },
+      {
+        "feature": "Retail Compliance",
+        "project44": "Strong OTIF tools",
+        "fourkites": "Best-in-class retail compliance",
+        "winner": "fourkites"
+      },
+      {
+        "feature": "Customer ETA Notifications",
+        "project44": "Strong",
+        "fourkites": "Excellent branded customer portal",
+        "winner": "fourkites"
+      },
+      {
+        "feature": "TMS Integrations",
+        "project44": "150+ TMS pre-built connectors",
+        "fourkites": "100+ TMS connectors",
+        "winner": "project44"
+      },
+      {
+        "feature": "AI Disruption Alerts",
+        "project44": "Good predictive ETAs",
+        "fourkites": "Strong disruption prediction",
+        "winner": "tie"
+      },
+      {
+        "feature": "Cost",
+        "project44": "$2K\u2013$25K/mo",
+        "fourkites": "$1.5K\u2013$15K/mo",
+        "winner": "fourkites"
+      },
+      {
+        "feature": "ERP Data Integration",
+        "project44": "Medium complexity",
+        "fourkites": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Breadth of carrier coverage is the priority \u2014 you work with many carriers globally",
+      "You need the largest pre-built TMS integration library",
+      "Your TMS is a less common platform that needs a broad integration network"
+    ],
+    "chooseBIf": [
+      "Retail compliance (OTIF, retailer portals) is a key requirement",
+      "Customer-facing ETA notifications and branded tracking are important",
+      "Ocean container visibility is a primary use case"
+    ],
+    "integrationComplexity": {
+      "project44": "Low",
+      "fourkites": "Low"
+    },
+    "estimatedSyncTime": {
+      "project44": "Same day to 1 day",
+      "fourkites": "Same day"
+    },
+    "docStandardFit": "Visibility platforms produce shipment event data (location pings, ETA updates, exceptions) that still needs normalization before accounting or financial systems can use it for landed cost calculations or freight accruals. DocStandard maps these event streams into clean financial entries.",
+    "bottomLine": "Project44 for maximum carrier coverage and TMS breadth. FourKites for retail compliance, ocean visibility, and branded customer experience."
+  },
+  "geotab-vs-samsara": {
+    "systems": [
+      "geotab",
+      "samsara"
+    ],
+    "category": "Fleet",
+    "useCase": "Enterprise fleet telematics and driver management",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Customization",
+        "geotab": "Highly customizable open SDK",
+        "samsara": "Good API, less open than Geotab",
+        "winner": "geotab"
+      },
+      {
+        "feature": "AI Dashcams",
+        "geotab": "Available, good",
+        "samsara": "Best-in-class AI dashcams",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Government/Public Sector",
+        "geotab": "Strong \u2014 widely used",
+        "samsara": "Growing government presence",
+        "winner": "geotab"
+      },
+      {
+        "feature": "Partner Ecosystem",
+        "geotab": "Massive Geotab Marketplace",
+        "samsara": "Good App Marketplace",
+        "winner": "geotab"
+      },
+      {
+        "feature": "Ease of Deployment",
+        "geotab": "Requires partner setup",
+        "samsara": "Easy self-service deploy",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Cost",
+        "geotab": "$24\u2013$120/vehicle/mo",
+        "samsara": "$50\u2013$150/vehicle/mo",
+        "winner": "geotab"
+      },
+      {
+        "feature": "Driver Safety Coaching",
+        "geotab": "Good rules-based coaching",
+        "samsara": "AI-powered video coaching",
+        "winner": "samsara"
+      },
+      {
+        "feature": "Accounting Data Export",
+        "geotab": "Custom SDK \u2014 medium complexity",
+        "samsara": "REST webhooks \u2014 low complexity",
+        "winner": "samsara"
+      }
+    ],
+    "chooseAIf": [
+      "Your enterprise has complex custom telematics workflows requiring deep SDK access",
+      "You are in government, utilities, or public sector where Geotab has strong references",
+      "Cost per vehicle is a primary constraint for a large fleet"
+    ],
+    "chooseBIf": [
+      "AI-powered dashcam and driver safety coaching are top priorities",
+      "You want easy self-service deployment without an implementation partner",
+      "Modern REST API and webhook integration with your ERP is important"
+    ],
+    "integrationComplexity": {
+      "geotab": "Medium",
+      "samsara": "Low"
+    },
+    "estimatedSyncTime": {
+      "geotab": "1\u20132 days",
+      "samsara": "Same day via webhook"
+    },
+    "docStandardFit": "Both platforms generate fuel, mileage, and driver hours data that needs normalization for IFTA reporting, accounting entries, and compliance documentation. DocStandard converts telematics exports from both into clean, audit-ready financial records.",
+    "bottomLine": "Geotab for enterprise customization, government, and cost-sensitive large fleets. Samsara for companies prioritizing AI safety technology and a frictionless deployment experience."
+  },
+  "verizon-connect-vs-motive": {
+    "systems": [
+      "verizon-connect",
+      "motive"
+    ],
+    "category": "Fleet",
+    "useCase": "ELD compliance and fleet management for trucking companies",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target Fleet Size",
+        "verizon-connect": "Mid-to-large (50+ vehicles)",
+        "motive": "Owner-ops to mid fleets (1\u2013200)",
+        "winner": "contextual"
+      },
+      {
+        "feature": "ELD Compliance",
+        "verizon-connect": "Full FMCSA certified",
+        "motive": "Full FMCSA certified",
+        "winner": "tie"
+      },
+      {
+        "feature": "IFTA Reporting",
+        "verizon-connect": "Available",
+        "motive": "Built-in, highly rated",
+        "winner": "motive"
+      },
+      {
+        "feature": "Cost",
+        "verizon-connect": "$40\u2013$100/vehicle/mo",
+        "motive": "$35\u2013$85/vehicle/mo",
+        "winner": "motive"
+      },
+      {
+        "feature": "Network Reliability",
+        "verizon-connect": "Verizon 4G LTE backbone",
+        "motive": "Multi-carrier SIM",
+        "winner": "verizon-connect"
+      },
+      {
+        "feature": "Driver App Quality",
+        "verizon-connect": "Functional",
+        "motive": "Highly rated by drivers",
+        "winner": "motive"
+      },
+      {
+        "feature": "Fuel Analytics",
+        "verizon-connect": "Good fuel management tools",
+        "motive": "Basic fuel tracking",
+        "winner": "verizon-connect"
+      },
+      {
+        "feature": "Accounting Integration",
+        "verizon-connect": "Medium \u2014 needs normalization",
+        "motive": "IFTA output needs normalization",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Network reliability is critical and Verizon LTE coverage is superior in your region",
+      "You have a large mixed fleet and need enterprise-level fuel management analytics",
+      "You already have a Verizon business account and want consolidated billing"
+    ],
+    "chooseBIf": [
+      "You are an owner-operator or manage a fleet under 100 trucks",
+      "Simple, driver-friendly ELD and IFTA tools are your priority",
+      "Cost per truck is a primary decision factor"
+    ],
+    "integrationComplexity": {
+      "verizon-connect": "Medium",
+      "motive": "Low"
+    },
+    "estimatedSyncTime": {
+      "verizon-connect": "1\u20132 days",
+      "motive": "Same day"
+    },
+    "docStandardFit": "IFTA fuel tax and driver hours data from both platforms needs jurisdiction-level normalization before it can be submitted as a tax-compliant report or imported into accounting software. DocStandard handles this mapping for both.",
+    "bottomLine": "Verizon Connect for large fleets with Verizon network dependency. Motive for cost-conscious smaller carriers who need simple ELD + IFTA without complexity."
+  },
+  "omnitracs-vs-trimble": {
+    "systems": [
+      "omnitracs",
+      "trimble"
+    ],
+    "category": "Fleet/TMS",
+    "useCase": "Long-haul carrier management and driver workflow systems",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Long-Haul Tools",
+        "omnitracs": "Strong legacy long-haul platform",
+        "trimble": "Strong driver pay + dispatch",
+        "winner": "tie"
+      },
+      {
+        "feature": "Driver Pay Management",
+        "omnitracs": "Available",
+        "trimble": "Best-in-class for carrier driver pay",
+        "winner": "trimble"
+      },
+      {
+        "feature": "ELD Compliance",
+        "omnitracs": "Full FMCSA",
+        "trimble": "Full FMCSA",
+        "winner": "tie"
+      },
+      {
+        "feature": "Platform Modernity",
+        "omnitracs": "Legacy systems in some areas",
+        "trimble": "Modern under new product structure",
+        "winner": "trimble"
+      },
+      {
+        "feature": "EDI Connectivity",
+        "omnitracs": "Good for carrier EDI",
+        "trimble": "Strong EDI via Trimble ID",
+        "winner": "trimble"
+      },
+      {
+        "feature": "Predictive Analytics",
+        "omnitracs": "Strong compliance prediction",
+        "trimble": "Good operational analytics",
+        "winner": "omnitracs"
+      },
+      {
+        "feature": "Cost",
+        "omnitracs": "$25\u2013$120/vehicle/mo",
+        "trimble": "$100\u2013$500/truck/mo (TMS)",
+        "winner": "omnitracs"
+      },
+      {
+        "feature": "Accounting Sync",
+        "omnitracs": "Medium complexity",
+        "trimble": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Your fleet has used Omnitracs for years and migration risk is a concern",
+      "Predictive compliance and driver safety analytics are priorities",
+      "You need a proven platform for long-haul over-the-road operations"
+    ],
+    "chooseBIf": [
+      "Driver pay calculation accuracy is your top operational pain point",
+      "You want modern EDI connectivity with strong carrier integrations",
+      "You are evaluating platforms fresh without a legacy migration concern"
+    ],
+    "integrationComplexity": {
+      "omnitracs": "Medium",
+      "trimble": "Medium"
+    },
+    "estimatedSyncTime": {
+      "omnitracs": "2\u20133 days",
+      "trimble": "2\u20133 days"
+    },
+    "docStandardFit": "Driver settlement statements, fuel receipts, and load completion records from both platforms need normalization before payroll systems or accounting software can process them. DocStandard maps carrier-specific field formats to clean journal entries for QuickBooks, Sage, or NetSuite.",
+    "bottomLine": "Omnitracs for legacy long-haul operations with proven compliance tools. Trimble for carriers prioritizing driver pay accuracy, modern dispatch, and strong EDI."
+  },
+  "epicor-vs-acumatica": {
+    "systems": [
+      "epicor",
+      "acumatica"
+    ],
+    "category": "ERP",
+    "useCase": "Mid-market ERP for discrete manufacturing and distribution",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Manufacturing Depth",
+        "epicor": "Deep BOM, MRP, shop floor",
+        "acumatica": "Good, less deep than Epicor",
+        "winner": "epicor"
+      },
+      {
+        "feature": "User Licensing",
+        "epicor": "Per-user",
+        "acumatica": "Consumption-based (no per-user)",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Construction Module",
+        "epicor": "Not strong",
+        "acumatica": "Industry-leading",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Distribution",
+        "epicor": "Strong",
+        "acumatica": "Strong",
+        "winner": "tie"
+      },
+      {
+        "feature": "Implementation Time",
+        "epicor": "6\u201312 months",
+        "acumatica": "3\u20138 months",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "UI Modernity",
+        "epicor": "Functional, not modern",
+        "acumatica": "Modern, good mobile",
+        "winner": "acumatica"
+      },
+      {
+        "feature": "Automotive Parts",
+        "epicor": "Strong vertical",
+        "acumatica": "Limited",
+        "winner": "epicor"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "epicor": "Medium complexity",
+        "acumatica": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "You are a discrete manufacturer (auto parts, industrial goods) needing deep MRP and shop floor control",
+      "Automotive industry-specific functionality is required",
+      "You have a stable IT team and prefer a proven mid-market manufacturing ERP"
+    ],
+    "chooseBIf": [
+      "You want to avoid per-user licensing costs with a growing team",
+      "You are in construction, distribution, or field service",
+      "Modern UI and mobile access for remote teams is a priority"
+    ],
+    "integrationComplexity": {
+      "epicor": "Medium",
+      "acumatica": "Medium"
+    },
+    "estimatedSyncTime": {
+      "epicor": "2\u20134 days",
+      "acumatica": "2\u20133 days"
+    },
+    "docStandardFit": "Both platforms require incoming logistics documents (BOLs, carrier invoices, receiving documents) to be normalized before ERP import. Epicor's import scenarios and Acumatica's import scenarios have different field requirements \u2014 DocStandard produces output compatible with both.",
+    "bottomLine": "Epicor for discrete manufacturers who need deep BOM and shop floor control. Acumatica for construction, distribution, and companies who want to eliminate per-user licensing costs."
+  },
+  "infor-cloudsuite-vs-dynamics365": {
+    "systems": [
+      "infor-cloudsuite",
+      "dynamics365"
+    ],
+    "category": "ERP",
+    "useCase": "Industry-specific ERP for manufacturing and distribution",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Industry Templates",
+        "infor-cloudsuite": "Deep vertical templates (food, fashion, healthcare)",
+        "dynamics365": "Horizontal platform \u2014 broad but not deep",
+        "winner": "infor-cloudsuite"
+      },
+      {
+        "feature": "Microsoft Ecosystem",
+        "infor-cloudsuite": "Via connectors",
+        "dynamics365": "Native Teams, Excel, Azure",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Implementation Time",
+        "infor-cloudsuite": "9\u201318 months",
+        "dynamics365": "6\u201312 months",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Partner Network",
+        "infor-cloudsuite": "Smaller \u2014 Infor-specific SIs",
+        "dynamics365": "Massive Microsoft VAR network",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Food & Beverage Depth",
+        "infor-cloudsuite": "Best-in-class",
+        "dynamics365": "Requires customization",
+        "winner": "infor-cloudsuite"
+      },
+      {
+        "feature": "AI/Copilot Features",
+        "infor-cloudsuite": "Infor Coleman AI",
+        "dynamics365": "Microsoft Copilot",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "infor-cloudsuite": "High complexity via ION",
+        "dynamics365": "Medium complexity",
+        "winner": "dynamics365"
+      },
+      {
+        "feature": "Cost",
+        "infor-cloudsuite": "$100K\u2013$500K+/yr",
+        "dynamics365": "$65\u2013$1,500/user/mo",
+        "winner": "contextual"
+      }
+    ],
+    "chooseAIf": [
+      "You are in food & beverage, fashion, healthcare, or manufacturing and need deep vertical functionality",
+      "Industry-specific compliance (FDA, GS1, recipe management) is a hard requirement",
+      "Your business processes are complex enough to justify deep vertical configuration"
+    ],
+    "chooseBIf": [
+      "Your team is embedded in Microsoft 365 and Copilot AI is a strategic priority",
+      "You want the largest possible VAR network for implementation and support",
+      "Your industry doesn't require deep vertical templates and a horizontal ERP suffices"
+    ],
+    "integrationComplexity": {
+      "infor-cloudsuite": "High",
+      "dynamics365": "Medium"
+    },
+    "estimatedSyncTime": {
+      "infor-cloudsuite": "5\u20138 days via Infor ION",
+      "dynamics365": "2\u20134 days"
+    },
+    "docStandardFit": "Both platforms require logistics and supply chain documents to be normalized before financial modules can process them correctly. Infor ION middleware adds a translation layer; Dynamics 365 uses Power Automate. DocStandard generates clean, structured data compatible with both middleware layers.",
+    "bottomLine": "Infor CloudSuite for companies where industry-specific depth (food, fashion, healthcare) outweighs the cost and complexity premium. Dynamics 365 for Microsoft-first organizations that need a capable horizontal ERP with AI."
+  },
+  "workday-vs-oracle-erp-cloud": {
+    "systems": [
+      "workday",
+      "oracle-erp-cloud"
+    ],
+    "category": "ERP",
+    "useCase": "Enterprise financial management and HCM for large organizations",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "HCM / HR Management",
+        "workday": "Best-in-class globally",
+        "oracle-erp-cloud": "Strong but secondary to finance",
+        "winner": "workday"
+      },
+      {
+        "feature": "Financial Management",
+        "workday": "Strong, growing",
+        "oracle-erp-cloud": "Best-in-class enterprise finance",
+        "winner": "oracle-erp-cloud"
+      },
+      {
+        "feature": "Procurement",
+        "workday": "Good",
+        "oracle-erp-cloud": "Comprehensive Source-to-Pay",
+        "winner": "oracle-erp-cloud"
+      },
+      {
+        "feature": "Supply Chain",
+        "workday": "Limited logistics depth",
+        "oracle-erp-cloud": "Strong with OTM integration",
+        "winner": "oracle-erp-cloud"
+      },
+      {
+        "feature": "Implementation Time",
+        "workday": "12\u201318 months",
+        "oracle-erp-cloud": "12\u201324 months",
+        "winner": "workday"
+      },
+      {
+        "feature": "User Experience",
+        "workday": "Modern, highly rated UI",
+        "oracle-erp-cloud": "Functional, complex",
+        "winner": "workday"
+      },
+      {
+        "feature": "Cost",
+        "workday": "$300K\u2013$2M+/yr",
+        "oracle-erp-cloud": "$500K\u2013$5M+/yr",
+        "winner": "workday"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "workday": "High complexity",
+        "oracle-erp-cloud": "High complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "HCM (workforce management, talent, payroll) is your primary driver",
+      "You want modern UX and strong user adoption out of the box",
+      "You are in financial services, technology, or higher education"
+    ],
+    "chooseBIf": [
+      "Financial management, procurement, and supply chain are your primary needs",
+      "You have complex global procurement and inventory management requirements",
+      "You are in public sector, healthcare, or a heavily regulated industry"
+    ],
+    "integrationComplexity": {
+      "workday": "High",
+      "oracle-erp-cloud": "Very High"
+    },
+    "estimatedSyncTime": {
+      "workday": "5\u20137 days initial",
+      "oracle-erp-cloud": "7\u201310 days initial"
+    },
+    "docStandardFit": "Logistics and vendor invoice data arriving from TMS platforms needs normalization before either system's financial modules can process it as clean AP transactions. Workday's SOAP API and Oracle's REST API have different field requirements \u2014 DocStandard outputs to both.",
+    "bottomLine": "Workday for HR-first enterprises with growing financial needs. Oracle ERP Cloud for finance-first enterprises with complex procurement and supply chain requirements."
+  },
+  "financialforce-vs-sage-intacct": {
+    "systems": [
+      "financialforce",
+      "sage-intacct"
+    ],
+    "category": "ERP",
+    "useCase": "Financial management for professional services companies",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Salesforce Integration",
+        "financialforce": "Native \u2014 runs on Salesforce",
+        "sage-intacct": "Via connector",
+        "winner": "financialforce"
+      },
+      {
+        "feature": "Project Accounting",
+        "financialforce": "Strong PSA + project billing",
+        "sage-intacct": "Strong project accounting",
+        "winner": "tie"
+      },
+      {
+        "feature": "AICPA Recognition",
+        "financialforce": "Not specifically",
+        "sage-intacct": "AICPA technology partner",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Multi-Entity",
+        "financialforce": "Salesforce-based consolidation",
+        "sage-intacct": "Strong multi-entity GL",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Cost",
+        "financialforce": "$150\u2013$600/user/mo",
+        "sage-intacct": "$2K\u2013$10K/mo (module-based)",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Implementation Time",
+        "financialforce": "3\u20136 months (if Salesforce running)",
+        "sage-intacct": "2\u20134 months",
+        "winner": "sage-intacct"
+      },
+      {
+        "feature": "Revenue Recognition",
+        "financialforce": "Strong ASC 606 compliance",
+        "sage-intacct": "Strong ASC 606 compliance",
+        "winner": "tie"
+      },
+      {
+        "feature": "Logistics Data Sync",
+        "financialforce": "Medium complexity",
+        "sage-intacct": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "Your sales and delivery processes are managed in Salesforce CRM",
+      "You need a unified view of pipeline, project delivery, and billing in one Salesforce org",
+      "You are a Salesforce-first professional services firm"
+    ],
+    "chooseBIf": [
+      "Financial reporting depth and multi-entity management are priorities",
+      "You want AICPA-aligned software your auditor will recognize",
+      "You don't use Salesforce and don't want to add that complexity"
+    ],
+    "integrationComplexity": {
+      "financialforce": "Medium",
+      "sage-intacct": "Medium"
+    },
+    "estimatedSyncTime": {
+      "financialforce": "2\u20133 days",
+      "sage-intacct": "2\u20133 days"
+    },
+    "docStandardFit": "Both platforms require incoming operational data (logistics invoices, vendor bills) to be normalized before entering as clean project accounting or GL entries. DocStandard produces normalized output compatible with both import formats.",
+    "bottomLine": "FinancialForce for Salesforce-native companies that need CRM + ERP in one org. Sage Intacct for finance-first companies that want robust multi-entity reporting without Salesforce dependency."
+  },
+  "3pl-central-vs-manhattan-associates": {
+    "systems": [
+      "3pl-central",
+      "manhattan-associates"
+    ],
+    "category": "WMS",
+    "useCase": "Warehouse management for 3PL operations at different scales",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target Scale",
+        "3pl-central": "SMB to mid-market 3PLs",
+        "manhattan-associates": "Enterprise 3PLs and retailers",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Cost",
+        "3pl-central": "$500\u2013$5K/mo",
+        "manhattan-associates": "$200K\u2013$1M+/yr",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Implementation Time",
+        "3pl-central": "1\u20133 months",
+        "manhattan-associates": "12\u201324 months",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Multi-Client Billing",
+        "3pl-central": "Strong 3PL billing automation",
+        "manhattan-associates": "Enterprise billing management",
+        "winner": "tie"
+      },
+      {
+        "feature": "Labor Management",
+        "3pl-central": "Basic",
+        "manhattan-associates": "Industry-leading LMS",
+        "winner": "manhattan-associates"
+      },
+      {
+        "feature": "Slotting Optimization",
+        "3pl-central": "Basic",
+        "manhattan-associates": "Advanced AI-driven slotting",
+        "winner": "manhattan-associates"
+      },
+      {
+        "feature": "eCommerce Integrations",
+        "3pl-central": "50+ eCommerce platforms",
+        "manhattan-associates": "Enterprise retail connections",
+        "winner": "3pl-central"
+      },
+      {
+        "feature": "Accounting Data Complexity",
+        "3pl-central": "Medium",
+        "manhattan-associates": "High",
+        "winner": "3pl-central"
+      }
+    ],
+    "chooseAIf": [
+      "You are a small-to-mid 3PL that needs fast deployment and affordable 3PL billing",
+      "You work with eCommerce clients (Shopify, Amazon) and need quick integrations",
+      "Budget is under $5,000/month for your WMS"
+    ],
+    "chooseBIf": [
+      "You manage a distribution center with 100,000+ SKUs and millions of picks per year",
+      "Labor cost optimization and advanced slotting are multi-million dollar opportunities",
+      "You are a Tier-1 retailer or a 3PL serving major retail brands"
+    ],
+    "integrationComplexity": {
+      "3pl-central": "Medium",
+      "manhattan-associates": "Very High"
+    },
+    "estimatedSyncTime": {
+      "3pl-central": "1\u20132 days",
+      "manhattan-associates": "10+ days initial configuration"
+    },
+    "docStandardFit": "3PL Central generates client billing data and inventory records that need normalization for QuickBooks/NetSuite. Manhattan Associates produces complex fulfillment transactions requiring ERP-specific mapping. DocStandard handles both \u2014 scaling from 3PL Central's simpler format to Manhattan's enterprise output.",
+    "bottomLine": "3PL Central for SMB-to-mid 3PLs that need fast deployment and strong eCommerce connectivity. Manhattan Associates for enterprise operations where labor management and slotting optimization justify the investment."
+  },
+  "freightpop-vs-shipstation": {
+    "systems": [
+      "freightpop",
+      "shipstation"
+    ],
+    "category": "TMS/WMS",
+    "useCase": "Multi-carrier shipping management for eCommerce and manufacturing",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Target User",
+        "freightpop": "Manufacturing and B2B shippers",
+        "shipstation": "eCommerce and marketplace sellers",
+        "winner": "contextual"
+      },
+      {
+        "feature": "LTL Support",
+        "freightpop": "Strong \u2014 purpose-built for LTL + parcel",
+        "shipstation": "Limited \u2014 primarily parcel",
+        "winner": "freightpop"
+      },
+      {
+        "feature": "Carrier Rate Shopping",
+        "freightpop": "LTL + parcel combined",
+        "shipstation": "150+ parcel carriers",
+        "winner": "contextual"
+      },
+      {
+        "feature": "ERP Connectors",
+        "freightpop": "NetSuite, Dynamics, Epicor built-in",
+        "shipstation": "QuickBooks, Xero connectors",
+        "winner": "freightpop"
+      },
+      {
+        "feature": "eCommerce Platforms",
+        "freightpop": "Limited marketplace integrations",
+        "shipstation": "100+ Shopify, Amazon, WooCommerce",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "Cost",
+        "freightpop": "$299\u2013$2,000/mo",
+        "shipstation": "$9.99\u2013$299/mo",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "Accounting Sync",
+        "freightpop": "Low-Medium complexity",
+        "shipstation": "Low complexity",
+        "winner": "shipstation"
+      },
+      {
+        "feature": "Analytics",
+        "freightpop": "Good freight spend analytics",
+        "shipstation": "Basic shipping analytics",
+        "winner": "freightpop"
+      }
+    ],
+    "chooseAIf": [
+      "You are a manufacturer or B2B distributor shipping LTL and parcel",
+      "You need ERP integration (NetSuite, Dynamics, Epicor) not just QuickBooks",
+      "Freight spend analytics and carrier comparison matter for cost optimization"
+    ],
+    "chooseBIf": [
+      "You are an eCommerce seller managing Shopify, Amazon, or WooCommerce orders",
+      "You primarily ship parcel and want the widest carrier network",
+      "Budget is under $100/month and you need a quick setup"
+    ],
+    "integrationComplexity": {
+      "freightpop": "Low",
+      "shipstation": "Low"
+    },
+    "estimatedSyncTime": {
+      "freightpop": "Same day to 1 day",
+      "shipstation": "Same day"
+    },
+    "docStandardFit": "Both platforms generate shipping cost data that requires normalization before ERP or accounting import. FreightPOP's LTL cost breakdowns and ShipStation's parcel-level data both need field mapping for clean GL entries. DocStandard handles the normalization for both.",
+    "bottomLine": "FreightPOP for B2B manufacturers and distributors who ship LTL and need ERP integration. ShipStation for eCommerce sellers who primarily ship parcel and sell across multiple marketplaces."
+  },
+  "zoho-books-vs-freshbooks": {
+    "systems": [
+      "zoho-books",
+      "freshbooks"
+    ],
+    "category": "Accounting",
+    "useCase": "SMB accounting and invoicing for service and light distribution businesses",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Ecosystem Integration",
+        "zoho-books": "Deep Zoho ecosystem (CRM, Inventory, Projects)",
+        "freshbooks": "Good 3rd party integrations",
+        "winner": "zoho-books"
+      },
+      {
+        "feature": "Time Tracking",
+        "zoho-books": "Available but secondary",
+        "freshbooks": "Excellent \u2014 core feature",
+        "winner": "freshbooks"
+      },
+      {
+        "feature": "Multi-Currency",
+        "zoho-books": "All plans",
+        "freshbooks": "Premium plans only",
+        "winner": "zoho-books"
+      },
+      {
+        "feature": "Invoicing UX",
+        "zoho-books": "Clean and customizable",
+        "freshbooks": "Best-in-class simplicity",
+        "winner": "freshbooks"
+      },
+      {
+        "feature": "Inventory Management",
+        "zoho-books": "Basic inventory module",
+        "freshbooks": "None",
+        "winner": "zoho-books"
+      },
+      {
+        "feature": "Cost",
+        "zoho-books": "$0\u2013$60/mo",
+        "freshbooks": "$17\u2013$55/mo",
+        "winner": "zoho-books"
+      },
+      {
+        "feature": "US Accountant Network",
+        "zoho-books": "Smaller than QuickBooks/Xero",
+        "freshbooks": "Smaller than QuickBooks/Xero",
+        "winner": "tie"
+      },
+      {
+        "feature": "Logistics Integration",
+        "zoho-books": "Limited \u2014 needs normalization",
+        "freshbooks": "Very limited",
+        "winner": "zoho-books"
+      }
+    ],
+    "chooseAIf": [
+      "You already use Zoho CRM, Zoho Inventory, or other Zoho products",
+      "Multi-currency operations are required on a budget",
+      "You need basic inventory tracking alongside accounting"
+    ],
+    "chooseBIf": [
+      "Time tracking for client billing is your most important accounting function",
+      "You are a freelancer, agency, or consultant billing hourly",
+      "Simplest possible invoicing experience is the priority"
+    ],
+    "integrationComplexity": {
+      "zoho-books": "Low",
+      "freshbooks": "Low"
+    },
+    "estimatedSyncTime": {
+      "zoho-books": "Same day",
+      "freshbooks": "Same day"
+    },
+    "docStandardFit": "Both platforms accept data from logistics operations via import or API. Shipping documents and freight invoices still need normalization regardless of which platform you use. DocStandard normalizes TMS outputs into Zoho Books or FreshBooks-compatible transaction formats.",
+    "bottomLine": "Zoho Books for businesses in the Zoho ecosystem needing multi-currency and inventory. FreshBooks for freelancers and agencies where time tracking and simple invoicing are the primary needs."
+  },
+  "alpega-vs-transporeon": {
+    "systems": [
+      "alpega",
+      "transporeon"
+    ],
+    "category": "TMS",
+    "useCase": "European shipper TMS for tender management and carrier collaboration",
+    "winner": "contextual",
+    "comparisonTable": [
+      {
+        "feature": "Carrier Network Size",
+        "alpega": "Large European network (Wtransnet + Teleroute)",
+        "transporeon": "Larger enterprise-focused network",
+        "winner": "transporeon"
+      },
+      {
+        "feature": "Target Company Size",
+        "alpega": "Mid-market shippers",
+        "transporeon": "Enterprise shippers and CPGs",
+        "winner": "contextual"
+      },
+      {
+        "feature": "Load Board",
+        "alpega": "Strong spot market (Wtransnet/Teleroute)",
+        "transporeon": "Enterprise load tendering",
+        "winner": "alpega"
+      },
+      {
+        "feature": "Cost",
+        "alpega": "$1K\u2013$12K/mo",
+        "transporeon": "$2K\u2013$20K/mo",
+        "winner": "alpega"
+      },
+      {
+        "feature": "Contract Management",
+        "alpega": "Good",
+        "transporeon": "Excellent for enterprise contracts",
+        "winner": "transporeon"
+      },
+      {
+        "feature": "Implementation Speed",
+        "alpega": "2\u20134 months",
+        "transporeon": "2\u20134 months",
+        "winner": "tie"
+      },
+      {
+        "feature": "SAP Integration",
+        "alpega": "Good SAP certified",
+        "transporeon": "Strong SAP/Oracle certified",
+        "winner": "transporeon"
+      },
+      {
+        "feature": "Accounting Data Sync",
+        "alpega": "Medium complexity",
+        "transporeon": "Medium complexity",
+        "winner": "tie"
+      }
+    ],
+    "chooseAIf": [
+      "You need access to a large spot market load board for European road freight",
+      "You are a mid-market shipper seeking cost-effective TMS with tender management",
+      "Wtransnet or Teleroute marketplace access is valuable for your carrier network"
+    ],
+    "chooseBIf": [
+      "You are an enterprise shipper (FMCG, automotive, retail) with complex contract tendering",
+      "You need deep SAP or Oracle integration out of the box",
+      "Your tender volumes justify premium platform investment"
+    ],
+    "integrationComplexity": {
+      "alpega": "Medium",
+      "transporeon": "Medium"
+    },
+    "estimatedSyncTime": {
+      "alpega": "2\u20133 days",
+      "transporeon": "2\u20133 days"
+    },
+    "docStandardFit": "Both platforms produce transport order data, carrier invoices, and delivery confirmation documents that need field normalization before ERP import. Euro currency handling and EU carrier code formats require specific mapping \u2014 DocStandard handles both platform exports.",
+    "bottomLine": "Alpega for mid-market European shippers who value spot market load board access at a competitive price. Transporeon for enterprise European shippers needing deep tender management and SAP/Oracle-certified integration."
+  },
+  "wave-vs-quickbooks-online": {
+    "systems": [
+      "wave",
+      "quickbooks-online"
+    ],
+    "category": "Accounting",
+    "useCase": "Free vs paid accounting software for small businesses",
+    "winner": "quickbooks-online",
+    "comparisonTable": [
+      {
+        "feature": "Cost",
+        "wave": "Free (core)",
+        "quickbooks-online": "$30\u2013$200/mo",
+        "winner": "wave"
+      },
+      {
+        "feature": "Invoicing",
+        "wave": "Good, unlimited",
+        "quickbooks-online": "Excellent, highly customizable",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Payroll",
+        "wave": "$35+/mo add-on",
+        "quickbooks-online": "Native, better US payroll",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Integrations",
+        "wave": "Limited",
+        "quickbooks-online": "700+ integrations",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Customer Support",
+        "wave": "Limited on free tier",
+        "quickbooks-online": "Phone + chat support",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Accountant Adoption",
+        "wave": "Low \u2014 most accountants prefer QBO",
+        "quickbooks-online": "Dominant in US",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Logistics Integration",
+        "wave": "Very limited",
+        "quickbooks-online": "Good via normalization",
+        "winner": "quickbooks-online"
+      },
+      {
+        "feature": "Scalability",
+        "wave": "Very small businesses only",
+        "quickbooks-online": "SMB to lower mid-market",
+        "winner": "quickbooks-online"
+      }
+    ],
+    "chooseAIf": [
+      "You are a micro-business or freelancer with zero accounting software budget",
+      "You process under 50 transactions per month",
+      "Your accountant doesn't mind working in Wave"
+    ],
+    "chooseBIf": [
+      "You plan to grow beyond 10 transactions per month",
+      "You need payroll, integrations, or accountant collaboration",
+      "Your industry software (TMS, WMS) has a QuickBooks connector"
+    ],
+    "integrationComplexity": {
+      "wave": "Low",
+      "quickbooks-online": "Low"
+    },
+    "estimatedSyncTime": {
+      "wave": "Manual \u2014 limited API",
+      "quickbooks-online": "Same day via API"
+    },
+    "docStandardFit": "Wave's limited API means logistics data from TMS exports must be manually entered or imported via CSV \u2014 which still requires normalization. QuickBooks Online's REST API allows DocStandard to push normalized logistics transactions directly, eliminating manual import steps.",
+    "bottomLine": "Wave only makes sense for micro-businesses with zero budget. QuickBooks Online is the right choice for any small business that plans to grow, needs integrations, or has a US accountant."
+  }
+}

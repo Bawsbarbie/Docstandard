@@ -132,13 +132,21 @@ export function buildIntegrationMeta(params: {
 export function buildComparisonMeta(params: {
   slugA: string
   slugB: string
+  /** Optional: real use-case string from feature-matrix.json */
+  useCase?: string
+  /** Optional: resolved display names (from system-profiles.json) */
+  nameA?: string
+  nameB?: string
 }): Metadata {
-  const { slugA, slugB } = params
-  const nameA = slugToName(slugA)
-  const nameB = slugToName(slugB)
+  const { slugA, slugB, useCase } = params
+  const nameA = params.nameA ?? slugToName(slugA)
+  const nameB = params.nameB ?? slugToName(slugB)
+  const description = useCase
+    ? `Compare ${nameA} vs ${nameB}: ${useCase}. Feature-by-feature breakdown with real pricing, integration complexity scores, and use-case guidance for logistics and document processing teams.`
+    : `Compare ${nameA} and ${nameB} for document normalization and ERP integration. See feature differences, pricing, integration complexity, and which platform fits your workflow.`
   return buildMeta({
-    title: `${nameA} vs ${nameB} | Comparison`,
-    description: `Compare ${nameA} and ${nameB} for document normalization and ERP integration. See field mapping differences, integration capabilities, and which platform fits your workflow.`,
+    title: `${nameA} vs ${nameB} | Side-by-Side Comparison`,
+    description,
     canonicalPath: `/comparison/${slugA}-vs-${slugB}`,
   })
 }
