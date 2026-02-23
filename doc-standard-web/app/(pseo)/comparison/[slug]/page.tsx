@@ -66,7 +66,7 @@ export default async function ComparisonPage({ params }: { params: { slug: strin
     { label: "Logistics Finance Hub", href: "/finance" }
   ]
 
-  const canonicalUrl = `https://docstandard.co/comparison/${slug}`
+  const canonicalUrl = `https://docstandard.co/comparison/${params.slug}`
 
   return (
     <main className="min-h-screen bg-white leading-relaxed">
