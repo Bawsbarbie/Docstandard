@@ -177,6 +177,115 @@ export function buildOrganizationSchema() {
 }
 
 /**
+ * SoftwareApplication — for SaaS product pages (integration pages).
+ * Helps LLMs understand the application context for citation.
+ */
+export function buildSoftwareApplicationSchema(opts: {
+  name: string
+  description: string
+  url: string
+  applicationCategory?: string
+  operatingSystem?: string
+  offers?: {
+    price?: string
+    priceCurrency?: string
+    availability?: string
+  }
+  aggregateRating?: {
+    ratingValue: string
+    reviewCount: string
+  }
+  featureList?: string[]
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    applicationCategory: opts.applicationCategory ?? "BusinessApplication",
+    operatingSystem: opts.operatingSystem ?? "Web-based",
+    provider: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    ...(opts.offers && {
+      offers: {
+        "@type": "Offer",
+        ...opts.offers,
+      },
+    }),
+    ...(opts.aggregateRating && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ...opts.aggregateRating,
+      },
+    }),
+    ...(opts.featureList && { featureList: opts.featureList }),
+  }
+}
+
+/**
+ * Dataset — for structured data tables (comparison tables).
+ * Helps LLMs extract tabular data for citations.
+ */
+export function buildDatasetSchema(opts: {
+  name: string
+  description: string
+  url: string
+  dataRows: Array<Record<string, string | number>>
+  columns: string[]
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    creator: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    distribution: {
+      "@type": "DataDownload",
+      encodingFormat: "HTML",
+      contentUrl: opts.url,
+    },
+    variableMeasured: opts.columns,
+  }
+}
+
+/**
+ * ItemList with HowTo — for step-by-step processes.
+ * Optimized for LLM extraction of procedural content.
+ */
+export function buildHowToListSchema(opts: {
+  name: string
+  description: string
+  steps: Array<{
+    name: string
+    text: string
+    url?: string
+  }>
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["ItemList", "HowTo"],
+    name: opts.name,
+    description: opts.description,
+    step: opts.steps.map((step, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: step.name,
+      text: step.text,
+      url: step.url,
+    })),
+  }
+}
+
+/**
  * Serialize one or more schema objects into a string safe for
  * dangerouslySetInnerHTML.
  *
