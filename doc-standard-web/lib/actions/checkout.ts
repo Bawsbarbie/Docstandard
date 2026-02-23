@@ -44,12 +44,12 @@ async function resolveAppUrl(): Promise<string> {
 }
 
 /**
- * Create a Stripe Checkout Session for a batch
- * Returns the session URL for redirect
+ * Create a Stripe Checkout Session for a batch (embedded mode).
+ * Returns the client_secret used by <EmbeddedCheckout>.
  */
 export async function createCheckoutSession(
   batchId: string
-): Promise<{ data: { url: string } | null; error: string | null }> {
+): Promise<{ data: { clientSecret: string } | null; error: string | null }> {
   try {
     const supabase = await createClient()
 
@@ -109,18 +109,12 @@ export async function createCheckoutSession(
           ? "Compliance"
           : "Standard"
 
-    // Create Stripe Checkout Session
+    // Create Stripe Checkout Session (embedded mode — no redirect)
     const session = await getStripe().checkout.sessions.create({
       mode: "payment",
+      ui_mode: "embedded",
       customer_email: user.email,
       client_reference_id: batchId,
-      branding_settings: {
-        background_color: "#f6f3ed",
-        button_color: "#2563eb",
-        border_style: "rounded",
-        display_name: "DocStandard",
-        font_family: "inter",
-      },
       line_items: [
         {
           price_data: {
@@ -135,8 +129,7 @@ export async function createCheckoutSession(
           quantity: 1,
         },
       ],
-      success_url: `${appUrl}/dashboard?payment=success&batch_id=${batchId}`,
-      cancel_url: `${appUrl}/dashboard?payment=cancelled&batch_id=${batchId}`,
+      return_url: `${appUrl}/dashboard?payment=success&batch_id=${batchId}`,
       metadata: {
         batch_id: batchId,
         user_id: user.id,
@@ -161,11 +154,11 @@ export async function createCheckoutSession(
       // Don't fail the request - session is created
     }
 
-    if (!session.url) {
+    if (!session.client_secret) {
       return { data: null, error: "Failed to create checkout session" }
     }
 
-    return { data: { url: session.url }, error: null }
+    return { data: { clientSecret: session.client_secret }, error: null }
   } catch (error) {
     console.error("Exception creating checkout session:", error)
     return {
