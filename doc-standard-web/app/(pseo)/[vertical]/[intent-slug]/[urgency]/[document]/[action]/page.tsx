@@ -241,7 +241,12 @@ export default async function UrgencyPage({ params }: PageProps) {
     notFound()
   }
   
-  const { name: cityName, country, majorPorts = [], airports = [] } = cityData
+  const { name: cityName, country, majorPorts = [], airports = [], customsPort } = cityData
+  // Port cities: sea demurrage / vessel content
+  // Air-only cities: storage fees / flight content
+  const hasPort = customsPort && majorPorts.length > 0
+  const hasAirport = airports.length > 0
+
   const displayTitle = `${urgency.label} ${document.singular} ${action.label}`
   const relatedDocuments = getRelatedDocuments(params.document, 2)
   const relatedUrgencies = getRelatedUrgencies(params.urgency, 2)
@@ -336,12 +341,20 @@ export default async function UrgencyPage({ params }: PageProps) {
               </p>
               
               <div className="space-y-4">
-                {[
-                  { stat: "$2,500+", label: "Average demurrage per day" },
-                  { stat: "48-72 hrs", label: "Customs hold for errors" },
-                  { stat: "15%", label: "Revenue loss from delays" },
-                  { stat: "Contract", label: "Penalties for late filing" }
-                ].map((item, i) => (
+                {(hasPort
+                  ? [
+                      { stat: "$2,500+", label: "Average demurrage per day" },
+                      { stat: "48-72 hrs", label: "Customs hold for errors" },
+                      { stat: "15%", label: "Revenue loss from delays" },
+                      { stat: "Contract", label: "Penalties for late filing" },
+                    ]
+                  : [
+                      { stat: "$800+", label: "Air freight storage fees per day" },
+                      { stat: "24-48 hrs", label: "Warehouse detention for errors" },
+                      { stat: "20%", label: "Expedited shipping surcharges" },
+                      { stat: "Contract", label: "Late delivery penalties" },
+                    ]
+                ).map((item, i) => (
                   <div key={i} className="flex items-center gap-4 p-4 bg-slate-900 rounded-xl border border-slate-800">
                     <div className="text-2xl font-bold text-red-400">{item.stat}</div>
                     <div className="text-slate-300">{item.label}</div>
@@ -355,12 +368,20 @@ export default async function UrgencyPage({ params }: PageProps) {
               <div className="relative bg-slate-900 p-8 rounded-2xl border border-slate-800">
                 <h3 className="text-xl font-bold text-white mb-6">Real {cityName} Scenarios</h3>
                 <div className="space-y-4">
-                  {[
-                    `${document.singular} errors delayed shipment → $3,200 demurrage`,
-                    `Late ${document.singular.toLowerCase()} filing → 3-day customs hold`,
-                    `Manual processing bottleneck → Missed vessel cutoff`,
-                    `Data entry errors → Customer penalty clauses triggered`
-                  ].map((item, i) => (
+                  {(hasPort
+                    ? [
+                        `${document.singular} errors delayed shipment → $3,200 demurrage`,
+                        `Late ${document.singular.toLowerCase()} filing → 3-day customs hold`,
+                        `Manual processing bottleneck → Missed vessel cutoff`,
+                        `Data entry errors → Customer penalty clauses triggered`,
+                      ]
+                    : [
+                        `${document.singular} errors delayed air freight → $1,800 storage fees`,
+                        `Late ${document.singular.toLowerCase()} filing → Flight rebooking costs`,
+                        `Manual processing bottleneck → Missed warehouse cutoff`,
+                        `Data entry errors → Expedited ground transport fees`,
+                      ]
+                  ).map((item, i) => (
                     <div key={i} className="flex items-start gap-3 text-slate-300">
                       <div className="w-6 h-6 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-red-400 text-xs">{i + 1}</span>
@@ -449,8 +470,10 @@ export default async function UrgencyPage({ params }: PageProps) {
                   <h3 className="font-bold text-slate-900">Cutoff Awareness</h3>
                 </div>
                 <p className="text-slate-600">
-                  We track {cityName} port and carrier cutoff times to ensure your 
-                  {document.plural.toLowerCase()} are processed before deadlines.
+                  {hasPort
+                    ? `We track ${cityName} port and carrier cutoff times to ensure your ${document.plural.toLowerCase()} are processed before vessel departures.`
+                    : `We track ${cityName} airport and warehouse cutoff times to ensure your ${document.plural.toLowerCase()} are processed before flight departures.`
+                  }
                 </p>
               </div>
               
@@ -471,7 +494,8 @@ export default async function UrgencyPage({ params }: PageProps) {
                   <h3 className="font-bold text-slate-900">Local Time Zone</h3>
                 </div>
                 <p className="text-slate-600">
-                  Processing schedules aligned to {cityName} business hours. Rush orders 
+                  Processing schedules aligned to {cityName}{" "}
+                  {hasPort ? "port operations" : "air cargo facilities"}. Rush orders
                   accepted 24/7 with local support.
                 </p>
               </div>
@@ -510,8 +534,10 @@ export default async function UrgencyPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Deadline Pressure</h3>
               <p className="text-slate-600">
-                {cityName} port cutoffs and carrier deadlines don&apos;t wait. Manual processing 
-                creates last-minute rushes and missed vessels.
+                {hasPort
+                  ? `${cityName} port cutoffs and carrier deadlines don't wait. Manual processing creates last-minute rushes and missed vessels.`
+                  : `${cityName} flight departures and warehouse cutoffs don't wait. Manual processing creates last-minute rushes and missed flights.`
+                }
               </p>
             </div>
             
@@ -521,8 +547,10 @@ export default async function UrgencyPage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-3">Cost Escalation</h3>
               <p className="text-slate-600">
-                Every hour of delay in {cityName} multiplies costs — demurrage, detention, 
-                expedited freight, and customer penalties.
+                {hasPort
+                  ? `Every hour of delay in ${cityName} multiplies costs — demurrage, detention, expedited freight, and customer penalties.`
+                  : `Every hour of delay in ${cityName} multiplies costs — air storage fees, rebooking charges, expedited ground freight, and customer penalties.`
+                }
               </p>
             </div>
           </div>
@@ -627,8 +655,12 @@ export default async function UrgencyPage({ params }: PageProps) {
               <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
                 <TrendingDown className="w-6 h-6 text-red-400" />
               </div>
-              <div className="text-3xl font-bold text-white mb-2">$5K+</div>
-              <p className="text-slate-400 text-sm mb-2">Demurrage avoided</p>
+              <div className="text-3xl font-bold text-white mb-2">
+                {hasPort ? "$5K+" : "$2K+"}
+              </div>
+              <p className="text-slate-400 text-sm mb-2">
+                {hasPort ? "Demurrage avoided" : "Storage fees avoided"}
+              </p>
               <div className="text-red-400 text-sm">Per shipment</div>
             </div>
             
@@ -702,24 +734,28 @@ export default async function UrgencyPage({ params }: PageProps) {
           <div className="space-y-4">
             {[
               {
-                q: `How does ${urgency.label.toLowerCase()} ${document.singular.toLowerCase()} ${action.label.toLowerCase()} work in ${cityName}?`,
-                a: `We prioritize your ${document.plural.toLowerCase()} in our processing queue the moment they're received. For ${cityName} operations, this means ${urgency.timeframe.toLowerCase()} turnaround from upload to delivery, with real-time status updates throughout.`
+                q: hasPort
+                  ? `How do I avoid $2,500+ demurrage fees on ${document.plural.toLowerCase()} in ${cityName}?`
+                  : `How do I avoid $800+ air freight storage fees on ${document.plural.toLowerCase()} in ${cityName}?`,
+                a: `DocStandard processes your ${document.plural.toLowerCase()} in ${urgency.timeframe.toLowerCase()}, ensuring you meet ${hasPort ? "vessel" : "flight"} cutoffs. ${hasPort ? "Port" : "Air cargo"} delays cost money every hour — our ${urgency.label.toLowerCase()} service eliminates these fees through guaranteed turnaround.`
               },
               {
-                q: `What if my ${document.singular.toLowerCase()} is complex or low quality?`,
-                a: `Even damaged scans or handwritten sections are handled. If OCR can't extract data automatically, our team manually processes it within the same ${urgency.timeframe.toLowerCase()} window. No extra charge for complexity.`
+                q: `What happens if my ${document.singular.toLowerCase()} has errors and ${hasPort ? "customs" : "the airline"} rejects it?`,
+                a: `Errors in ${document.plural.toLowerCase()} trigger ${hasPort ? "3-5 day customs holds" : "24-48 hour warehouse detention"}. DocStandard validates every field before submission, cross-checking ${hasPort ? "HS codes, weights, and port requirements" : "airwaybill data, weights, and carrier requirements"} to ensure first-time acceptance.`
               },
               {
-                q: `Can you meet ${cityName} port and carrier cutoff times?`,
-                a: `Yes. We track major ${cityName} port schedules and carrier deadlines. Submit your ${document.plural.toLowerCase()} with cutoff time noted, and we'll prioritize to ensure you make it.`
+                q: `How do I prevent ${document.singular.toLowerCase()} delays from costing me the contract?`,
+                a: `Late ${document.plural.toLowerCase()} trigger penalty clauses and damage customer relationships. Our ${cityName} team tracks ${hasPort ? "port schedules and vessel ETAs" : "flight schedules and warehouse cutoffs"} to ensure your documents are ready before critical deadlines.`
               },
               {
-                q: `What output formats do you deliver?`,
-                a: `Excel, CSV, JSON, or direct API integration. Data is structured and validated according to your target system requirements — ready for immediate use.`
+                q: `What if my ${document.singular.toLowerCase()} is a low-quality scan or photo?`,
+                a: `Damaged or handwritten ${document.plural.toLowerCase()} require manual extraction. DocStandard handles these within the same ${urgency.timeframe.toLowerCase()} window — no extra charge for complexity. We extract data even from poor-quality images.`
               },
               {
-                q: `Is there a deadline guarantee?`,
-                a: `Absolutely. If we don't deliver within ${urgency.timeframe.toLowerCase()}, the processing is free. That's our commitment to ${cityName} operations that depend on speed.`
+                q: hasPort
+                  ? `How do I make sure I don't miss vessel cutoffs at ${majorPorts[0] || cityName}?`
+                  : `How do I make sure I don't miss flight cutoffs at ${airports[0] || cityName}?`,
+                a: `Submit your ${document.plural.toLowerCase()} with your ${hasPort ? "vessel" : "flight"} cutoff time noted. We prioritize to ${hasPort ? "port" : "air cargo"} schedules and will flag if turnaround is impossible, giving you time to make alternative arrangements.`
               }
             ].map((faq, i) => (
               <div key={i} className="bg-white p-6 rounded-xl border border-slate-200">
